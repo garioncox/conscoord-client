@@ -7,6 +7,7 @@ import ShiftOfficerList from "./Pages/ShiftOfficerList";
 import CreateProject from "./Pages/CreateProject";
 import EmployeeDetails from "./Pages/EmployeeDetails";
 import EmployeeList from "./Pages/EmployeeList";
+import PageNotFound from "./Components/PageNotFound/PageNotFound";
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
       <Route path="project/create" element={<CreateProject />} />
       <Route path="admin/view/employees" element={<EmployeeList />} />
       <Route path="admin/view/employees/:id" element={<EmployeeDetails />} />
+      <Route path="*" element={<PageNotFound />}
+      />
     </Routes>
   );
 }
