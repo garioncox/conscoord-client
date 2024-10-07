@@ -83,7 +83,7 @@ const CreateShift = () => {
             },
           },
           error: {
-            render({ data }) {
+            render({ data }: { data: any }) {
               return data.message || "Error Creating Shift";
             },
           },

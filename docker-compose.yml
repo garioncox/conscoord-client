@@ -2,7 +2,7 @@ services:
   api:
     image: garioncox/test:latest
     ports:
-    - 3001:80
+    - 5173:80
     volumes:
       - images:/app/image
 volumes:

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
-import { httpRequest } from "../Functions/HttpRequest";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const CreateProject = () => {
   const [title, setTitle] = useState<string>("");
@@ -62,11 +62,7 @@ const CreateProject = () => {
         endDate: endDate,
       };
       toast.promise(
-        httpRequest(
-          import.meta.env.VITE_API_URL + "api/Project",
-          project,
-          "POST"
-        ),
+        axios.post("api/Project", project),
         {
           pending: "Creating Project...",
           success: {
@@ -75,7 +71,7 @@ const CreateProject = () => {
             },
           },
           error: {
-            render({ data }) {
+            render({ data }: { data: any }) {
               return data.message || "Error Creating Project";
             },
           },

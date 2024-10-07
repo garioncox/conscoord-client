@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
-import { httpDelete, httpRequest } from "../Functions/HttpRequest";
+import {  httpRequest } from "../Functions/HttpRequest";
 
 const ProjectList = () => {
   const [projects, setProjects] = useState<Project[]>();
@@ -33,10 +33,6 @@ const ProjectList = () => {
     );
     const data = await response.json();
     setProjects(data);
-  }
-
-  function handleEdit(id: number) {
-    setSelected(id);
   }
 
   function findProject() {
@@ -86,13 +82,7 @@ const ProjectList = () => {
       prevProjects?.map((s) => (s.id === newProject.id ? newProject : s))
     );
   }
-
-  function handleDelete(id: number) {
-    httpDelete(
-      import.meta.env.VITE_API_URL + "api/Project/delete/" + String(id)
-    );
-  }
-
+  
   function checkSelected(s: Project) {
     const val =
       s.id === selected ? (

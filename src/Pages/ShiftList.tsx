@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
-import { httpDelete, httpRequest } from "../Functions/HttpRequest";
+import { httpRequest } from "../Functions/HttpRequest";
 
 const ShiftList = () => {
   const [selected, setSelected] = useState<number>();
@@ -84,10 +84,6 @@ const ShiftList = () => {
     );
   }
 
-  function handleDelete(id: number): void {
-    httpDelete(import.meta.env.VITE_API_URL + "api/Shift/delete/" + String(id));
-  }
-
   function findShift() {
     if (shifts === undefined) {
       return;
@@ -104,60 +100,51 @@ const ShiftList = () => {
       s.id === selected ? (
         <tr key={s.id}>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setLocation(e.target.value)}
               value={selectLocation}
-            />{" "}
+            />
           </td>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setStartTime(e.target.value)}
               value={selectStartTime}
-            />{" "}
+            />
           </td>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setEndTime(e.target.value)}
               value={selectEndTime}
-            />{" "}
+            />
           </td>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setDescription(e.target.value)}
               value={selectDescription}
-            />{" "}
+            />
           </td>
           <td>
-            {" "}
             <input
               type="number"
               className="form-control"
               onChange={(e) => setReqEmployees(Number(e.target.value))}
               value={selectReqEmployees}
-            />{" "}
+            />
           </td>
           <td> {findShift()?.status} </td>
           <td>
-            {" "}
             <button onClick={() => saveEdit()} className="btn btn-success">
-              {" "}
-              Save{" "}
-            </button>{" "}
+              Save
+            </button>
           </td>
           <td>
-            {" "}
             <button onClick={() => handleEdit(-1)} className="btn btn-danger">
-              {" "}
-              Cancel{" "}
-            </button>{" "}
+              Cancel
+            </button>
           </td>
         </tr>
       ) : (
@@ -169,21 +156,17 @@ const ShiftList = () => {
           <td>{s.requestedEmployees}</td>
           <td>{s.status} </td>
           <td>
-            {" "}
             <button
               onClick={() => handleEdit(s.id)}
               className="btn btn-warning"
             >
-              {" "}
-              Edit{" "}
-            </button>{" "}
+              Edit
+            </button>
           </td>
           <td>
-            {" "}
             <button onClick={() => handleArchive(s)} className="btn btn-danger">
-              {" "}
-              Delete{" "}
-            </button>{" "}
+              Delete
+            </button>
           </td>
         </tr>
       );

@@ -5,7 +5,6 @@ COPY package*.json /app/
 RUN npm install
 
 COPY . .
-ENV VITE_API_URL=http://localhost:5173
 RUN npm run build
 
 # nginx
