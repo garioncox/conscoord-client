@@ -1,8 +1,8 @@
 export interface ShiftDTO {
-    StartTime: string
-    EndTime: string
-    Description: string
-    Location: string
-    RequestedEmployees: number
-    Status: string
+  StartTime: string;
+  EndTime: string;
+  Description: string;
+  Location: string;
+  RequestedEmployees: number;
+  Status: string;
 }

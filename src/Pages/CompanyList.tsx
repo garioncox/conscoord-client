@@ -9,9 +9,7 @@ const CompanyList = () => {
   }, []);
 
   async function populateCompanyData() {
-    const response = await fetch(
-      "/api/Company/get"
-    );
+    const response = await fetch("/api/Company/get");
     const data = await response.json();
     setCompanies(data);
   }

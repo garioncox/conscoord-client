@@ -1,4 +1,4 @@
-export interface EmployeeShiftDTO{
-    EmployeeId: number
-    ShiftId: number
+export interface EmployeeShiftDTO {
+  EmployeeId: number;
+  ShiftId: number;
 }

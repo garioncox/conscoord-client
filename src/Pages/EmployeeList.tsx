@@ -12,9 +12,7 @@ const EmployeeList = () => {
   }, []);
 
   async function getEmployees() {
-    const response = await fetch(
-      "/api/Employee/get"
-    );
+    const response = await fetch("/api/Employee/get");
     const value = await response.json();
 
     setEmployees(value);
