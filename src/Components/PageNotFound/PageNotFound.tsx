@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './PageNotFound.css';
-// Removed the .js import as it's not needed in TypeScript
 
 const PageNotFound: React.FC = () => {
     return (
