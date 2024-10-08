@@ -61,22 +61,19 @@ const CreateProject = () => {
         startDate: startDate,
         endDate: endDate,
       };
-      toast.promise(
-        axios.post("/api/Project", project),
-        {
-          pending: "Creating Project...",
-          success: {
-            render() {
-              return "Project Created Successfully";
-            },
+      toast.promise(axios.post("/api/Project", project), {
+        pending: "Creating Project...",
+        success: {
+          render() {
+            return "Project Created Successfully";
           },
-          error: {
-            render({ data }: { data: any }) {
-              return data.message || "Error Creating Project";
-            },
+        },
+        error: {
+          render({ data }: { data: any }) {
+            return data.message || "Error Creating Project";
           },
-        }
-      );
+        },
+      });
 
       setTitle("");
       setStartDate("");
