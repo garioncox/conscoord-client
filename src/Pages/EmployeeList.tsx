@@ -13,7 +13,7 @@ const EmployeeList = () => {
 
   async function getEmployees() {
     const response = await fetch(
-      import.meta.env.VITE_API_URL + "api/Employee/GetEmployees"
+      "/api/Employee/get"
     );
     const value = await response.json();
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { httpRequest } from "../Functions/HttpRequest";
 import { EmployeeDTO } from "../Data/DTOInterfaces/EmployeeDTOInterface";
 
-const AddOfficer = () => {
+function AddOfficer() {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -46,11 +46,7 @@ const AddOfficer = () => {
         phonenumber: myPhone,
       };
       setFormErrors({});
-      await httpRequest(
-        import.meta.env.VITE_API_URL + "api/Employee/PostEmployee",
-        employee,
-        "POST"
-      );
+      await httpRequest("/api/Employee/add", employee, "POST");
     }
   }
 
@@ -74,7 +70,6 @@ const AddOfficer = () => {
 
   return (
     <>
-      <div>{phone}</div>
       <h3>Add Officer</h3>
       <form
         onSubmit={(e) => {
@@ -170,6 +165,6 @@ const AddOfficer = () => {
       </form>
     </>
   );
-};
+}
 
 export default AddOfficer;

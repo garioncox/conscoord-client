@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
-import {  httpRequest } from "../Functions/HttpRequest";
+import { httpRequest } from "../Functions/HttpRequest";
 
-const ProjectList = () => {
+function ProjectList() {
   const [projects, setProjects] = useState<Project[]>();
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -28,9 +28,7 @@ const ProjectList = () => {
   }, [selected]);
 
   async function populateProjects() {
-    const response = await fetch(
-      import.meta.env.VITE_API_URL + "api/Project/GetProjects"
-    );
+    const response = await fetch("/api/Project/get");
     const data = await response.json();
     setProjects(data);
   }
@@ -49,11 +47,7 @@ const ProjectList = () => {
   async function handleArchive(project: Project) {
     project.status = "ARCHIVED";
 
-    httpRequest(
-      import.meta.env.VITE_API_URL + "api/Shift/edit/" + String(project.id),
-      project,
-      "PUT"
-    );
+    httpRequest("/api/Shift/edit/" + String(project.id), project, "PUT");
 
     setProjects((prevProjects) =>
       prevProjects?.map((s) => (s.id === project.id ? project : s))
@@ -82,60 +76,52 @@ const ProjectList = () => {
       prevProjects?.map((s) => (s.id === newProject.id ? newProject : s))
     );
   }
-  
+
   function checkSelected(s: Project) {
     const val =
       s.id === selected ? (
         <tr key={s.id}>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setName(e.target.value)}
               value={name}
-            />{" "}
+            />
           </td>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setLocation(e.target.value)}
               value={location}
-            />{" "}
+            />
           </td>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setStartDate(e.target.value)}
               value={startDate}
-            />{" "}
+            />
           </td>
           <td>
-            {" "}
             <input
               className="form-control"
               onChange={(e) => setEndDate(e.target.value)}
               value={endDate}
-            />{" "}
+            />
           </td>
           <td> {s.status} </td>
           <td>
-            {" "}
             <button
               onClick={() => saveEdit(s.id, s.status)}
               className="btn btn-success"
             >
-              {" "}
-              Save{" "}
-            </button>{" "}
+              Save
+            </button>
           </td>
           <td>
-            {" "}
             <button onClick={() => setSelected(-1)} className="btn btn-danger">
-              {" "}
-              Cancel{" "}
-            </button>{" "}
+              Cancel
+            </button>
           </td>
         </tr>
       ) : (
@@ -146,7 +132,6 @@ const ProjectList = () => {
           <td>{s.endDate}</td>
           <td>{s.status}</td>
           <td>
-            {" "}
             <button
               onClick={() => {
                 setSelected(s.id);
@@ -154,16 +139,13 @@ const ProjectList = () => {
               }}
               className="btn btn-warning"
             >
-              {" "}
-              Edit{" "}
-            </button>{" "}
+              Edit
+            </button>
           </td>
           <td>
-            {" "}
             <button onClick={() => handleArchive(s)} className="btn btn-danger">
-              {" "}
-              Delete{" "}
-            </button>{" "}
+              Delete
+            </button>
           </td>
         </tr>
       );
@@ -192,7 +174,7 @@ const ProjectList = () => {
       {contents}
     </div>
   );
-};
+}
 export default ProjectList;
 
 function setupEdit() {

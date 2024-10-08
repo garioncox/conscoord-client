@@ -4,7 +4,7 @@ import { httpRequest } from "../Functions/HttpRequest";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const CreateShift = () => {
+function CreateShift() {
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -59,7 +59,7 @@ const CreateShift = () => {
   };
 
   async function postShift() {
-    setSubmitted(true); // Used for validation
+    setSubmitted(true);
     if (validateAllInput()) {
       const shift: ShiftDTO = {
         StartTime: startTime,
@@ -69,26 +69,19 @@ const CreateShift = () => {
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
-      toast.promise(
-        httpRequest(
-          import.meta.env.VITE_API_URL + "api/Shift/create",
-          shift,
-          "POST"
-        ),
-        {
-          pending: "Creating Shift...",
-          success: {
-            render() {
-              return "Shift Created Successfully";
-            },
+      toast.promise(httpRequest("/api/Shift/add", shift, "POST"), {
+        pending: "Creating Shift...",
+        success: {
+          render() {
+            return "Shift Created Successfully";
           },
-          error: {
-            render({ data }: { data: any }) {
-              return data.message || "Error Creating Shift";
-            },
+        },
+        error: {
+          render({ data }: { data: any }) {
+            return data.message || "Error Creating Shift";
           },
-        }
-      );
+        },
+      });
       setFormErrors({});
     }
   }
@@ -104,7 +97,7 @@ const CreateShift = () => {
             onChange={(e) => {
               setLocation(e.target.value);
               if (submitted && e.target.value) {
-                setFormErrors((prev) => ({ ...prev, location: "" })); // Clear error on input
+                setFormErrors((prev) => ({ ...prev, location: "" }));
               }
             }}
             type="text"
@@ -130,7 +123,7 @@ const CreateShift = () => {
             onChange={(e) => {
               setStartTime(e.target.value);
               if (submitted && e.target.value) {
-                setFormErrors((prev) => ({ ...prev, startTime: "" })); // Clear error on input
+                setFormErrors((prev) => ({ ...prev, startTime: "" }));
               }
             }}
             type="date"
@@ -155,7 +148,7 @@ const CreateShift = () => {
             onChange={(e) => {
               setEndTime(e.target.value);
               if (submitted && e.target.value) {
-                setFormErrors((prev) => ({ ...prev, endTime: "" })); // Clear error on input
+                setFormErrors((prev) => ({ ...prev, endTime: "" }));
               }
             }}
             type="date"
@@ -181,7 +174,7 @@ const CreateShift = () => {
               onChange={(e) => {
                 setDescription(e.target.value);
                 if (submitted && e.target.value) {
-                  setFormErrors((prev) => ({ ...prev, description: "" })); // Clear error on input
+                  setFormErrors((prev) => ({ ...prev, description: "" }));
                 }
               }}
               type="text"
@@ -214,7 +207,7 @@ const CreateShift = () => {
                   setFormErrors((prev) => ({
                     ...prev,
                     requestedEmployees: "",
-                  })); // Clear error on input
+                  }));
                 }
               }}
               type="number"
@@ -245,6 +238,6 @@ const CreateShift = () => {
       <ToastContainer position="bottom-right" />
     </form>
   );
-};
+}
 
 export default CreateShift;

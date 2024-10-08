@@ -10,7 +10,7 @@ const CompanyList = () => {
 
   async function populateCompanyData() {
     const response = await fetch(
-      import.meta.env.VITE_API_URL + "api/Company/GetCompanies"
+      "/api/Company/get"
     );
     const data = await response.json();
     setCompanies(data);

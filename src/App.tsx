@@ -20,7 +20,7 @@ function App() {
       <Route path="project/create" element={<CreateProject />} />
       <Route path="admin/view/employees" element={<EmployeeList />} />
       <Route path="admin/view/employees/:id" element={<EmployeeDetails />} />
-      <Route path="*" element={<PageNotFound />}/>
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 }
