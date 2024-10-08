@@ -3,7 +3,7 @@ import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 import { httpRequest } from "../Functions/HttpRequest";
 
-const ShiftOfficerList = () => {
+function ShiftOfficerList() {
   const [shifts, setShifts] = useState<Shift[]>();
 
   useEffect(() => {
@@ -29,13 +29,12 @@ const ShiftOfficerList = () => {
               <td>{s.startTime}</td>
               <td>{s.endTime}</td>
               <td>
-                {" "}
                 <button
                   className="btn btn-primary"
                   onClick={() => postEmployeeShift(s.id)}
                 >
                   Take This Shift
-                </button>{" "}
+                </button>
               </td>
             </tr>
           ))}
@@ -44,9 +43,7 @@ const ShiftOfficerList = () => {
     );
 
   async function populateShifts() {
-    const response = await fetch(
-      import.meta.env.VITE_API_URL + "api/Shift/get"
-    );
+    const response = await fetch("/api/Shift/get");
     const data = await response.json();
     setShifts(data);
   }
@@ -57,11 +54,7 @@ const ShiftOfficerList = () => {
       ShiftId: id,
     };
 
-    httpRequest(
-      import.meta.env.VITE_API_URL + "api/EmployeeShift/",
-      employee,
-      "POST"
-    );
+    httpRequest("/api/EmployeeShift/add", employee, "POST");
   }
 
   return (
@@ -70,6 +63,6 @@ const ShiftOfficerList = () => {
       {contents}
     </div>
   );
-};
+}
 
 export default ShiftOfficerList;
