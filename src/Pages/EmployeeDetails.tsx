@@ -1,76 +1,62 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import "../index.css";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
-import { Shift } from "../Data/Interfaces/Shift";
+import AddOfficer from "./AddOfficer";
 
-const EmployeeDetails = () => {
-  const { id } = useParams();
-  const [employee, setEmployees] = useState<Employee>();
-  const [shift, setShift] = useState<Shift[]>();
+function EmployeeList() {
+  const [employees, setEmployees] = useState<Employee[]>([]);
 
   useEffect(() => {
-    getEmploye();
+    getEmployees();
   }, []);
 
-  async function getEmploye() {
-    const responseEmployee = await fetch(
-      import.meta.env.VITE_API_URL + `api/Employee/GetEmployees/${id}`
+  async function getEmployees() {
+    const response = await fetch(
+      "/api/Employee/get"
     );
-    const responseShift = await fetch(
-      import.meta.env.VITE_API_URL + `api/EmployeeShift/getShifts/${id}`
-    );
-    const empVal = await responseEmployee.json();
-    const shiftVal = await responseShift.json();
+    const value = await response.json();
 
-    setEmployees(empVal);
-    setShift(shiftVal);
+    setEmployees(value);
   }
 
-  function employeeDetails() {
-    return employee != undefined ? (
-      <>
-        <h1>{employee?.name}</h1>
-        <h2>{employee.email}</h2>
-        <h2>{employee.phonenumber}</h2>
-      </>
+  const navigate = useNavigate();
+
+  const contents =
+    employees === undefined ? (
+      <div className="spinner-border" role="status" />
     ) : (
-      <div>No employee found with that Id</div>
-    );
-  }
-
-  function shiftDetails() {
-    return (
       <table className="table table-striped">
         <thead>
           <tr>
-            <th className="text-start">Shift Details</th>
-            <th className="text-start">Location</th>
-            <th className="text-start">Start Time</th>
-            <th className="text-start">End Time</th>
-            <th className="text-start">Status</th>
+            <th className="text-start">Name</th>
+            <th className="text-start">Phone Number</th>
+            <th className="text-start">Email</th>
           </tr>
         </thead>
         <tbody>
-          {shift?.map((s) => (
-            <tr>
-              <td className="text-start">{s.description}</td>
-              <td className="text-start">{s.location}</td>
-              <td className="text-start">{s.startTime}</td>
-              <td className="text-start">{s.startTime}</td>
-              <td className="text-start">{s.status}</td>
+          {employees.map((e) => (
+            <tr
+              key={e.id}
+              className="grow grow:hover"
+              onClick={() => navigate(`/admin/view/employees/${e.id}`)}
+            >
+              <td className="text-start">{e.name}</td>
+              <td className="text-start">{e.phonenumber}</td>
+              <td className="text-start">{e.email}</td>
             </tr>
           ))}
         </tbody>
       </table>
     );
-  }
 
   return (
     <>
-      <div>{employeeDetails()}</div>
-
-      <div>{shiftDetails()}</div>
+      <AddOfficer />
+      <h1>Admin Employee View</h1>
+      {contents}
     </>
   );
-};
-export default EmployeeDetails;
+}
+
+export default EmployeeList;
