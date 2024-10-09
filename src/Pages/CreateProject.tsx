@@ -3,6 +3,7 @@ import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { FormatDate } from "../Functions/FormatDates";
 
 const CreateProject = () => {
   const [title, setTitle] = useState<string>("");
@@ -58,8 +59,8 @@ const CreateProject = () => {
       const project: ProjectDTO = {
         name: title,
         location: location,
-        startDate: startDate,
-        endDate: endDate,
+        startDate: FormatDate(startDate),
+        endDate: FormatDate(endDate),
       };
       toast.promise(axios.post("/api/Project", project), {
         pending: "Creating Project...",
