@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import AddOfficer from "./AddOfficer";
-import { useGetEmployees, useGetRoleName, useGetRoles } from "../Functions/EmployeeListFunctions";
-
+import {
+  useGetEmployees,
+  useGetRoleName,
+  useGetRoles,
+} from "../Functions/EmployeeListFunctions";
 
 const EmployeeList = () => {
   const { employees, fetchEmployees } = useGetEmployees();
   const { roles, fetchRoles } = useGetRoles();
-
 
   useEffect(() => {
     fetchEmployees();
@@ -40,9 +42,7 @@ const EmployeeList = () => {
               <td className="text-start">{e.name}</td>
               <td className="text-start">{e.phonenumber}</td>
               <td className="text-start">{e.email}</td>
-              <td className="text-start">
-                {useGetRoleName(roles, e.roleid)}
-              </td>
+              <td className="text-start">{useGetRoleName(roles, e.roleid)}</td>
             </tr>
           ))}
         </tbody>
