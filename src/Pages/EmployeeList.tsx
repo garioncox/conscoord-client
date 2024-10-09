@@ -1,24 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
-import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import AddOfficer from "./AddOfficer";
+import { useGetEmployees, useGetRoleName, useGetRoles } from "../Functions/EmployeeListFunctions";
+
 
 const EmployeeList = () => {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const { employees, fetchEmployees } = useGetEmployees();
+  const { roles, fetchRoles } = useGetRoles();
+
 
   useEffect(() => {
-    getEmployees();
+    fetchEmployees();
+    fetchRoles();
   }, []);
-
-  async function getEmployees() {
-    const response = await fetch(
-      import.meta.env.VITE_API_URL + "api/Employee/GetEmployees"
-    );
-    const value = await response.json();
-
-    setEmployees(value);
-  }
 
   const navigate = useNavigate();
 
@@ -32,6 +27,7 @@ const EmployeeList = () => {
             <th className="text-start">Name</th>
             <th className="text-start">Phone Number</th>
             <th className="text-start">Email</th>
+            <th className="text-start">Role</th>
           </tr>
         </thead>
         <tbody>
@@ -44,6 +40,9 @@ const EmployeeList = () => {
               <td className="text-start">{e.name}</td>
               <td className="text-start">{e.phonenumber}</td>
               <td className="text-start">{e.email}</td>
+              <td className="text-start">
+                {useGetRoleName(roles, e.roleid)}
+              </td>
             </tr>
           ))}
         </tbody>
