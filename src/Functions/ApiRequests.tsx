@@ -18,19 +18,19 @@ export const addEmployee = async (employee: EmployeeDTO) => {
 };
 
 export const getAllEmployees = async (): Promise<Employee[]> => {
-  return await axios.get(`/api/Employee/getall`);
+  return await axios.get(`/api/Employee/getAll`);
 };
 
 export const getAllRoles = async (): Promise<Role[]> => {
-  return await axios.get(`/api/Role/getall`);
+  return await axios.get(`/api/Role/getAll`);
 };
 
 export const getAllProjects = async (): Promise<Project[]> => {
-  return await axios.get(`/api/Project/getall`);
+  return await axios.get(`/api/Project/getAll`);
 };
 
 export const getCompanies = async (): Promise<Company[]> => {
-  return await axios.get(`/api/Company/getall`);
+  return await axios.get(`/api/Company/getAll`);
 };
 
 export const addProject = async (project: ProjectDTO) => {
@@ -46,7 +46,7 @@ export const editShift = async (id: number, shift: ShiftDTO) => {
 };
 
 export const getAllShifts = async (): Promise<Shift[]> => {
-  return await axios.get(`/api/Shift/getall`);
+  return await axios.get(`/api/Shift/getAll`);
 };
 
 export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
@@ -54,7 +54,7 @@ export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
 };
 
 export const getAllArchivedShifts = async (): Promise<Shift[]> => {
-  return await axios.get(`/api/Shift/getall/archived`);
+  return await axios.get(`/api/Shift/getAll/archived`);
 };
 
 export const archiveShift = async (shiftId: number) => {
