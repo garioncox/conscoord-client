@@ -2,8 +2,8 @@ import { useState } from "react";
 import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { FormatDate } from "../Functions/FormatDates";
+import { addProject } from "../Functions/ApiRequests";
 
 const CreateProject = () => {
   const [title, setTitle] = useState<string>("");
@@ -62,7 +62,8 @@ const CreateProject = () => {
         startDate: FormatDate(startDate),
         endDate: FormatDate(endDate),
       };
-      toast.promise(axios.post("/api/Project", project), {
+
+      toast.promise(addProject(project), {
         pending: "Creating Project...",
         success: {
           render() {
@@ -70,6 +71,7 @@ const CreateProject = () => {
           },
         },
         error: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           render({ data }: { data: any }) {
             return data.message || "Error Creating Project";
           },

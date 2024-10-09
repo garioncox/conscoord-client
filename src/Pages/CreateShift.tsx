@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
-import { httpRequest } from "../Functions/HttpRequest";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormatDate } from "../Functions/FormatDates";
+import { addShift } from "../Functions/ApiRequests";
 
 function CreateShift() {
   const [startTime, setStartTime] = useState<string>("");
@@ -70,7 +70,7 @@ function CreateShift() {
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
-      toast.promise(httpRequest("/api/Shift/add", shift, "POST"), {
+      toast.promise(addShift(shift), {
         pending: "Creating Shift...",
         success: {
           render() {
@@ -78,6 +78,7 @@ function CreateShift() {
           },
         },
         error: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           render({ data }: { data: any }) {
             return data.message || "Error Creating Shift";
           },
@@ -86,8 +87,6 @@ function CreateShift() {
       setFormErrors({});
     }
   }
-
-
 
   return (
     <form>

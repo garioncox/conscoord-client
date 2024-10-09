@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../index.css";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import AddOfficer from "./AddOfficer";
+import { getAllEmployees } from "../Functions/ApiRequests";
 
 function EmployeeList() {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -12,10 +13,7 @@ function EmployeeList() {
   }, []);
 
   async function getEmployees() {
-    const response = await fetch("/api/Employee/get");
-    const value = await response.json();
-
-    setEmployees(value);
+    setEmployees(await getAllEmployees());
   }
 
   const navigate = useNavigate();

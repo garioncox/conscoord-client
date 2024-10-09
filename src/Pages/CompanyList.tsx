@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Company } from "../Data/Interfaces/Company";
+import { getCompanies } from "../Functions/ApiRequests";
 
 const CompanyList = () => {
   const [companies, setCompanies] = useState<Company[]>();
@@ -9,9 +10,7 @@ const CompanyList = () => {
   }, []);
 
   async function populateCompanyData() {
-    const response = await fetch("/api/Company/get");
-    const data = await response.json();
-    setCompanies(data);
+    setCompanies(await getCompanies());
   }
 
   const contents =

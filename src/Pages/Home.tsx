@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
-import { createNewUser, getUserByEmail } from "../Functions/AddUser";
+import { addEmployee, getUserByEmail } from "../Functions/ApiRequests";
 
-const Home = () => {
+export const Home = () => {
   const { user } = useAuth0();
 
   useEffect(() => {
@@ -12,9 +12,9 @@ const Home = () => {
       }
 
       try {
-        const loggedInUser = await getUserByEmail(user?.email!);
+        const loggedInUser = await getUserByEmail(user.email!);
         if (!loggedInUser) {
-          createNewUser({
+          addEmployee({
             name: user.name!,
             email: user.email!,
             phonenumber: user.phone_number ?? "",
@@ -36,5 +36,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default Home;

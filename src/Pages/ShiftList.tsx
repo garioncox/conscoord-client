@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
-import { httpRequest } from "../Functions/HttpRequest";
+import {
+  archiveShift,
+  editShift,
+  getAllArchivedShifts,
+  getAllShifts,
+} from "../Functions/ApiRequests";
+import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 
 function ShiftList() {
   const [selected, setSelected] = useState<number>();
@@ -28,14 +34,14 @@ function ShiftList() {
     setReqEmployees(shift.requestedEmployees);
     setDescription(shift.description);
   }, [selected]);
+  /////////////////// TODO ///////////////////
+  // This useEffect should have the function as params
+  // but is not able to. Find a way to "findShift" without
+  // rendering every cycle
 
   async function populateShifts() {
-    const r1 = await fetch("/api/Shift/get/archived");
-    const archived = await r1.json();
-
-    const r2 = await fetch("/api/Shift/get");
-    const active = await r2.json();
-
+    const archived = await getAllArchivedShifts();
+    const active = await getAllShifts();
     setShifts([...archived, ...active]);
   }
 
@@ -44,9 +50,7 @@ function ShiftList() {
   }
 
   async function handleArchive(shift: Shift) {
-    shift.status = "ARCHIVED";
-
-    httpRequest("/api/Shift/edit/" + String(shift.id), shift, "PUT");
+    await archiveShift(shift.id);
 
     setShifts((prevShifts) =>
       prevShifts?.map((s) => (s.id === shift.id ? shift : s))
@@ -56,22 +60,24 @@ function ShiftList() {
   async function saveEdit() {
     const shift = findShift();
 
-    const newShift: Shift = {
-      location: selectLocation,
-      id: shift!.id,
-      startTime: selectStartTime,
-      endTime: selectEndTime,
-      description: selectDescription,
-      requestedEmployees: selectReqEmployees,
-      status: shift!.status,
+    if (shift === undefined) {
+      console.log("Error when saving shift: shift not found");
+      return;
+    }
+
+    const newShift: ShiftDTO = {
+      Location: selectLocation,
+      StartTime: selectStartTime,
+      EndTime: selectEndTime,
+      Description: selectDescription,
+      RequestedEmployees: selectReqEmployees,
+      Status: shift.status,
     };
 
-    httpRequest("/api/Shift/edit/" + String(newShift.id), newShift, "PUT");
+    await editShift(shift.id, newShift);
     handleEdit(-1);
 
-    setShifts((prevShifts) =>
-      prevShifts?.map((s) => (s.id === newShift.id ? newShift : s))
-    );
+    await populateShifts();
   }
 
   function findShift() {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import AddOfficer from "./AddOfficer";
@@ -15,7 +15,7 @@ const EmployeeList = () => {
   useEffect(() => {
     fetchEmployees();
     fetchRoles();
-  }, []);
+  }, [fetchEmployees, fetchRoles]);
 
   const navigate = useNavigate();
 
@@ -43,6 +43,10 @@ const EmployeeList = () => {
               <td className="text-start">{e.phonenumber}</td>
               <td className="text-start">{e.email}</td>
               <td className="text-start">{useGetRoleName(roles, e.roleid)}</td>
+              {/* TODO: We should not be calling a function here.
+                  Either attach a role to an employee when getting
+                  the employee, or match the roles outside of where
+                  we render. perhaps we want to use a controller? */}
             </tr>
           ))}
         </tbody>

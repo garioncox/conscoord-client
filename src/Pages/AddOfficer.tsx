@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { httpRequest } from "../Functions/HttpRequest";
-import { EmployeeDTO } from "../Data/DTOInterfaces/EmployeeDTOInterface";
+import { addEmployee } from "../Functions/ApiRequests";
 
 function AddOfficer() {
   const [name, setName] = useState<string>("");
@@ -36,17 +35,17 @@ function AddOfficer() {
     return isvalid;
   }
 
-  async function PostEmployee() {
+  async function HandleSubmit() {
     if (validateForm()) {
       const myPhone = phone.replace(/-/g, "");
 
-      const employee: EmployeeDTO = {
+      addEmployee({
         name: name,
         email: email,
         phonenumber: myPhone,
-      };
+      });
+
       setFormErrors({});
-      await httpRequest("/api/Employee/add", employee, "POST");
     }
   }
 
@@ -74,7 +73,7 @@ function AddOfficer() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          PostEmployee();
+          HandleSubmit();
         }}
       >
         <div className="container">
