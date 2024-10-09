@@ -62,8 +62,8 @@ function CreateShift() {
     setSubmitted(true);
     if (validateAllInput()) {
       const shift: ShiftDTO = {
-        StartTime: startTime,
-        EndTime: endTime,
+        StartTime: FormatDate(startTime),
+        EndTime: FormatDate(endTime),
         Description: description,
         Location: location,
         RequestedEmployees: requestedEmployees,
@@ -84,6 +84,13 @@ function CreateShift() {
       });
       setFormErrors({});
     }
+  }
+
+  function FormatDate(DateInput : string){
+    const date = new Date(DateInput + 'T00:00:00');
+    return date.toISOString().split("T")[0].replace(/-/g, '/') + 
+                          ' ' + 
+                          date.toTimeString().split(' ')[0];
   }
 
   return (
