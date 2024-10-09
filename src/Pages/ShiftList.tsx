@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { httpRequest } from "../Functions/HttpRequest";
 
-const ShiftList = () => {
+function ShiftList() {
   const [selected, setSelected] = useState<number>();
   const [selectLocation, setLocation] = useState<string>("");
   const [selectStartTime, setStartTime] = useState<string>("");
@@ -30,12 +30,10 @@ const ShiftList = () => {
   }, [selected]);
 
   async function populateShifts() {
-    const r1 = await fetch(
-      import.meta.env.VITE_API_URL + "api/Shift/get/archived"
-    );
+    const r1 = await fetch("/api/Shift/get/archived");
     const archived = await r1.json();
 
-    const r2 = await fetch(import.meta.env.VITE_API_URL + "api/Shift/get");
+    const r2 = await fetch("/api/Shift/get");
     const active = await r2.json();
 
     setShifts([...archived, ...active]);
@@ -48,11 +46,7 @@ const ShiftList = () => {
   async function handleArchive(shift: Shift) {
     shift.status = "ARCHIVED";
 
-    httpRequest(
-      import.meta.env.VITE_API_URL + "api/Shift/edit/" + String(shift.id),
-      shift,
-      "PUT"
-    );
+    httpRequest("/api/Shift/edit/" + String(shift.id), shift, "PUT");
 
     setShifts((prevShifts) =>
       prevShifts?.map((s) => (s.id === shift.id ? shift : s))
@@ -72,11 +66,7 @@ const ShiftList = () => {
       status: shift!.status,
     };
 
-    httpRequest(
-      import.meta.env.VITE_API_URL + "api/Shift/edit/" + String(newShift.id),
-      newShift,
-      "PUT"
-    );
+    httpRequest("/api/Shift/edit/" + String(newShift.id), newShift, "PUT");
     handleEdit(-1);
 
     setShifts((prevShifts) =>
@@ -195,5 +185,5 @@ const ShiftList = () => {
       {contents}
     </div>
   );
-};
+}
 export default ShiftList;

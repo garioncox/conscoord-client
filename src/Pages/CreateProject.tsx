@@ -52,7 +52,7 @@ const CreateProject = () => {
   };
 
   async function postProject() {
-    setSubmitted(true); // Set the submitted flag to true
+    setSubmitted(true);
 
     if (validateAllInput()) {
       const project: ProjectDTO = {
@@ -61,30 +61,26 @@ const CreateProject = () => {
         startDate: startDate,
         endDate: endDate,
       };
-      toast.promise(
-        axios.post("api/Project", project),
-        {
-          pending: "Creating Project...",
-          success: {
-            render() {
-              return "Project Created Successfully";
-            },
+      toast.promise(axios.post("/api/Project", project), {
+        pending: "Creating Project...",
+        success: {
+          render() {
+            return "Project Created Successfully";
           },
-          error: {
-            render({ data }: { data: any }) {
-              return data.message || "Error Creating Project";
-            },
+        },
+        error: {
+          render({ data }: { data: any }) {
+            return data.message || "Error Creating Project";
           },
-        }
-      );
+        },
+      });
 
-      // Reset form on successful submission
       setTitle("");
       setStartDate("");
       setEndDate("");
       setLocation("");
       setFormErrors({});
-      setSubmitted(false); // Reset the submitted flag
+      setSubmitted(false);
     }
   }
 
@@ -109,7 +105,7 @@ const CreateProject = () => {
             onChange={(e) => {
               setTitle(e.target.value);
               if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, title: "" })); // Clear error on input
+                setFormErrors((prev) => ({ ...prev, title: "" }));
               }
             }}
             required
@@ -134,7 +130,7 @@ const CreateProject = () => {
             onChange={(e) => {
               setStartDate(e.target.value);
               if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, startDate: "" })); // Clear error on input
+                setFormErrors((prev) => ({ ...prev, startDate: "" }));
               }
             }}
             required
@@ -159,7 +155,7 @@ const CreateProject = () => {
             onChange={(e) => {
               setEndDate(e.target.value);
               if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, endDate: "" })); // Clear error on input
+                setFormErrors((prev) => ({ ...prev, endDate: "" }));
               }
             }}
             required
@@ -187,7 +183,7 @@ const CreateProject = () => {
             onChange={(e) => {
               setLocation(e.target.value);
               if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, location: "" })); // Clear error on input
+                setFormErrors((prev) => ({ ...prev, location: "" }));
               }
             }}
             required
