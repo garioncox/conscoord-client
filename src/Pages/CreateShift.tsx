@@ -3,6 +3,7 @@ import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 import { httpRequest } from "../Functions/HttpRequest";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FormatDate } from "../Functions/FormatDates";
 
 function CreateShift() {
   const [startTime, setStartTime] = useState<string>("");
@@ -86,12 +87,7 @@ function CreateShift() {
     }
   }
 
-  function FormatDate(DateInput : string){
-    const date = new Date(DateInput + 'T00:00:00');
-    return date.toISOString().split("T")[0].replace(/-/g, '/') + 
-                          ' ' + 
-                          date.toTimeString().split(' ')[0];
-  }
+
 
   return (
     <form>
