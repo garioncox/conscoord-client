@@ -27,7 +27,7 @@ export const Home = () => {
           });
         }
 
-        // console.error("Error fetching user by email:", error);
+        console.error("Error fetching user by email:", error);
       }
     };
 
