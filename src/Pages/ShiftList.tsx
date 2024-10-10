@@ -68,13 +68,14 @@ function ShiftList() {
       return;
     }
 
-    const newShift: ShiftDTO = {
-      Location: selectLocation,
-      StartTime: selectStartTime,
-      EndTime: selectEndTime,
-      Description: selectDescription,
-      RequestedEmployees: selectReqEmployees,
-      Status: s.status,
+    const newShift: Shift = {
+      id: s.id,
+      location: selectLocation,
+      startTime: selectStartTime,
+      endTime: selectEndTime,
+      description: selectDescription,
+      requestedEmployees: selectReqEmployees,
+      status: s.status,
     };
 
     await editShift(s.id, newShift);

@@ -10,7 +10,6 @@ import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 
 export const useApiRequests = () => {
-
   const getUserByEmail = async (email: string): Promise<Employee> => {
     const response = await axios.get(`/api/Employee/getByEmail/${email}`);
     return response.data;
@@ -48,8 +47,8 @@ export const useApiRequests = () => {
     await axios.post(`/api/Shift/add`, shift);
   };
 
-  const editShift = async (id: number, shift: ShiftDTO) => {
-    await axios.post(`/api/Shift/edit/${id}`, shift);
+  const editShift = async (id: number, shift: Shift) => {
+    await axios.put(`/api/Shift/edit/${id}`, shift);
   };
 
   const getAllShifts = async (): Promise<Shift[]> => {
