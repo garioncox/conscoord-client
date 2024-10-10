@@ -21,6 +21,31 @@ function ShiftList() {
     populateShifts();
   }, []);
 
+  useEffect(() => {
+    const shift = findShift();
+
+    if (shift === undefined) {
+      return;
+    }
+
+    setLocation(shift.location);
+    setStartTime(shift.startTime);
+    setEndTime(shift.endTime);
+    setReqEmployees(shift.requestedEmployees);
+    setDescription(shift.description);
+  }, [selected]);
+
+  function findShift() {
+    if (shifts === undefined) {
+      return;
+    }
+    for (let i = 0; i < shifts.length; i++) {
+      if (shifts[i].id === selected) {
+        return shifts[i];
+      }
+    }
+  }
+
   async function populateShifts() {
     const archived = await getAllArchivedShifts();
     const active = await getAllShifts();

@@ -35,7 +35,7 @@ function AddOfficer() {
     return isvalid;
   }
 
-  async function HandleSubmit() {
+  async function AddOfficer() {
     if (validateForm()) {
       const myPhone = phone.replace(/-/g, "");
 
@@ -73,7 +73,7 @@ function AddOfficer() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          HandleSubmit();
+          AddOfficer();
         }}
       >
         <div className="container">
