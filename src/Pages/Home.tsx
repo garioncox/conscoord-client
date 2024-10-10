@@ -1,8 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
-import { createNewUser, getUserByEmail } from "../Functions/AddUser";
+import { useApiRequests } from "../Functions/ApiRequests";
 
-const Home = () => {
+export const Home = () => {
+  const { addEmployee, getUserByEmail } = useApiRequests();
+
   const { user } = useAuth0();
 
   useEffect(() => {
@@ -12,17 +14,19 @@ const Home = () => {
       }
 
       try {
-        const loggedInUser = await getUserByEmail(user?.email!);
-        if (!loggedInUser) {
-          createNewUser({
+        await getUserByEmail(user.email!);
+      } catch (error) {
+        if (error.status == 404) {
+          console.log("User is not in database...");
+          console.log("Adding user");
+
+          addEmployee({
             name: user.name!,
             email: user.email!,
             phonenumber: user.phone_number ?? "",
           });
-        } else {
-          console.log("user could not be created");
         }
-      } catch (error) {
+
         console.error("Error fetching user by email:", error);
       }
     };
@@ -36,5 +40,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default Home;

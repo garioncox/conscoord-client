@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
-import { httpRequest } from "../Functions/HttpRequest";
+import { useApiRequests } from "../Functions/ApiRequests";
 
 function ProjectList() {
+  const { archiveProject, getAllProjects, updateProject } = useApiRequests();
+
   const [projects, setProjects] = useState<Project[]>();
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -28,9 +30,7 @@ function ProjectList() {
   }, [selected]);
 
   async function populateProjects() {
-    const response = await fetch("/api/Project/get");
-    const data = await response.json();
-    setProjects(data);
+    setProjects(await getAllProjects());
   }
 
   function findProject() {
@@ -45,9 +45,7 @@ function ProjectList() {
   }
 
   async function handleArchive(project: Project) {
-    project.status = "ARCHIVED";
-
-    httpRequest("/api/Shift/edit/" + String(project.id), project, "PUT");
+    await archiveProject(project);
 
     setProjects((prevProjects) =>
       prevProjects?.map((s) => (s.id === project.id ? project : s))
@@ -64,13 +62,7 @@ function ProjectList() {
       status: status,
     };
 
-    httpRequest(
-      import.meta.env.VITE_API_URL +
-        "api/Project/edit/" +
-        String(newProject.id),
-      newProject,
-      "PUT"
-    );
+    updateProject(newProject);
     setSelected(-1);
     setProjects((prevProjects) =>
       prevProjects?.map((s) => (s.id === newProject.id ? newProject : s))

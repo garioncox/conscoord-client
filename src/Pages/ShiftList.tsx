@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
-import { httpRequest } from "../Functions/HttpRequest";
+import { useApiRequests } from "../Functions/ApiRequests";
+import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 
 function ShiftList() {
+  const { archiveShift, editShift, getAllArchivedShifts, getAllShifts } =
+    useApiRequests();
+
   const [selected, setSelected] = useState<number>();
   const [selectLocation, setLocation] = useState<string>("");
   const [selectStartTime, setStartTime] = useState<string>("");
@@ -29,51 +33,6 @@ function ShiftList() {
     setDescription(shift.description);
   }, [selected]);
 
-  async function populateShifts() {
-    const r1 = await fetch("/api/Shift/get/archived");
-    const archived = await r1.json();
-
-    const r2 = await fetch("/api/Shift/get");
-    const active = await r2.json();
-
-    setShifts([...archived, ...active]);
-  }
-
-  function handleEdit(id: number) {
-    setSelected(id);
-  }
-
-  async function handleArchive(shift: Shift) {
-    shift.status = "ARCHIVED";
-
-    httpRequest("/api/Shift/edit/" + String(shift.id), shift, "PUT");
-
-    setShifts((prevShifts) =>
-      prevShifts?.map((s) => (s.id === shift.id ? shift : s))
-    );
-  }
-
-  async function saveEdit() {
-    const shift = findShift();
-
-    const newShift: Shift = {
-      location: selectLocation,
-      id: shift!.id,
-      startTime: selectStartTime,
-      endTime: selectEndTime,
-      description: selectDescription,
-      requestedEmployees: selectReqEmployees,
-      status: shift!.status,
-    };
-
-    httpRequest("/api/Shift/edit/" + String(newShift.id), newShift, "PUT");
-    handleEdit(-1);
-
-    setShifts((prevShifts) =>
-      prevShifts?.map((s) => (s.id === newShift.id ? newShift : s))
-    );
-  }
-
   function findShift() {
     if (shifts === undefined) {
       return;
@@ -83,6 +42,45 @@ function ShiftList() {
         return shifts[i];
       }
     }
+  }
+
+  async function populateShifts() {
+    const archived = await getAllArchivedShifts();
+    const active = await getAllShifts();
+    setShifts([...archived, ...active]);
+  }
+
+  function handleEdit(id: number) {
+    setSelected(id);
+  }
+
+  async function handleArchive(shift: Shift) {
+    await archiveShift(shift.id);
+
+    setShifts((prevShifts) =>
+      prevShifts?.map((s) => (s.id === shift.id ? shift : s))
+    );
+  }
+
+  async function saveEdit(s: Shift) {
+    if (s === undefined) {
+      console.log("Error when saving shift: shift not found");
+      return;
+    }
+
+    const newShift: ShiftDTO = {
+      Location: selectLocation,
+      StartTime: selectStartTime,
+      EndTime: selectEndTime,
+      Description: selectDescription,
+      RequestedEmployees: selectReqEmployees,
+      Status: s.status,
+    };
+
+    await editShift(s.id, newShift);
+    handleEdit(-1);
+
+    await populateShifts();
   }
 
   function checkSelected(s: Shift) {
@@ -125,9 +123,9 @@ function ShiftList() {
               value={selectReqEmployees}
             />
           </td>
-          <td> {findShift()?.status} </td>
+          <td> {s.status} </td>
           <td>
-            <button onClick={() => saveEdit()} className="btn btn-success">
+            <button onClick={() => saveEdit(s)} className="btn btn-success">
               Save
             </button>
           </td>

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
-import { httpRequest } from "../Functions/HttpRequest";
+import { useApiRequests } from "../Functions/ApiRequests";
 
 function ShiftOfficerList() {
+  const { addEmployeeShift, getAllShifts } = useApiRequests();
+
   const [shifts, setShifts] = useState<Shift[]>();
 
   useEffect(() => {
@@ -43,9 +45,7 @@ function ShiftOfficerList() {
     );
 
   async function populateShifts() {
-    const response = await fetch("/api/Shift/get");
-    const data = await response.json();
-    setShifts(data);
+    setShifts(await getAllShifts());
   }
 
   async function postEmployeeShift(id: number) {
@@ -54,12 +54,12 @@ function ShiftOfficerList() {
       ShiftId: id,
     };
 
-    httpRequest("/api/EmployeeShift/add", employee, "POST");
+    await addEmployeeShift(employee);
   }
 
   return (
     <div>
-      <h1 id="shifts"> Shift List</h1>
+      <h1 id="shifts">Shift List</h1>
       {contents}
     </div>
   );
