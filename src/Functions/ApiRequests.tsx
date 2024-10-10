@@ -10,7 +10,8 @@ import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 
 export const getUserByEmail = async (email: string): Promise<Employee> => {
-  return await axios.get(`/api/Employee/GetEmployeeByEmail/${email}`);
+  const response = await axios.get(`/api/Employee/GetEmployeeByEmail/${email}`);
+  return response.data;
 };
 
 export const addEmployee = async (employee: EmployeeDTO) => {
@@ -18,19 +19,23 @@ export const addEmployee = async (employee: EmployeeDTO) => {
 };
 
 export const getAllEmployees = async (): Promise<Employee[]> => {
-  return await axios.get(`/api/Employee/getAll`);
+  const response = await axios.get(`/api/Employee/getAll`);
+  return response.data;
 };
 
 export const getAllRoles = async (): Promise<Role[]> => {
-  return await axios.get(`/api/Role/getAll`);
+  const response = await axios.get(`/api/Role/getAll`);
+  return response.data;
 };
 
 export const getAllProjects = async (): Promise<Project[]> => {
-  return await axios.get(`/api/Project/getAll`);
+  const response = await axios.get(`/api/Project/getAll`);
+  return response.data;
 };
 
 export const getCompanies = async (): Promise<Company[]> => {
-  return await axios.get(`/api/Company/getAll`);
+  const response = await axios.get(`/api/Company/getAll`);
+  return response.data;
 };
 
 export const addProject = async (project: ProjectDTO) => {
@@ -46,7 +51,8 @@ export const editShift = async (id: number, shift: ShiftDTO) => {
 };
 
 export const getAllShifts = async (): Promise<Shift[]> => {
-  return await axios.get(`/api/Shift/getAll`);
+  const response = await axios.get(`/api/Shift/getAll`);
+  return response.data;
 };
 
 export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
@@ -54,7 +60,8 @@ export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
 };
 
 export const getAllArchivedShifts = async (): Promise<Shift[]> => {
-  return await axios.get(`/api/Shift/getAll/archived`);
+  const response = await axios.get(`/api/Shift/getAll/archived`);
+  return response.data;
 };
 
 export const archiveShift = async (shiftId: number) => {
@@ -64,3 +71,7 @@ export const archiveShift = async (shiftId: number) => {
 export const updateProject = async (project: Project) => {
   await axios.put(`/api/Project/edit/${project.id}`);
 };
+
+export const archiveProject = async (project: Project) => {
+  await axios.put(`/api/Project/archive/${project.id}`);
+}

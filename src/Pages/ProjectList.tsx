@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
 import { getAllProjects, updateProject } from "../Functions/ApiRequests";
+import axios from "axios";
 
 function ProjectList() {
   const [projects, setProjects] = useState<Project[]>();
@@ -51,7 +52,8 @@ function ProjectList() {
     // associated with a project, but this is not
     // currently implemented in the backend in this
     // way.
-    httpRequest("/api/Shift/edit/" + String(project.id), project, "PUT");
+    axios.put("/api/Project/archive", project);
+    // httpRequest("/api/Shift/edit/" + String(project.id), project, "PUT");
 
     setProjects((prevProjects) =>
       prevProjects?.map((s) => (s.id === project.id ? project : s))

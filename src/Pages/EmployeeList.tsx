@@ -4,7 +4,6 @@ import "../index.css";
 import AddOfficer from "./AddOfficer";
 import {
   useGetEmployees,
-  useGetRoleName,
   useGetRoles,
 } from "../Functions/EmployeeListFunctions";
 
@@ -42,11 +41,9 @@ const EmployeeList = () => {
               <td className="text-start">{e.name}</td>
               <td className="text-start">{e.phonenumber}</td>
               <td className="text-start">{e.email}</td>
-              <td className="text-start">{useGetRoleName(roles, e.roleid)}</td>
-              {/* TODO: We should not be calling a function here.
-                  Either attach a role to an employee when getting
-                  the employee, or match the roles outside of where
-                  we render. perhaps we want to use a controller? */}
+              <td className="text-start">
+                {roles.find((role) => role.id === e.roleid)?.rolename}
+              </td>
             </tr>
           ))}
         </tbody>

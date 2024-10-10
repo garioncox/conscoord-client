@@ -21,24 +21,6 @@ function ShiftList() {
     populateShifts();
   }, []);
 
-  useEffect(() => {
-    const shift = findShift();
-
-    if (shift === undefined) {
-      return;
-    }
-
-    setLocation(shift.location);
-    setStartTime(shift.startTime);
-    setEndTime(shift.endTime);
-    setReqEmployees(shift.requestedEmployees);
-    setDescription(shift.description);
-  }, [selected]);
-  /////////////////// TODO ///////////////////
-  // This useEffect should have the function as params
-  // but is not able to. Find a way to "findShift" without
-  // rendering every cycle
-
   async function populateShifts() {
     const archived = await getAllArchivedShifts();
     const active = await getAllShifts();
@@ -57,10 +39,8 @@ function ShiftList() {
     );
   }
 
-  async function saveEdit() {
-    const shift = findShift();
-
-    if (shift === undefined) {
+  async function saveEdit(s: Shift) {
+    if (s === undefined) {
       console.log("Error when saving shift: shift not found");
       return;
     }
@@ -71,24 +51,13 @@ function ShiftList() {
       EndTime: selectEndTime,
       Description: selectDescription,
       RequestedEmployees: selectReqEmployees,
-      Status: shift.status,
+      Status: s.status,
     };
 
-    await editShift(shift.id, newShift);
+    await editShift(s.id, newShift);
     handleEdit(-1);
 
     await populateShifts();
-  }
-
-  function findShift() {
-    if (shifts === undefined) {
-      return;
-    }
-    for (let i = 0; i < shifts.length; i++) {
-      if (shifts[i].id === selected) {
-        return shifts[i];
-      }
-    }
   }
 
   function checkSelected(s: Shift) {
@@ -131,9 +100,9 @@ function ShiftList() {
               value={selectReqEmployees}
             />
           </td>
-          <td> {findShift()?.status} </td>
+          <td> {s.status} </td>
           <td>
-            <button onClick={() => saveEdit()} className="btn btn-success">
+            <button onClick={() => saveEdit(s)} className="btn btn-success">
               Save
             </button>
           </td>
