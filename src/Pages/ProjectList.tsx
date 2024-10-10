@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
-import { getAllProjects, updateProject } from "../Functions/ApiRequests";
-import axios from "axios";
+import { archiveProject, getAllProjects, updateProject } from "../Functions/ApiRequests";
 
 function ProjectList() {
   const [projects, setProjects] = useState<Project[]>();
@@ -16,7 +15,7 @@ function ProjectList() {
   }, []);
 
   useEffect(() => {
-    const project = findProject();
+    const project = findProject();  
 
     if (project === undefined) {
       return;
@@ -28,7 +27,7 @@ function ProjectList() {
     setName(project.name);
   }, [selected]);
 
-  async function populateProjects() {
+  async function populateProjects() { 
     setProjects(await getAllProjects());
   }
 
@@ -44,16 +43,7 @@ function ProjectList() {
   }
 
   async function handleArchive(project: Project) {
-    project.status = "ARCHIVED";
-
-    /////////////////// TODO: ///////////////////
-    // Figure out what's going on here
-    // I believe we are trying to archive all shifts
-    // associated with a project, but this is not
-    // currently implemented in the backend in this
-    // way.
-    axios.put("/api/Project/archive", project);
-    // httpRequest("/api/Shift/edit/" + String(project.id), project, "PUT");
+    await archiveProject(project);
 
     setProjects((prevProjects) =>
       prevProjects?.map((s) => (s.id === project.id ? project : s))
