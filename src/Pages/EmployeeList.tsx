@@ -14,7 +14,7 @@ const EmployeeList = () => {
   useEffect(() => {
     fetchEmployees();
     fetchRoles();
-  }, [fetchEmployees, fetchRoles]);
+  }, []);
 
   const navigate = useNavigate();
 
