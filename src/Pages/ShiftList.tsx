@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useApiRequests } from "../Functions/ApiRequests";
-import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 
 function ShiftList() {
   const { archiveShift, editShift, getAllArchivedShifts, getAllShifts } =
