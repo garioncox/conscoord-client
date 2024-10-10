@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
-import {
-  archiveShift,
-  editShift,
-  getAllArchivedShifts,
-  getAllShifts,
-} from "../Functions/ApiRequests";
+import { useApiRequests } from "../Functions/ApiRequests";
 import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 
 function ShiftList() {
+  const { archiveShift, editShift, getAllArchivedShifts, getAllShifts } =
+    useApiRequests();
+
   const [selected, setSelected] = useState<number>();
   const [selectLocation, setLocation] = useState<string>("");
   const [selectStartTime, setStartTime] = useState<string>("");

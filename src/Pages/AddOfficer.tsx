@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { addEmployee } from "../Functions/ApiRequests";
+import { useApiRequests } from "../Functions/ApiRequests";
 
 function AddOfficer() {
+  const { addEmployee } = useApiRequests();
+
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");

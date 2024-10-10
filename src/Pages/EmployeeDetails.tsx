@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../index.css";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import AddOfficer from "./AddOfficer";
-import { getAllEmployees } from "../Functions/ApiRequests";
+import { useApiRequests } from "../Functions/ApiRequests";
 
 function EmployeeList() {
+  const { getAllEmployees } = useApiRequests();
+
   const [employees, setEmployees] = useState<Employee[]>([]);
 
   useEffect(() => {

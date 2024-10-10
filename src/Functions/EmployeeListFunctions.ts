@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import Role from "../Data/Interfaces/RoleInterface";
-import { getAllEmployees, getAllRoles } from "./ApiRequests";
+import { useApiRequests } from "./ApiRequests";
 
 export const useGetEmployees = () => {
+  const { getAllEmployees } = useApiRequests();
+
   const [employees, setEmployees] = useState<Employee[]>([]);
 
   const fetchEmployees = async () => {
@@ -14,6 +16,7 @@ export const useGetEmployees = () => {
 };
 
 export const useGetRoles = () => {
+  const { getAllRoles } = useApiRequests();
   const [roles, setRoles] = useState<Role[]>([]);
 
   const fetchRoles = async () => {

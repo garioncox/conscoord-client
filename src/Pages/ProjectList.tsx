@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
-import { archiveProject, getAllProjects, updateProject } from "../Functions/ApiRequests";
+import { useApiRequests } from "../Functions/ApiRequests";
 
 function ProjectList() {
+  const { archiveProject, getAllProjects, updateProject } = useApiRequests();
+
   const [projects, setProjects] = useState<Project[]>();
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -15,7 +17,7 @@ function ProjectList() {
   }, []);
 
   useEffect(() => {
-    const project = findProject();  
+    const project = findProject();
 
     if (project === undefined) {
       return;
@@ -27,7 +29,7 @@ function ProjectList() {
     setName(project.name);
   }, [selected]);
 
-  async function populateProjects() { 
+  async function populateProjects() {
     setProjects(await getAllProjects());
   }
 

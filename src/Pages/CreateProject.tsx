@@ -3,9 +3,11 @@ import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormatDate } from "../Functions/FormatDates";
-import { addProject } from "../Functions/ApiRequests";
+import { useApiRequests } from "../Functions/ApiRequests";
 
 const CreateProject = () => {
+  const { addProject } = useApiRequests();
+
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");

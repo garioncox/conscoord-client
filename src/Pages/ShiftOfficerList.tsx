@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
-import { addEmployeeShift, getAllShifts } from "../Functions/ApiRequests";
+import { useApiRequests } from "../Functions/ApiRequests";
 
 function ShiftOfficerList() {
+  const { addEmployeeShift, getAllShifts } = useApiRequests();
+
   const [shifts, setShifts] = useState<Shift[]>();
 
   useEffect(() => {
