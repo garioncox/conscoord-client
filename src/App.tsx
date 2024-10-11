@@ -10,7 +10,6 @@ import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import { Home } from "./Pages/Home";
 
 function App() {
-  console.log(`Environment toggle value: ${import.meta.env.VITE_EMAIL_TOGGLE}`);
   return (
     <Routes>
       <Route path="/" element={<Home />} />
