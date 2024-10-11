@@ -8,6 +8,7 @@ import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 import { Project } from "../Data/Interfaces/Project";
 import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
+import { EmailRequest } from "../Data/Interfaces/Email";
 
 export const useApiRequests = () => {
   const getUserByEmail = async (email: string): Promise<Employee> => {
@@ -77,6 +78,10 @@ export const useApiRequests = () => {
     await axios.put(`/api/Project/archive/${project.id}`);
   };
 
+  const sendEmail = async (email: EmailRequest) => {
+    await axios.post(`/api/Email/send/`, email);
+  };
+
   return {
     getUserByEmail,
     addEmployee,
@@ -93,5 +98,6 @@ export const useApiRequests = () => {
     archiveShift,
     updateProject,
     archiveProject,
+    sendEmail,
   };
 };
