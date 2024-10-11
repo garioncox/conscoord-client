@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../index.css";
+import { Employee } from "../Data/Interfaces/EmployeeInterface";
+import { useEmployeeRequests } from "../Functions/EmployeeRequests";
+import { useRoleRequests } from "../Functions/RoleRequests";
 import AddOfficer from "./AddOfficer";
-import {
-  useGetEmployees,
-  useGetRoles,
-} from "../Functions/EmployeeListFunctions";
-import Role from "../Data/Interfaces/RoleInterface";
+import "../index.css";
 
-const EmployeeList = () => {
-  const { employees, fetchEmployees } = useGetEmployees();
-  const { roles, fetchRoles } = useGetRoles();
+export const EmployeeList = () => {
+  const {employees, getAllEmployees,getEmployeeById, editEmployee} = useEmployeeRequests();
+  const {roles, getAllRoles} = useRoleRequests();
   const [selectedRole, setSelectedRole] = useState<number | undefined>(-1);
   const [selectedEmployee, setSelectedEmployee] = useState<number | null>(-1);
 
   useEffect(() => {
-    fetchEmployees();
-    fetchRoles();
+    getAllEmployees();
+    getAllRoles();
   }, []);
 
   const navigate = useNavigate();
@@ -26,10 +24,26 @@ const EmployeeList = () => {
     setSelectedRole(currentRoleId);
   };
 
-  const saveUserRole = () => {
-    //set the role id here
-    // setSelectedEmployee(null);
-    // setSelectedRole(undefined);  
+  const saveUserRole = async (id: number) => {
+    const employee = await getEmployeeById(id);
+
+    if (employee) {
+      console.log("User found ", employee);
+
+      const updatedEmployee: Employee = {
+        ...employee,
+        roleid: selectedRole ? selectedRole : 0,
+      };
+
+      await editEmployee(updatedEmployee);
+      await getAllEmployees();
+      console.log("Employee updated successfully");
+    } else {
+      console.log("no role selected");
+    }
+
+    setSelectedEmployee(null);
+    setSelectedRole(undefined);
   };
 
   const contents =
@@ -48,57 +62,62 @@ const EmployeeList = () => {
         </thead>
         <tbody>
           {employees.map((e) => (
-            <tr
-              key={e.id}
-              className="grow grow:hover"
-              // onClick={() => navigate(`/admin/view/employees/${e.id}`)}
-            >
+            <tr key={e.id} className="grow grow:hover">
               <td className="text-start">{e.name}</td>
               <td className="text-start">{e.phonenumber}</td>
               <td className="text-start">{e.email}</td>
 
               {selectedEmployee === e.id ? (
-              <>
-                <td className="text-start">
-                  {/* <label htmlFor="selectRole">Select Role</label> */}
-                  <select
-                    className="form-select"
-                    name="selectRole"
-                    onChange={(e) => {
-                         const selectedRoleId = roles.find((role: Role) => role.rolename === e.target.value)?.id;
-                         setSelectedRole(selectedRoleId ?? 1);
-                       }}                  >
-                    <option value="">
-                      Default (No Role)
-                    </option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.rolename}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <button className="btn btn-info" onClick={saveUserRole}>
-                    Save Changes
-                  </button>
-                </td>
-              </>
-            ) : (
-              <>
-                <td className="text-start">
-                  {roles.find((role) => role.id === e.roleid)?.rolename}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-info"
-                    onClick={() => updateUserRole(e.id, e.roleid)}
-                  >
-                    Update Role
-                  </button>
-                </td>
-              </>
-            )}
+                <>
+                  <td className="text-start">
+                    <select
+                      className="form-select"
+                      name="selectRole"
+                      onChange={(e) => {
+                        setSelectedRole(Number(e.target.value));
+                      }}
+                    >
+                      <option value="">Default (No Role)</option>
+                      {roles.map((role) => (
+                        <option
+                          key={role.id}
+                          value={role.id}
+                          selected={role.id == e.roleid}
+                        >
+                          {role.rolename}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-info"
+                      onClick={() => saveUserRole(e.id)}
+                    >
+                      Save Changes
+                    </button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td className="text-start">
+                    {roles.find((role) => role.id === e.roleid)?.rolename}
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-info"
+                      onClick={() => updateUserRole(e.id, e.roleid)}
+                    >
+                      Update Role
+                    </button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate(`/admin/view/employees/${e.id}`)}
+                    > View Employee
+                    </button>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>
@@ -109,10 +128,9 @@ const EmployeeList = () => {
     <>
       <AddOfficer />
       <h1>Admin Employee View</h1>
-      <div>Selected Role is {selectedRole}</div>
       {contents}
     </>
   );
 };
 
-export default EmployeeList;
+export default EmployeeList

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Company } from "../Data/Interfaces/Company";
-import { useApiRequests } from "../Functions/ApiRequests";
+import { useCompanyRequests } from "../Functions/CompanyRequests";
 
 const CompanyList = () => {
-  const { getCompanies } = useApiRequests();
+  const { getCompanies } = useCompanyRequests();
 
   const [companies, setCompanies] = useState<Company[]>();
 
