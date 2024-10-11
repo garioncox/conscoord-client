@@ -79,8 +79,18 @@ export const useApiRequests = () => {
   };
 
   const sendEmail = async (email: EmailRequest) => {
-    if (import.meta.env.VITE_EMAIL_TOGGLE === "ENABLED") {
+    try {
       await axios.post(`/api/Email/send/`, email);
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        if (e.response?.status === 405) {
+          console.warn("Error 405: Feature Flag Not Enabled");
+        } else {
+          console.warn(e);
+        }
+      } else {
+        console.warn("Unexpected error:", e);
+      }
     }
   };
 
