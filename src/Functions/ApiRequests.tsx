@@ -79,7 +79,9 @@ export const useApiRequests = () => {
   };
 
   const sendEmail = async (email: EmailRequest) => {
-    await axios.post(`/api/Email/send/`, email);
+    if (import.meta.env.VITE_EMAIL_TOGGLE === "ENABLED") {
+      await axios.post(`/api/Email/send/`, email);
+    }
   };
 
   return {
