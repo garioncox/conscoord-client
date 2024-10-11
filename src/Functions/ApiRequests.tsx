@@ -66,7 +66,6 @@ export const useApiRequests = () => {
   };
 
   const archiveShift = async (shiftId: number) => {
-    console.warn(`Archiving shift ${shiftId}`);
     await axios.put(`/api/Shift/archive/${shiftId}`);
   };
 
