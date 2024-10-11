@@ -153,7 +153,7 @@ function ShiftList() {
           </td>
           <td>
             <button onClick={() => handleArchive(s)} className="btn btn-danger">
-              Delete
+              Archive
             </button>
           </td>
         </tr>
