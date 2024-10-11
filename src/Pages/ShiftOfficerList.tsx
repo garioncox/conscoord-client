@@ -3,10 +3,18 @@ import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
+import { EmailRequest } from "../Data/Interfaces/Email";
+import { useEmailRequests } from "../Functions/EmailRequests";
+import { useAuth0 } from "@auth0/auth0-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ShiftOfficerList() {
   const {addEmployeeShift} = useEmpShiftRequests();
   const {getAllShifts} = useShiftRequests();
+  const {sendEmail} = useEmailRequests();
+  const { user } = useAuth0();
+
   const [shifts, setShifts] = useState<Shift[]>();
 
   useEffect(() => {
@@ -34,7 +42,19 @@ function ShiftOfficerList() {
               <td>
                 <button
                   className="btn btn-primary"
-                  onClick={() => postEmployeeShift(s.id)}
+                  onClick={() => {
+                    toast.success("Shift Signed Up Successfully");
+                    postEmployeeShift(s.id);
+
+                    if (user && user.email) {
+                      const email: EmailRequest = {
+                        Email: user.email,
+                        Subject: "Shift signup notification",
+                        MessageBody: ` ${user?.name}, you have signed up to the shift at ${s.location} from ${s.startTime} to ${s.endTime}`,
+                      };
+                      sendEmail(email);
+                    }
+                  }}
                 >
                   Take This Shift
                 </button>
@@ -62,6 +82,7 @@ function ShiftOfficerList() {
     <div>
       <h1 id="shifts">Shift List</h1>
       {contents}
+      <ToastContainer position="top-center" />
     </div>
   );
 }
