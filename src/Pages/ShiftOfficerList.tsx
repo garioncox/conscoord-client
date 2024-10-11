@@ -41,12 +41,13 @@ function ShiftOfficerList() {
                   onClick={() => {
                     toast.success("Shift Signed Up Successfully");
                     postEmployeeShift(s.id);
+
                     if (user && user.email) {
-                      const email : EmailRequest = {
-                        Email : user.email,
-                        Subject : "Shift signup notification",
-                        MessageBody : ` ${user?.name}, you have signed up to the shift at ${s.location} from ${s.startTime} to ${s.endTime}`
-                    }
+                      const email: EmailRequest = {
+                        Email: user.email,
+                        Subject: "Shift signup notification",
+                        MessageBody: ` ${user?.name}, you have signed up to the shift at ${s.location} from ${s.startTime} to ${s.endTime}`,
+                      };
                       sendEmail(email);
                     }
                   }}
