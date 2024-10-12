@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useApiRequests } from "../Functions/ApiRequests";
+import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
 
 export const Home = () => {
   const { addEmployee, getUserByEmail } = useApiRequests();
@@ -35,8 +36,10 @@ export const Home = () => {
   }, [user]);
 
   return (
-    <div className="d-flex justify-content-center align-items-center">
-      <h1>Welcome Home!</h1>
-    </div>
+    <PermissionLock role={ADMIN_ROLE}>
+      <div className="d-flex justify-content-center align-items-center">
+        <h1>Welcome Home!</h1>
+      </div>
+    </PermissionLock>
   );
 };

@@ -30,6 +30,11 @@ export const useApiRequests = () => {
     return response.data;
   };
 
+  const getRoleFromEmail = async (email: string): Promise<Role> => {
+    const response = await axios.get(`/api/Role/getByEmail/${email}`);
+    return response.data;
+  };
+
   const getAllProjects = async (): Promise<Project[]> => {
     const response = await axios.get(`/api/Project/getAll`);
     return response.data;
@@ -111,5 +116,6 @@ export const useApiRequests = () => {
     updateProject,
     archiveProject,
     sendEmail,
+    getRoleFromEmail,
   };
 };
