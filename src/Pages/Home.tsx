@@ -2,7 +2,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useApiRequests } from "../Functions/ApiRequests";
 import PermissionLock, {
-  ADMIN_ROLE,
   CLIENT_ROLE,
   PSO_ROLE,
 } from "../Components/PermissionLock";
