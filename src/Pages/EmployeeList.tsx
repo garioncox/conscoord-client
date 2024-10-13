@@ -6,6 +6,7 @@ import {
   useGetEmployees,
   useGetRoles,
 } from "../Functions/EmployeeListFunctions";
+import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
 
 const EmployeeList = () => {
   const { employees, fetchEmployees } = useGetEmployees();
@@ -52,9 +53,11 @@ const EmployeeList = () => {
 
   return (
     <>
-      <AddOfficer />
-      <h1>Admin Employee View</h1>
-      {contents}
+      <PermissionLock roles={[ADMIN_ROLE]}>
+        <AddOfficer />
+        <h1>Admin Employee View</h1>
+        {contents}
+      </PermissionLock>
     </>
   );
 };
