@@ -1,8 +1,11 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./Login";
 import LogoutButton from "./Logout";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  const { user } = useAuth0();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary py-3">
@@ -57,10 +60,7 @@ const Navbar = () => {
 
             <ul className="ms-auto navbar-nav">
               <li className="nav-item mx-2">
-                <LoginButton />
-              </li>
-              <li className="nav-item mx-2">
-                <LogoutButton />
+                {user ? <LogoutButton /> : <LoginButton />}
               </li>
             </ul>
           </div>
