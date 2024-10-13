@@ -6,9 +6,9 @@ export const PSO_ROLE = "PSO";
 export const CLIENT_ROLE = "CLIENT";
 
 const PermissionLock: FC<{
-  role: string;
+  roles: string[];
   children: ReactNode;
-}> = ({ role, children }) => {
+}> = ({ roles, children }) => {
   const { useRoleQuery } = useRoleProvider();
 
   const roleQuery = useRoleQuery();
@@ -19,7 +19,10 @@ const PermissionLock: FC<{
     </div>;
   }
 
-  if (roleQuery.data && roleQuery.data === role) {
+  if (
+    (roleQuery.data && roles.includes(roleQuery.data)) ||
+    roleQuery.data == ADMIN_ROLE
+  ) {
     return <div>{children}</div>;
   }
 

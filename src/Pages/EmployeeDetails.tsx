@@ -4,6 +4,7 @@ import "../index.css";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import AddOfficer from "./AddOfficer";
 import { useApiRequests } from "../Functions/ApiRequests";
+import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
 
 function EmployeeList() {
   const { getAllEmployees } = useApiRequests();
@@ -50,9 +51,11 @@ function EmployeeList() {
 
   return (
     <>
-      <AddOfficer />
-      <h1>Admin Employee View</h1>
-      {contents}
+      <PermissionLock roles={[ADMIN_ROLE]}>
+        <AddOfficer />
+        <h1>Admin Employee View</h1>
+        {contents}
+      </PermissionLock>
     </>
   );
 }
