@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
-import { useApiRequests } from "../Functions/ApiRequests";
+import { useProjectRequests } from "../Functions/ProjectRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
 
 function ProjectList() {
-  const { archiveProject, getAllProjects, updateProject } = useApiRequests();
-
+  const {getAllProjects, archiveProject, updateProject} = useProjectRequests();
   const [projects, setProjects] = useState<Project[]>();
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");

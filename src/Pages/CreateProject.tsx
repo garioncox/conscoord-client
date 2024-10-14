@@ -3,11 +3,11 @@ import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormatDate } from "../Functions/FormatDates";
-import { useApiRequests } from "../Functions/ApiRequests";
+import { useProjectRequests } from "../Functions/ProjectRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
 
 const CreateProject = () => {
-  const { addProject } = useApiRequests();
+  const { addProject } = useProjectRequests();
 
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");

@@ -3,11 +3,11 @@ import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormatDate } from "../Functions/FormatDates";
-import { useApiRequests } from "../Functions/ApiRequests";
+import { useShiftRequests } from "../Functions/ShiftRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
 
 function CreateShift() {
-  const { addShift } = useApiRequests();
+  const { addShift } = useShiftRequests();
 
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");

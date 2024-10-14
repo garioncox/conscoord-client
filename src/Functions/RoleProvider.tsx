@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { useApiRequests } from "./ApiRequests";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useRoleRequests } from "./RoleRequests";
 
 export const useRoleProvider = () => {
   const { isAuthenticated, user } = useAuth0();
-  const { getRoleFromEmail } = useApiRequests();
+  const { getRoleFromEmail } = useRoleRequests();
 
   const useRoleQuery = () => {
     return useQuery({
