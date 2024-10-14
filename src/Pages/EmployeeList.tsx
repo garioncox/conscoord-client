@@ -30,8 +30,6 @@ export const EmployeeList = () => {
     const employee = await getEmployeeById(id);
 
     if (employee) {
-      console.log("User found ", employee);
-
       const updatedEmployee: Employee = {
         ...employee,
         roleid: selectedRole ? selectedRole : 0,
