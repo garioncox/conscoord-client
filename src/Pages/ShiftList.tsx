@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useShiftRequests } from "../Functions/ShiftRequests";
+import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
 
 function ShiftList() {
   const {getAllArchivedShifts, getAllShifts, archiveShift, editShift} = useShiftRequests();
@@ -176,10 +177,10 @@ function ShiftList() {
     );
 
   return (
-    <div>
+    <PermissionLock roles={[CLIENT_ROLE]}>
       <h1 id="shifts"> Shift List</h1>
       {contents}
-    </div>
+    </PermissionLock>
   );
 }
 export default ShiftList;

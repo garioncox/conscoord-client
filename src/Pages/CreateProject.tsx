@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormatDate } from "../Functions/FormatDates";
 import { useProjectRequests } from "../Functions/ProjectRequests";
+import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
 
 const CreateProject = () => {
   const { addProject } = useProjectRequests();
@@ -89,120 +90,128 @@ const CreateProject = () => {
     }
   }
 
+  const content = (
+    <>
+      <form>
+        <h1>Create a New Project</h1>
+        <div className="row">
+          <div className="col-md-8 mb-3">
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              className={`form-control ${
+                submitted && formErrors.title
+                  ? "is-invalid"
+                  : title && !formErrors.title && submitted
+                  ? "is-valid"
+                  : ""
+              }`}
+              id="title"
+              placeholder="I-15, Mile Marker: 223, Expansion"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                if (e.target.value) {
+                  setFormErrors((prev) => ({ ...prev, title: "" }));
+                }
+              }}
+              required
+            />
+            {submitted && formErrors.title && (
+              <div className="invalid-feedback">{formErrors.title}</div>
+            )}
+          </div>
+          <div className="col-md-2 mb-3">
+            <label htmlFor="startDate">Start</label>
+            <input
+              type="date"
+              className={`form-control ${
+                submitted && formErrors.startDate
+                  ? "is-invalid"
+                  : startDate && !formErrors.startDate && submitted
+                  ? "is-valid"
+                  : ""
+              }`}
+              id="startDate"
+              value={startDate}
+              onChange={(e) => {
+                setStartDate(e.target.value);
+                if (e.target.value) {
+                  setFormErrors((prev) => ({ ...prev, startDate: "" }));
+                }
+              }}
+              required
+            />
+            {submitted && formErrors.startDate && (
+              <div className="invalid-feedback">{formErrors.startDate}</div>
+            )}
+          </div>
+          <div className="col-md-2 mb-3">
+            <label htmlFor="endDate">End</label>
+            <input
+              type="date"
+              className={`form-control ${
+                submitted && formErrors.endDate
+                  ? "is-invalid"
+                  : endDate && !formErrors.endDate && submitted
+                  ? "is-valid"
+                  : ""
+              }`}
+              id="endDate"
+              value={endDate}
+              onChange={(e) => {
+                setEndDate(e.target.value);
+                if (e.target.value) {
+                  setFormErrors((prev) => ({ ...prev, endDate: "" }));
+                }
+              }}
+              required
+            />
+            {submitted && formErrors.endDate && (
+              <div className="invalid-feedback">{formErrors.endDate}</div>
+            )}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 mb-3">
+            <label htmlFor="location">Location</label>
+            <input
+              type="text"
+              className={`form-control ${
+                submitted && formErrors.location
+                  ? "is-invalid"
+                  : location && !formErrors.location && submitted
+                  ? "is-valid"
+                  : ""
+              }`}
+              id="location"
+              placeholder="Check in at Latitude: -3.59790, Longitude: -79.55949, or I-15 Mile Marker 223"
+              value={location}
+              onChange={(e) => {
+                setLocation(e.target.value);
+                if (e.target.value) {
+                  setFormErrors((prev) => ({ ...prev, location: "" }));
+                }
+              }}
+              required
+            />
+            {submitted && formErrors.location && (
+              <div className="invalid-feedback">{formErrors.location}</div>
+            )}
+          </div>
+        </div>
+        <button className="btn btn-primary" type="button" onClick={postProject}>
+          Create Project
+        </button>
+        <ToastContainer />
+      </form>
+    </>
+  );
+
   return (
-    <form>
-      <h1>Create a New Project</h1>
-      <div className="row">
-        <div className="col-md-8 mb-3">
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            className={`form-control ${
-              submitted && formErrors.title
-                ? "is-invalid"
-                : title && !formErrors.title && submitted
-                ? "is-valid"
-                : ""
-            }`}
-            id="title"
-            placeholder="I-15, Mile Marker: 223, Expansion"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, title: "" }));
-              }
-            }}
-            required
-          />
-          {submitted && formErrors.title && (
-            <div className="invalid-feedback">{formErrors.title}</div>
-          )}
-        </div>
-        <div className="col-md-2 mb-3">
-          <label htmlFor="startDate">Start</label>
-          <input
-            type="date"
-            className={`form-control ${
-              submitted && formErrors.startDate
-                ? "is-invalid"
-                : startDate && !formErrors.startDate && submitted
-                ? "is-valid"
-                : ""
-            }`}
-            id="startDate"
-            value={startDate}
-            onChange={(e) => {
-              setStartDate(e.target.value);
-              if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, startDate: "" }));
-              }
-            }}
-            required
-          />
-          {submitted && formErrors.startDate && (
-            <div className="invalid-feedback">{formErrors.startDate}</div>
-          )}
-        </div>
-        <div className="col-md-2 mb-3">
-          <label htmlFor="endDate">End</label>
-          <input
-            type="date"
-            className={`form-control ${
-              submitted && formErrors.endDate
-                ? "is-invalid"
-                : endDate && !formErrors.endDate && submitted
-                ? "is-valid"
-                : ""
-            }`}
-            id="endDate"
-            value={endDate}
-            onChange={(e) => {
-              setEndDate(e.target.value);
-              if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, endDate: "" }));
-              }
-            }}
-            required
-          />
-          {submitted && formErrors.endDate && (
-            <div className="invalid-feedback">{formErrors.endDate}</div>
-          )}
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-12 mb-3">
-          <label htmlFor="location">Location</label>
-          <input
-            type="text"
-            className={`form-control ${
-              submitted && formErrors.location
-                ? "is-invalid"
-                : location && !formErrors.location && submitted
-                ? "is-valid"
-                : ""
-            }`}
-            id="location"
-            placeholder="Check in at Latitude: -3.59790, Longitude: -79.55949, or I-15 Mile Marker 223"
-            value={location}
-            onChange={(e) => {
-              setLocation(e.target.value);
-              if (e.target.value) {
-                setFormErrors((prev) => ({ ...prev, location: "" }));
-              }
-            }}
-            required
-          />
-          {submitted && formErrors.location && (
-            <div className="invalid-feedback">{formErrors.location}</div>
-          )}
-        </div>
-      </div>
-      <button className="btn btn-primary" type="button" onClick={postProject}>
-        Create Project
-      </button>
-      <ToastContainer />
-    </form>
+    <>
+      <PermissionLock roles={[CLIENT_ROLE]}>{content}</PermissionLock>
+    </>
   );
 };
 

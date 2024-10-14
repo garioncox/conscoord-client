@@ -1,14 +1,19 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./Login";
 import LogoutButton from "./Logout";
 import { Link } from "react-router-dom";
+import { ADMIN_ROLE, CLIENT_ROLE, PSO_ROLE } from "./PermissionLock";
+import NavItem from "./Navitem";
 
 const Navbar = () => {
+  const { user } = useAuth0();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary py-3">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
-            Navbar
+            Home
           </Link>
           <button
             className="navbar-toggler"
@@ -23,44 +28,46 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/shift/view">
-                  Client Shifts
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/shift/view/officer">
-                  Officer Shifts
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/project/view">
-                  Projects
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/project/create">
-                  Create Project
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/shift/create">
-                  Create Shift
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/admin/view/employees">
-                  View Employees
-                </Link>
-              </li>
+              {/* PSO Items */}
+              <NavItem
+                to={"/shift/view/officer"}
+                label={"Officer Shifts"}
+                roles={[PSO_ROLE]}
+              />
+
+              {/* Client Items */}
+              <NavItem
+                to={"/project/view"}
+                label={"Projects"}
+                roles={[CLIENT_ROLE]}
+              />
+              <NavItem
+                to={"/project/create"}
+                label={"Create Project"}
+                roles={[CLIENT_ROLE]}
+              />
+              <NavItem
+                to={"/shift/view"}
+                label={"Client Shifts"}
+                roles={[CLIENT_ROLE]}
+              />
+              <NavItem
+                to={"/shift/create"}
+                label={"Create Shift"}
+                roles={[CLIENT_ROLE]}
+              />
+
+              {/* Admin Items */}
+              <NavItem
+                to={"/admin/view/employees"}
+                label={"View Employees"}
+                roles={[ADMIN_ROLE]}
+              />
             </ul>
 
             <ul className="ms-auto navbar-nav">
               <li className="nav-item mx-2">
-                <LoginButton />
-              </li>
-              <li className="nav-item mx-2">
-                <LogoutButton />
+                {user ? <LogoutButton /> : <LoginButton />}
               </li>
             </ul>
           </div>

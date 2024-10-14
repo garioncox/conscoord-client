@@ -3,11 +3,12 @@ import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
-import { EmailRequest } from "../Data/Interfaces/Email";
 import { useEmailRequests } from "../Functions/EmailRequests";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { EmailRequest } from "../Data/Interfaces/Email";
+import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
 
 function ShiftOfficerList() {
   const {addEmployeeShift} = useEmpShiftRequests();
@@ -79,11 +80,11 @@ function ShiftOfficerList() {
   }
 
   return (
-    <div>
+    <PermissionLock roles={[PSO_ROLE]}>
       <h1 id="shifts">Shift List</h1>
       {contents}
       <ToastContainer position="top-center" />
-    </div>
+    </PermissionLock>
   );
 }
 

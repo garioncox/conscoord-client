@@ -5,11 +5,12 @@ import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { useRoleRequests } from "../Functions/RoleRequests";
 import AddOfficer from "./AddOfficer";
 import "../index.css";
+import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
 
 export const EmployeeList = () => {
-  const { employees, setEmployeesList,getAllEmployees, getEmployeeById, editEmployee } =
+  const { employees, setEmployeesList, getEmployeeById, editEmployee } =
     useEmployeeRequests();
-  const { roles, getAllRoles, setRolesList } = useRoleRequests();
+  const { roles, setRolesList } = useRoleRequests();
   const [selectedRole, setSelectedRole] = useState<number | undefined>(-1);
   const [selectedEmployee, setSelectedEmployee] = useState<number | null>(-1);
 
@@ -129,9 +130,11 @@ export const EmployeeList = () => {
 
   return (
     <>
-      <AddOfficer />
-      <h1>Admin Employee View</h1>
-      {contents}
+      <PermissionLock roles={[ADMIN_ROLE]}>
+        <AddOfficer />
+        <h1>Admin Employee View</h1>
+        {contents}
+      </PermissionLock>
     </>
   );
 };

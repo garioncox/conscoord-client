@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
 import { useProjectRequests } from "../Functions/ProjectRequests";
+import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
 
 function ProjectList() {
   const {getAllProjects, archiveProject, updateProject} = useProjectRequests();
@@ -160,10 +161,10 @@ function ProjectList() {
     );
 
   return (
-    <div>
+    <PermissionLock roles={[CLIENT_ROLE]}>
       <h1 id="projects">Project List</h1>
       {contents}
-    </div>
+    </PermissionLock>
   );
 }
 export default ProjectList;
