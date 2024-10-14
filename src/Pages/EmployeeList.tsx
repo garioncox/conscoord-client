@@ -7,14 +7,15 @@ import AddOfficer from "./AddOfficer";
 import "../index.css";
 
 export const EmployeeList = () => {
-  const {employees, getAllEmployees,getEmployeeById, editEmployee} = useEmployeeRequests();
-  const {roles, getAllRoles} = useRoleRequests();
+  const { employees, setEmployeesList,getAllEmployees, getEmployeeById, editEmployee } =
+    useEmployeeRequests();
+  const { roles, getAllRoles, setRolesList } = useRoleRequests();
   const [selectedRole, setSelectedRole] = useState<number | undefined>(-1);
   const [selectedEmployee, setSelectedEmployee] = useState<number | null>(-1);
 
   useEffect(() => {
-    getAllEmployees();
-    getAllRoles();
+    setEmployeesList();
+    setRolesList();
   }, []);
 
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export const EmployeeList = () => {
       };
 
       await editEmployee(updatedEmployee);
-      await getAllEmployees();
+      await setEmployeesList();
       console.log("Employee updated successfully");
     } else {
       console.log("no role selected");
@@ -113,7 +114,9 @@ export const EmployeeList = () => {
                     <button
                       className="btn btn-primary"
                       onClick={() => navigate(`/admin/view/employees/${e.id}`)}
-                    > View Employee
+                    >
+                      {" "}
+                      View Employee
                     </button>
                   </td>
                 </>
@@ -133,4 +136,4 @@ export const EmployeeList = () => {
   );
 };
 
-export default EmployeeList
+export default EmployeeList;

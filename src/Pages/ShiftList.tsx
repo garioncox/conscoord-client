@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
-import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 
 function ShiftList() {

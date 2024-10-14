@@ -7,7 +7,7 @@ export const useShiftRequests = () => {
     await axios.post(`/api/Shift/add`, shift);
   };
 
-  const editShift = async (id: number, shift: ShiftDTO) => {
+  const editShift = async (id: number, shift: Shift) => {
     await axios.post(`/api/Shift/edit/${id}`, shift);
   };
 
