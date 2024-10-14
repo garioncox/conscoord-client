@@ -3,10 +3,15 @@ import Role from "../Data/Interfaces/RoleInterface";
 import { useState } from "react";
 
 export const useRoleRequests = () => {
-    const [roles, setRoles] = useState<Role[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
 
   const getAllRoles = async (): Promise<Role[]> => {
     const response = await axios.get(`/api/Role/getAll`);
+    return response.data;
+  };
+
+  const getRoleFromEmail = async (email: string): Promise<Role> => {
+    const response = await axios.get(`/api/Role/getByEmail/${email}`);
     return response.data;
   };
 
@@ -21,6 +26,7 @@ export const useRoleRequests = () => {
 
   return {
     roles,
+    getRoleFromEmail,
     getAllRoles,
     useGetRoleName,
     setRolesList,
