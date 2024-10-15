@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { useRoleProvider } from "../Functions/RoleProvider";
+import { useRoleQuery } from "../Functions/RoleProvider";
 
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";
@@ -9,8 +9,6 @@ const PermissionLock: FC<{
   roles: string[];
   children: ReactNode;
 }> = ({ roles, children }) => {
-  const { useRoleQuery } = useRoleProvider();
-
   const roleQuery = useRoleQuery();
 
   if (!roleQuery) {
