@@ -4,7 +4,7 @@ import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 
 export const useProjectRequests = () => {
   const archiveProject = async (project: Project) => {
-    await axios.put(`/api/Project/archive/${project.id}`);
+    await axios.put(`/api/Project/archive/`, project);
   };
 
   const addProject = async (project: ProjectDTO) => {
@@ -12,7 +12,7 @@ export const useProjectRequests = () => {
   };
 
   const updateProject = async (project: Project) => {
-    await axios.put(`/api/Project/edit/${project.id}`);
+    await axios.put(`/api/Project/edit/`, project);
   };
 
   const getAllProjects = async (): Promise<Project[]> => {
