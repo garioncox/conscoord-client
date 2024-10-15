@@ -12,7 +12,6 @@ export const useProjectRequests = () => {
   };
 
   const updateProject = async (project: Project) => {
-    console.log(project);
     await axios.put(`/api/Project/edit/`, project);
   };
 
