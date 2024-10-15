@@ -63,6 +63,7 @@ function ShiftOfficerList() {
         </table>
         <hr />
 
+        <h1>Shifts Still Open</h1>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -127,7 +128,7 @@ function ShiftOfficerList() {
 
   return (
     <PermissionLock roles={[PSO_ROLE]}>
-      <h1 id="shifts">Shift List</h1>
+      <h1 id="shifts">My Shifts</h1>
       {contents}
       <ToastContainer position="top-center" />
     </PermissionLock>
