@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { FormatDate } from "../Functions/FormatDates";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
+import { ToastContainer, useToast } from "react-toastify";
+import { useCustomToast } from "../Components/Toast";
 
 function CreateShift() {
   const { addShift } = useShiftRequests();
-
+  const { createToast } = useCustomToast();
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -73,21 +73,7 @@ function CreateShift() {
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
-      toast.promise(addShift(shift), {
-        pending: "Creating Shift...",
-        success: {
-          render() {
-            return "Shift Created Successfully";
-          },
-        },
-        error: {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          render({ data }: { data: any }) {
-            return data.message || "Error Creating Shift";
-          },
-        },
-      });
-      setFormErrors({});
+      createToast(addShift, shift);
     }
   }
 

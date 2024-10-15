@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { FormatDate } from "../Functions/FormatDates";
 import { useProjectRequests } from "../Functions/ProjectRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
+import { useCustomToast } from "../Components/Toast";
+import { ToastContainer } from "react-toastify";
 
 const CreateProject = () => {
   const { addProject } = useProjectRequests();
-
+  const {createToast} = useCustomToast();
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -65,21 +65,7 @@ const CreateProject = () => {
         startDate: FormatDate(startDate),
         endDate: FormatDate(endDate),
       };
-
-      toast.promise(addProject(project), {
-        pending: "Creating Project...",
-        success: {
-          render() {
-            return "Project Created Successfully";
-          },
-        },
-        error: {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          render({ data }: { data: any }) {
-            return data.message || "Error Creating Project";
-          },
-        },
-      });
+      createToast(addProject, project)
 
       setTitle("");
       setStartDate("");
