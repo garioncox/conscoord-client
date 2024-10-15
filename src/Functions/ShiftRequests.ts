@@ -8,7 +8,7 @@ export const useShiftRequests = () => {
   };
 
   const editShift = async (id: number, shift: Shift) => {
-    await axios.post(`/api/Shift/edit/${id}`, shift);
+    await axios.put(`/api/Shift/edit/${id}`, shift);
   };
 
   const getAllShifts = async (): Promise<Shift[]> => {
@@ -22,7 +22,7 @@ export const useShiftRequests = () => {
   };
 
   const archiveShift = async (shiftId: number) => {
-    await axios.post(`/api/Shift/archive/${shiftId}`);
+    await axios.put(`/api/Shift/archive/${shiftId}`);
   };
 
   return {

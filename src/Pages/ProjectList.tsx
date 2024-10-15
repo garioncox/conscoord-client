@@ -4,7 +4,8 @@ import { useProjectRequests } from "../Functions/ProjectRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
 
 function ProjectList() {
-  const {getAllProjects, archiveProject, updateProject} = useProjectRequests();
+  const { getAllProjects, archiveProject, updateProject } =
+    useProjectRequests();
   const [projects, setProjects] = useState<Project[]>();
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -136,7 +137,7 @@ function ProjectList() {
           </td>
           <td>
             <button onClick={() => handleArchive(s)} className="btn btn-danger">
-              Delete
+              Archive
             </button>
           </td>
         </tr>
