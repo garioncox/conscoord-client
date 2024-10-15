@@ -73,7 +73,7 @@ function CreateShift() {
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
-      createToast(addShift, shift);
+      createToast(addShift, shift, "Adding Shift");
     }
   }
 
