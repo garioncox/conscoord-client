@@ -25,7 +25,6 @@ function ShiftOfficerList() {
 
   useEffect(() => {
     populateShifts();
-    console.log(shifts)
   }, [user?.email]);
 
   const contents =
