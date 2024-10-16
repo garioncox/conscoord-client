@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { useRoleProvider } from "../Functions/RoleProvider";
-import { ADMIN_ROLE } from "./PermissionLock";
+import { useRoleProvider } from "../../Functions/RoleProvider";
+import { ADMIN_ROLE } from "../Auth/PermissionLock";
 
 const NavItem: FC<{
   to: string;

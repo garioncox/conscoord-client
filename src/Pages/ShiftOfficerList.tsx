@@ -8,12 +8,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EmailRequest } from "../Data/Interfaces/Email";
-import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
+import PermissionLock, { PSO_ROLE } from "../Components/Auth/PermissionLock";
 
 function ShiftOfficerList() {
-  const {addEmployeeShift} = useEmpShiftRequests();
-  const {getAllShifts} = useShiftRequests();
-  const {sendEmail} = useEmailRequests();
+  const { addEmployeeShift } = useEmpShiftRequests();
+  const { getAllShifts } = useShiftRequests();
+  const { sendEmail } = useEmailRequests();
   const { user } = useAuth0();
 
   const [shifts, setShifts] = useState<Shift[]>();

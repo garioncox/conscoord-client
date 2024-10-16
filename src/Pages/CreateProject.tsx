@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 import { FormatDate } from "../Functions/FormatDates";
 import { useProjectRequests } from "../Functions/ProjectRequests";
-import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
+import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
 import { useCustomToast } from "../Components/Toast";
 import { ToastContainer } from "react-toastify";
 
@@ -65,7 +65,7 @@ const CreateProject = () => {
         startDate: FormatDate(startDate),
         endDate: FormatDate(endDate),
       };
-      createToast(addProject, project, "Creating Project")
+      createToast(addProject, project, "Creating Project");
 
       setTitle("");
       setStartDate("");
@@ -85,12 +85,13 @@ const CreateProject = () => {
             <label htmlFor="title">Title</label>
             <input
               type="text"
-              className={`form-control ${submitted && formErrors.title
-                ? "is-invalid"
-                : title && !formErrors.title && submitted
+              className={`form-control ${
+                submitted && formErrors.title
+                  ? "is-invalid"
+                  : title && !formErrors.title && submitted
                   ? "is-valid"
                   : ""
-                }`}
+              }`}
               id="title"
               placeholder="I-15, Mile Marker: 223, Expansion"
               value={title}
@@ -110,12 +111,13 @@ const CreateProject = () => {
             <label htmlFor="startDate">Start</label>
             <input
               type="date"
-              className={`form-control ${submitted && formErrors.startDate
-                ? "is-invalid"
-                : startDate && !formErrors.startDate && submitted
+              className={`form-control ${
+                submitted && formErrors.startDate
+                  ? "is-invalid"
+                  : startDate && !formErrors.startDate && submitted
                   ? "is-valid"
                   : ""
-                }`}
+              }`}
               id="startDate"
               value={startDate}
               onChange={(e) => {
@@ -134,12 +136,13 @@ const CreateProject = () => {
             <label htmlFor="endDate">End</label>
             <input
               type="date"
-              className={`form-control ${submitted && formErrors.endDate
-                ? "is-invalid"
-                : endDate && !formErrors.endDate && submitted
+              className={`form-control ${
+                submitted && formErrors.endDate
+                  ? "is-invalid"
+                  : endDate && !formErrors.endDate && submitted
                   ? "is-valid"
                   : ""
-                }`}
+              }`}
               id="endDate"
               value={endDate}
               onChange={(e) => {
@@ -160,12 +163,13 @@ const CreateProject = () => {
             <label htmlFor="location">Location</label>
             <input
               type="text"
-              className={`form-control ${submitted && formErrors.location
-                ? "is-invalid"
-                : location && !formErrors.location && submitted
+              className={`form-control ${
+                submitted && formErrors.location
+                  ? "is-invalid"
+                  : location && !formErrors.location && submitted
                   ? "is-valid"
                   : ""
-                }`}
+              }`}
               id="location"
               placeholder="Check in at Latitude: -3.59790, Longitude: -79.55949, or I-15 Mile Marker 223"
               value={location}

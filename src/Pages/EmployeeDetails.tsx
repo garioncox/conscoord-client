@@ -4,7 +4,7 @@ import "../index.css";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import AddOfficer from "./AddOfficer";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
+import PermissionLock, { ADMIN_ROLE } from "../Components/Auth/PermissionLock";
 
 function EmployeeList() {
   const { getAllEmployees } = useEmployeeRequests();

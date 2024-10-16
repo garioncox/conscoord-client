@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
 import { useProjectRequests } from "../Functions/ProjectRequests";
-import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
+import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
 import { useCustomToast } from "../Components/Toast";
 import { ToastContainer } from "react-toastify";
 
@@ -167,7 +167,7 @@ function ProjectList() {
     <PermissionLock roles={[CLIENT_ROLE]}>
       <h1 id="projects">Project List</h1>
       {contents}
-      <ToastContainer/>
+      <ToastContainer />
     </PermissionLock>
   );
 }

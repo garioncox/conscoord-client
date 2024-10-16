@@ -5,7 +5,7 @@ import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { useRoleRequests } from "../Functions/RoleRequests";
 import AddOfficer from "./AddOfficer";
 import "../index.css";
-import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
+import PermissionLock, { ADMIN_ROLE } from "../Components/Auth/PermissionLock";
 
 export const EmployeeList = () => {
   const { employees, setEmployeesList, getEmployeeById, editEmployee } =
@@ -77,7 +77,9 @@ export const EmployeeList = () => {
                         setSelectedRole(Number(e.target.value));
                       }}
                     >
-                      <option value="" disabled>Default (No Role)</option>
+                      <option value="" disabled>
+                        Default (No Role)
+                      </option>
                       {roles.map((role) => (
                         <option
                           key={role.id}

@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { useRoleProvider } from "../Functions/RoleProvider";
+import { useRoleProvider } from "../../Functions/RoleProvider";
 
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";

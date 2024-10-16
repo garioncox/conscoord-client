@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import "../../css_modules/mainLayout.module.css";
+import "../../../css_modules/mainLayout.module.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const MainLayout: FC<{
