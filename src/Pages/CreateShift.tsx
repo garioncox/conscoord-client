@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 import { FormatDate } from "../Functions/FormatDates";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
-import { ToastContainer, useToast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useCustomToast } from "../Components/Toast";
+import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
+import { useProjectRequests } from "../Functions/ProjectRequests";
+import { ProjectShiftDTO } from "../Data/DTOInterfaces/ProjectShiftDTO";
 
 function CreateShift() {
   const { addShift } = useShiftRequests();
-  const { createToast } = useCustomToast();
+  // const { createToast } = useCustomToast();
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -22,6 +25,18 @@ function CreateShift() {
     requestedEmployees?: string;
   }>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const { addProjectShift } = useProjectShiftRequests();
+  const { Projects, setProjects, getAllProjects } = useProjectRequests();
+  const [ChosenProject, setChosenProject] = useState<number>(-1);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const projects = await getAllProjects();
+      setProjects(projects);
+      console.log(`All Projects ${projects}`)
+    }
+    fetchProjects();
+  }, []);
 
   const validateAllInput = () => {
     const errors: { [key: string]: string } = {};
@@ -57,6 +72,10 @@ function CreateShift() {
       errors.location = "Please add a location";
       isValid = false;
     }
+    if (!ChosenProject) {
+      errors.ChosenProject = "Project is Required";
+      isValid = false;
+    }
 
     setFormErrors(errors);
     return isValid;
@@ -73,7 +92,13 @@ function CreateShift() {
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
-      createToast(addShift, shift, "Adding Shift");
+      // createToast(addShift, shift, "Adding Shift");
+      const addShiftId: number = await addShift(shift);
+      const newProjectShift: ProjectShiftDTO = {
+        projectId: ChosenProject,
+        shiftId: addShiftId,
+      }
+      await addProjectShift(newProjectShift);
     }
   }
 
@@ -93,13 +118,12 @@ function CreateShift() {
                 }
               }}
               type="text"
-              className={`form-control ${
-                submitted && formErrors.location
-                  ? "is-invalid"
-                  : location && !formErrors.location && submitted
+              className={`form-control ${submitted && formErrors.location
+                ? "is-invalid"
+                : location && !formErrors.location && submitted
                   ? "is-valid"
                   : ""
-              }`}
+                }`}
               id="location"
               placeholder="North Side"
               required
@@ -119,13 +143,12 @@ function CreateShift() {
                 }
               }}
               type="date"
-              className={`form-control ${
-                submitted && formErrors.startTime
-                  ? "is-invalid"
-                  : startTime && !formErrors.startTime && submitted
+              className={`form-control ${submitted && formErrors.startTime
+                ? "is-invalid"
+                : startTime && !formErrors.startTime && submitted
                   ? "is-valid"
                   : ""
-              }`}
+                }`}
               id="startTime"
               required
             />
@@ -144,13 +167,12 @@ function CreateShift() {
                 }
               }}
               type="date"
-              className={`form-control ${
-                submitted && formErrors.endTime
-                  ? "is-invalid"
-                  : endTime && !formErrors.endTime && submitted
+              className={`form-control ${submitted && formErrors.endTime
+                ? "is-invalid"
+                : endTime && !formErrors.endTime && submitted
                   ? "is-valid"
                   : ""
-              }`}
+                }`}
               id="endTime"
               required
             />
@@ -170,13 +192,12 @@ function CreateShift() {
                   }
                 }}
                 type="text"
-                className={`form-control ${
-                  submitted && formErrors.description
-                    ? "is-invalid"
-                    : description && !formErrors.description && submitted
+                className={`form-control ${submitted && formErrors.description
+                  ? "is-invalid"
+                  : description && !formErrors.description && submitted
                     ? "is-valid"
                     : ""
-                }`}
+                  }`}
                 id="description"
                 placeholder="Traffic Control"
                 required
@@ -203,15 +224,14 @@ function CreateShift() {
                   }
                 }}
                 type="number"
-                className={`form-control ${
-                  submitted && formErrors.requestedEmployees
-                    ? "is-invalid"
-                    : requestedEmployees &&
-                      !formErrors.requestedEmployees &&
-                      submitted
+                className={`form-control ${submitted && formErrors.requestedEmployees
+                  ? "is-invalid"
+                  : requestedEmployees &&
+                    !formErrors.requestedEmployees &&
+                    submitted
                     ? "is-valid"
                     : ""
-                }`}
+                  }`}
                 id="requestedEmployees"
                 placeholder="0"
                 required
@@ -221,6 +241,18 @@ function CreateShift() {
                   {formErrors.requestedEmployees}
                 </div>
               )}
+            </div>
+            <div className="col-md-4 mb-3">
+              {/* TODO: Only display projects that are connected to the signed in company */}
+              <label htmlFor="ChosenProject">Choose A Project</label>
+              <select className="form-select" name="ChosenProject" onChange={(e) => setChosenProject((Number(e.target.value)))} defaultValue="">
+                <option value="" disabled selected>NONE SELECTED</option>
+                {Projects?.map((pShift) => (
+                  <option key={pShift.id} value={pShift.id}>
+                    {pShift.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>

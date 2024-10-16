@@ -77,7 +77,7 @@ export const EmployeeList = () => {
                         setSelectedRole(Number(e.target.value));
                       }}
                     >
-                      <option value="">Default (No Role)</option>
+                      <option value="" disabled>Default (No Role)</option>
                       {roles.map((role) => (
                         <option
                           key={role.id}
