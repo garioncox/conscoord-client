@@ -3,11 +3,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const useCustomToast = () => {
     const createToast = (
-        asyncFunction: any, 
+        asyncFunction: any,
         params: any,
         defaultMessage: string
     ) => {
-        console.log(params)
         toast.promise(asyncFunction(params), {
             pending: `${defaultMessage}`,
             success: {
