@@ -4,18 +4,17 @@ import { FormatDate } from "../Functions/FormatDates";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
 import { ToastContainer } from "react-toastify";
-import { useCustomToast } from "../Components/Toast";
 import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
 import { useProjectRequests } from "../Functions/ProjectRequests";
 import { ProjectShiftDTO } from "../Data/DTOInterfaces/ProjectShiftDTO";
+import { useGTextInput } from "../Components/Generics/gTextInputController";
+import GTextInput from "../Components/Generics/gTextInput";
 
 function CreateShift() {
   const { addShift } = useShiftRequests();
-  // const { createToast } = useCustomToast();
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
   const [requestedEmployees, setRequestedEmployees] = useState<number>(0);
   const [formErrors, setFormErrors] = useState<{
     location?: string;
@@ -67,7 +66,7 @@ function CreateShift() {
       errors.description = "Please add a description";
       isValid = false;
     }
-    if (!location) {
+    if (!locationControl.value && !locationControl.error) {
       errors.location = "Please add a location";
       isValid = false;
     }
@@ -87,7 +86,7 @@ function CreateShift() {
         StartTime: FormatDate(startTime),
         EndTime: FormatDate(endTime),
         Description: description,
-        Location: location,
+        Location: locationControl.value,
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
@@ -98,8 +97,18 @@ function CreateShift() {
         shiftId: addShiftId,
       };
       await addProjectShift(newProjectShift);
+    } else {
+      console.error("Error creaing shift: input not valid");
     }
   }
+
+  //////////////
+
+  const locationControl = useGTextInput("", (s: string) => {
+    return s === "" ? "Please add a location" : "";
+  });
+
+  //////////////
 
   const content = (
     <>
@@ -107,7 +116,13 @@ function CreateShift() {
         <h1>Create a New Shift</h1>
         <div className="row">
           <div className="col-md-8 mb-3">
-            <label htmlFor="location">Location</label>
+            <GTextInput
+              control={locationControl}
+              label="Location"
+              placeholder={"North Side"}
+              maxLength={50}
+            />
+            {/* <label htmlFor="location">Location</label>
             <input
               value={location}
               onChange={(e) => {
@@ -130,8 +145,9 @@ function CreateShift() {
             />
             {submitted && formErrors.location && (
               <div className="invalid-feedback">{formErrors.location}</div>
-            )}
+            )} */}
           </div>
+
           <div className="col-md-2 mb-3">
             <label htmlFor="startTime">Start</label>
             <input
@@ -157,6 +173,7 @@ function CreateShift() {
               <div className="invalid-feedback">{formErrors.startTime}</div>
             )}
           </div>
+
           <div className="col-md-2 mb-3">
             <label htmlFor="endTime">End</label>
             <input
@@ -182,6 +199,7 @@ function CreateShift() {
               <div className="invalid-feedback">{formErrors.endTime}</div>
             )}
           </div>
+
           <div className="row">
             <div className="col-12 mb-3">
               <label htmlFor="description">Description</label>
@@ -210,6 +228,7 @@ function CreateShift() {
               )}
             </div>
           </div>
+
           <div className="row">
             <div className="col-md-8 mb-3">
               <label htmlFor="requestedEmployees">
@@ -246,6 +265,7 @@ function CreateShift() {
                 </div>
               )}
             </div>
+
             <div className="col-md-4 mb-3">
               {/* TODO: Only display projects that are connected to the signed in company */}
               <label htmlFor="ChosenProject">Choose A Project</label>

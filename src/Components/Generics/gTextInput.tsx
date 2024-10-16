@@ -1,17 +1,23 @@
-import { gTextInpurController } from "./gTextInputController";
+import { GTextInputController } from "./gTextInputController";
 
-const gTextInput: React.FC<{
+export const defaultValidation = (s: string) => {
+  return s === "" ? "Field is required" : "";
+};
+
+const GTextInput: React.FC<{
   label?: string;
-  control: gTextInpurController;
+  placeholder?: string;
+  control: GTextInputController;
   minLength?: number;
   maxLength?: number;
-}> = ({ label, control, minLength, maxLength }) => {
+}> = ({ label, placeholder, control, minLength, maxLength }) => {
   return (
     <>
-      <label className="form-label">
+      <label className="form-label d-flex flex-column flex-grow-1">
         {label}
         <input
           type="text"
+          placeholder={placeholder ?? ""}
           className={`form-control ${
             control.hasBeenTouched
               ? control.error
@@ -19,7 +25,7 @@ const gTextInput: React.FC<{
                 : "is-valid"
               : ""
           }`}
-          minLength={minLength ?? 3}
+          minLength={minLength ?? 0}
           maxLength={maxLength ?? 30}
           value={control.value}
           onChange={(e) => {
@@ -33,4 +39,4 @@ const gTextInput: React.FC<{
   );
 };
 
-export default gTextInput;
+export default GTextInput;
