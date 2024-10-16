@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
 import { useProjectRequests } from "../Functions/ProjectRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
+import { useCustomToast } from "../Components/Toast";
+import { ToastContainer } from "react-toastify";
 
 function ProjectList() {
   const { getAllProjects, archiveProject, updateProject } =
     useProjectRequests();
+  const { createToast } = useCustomToast();
   const [projects, setProjects] = useState<Project[]>();
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -46,8 +49,7 @@ function ProjectList() {
   }
 
   async function handleArchive(project: Project) {
-    await archiveProject(project);
-
+    createToast(archiveProject, project, "Archiving Project");
     setProjects((prevProjects) =>
       prevProjects?.map((s) => (s.id === project.id ? project : s))
     );
@@ -63,7 +65,7 @@ function ProjectList() {
       status: status,
     };
 
-    updateProject(newProject);
+    createToast(updateProject, newProject, "Updating Project");
     setSelected(-1);
     setProjects((prevProjects) =>
       prevProjects?.map((s) => (s.id === newProject.id ? newProject : s))
@@ -165,6 +167,7 @@ function ProjectList() {
     <PermissionLock roles={[CLIENT_ROLE]}>
       <h1 id="projects">Project List</h1>
       {contents}
+      <ToastContainer/>
     </PermissionLock>
   );
 }
