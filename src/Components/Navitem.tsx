@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { useRoleProvider } from "../Functions/RoleProvider";
+import { useRoleQuery } from "../Functions/RoleProvider";
 import { ADMIN_ROLE } from "./PermissionLock";
 
 const NavItem: FC<{
@@ -8,7 +8,6 @@ const NavItem: FC<{
   label: string;
   roles: string[];
 }> = ({ to, label, roles }) => {
-  const { useRoleQuery } = useRoleProvider();
   const { data } = useRoleQuery();
 
   if (data && (roles.includes(data) || data === ADMIN_ROLE)) {

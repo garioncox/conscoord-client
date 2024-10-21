@@ -5,6 +5,7 @@ import PermissionLock, {
   CLIENT_ROLE,
   PSO_ROLE,
 } from "../Components/PermissionLock";
+import axios from "axios";
 
 export const Home = () => {
   const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
@@ -20,18 +21,20 @@ export const Home = () => {
       try {
         await getEmployeeByEmail(user.email!);
       } catch (error) {
-        if (error.status == 404) {
-          console.log("User is not in database...");
-          console.log("Adding user");
+        if (axios.isAxiosError(error)) {
+          if (error.status == 404) {
+            console.log("User is not in database...");
+            console.log("Adding user");
 
-          addEmployee({
-            name: user.name!,
-            email: user.email!,
-            phonenumber: user.phone_number ?? "",
-          });
+            addEmployee({
+              name: user.name!,
+              email: user.email!,
+              phonenumber: user.phone_number ?? "",
+            });
+          }
+        } else {
+          console.error("Error fetching user by email:", error);
         }
-
-        console.error("Error fetching user by email:", error);
       }
     };
 
