@@ -9,7 +9,6 @@ import { useProjectRequests } from "../Functions/ProjectRequests";
 import { ProjectShiftDTO } from "../Data/DTOInterfaces/ProjectShiftDTO";
 import { useGTextInput } from "../Components/Generics/gTextInputController";
 import GTextInput from "../Components/Generics/gTextInput";
-import { useCustomToast } from "../Components/Toast";
 
 function CreateShift() {
   const { addShift } = useShiftRequests();
@@ -28,7 +27,6 @@ function CreateShift() {
   const { addProjectShift } = useProjectShiftRequests();
   const { Projects, setProjects, getAllProjects } = useProjectRequests();
   const [ChosenProject, setChosenProject] = useState<number>(-1);
-  const { createToast } = useCustomToast(); 
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -92,7 +90,8 @@ function CreateShift() {
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
-      const addShiftId: number = await createToast(addShift, shift, "Adding Shift");
+      // createToast(addShift, shift, "Adding Shift");
+      const addShiftId: number = await addShift(shift);
       const newProjectShift: ProjectShiftDTO = {
         projectId: ChosenProject,
         shiftId: addShiftId,
@@ -276,7 +275,7 @@ function CreateShift() {
                 onChange={(e) => setChosenProject(Number(e.target.value))}
                 defaultValue=""
               >
-                <option value="" disabled>
+                <option value="" disabled selected>
                   NONE SELECTED
                 </option>
                 {Projects?.map((pShift) => (
