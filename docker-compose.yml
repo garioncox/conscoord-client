@@ -1,9 +1,0 @@
-services:
-  api:
-    image: garioncox/test:latest
-    ports:
-    - 5173:80
-    volumes:
-      - images:/app/image
-volumes:
-  images:
