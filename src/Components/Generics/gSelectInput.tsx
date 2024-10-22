@@ -1,19 +1,14 @@
-import { GTextInputController } from "./gTextInputController";
+import { GSelectInputController } from "./gSelectInputController";
 
-const GTextInput: React.FC<{
+const GSelectInput: React.FC<{
   label?: string;
-  placeholder?: string;
-  control: GTextInputController;
-  minLength?: number;
-  maxLength?: number;
-}> = ({ label, placeholder, control, minLength, maxLength }) => {
+  control: GSelectInputController;
+}> = ({ label, control }) => {
   return (
     <>
       <label className="form-label d-flex flex-column flex-grow-1">
         {label}
-        <input
-          type="text"
-          placeholder={placeholder ?? ""}
+        <select
           className={`form-control ${
             control.hasBeenTouched
               ? control.error
@@ -21,19 +16,24 @@ const GTextInput: React.FC<{
                 : "is-valid"
               : ""
           }`}
-          minLength={minLength ?? 0}
-          maxLength={maxLength ?? 30}
           value={control.value}
           onChange={(e) => {
             control.setValue(e.target.value);
             control.setHasBeenTouched(true);
           }}
           onBlur={() => control.setHasBeenTouched(true)}
-        />
+        >
+          <option value="" />
+          {control.possibleValues.map((v) => (
+            <option key={v} value={v}>
+              {v}
+            </option>
+          ))}
+        </select>
         <p className="invalid-feedback">{control.error}</p>
       </label>
     </>
   );
 };
 
-export default GTextInput;
+export default GSelectInput;

@@ -9,12 +9,17 @@ import { useProjectRequests } from "../Functions/ProjectRequests";
 import { ProjectShiftDTO } from "../Data/DTOInterfaces/ProjectShiftDTO";
 import { useGTextInput } from "../Components/Generics/gTextInputController";
 import GTextInput from "../Components/Generics/gTextInput";
+import { useGDateInput } from "../Components/Generics/gDateInputController";
+import GDateInput from "../Components/Generics/gDateInput";
+import GNumberInput from "../Components/Generics/gNumberInput";
+import { useGNumberInput } from "../Components/Generics/gNumberInputController";
+import GSelectInput from "../Components/Generics/gSelectInput";
+import { useGSelectInput } from "../Components/Generics/gSelectInputController";
 
 function CreateShift() {
   const { addShift } = useShiftRequests();
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [requestedEmployees, setRequestedEmployees] = useState<number>(0);
   const [formErrors, setFormErrors] = useState<{
     location?: string;
@@ -32,7 +37,6 @@ function CreateShift() {
     const fetchProjects = async () => {
       const projects = await getAllProjects();
       setProjects(projects);
-      console.log(`All Projects ${projects}`);
     };
     fetchProjects();
   }, []);
@@ -62,7 +66,7 @@ function CreateShift() {
       errors.requestedEmployees = "Requested Officers must be greater than 0";
       isValid = false;
     }
-    if (!description) {
+    if (!descriptionControl.value && !descriptionControl.error) {
       errors.description = "Please add a description";
       isValid = false;
     }
@@ -85,7 +89,7 @@ function CreateShift() {
       const shift: ShiftDTO = {
         StartTime: FormatDate(startTime),
         EndTime: FormatDate(endTime),
-        Description: description,
+        Description: descriptionControl.value,
         Location: locationControl.value,
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
@@ -108,6 +112,49 @@ function CreateShift() {
     return s === "" ? "Please add a location" : "";
   });
 
+  const descriptionControl = useGTextInput("", (s: string) => {
+    return s === "" ? "Please add a description" : "";
+  });
+
+  const startDateControl = useGDateInput("", (s: string) => {
+    if (s === "") {
+      return "Start date is required";
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+
+    if (s < today) {
+      return "Start date cannot be in the past";
+    }
+
+    return "";
+  });
+
+  const endDateControl = useGDateInput("", (s: string) => {
+    if (s === "") {
+      return "End date is required";
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+
+    if (s < today) {
+      return "End date cannot be in the past";
+    }
+
+    if (startDateControl.value !== "" && s < startDateControl.value) {
+      return "End date cannot be before start date";
+    }
+
+    return "";
+  });
+
+  const psoCountControl = useGNumberInput(1, (n: number) => {
+    return n <= 0 ? "Value must be greater than zero" : "";
+  });
+
+  const projectSelectControl = useGSelectInput([], (s: string) => {
+    return s === "" ? "Please select a project" : "";
+  });
   //////////////
 
   const content = (
@@ -122,168 +169,57 @@ function CreateShift() {
               placeholder={"North Side"}
               maxLength={50}
             />
-            {/* <label htmlFor="location">Location</label>
-            <input
-              value={location}
-              onChange={(e) => {
-                setLocation(e.target.value);
-                if (submitted && e.target.value) {
-                  setFormErrors((prev) => ({ ...prev, location: "" }));
-                }
-              }}
-              type="text"
-              className={`form-control ${
-                submitted && formErrors.location
-                  ? "is-invalid"
-                  : location && !formErrors.location && submitted
-                  ? "is-valid"
-                  : ""
-              }`}
-              id="location"
-              placeholder="North Side"
-              required
-            />
-            {submitted && formErrors.location && (
-              <div className="invalid-feedback">{formErrors.location}</div>
-            )} */}
           </div>
 
           <div className="col-md-2 mb-3">
-            <label htmlFor="startTime">Start</label>
-            <input
-              value={startTime}
-              onChange={(e) => {
-                setStartTime(e.target.value);
-                if (submitted && e.target.value) {
-                  setFormErrors((prev) => ({ ...prev, startTime: "" }));
-                }
-              }}
-              type="date"
-              className={`form-control ${
-                submitted && formErrors.startTime
-                  ? "is-invalid"
-                  : startTime && !formErrors.startTime && submitted
-                  ? "is-valid"
-                  : ""
-              }`}
-              id="startTime"
-              required
-            />
-            {submitted && formErrors.startTime && (
-              <div className="invalid-feedback">{formErrors.startTime}</div>
-            )}
+            <GDateInput control={startDateControl} label="Start" />
           </div>
 
           <div className="col-md-2 mb-3">
-            <label htmlFor="endTime">End</label>
-            <input
-              value={endTime}
-              onChange={(e) => {
-                setEndTime(e.target.value);
-                if (submitted && e.target.value) {
-                  setFormErrors((prev) => ({ ...prev, endTime: "" }));
-                }
-              }}
-              type="date"
-              className={`form-control ${
-                submitted && formErrors.endTime
-                  ? "is-invalid"
-                  : endTime && !formErrors.endTime && submitted
-                  ? "is-valid"
-                  : ""
-              }`}
-              id="endTime"
-              required
-            />
-            {submitted && formErrors.endTime && (
-              <div className="invalid-feedback">{formErrors.endTime}</div>
-            )}
+            <GDateInput control={endDateControl} label="End" />
           </div>
 
           <div className="row">
             <div className="col-12 mb-3">
-              <label htmlFor="description">Description</label>
-              <input
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                  if (submitted && e.target.value) {
-                    setFormErrors((prev) => ({ ...prev, description: "" }));
-                  }
-                }}
-                type="text"
-                className={`form-control ${
-                  submitted && formErrors.description
-                    ? "is-invalid"
-                    : description && !formErrors.description && submitted
-                    ? "is-valid"
-                    : ""
-                }`}
-                id="description"
-                placeholder="Traffic Control"
-                required
+              <GTextInput
+                control={descriptionControl}
+                label="Description"
+                placeholder={"Traffic Control"}
+                maxLength={200}
               />
-              {submitted && formErrors.description && (
-                <div className="invalid-feedback">{formErrors.description}</div>
-              )}
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-8 mb-3">
-              <label htmlFor="requestedEmployees">
-                Requested Number of Officers
-              </label>
-              <input
-                value={requestedEmployees}
-                onChange={(e) => {
-                  setRequestedEmployees(Number(e.target.value));
-                  if (submitted && e.target.value) {
-                    setFormErrors((prev) => ({
-                      ...prev,
-                      requestedEmployees: "",
-                    }));
-                  }
-                }}
-                type="number"
-                className={`form-control ${
-                  submitted && formErrors.requestedEmployees
-                    ? "is-invalid"
-                    : requestedEmployees &&
-                      !formErrors.requestedEmployees &&
-                      submitted
-                    ? "is-valid"
-                    : ""
-                }`}
-                id="requestedEmployees"
-                placeholder="0"
-                required
+              <GNumberInput
+                label={"Requested Number of Officers"}
+                control={psoCountControl}
+                minimum={1}
+                maximum={100}
               />
-              {submitted && formErrors.requestedEmployees && (
-                <div className="invalid-feedback">
-                  {formErrors.requestedEmployees}
-                </div>
-              )}
             </div>
 
             <div className="col-md-4 mb-3">
               {/* TODO: Only display projects that are connected to the signed in company */}
-              <label htmlFor="ChosenProject">Choose A Project</label>
+              {/* <label htmlFor="ChosenProject">Choose A Project</label>
               <select
                 className="form-select"
                 name="ChosenProject"
                 onChange={(e) => setChosenProject(Number(e.target.value))}
                 defaultValue=""
               >
-                <option value="" disabled selected>
-                  NONE SELECTED
-                </option>
+                <option value="" />
                 {Projects?.map((pShift) => (
                   <option key={pShift.id} value={pShift.id}>
                     {pShift.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
+              <GSelectInput
+                label={"Choose a Project"}
+                control={projectSelectControl}
+              />
             </div>
           </div>
         </div>
