@@ -79,8 +79,8 @@ function ShiftList() {
       status: s.status,
     };
 
-    await editShift(s.id, newShift);
-    // await createToast(editShift,(s.id, newShift), "Editing Shift");
+    await createToast(editShift,newShift, "Editing Shift");
+
     handleEdit(-1);
 
     await populateShifts();
