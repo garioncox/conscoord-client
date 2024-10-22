@@ -7,6 +7,7 @@ export const useCustomToast = () => {
     params: any,
     defaultMessage: string
   ) => {
+    console.log(`Params was ${JSON.stringify(params)}`)
     const response: any = await toast.promise(asyncFunction(params), {
       pending: `${defaultMessage}`,
       success: {
