@@ -8,8 +8,8 @@ export const useShiftRequests = () => {
     return response.data;
   };
 
-  const editShift = async (id: number, shift: Shift) => {
-    await axios.put(`/api/Shift/edit/${id}`, shift);
+  const editShift = async (shift: Shift) => {
+    await axios.put(`/api/Shift/edit/`, shift);
   };
 
   const getAllShifts = async (): Promise<Shift[]> => {
