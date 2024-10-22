@@ -28,13 +28,14 @@ function CreateShift() {
   const { addProjectShift } = useProjectShiftRequests();
   const { Projects, setProjects, getAllProjects } = useProjectRequests();
   const [ChosenProject, setChosenProject] = useState<number>(-1);
+  const { createToast } = useCustomToast();
 
   useEffect(() => {
     const fetchProjects = async () => {
       const projects = await getAllProjects();
       setProjects(projects);
-      console.log(`All Projects ${projects}`)
-    }
+      console.log(`All Projects ${projects}`);
+    };
     fetchProjects();
   }, []);
 
@@ -92,12 +93,11 @@ function CreateShift() {
         RequestedEmployees: requestedEmployees,
         Status: "ACTIVE",
       };
-      // createToast(addShift, shift, "Adding Shift");
-      const addShiftId: number = await addShift(shift);
+      const addShiftId: number = await createToast(addShift, shift, "Adding Shift");
       const newProjectShift: ProjectShiftDTO = {
         projectId: ChosenProject,
         shiftId: addShiftId,
-      }
+      };
       await addProjectShift(newProjectShift);
     }
   }
@@ -118,12 +118,13 @@ function CreateShift() {
                 }
               }}
               type="text"
-              className={`form-control ${submitted && formErrors.location
-                ? "is-invalid"
-                : location && !formErrors.location && submitted
+              className={`form-control ${
+                submitted && formErrors.location
+                  ? "is-invalid"
+                  : location && !formErrors.location && submitted
                   ? "is-valid"
                   : ""
-                }`}
+              }`}
               id="location"
               placeholder="North Side"
               required
@@ -143,12 +144,13 @@ function CreateShift() {
                 }
               }}
               type="date"
-              className={`form-control ${submitted && formErrors.startTime
-                ? "is-invalid"
-                : startTime && !formErrors.startTime && submitted
+              className={`form-control ${
+                submitted && formErrors.startTime
+                  ? "is-invalid"
+                  : startTime && !formErrors.startTime && submitted
                   ? "is-valid"
                   : ""
-                }`}
+              }`}
               id="startTime"
               required
             />
@@ -167,12 +169,13 @@ function CreateShift() {
                 }
               }}
               type="date"
-              className={`form-control ${submitted && formErrors.endTime
-                ? "is-invalid"
-                : endTime && !formErrors.endTime && submitted
+              className={`form-control ${
+                submitted && formErrors.endTime
+                  ? "is-invalid"
+                  : endTime && !formErrors.endTime && submitted
                   ? "is-valid"
                   : ""
-                }`}
+              }`}
               id="endTime"
               required
             />
@@ -192,12 +195,13 @@ function CreateShift() {
                   }
                 }}
                 type="text"
-                className={`form-control ${submitted && formErrors.description
-                  ? "is-invalid"
-                  : description && !formErrors.description && submitted
+                className={`form-control ${
+                  submitted && formErrors.description
+                    ? "is-invalid"
+                    : description && !formErrors.description && submitted
                     ? "is-valid"
                     : ""
-                  }`}
+                }`}
                 id="description"
                 placeholder="Traffic Control"
                 required
@@ -224,14 +228,15 @@ function CreateShift() {
                   }
                 }}
                 type="number"
-                className={`form-control ${submitted && formErrors.requestedEmployees
-                  ? "is-invalid"
-                  : requestedEmployees &&
-                    !formErrors.requestedEmployees &&
-                    submitted
+                className={`form-control ${
+                  submitted && formErrors.requestedEmployees
+                    ? "is-invalid"
+                    : requestedEmployees &&
+                      !formErrors.requestedEmployees &&
+                      submitted
                     ? "is-valid"
                     : ""
-                  }`}
+                }`}
                 id="requestedEmployees"
                 placeholder="0"
                 required
@@ -245,8 +250,15 @@ function CreateShift() {
             <div className="col-md-4 mb-3">
               {/* TODO: Only display projects that are connected to the signed in company */}
               <label htmlFor="ChosenProject">Choose A Project</label>
-              <select className="form-select" name="ChosenProject" onChange={(e) => setChosenProject((Number(e.target.value)))} defaultValue="">
-                <option value="" disabled selected>NONE SELECTED</option>
+              <select
+                className="form-select"
+                name="ChosenProject"
+                onChange={(e) => setChosenProject(Number(e.target.value))}
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  NONE SELECTED
+                </option>
                 {Projects?.map((pShift) => (
                   <option key={pShift.id} value={pShift.id}>
                     {pShift.name}
