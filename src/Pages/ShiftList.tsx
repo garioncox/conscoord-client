@@ -56,7 +56,7 @@ function ShiftList() {
   }
 
   async function handleArchive(shift: Shift) {
-    await archiveShift(shift.id);
+    await createToast(archiveShift,shift.id, "Archiving Shift");
 
     setShifts((prevShifts) =>
       prevShifts?.map((s) => (s.id === shift.id ? shift : s))
@@ -80,6 +80,7 @@ function ShiftList() {
     };
 
     await createToast(editShift,newShift, "Editing Shift");
+
     handleEdit(-1);
 
     await populateShifts();
