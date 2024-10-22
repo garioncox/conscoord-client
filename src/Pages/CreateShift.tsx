@@ -94,7 +94,6 @@ function CreateShift() {
         Status: "ACTIVE",
       };
       const addShiftId: number = await createToast(addShift, shift, "Adding Shift");
-      // const addShiftId: number = await addShift(shift);
       const newProjectShift: ProjectShiftDTO = {
         projectId: ChosenProject,
         shiftId: addShiftId,
