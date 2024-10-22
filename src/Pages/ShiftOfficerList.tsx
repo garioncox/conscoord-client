@@ -54,6 +54,16 @@ function ShiftOfficerList() {
                       await createToast(deleteEmployeeShift, s.id, "Deleting shift...");
                       setClaimedShifts(claimedShifts.filter(shift => shift.id !== s.id))
                       setShifts((prevShifts) => [...prevShifts, s])
+
+                      if (user && user.email) {
+                        const email: EmailRequest = {
+                          email: user.email,
+                          subject: "Shift resignation notification",
+                          messageBody: ` ${user?.name}, you have resigned from the shift at ${s.location} from ${s.startTime} to ${s.endTime}. \n\n
+                            If you did not resign from this shift, please secure your account, otherwise you can disregard this email.`,
+                        };
+                        sendEmail(email);
+                      }
                     }
                     }
                   >
@@ -90,12 +100,11 @@ function ShiftOfficerList() {
                       setClaimedShifts((prevClaimedShifts) => [...prevClaimedShifts, s]);
                       setShifts(shifts?.filter(shift => shift.id !== s.id))
 
-
                       if (user && user.email) {
                         const email: EmailRequest = {
-                          Email: user.email,
-                          Subject: "Shift signup notification",
-                          MessageBody: ` ${user?.name}, you have signed up to the shift at ${s.location} from ${s.startTime} to ${s.endTime}`,
+                          email: user.email,
+                          subject: "Shift signup notification",
+                          messageBody: ` ${user?.name}, you have signed up to the shift at ${s.location} from ${s.startTime} to ${s.endTime}`,
                         };
                         sendEmail(email);
                       }

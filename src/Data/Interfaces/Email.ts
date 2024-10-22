@@ -1,7 +1,5 @@
-export interface EmailRequest
-{
-      Email:string
-      Subject : string
-      MessageBody : string 
+export interface EmailRequest {
+      email: string
+      subject: string
+      messageBody: string
 }
-  
