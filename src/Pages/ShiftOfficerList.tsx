@@ -37,7 +37,6 @@ function ShiftOfficerList() {
     populateShifts();
     populateProjects();
     populateProjectShifts();
-    console.log(projects);
   }, [user?.email]);
 
   const contents =
