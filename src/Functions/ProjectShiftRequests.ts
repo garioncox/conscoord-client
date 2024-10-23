@@ -14,7 +14,7 @@ export const useProjectShiftRequests = () => {
         await axios.delete(`/api/ProjectShift/delete/${projectShiftID}`)
     }
 
-    const getProjectShifts = async (): Promise<ProjectShift[]> => {
+    const getAllProjectShifts = async (): Promise<ProjectShift[]> => {
         const response = await axios.get(`/api/ProjectShift/getAll`);
         return response.data;
     }
@@ -22,7 +22,7 @@ export const useProjectShiftRequests = () => {
     return {
         addProjectShift,
         deleteProjectShift,
-        getProjectShifts,
+        getAllProjectShifts,
         ProjectShifts,
         setProjectShifts
     };
