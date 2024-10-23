@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "./Login";
-import LogoutButton from "./Logout";
+import LoginButton from "../Auth/Login";
+import LogoutButton from "../Auth/Logout";
 import { Link } from "react-router-dom";
-import { ADMIN_ROLE, CLIENT_ROLE, PSO_ROLE } from "./PermissionLock";
+import { ADMIN_ROLE, CLIENT_ROLE, PSO_ROLE } from "../Auth/PermissionLock";
 import NavItem from "./Navitem";
 
 const Navbar = () => {

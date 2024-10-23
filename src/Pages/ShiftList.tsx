@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useShiftRequests } from "../Functions/ShiftRequests";
-import PermissionLock, { CLIENT_ROLE } from "../Components/PermissionLock";
+import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
 import { ToastContainer } from "react-toastify";
 
 function ShiftList() {
-  const {getAllArchivedShifts, getAllShifts, archiveShift, editShift} = useShiftRequests();
+  const { getAllArchivedShifts, getAllShifts, archiveShift, editShift } =
+    useShiftRequests();
   const [selected, setSelected] = useState<number>();
   const [selectLocation, setLocation] = useState<string>("");
   const [selectStartTime, setStartTime] = useState<string>("");
@@ -181,7 +182,7 @@ function ShiftList() {
     <PermissionLock roles={[CLIENT_ROLE]}>
       <h1 id="shifts"> Shift List</h1>
       {contents}
-      <ToastContainer/>
+      <ToastContainer />
     </PermissionLock>
   );
 }

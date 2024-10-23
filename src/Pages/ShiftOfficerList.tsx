@@ -8,16 +8,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EmailRequest } from "../Data/Interfaces/Email";
-import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
-import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import { useCustomToast } from "../Components/Toast";
+import PermissionLock, { PSO_ROLE } from "../Components/Auth/PermissionLock";
 
 function ShiftOfficerList() {
-  const { addEmployeeShift, getSignedUpShifts, deleteEmployeeShift } = useEmpShiftRequests();
-  const { getEmployeeByEmail } = useEmployeeRequests();
+  const { addEmployeeShift } = useEmpShiftRequests();
   const { getAllShifts } = useShiftRequests();
   const { sendEmail } = useEmailRequests();
-  const { createToast } = useCustomToast();
   const { user } = useAuth0();
 
   const [shifts, setShifts] = useState<Shift[]>([]);
@@ -51,11 +47,16 @@ function ShiftOfficerList() {
                   <button
                     className="btn btn-danger"
                     onClick={async () => {
-                      await createToast(deleteEmployeeShift, s.id, "Deleting shift...");
-                      setClaimedShifts(claimedShifts.filter(shift => shift.id !== s.id))
-                      setShifts((prevShifts) => [...prevShifts, s])
-                    }
-                    }
+                      await createToast(
+                        deleteEmployeeShift,
+                        s.id,
+                        "Deleting shift..."
+                      );
+                      setClaimedShifts(
+                        claimedShifts.filter((shift) => shift.id !== s.id)
+                      );
+                      setShifts((prevShifts) => [...prevShifts, s]);
+                    }}
                   >
                     Resign from shift
                   </button>
@@ -85,11 +86,17 @@ function ShiftOfficerList() {
                   <button
                     className="btn btn-primary"
                     onClick={() => {
-                      createToast(postEmployeeShift, s.id, "Signing up for shift...");
+                      createToast(
+                        postEmployeeShift,
+                        s.id,
+                        "Signing up for shift..."
+                      );
 
-                      setClaimedShifts((prevClaimedShifts) => [...prevClaimedShifts, s]);
-                      setShifts(shifts?.filter(shift => shift.id !== s.id))
-
+                      setClaimedShifts((prevClaimedShifts) => [
+                        ...prevClaimedShifts,
+                        s,
+                      ]);
+                      setShifts(shifts?.filter((shift) => shift.id !== s.id));
 
                       if (user && user.email) {
                         const email: EmailRequest = {
@@ -118,16 +125,13 @@ function ShiftOfficerList() {
 
       const allShifts = await getAllShifts();
 
-      const availableShifts = allShifts.filter(shift =>
-        !claimed.some(claimedShift =>
-          claimedShift.id === shift.id
-        )
+      const availableShifts = allShifts.filter(
+        (shift) => !claimed.some((claimedShift) => claimedShift.id === shift.id)
       );
 
       setShifts(availableShifts);
     }
   }
-
 
   async function postEmployeeShift(id: number) {
     if (user && user.email) {
