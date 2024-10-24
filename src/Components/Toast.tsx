@@ -2,12 +2,12 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const useCustomToast = () => {
-  const createToast = (
+  const createToast = async (
     asyncFunction: any,
     params: any,
     defaultMessage: string
   ) => {
-    toast.promise(asyncFunction(params), {
+    const response: any = await toast.promise(asyncFunction(params), {
       pending: `${defaultMessage}`,
       success: {
         render() {
@@ -20,6 +20,7 @@ export const useCustomToast = () => {
         },
       },
     });
+    return response;
   };
 
   return {

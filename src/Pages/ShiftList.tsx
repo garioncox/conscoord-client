@@ -3,6 +3,7 @@ import { Shift } from "../Data/Interfaces/Shift";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
 import { ToastContainer } from "react-toastify";
+import { useCustomToast } from "../Components/Toast";
 
 function ShiftList() {
   const { getAllArchivedShifts, getAllShifts, archiveShift, editShift } =
@@ -14,6 +15,7 @@ function ShiftList() {
   const [selectDescription, setDescription] = useState<string>("");
   const [selectReqEmployees, setReqEmployees] = useState<number>(-1);
   const [shifts, setShifts] = useState<Shift[]>();
+  const {createToast} = useCustomToast();
 
   useEffect(() => {
     populateShifts();
@@ -55,7 +57,7 @@ function ShiftList() {
   }
 
   async function handleArchive(shift: Shift) {
-    await archiveShift(shift.id);
+    await createToast(archiveShift,shift.id, "Archiving Shift");
 
     setShifts((prevShifts) =>
       prevShifts?.map((s) => (s.id === shift.id ? shift : s))
@@ -78,7 +80,8 @@ function ShiftList() {
       status: s.status,
     };
 
-    await editShift(s.id, newShift);
+    await createToast(editShift,newShift, "Editing Shift");
+
     handleEdit(-1);
 
     await populateShifts();

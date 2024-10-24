@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
+import { useCustomToast } from "../Components/Toast";
 
 function AddOfficer() {
   const { addEmployee } = useEmployeeRequests();
-
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -12,6 +12,7 @@ function AddOfficer() {
     phone?: string;
     email?: string;
   }>({});
+  const {createToast} = useCustomToast();
 
   //chat gave these regex patterns
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -41,11 +42,12 @@ function AddOfficer() {
     if (validateForm()) {
       const myPhone = phone.replace(/-/g, "");
 
-      addEmployee({
+      await createToast(addEmployee,{
         name: name,
         email: email,
         phonenumber: myPhone,
-      });
+      }, "Adding Employee")
+
 
       setFormErrors({});
     }

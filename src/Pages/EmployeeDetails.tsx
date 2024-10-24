@@ -1,63 +1,75 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../index.css";
+import { useParams } from "react-router-dom";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
-import AddOfficer from "./AddOfficer";
+import { Shift } from "../Data/Interfaces/Shift";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import PermissionLock, { ADMIN_ROLE } from "../Components/Auth/PermissionLock";
+import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
 
-function EmployeeList() {
-  const { getAllEmployees } = useEmployeeRequests();
-
-  const [employees, setEmployees] = useState<Employee[]>([]);
-
+const EmployeeDetails = () => {
+  const { id } = useParams();
+  const [employee, setEmployees] = useState<Employee>();
+  const [shift, setShift] = useState<Shift[]>();
+  
   useEffect(() => {
-    getEmployees();
+    getEmployee();
   }, []);
 
-  async function getEmployees() {
-    setEmployees(await getAllEmployees());
+  const { getEmployeeById } = useEmployeeRequests();
+  const { getSignedUpShifts } = useEmpShiftRequests();
+
+  async function getEmployee() {
+    if (id === undefined) {
+      return
+    }
+    const response = await getEmployeeById(Number(id));
+    setEmployees(response);
+
+    const shiftresponse = await getSignedUpShifts(response.email);
+    setShift(shiftresponse);
   }
 
-  const navigate = useNavigate();
-
-  const contents =
-    employees === undefined ? (
-      <div className="spinner-border" role="status" />
+  function employeeDetails() {
+    return employee != undefined ? (
+      <>
+        <h1>{employee?.name}</h1>
+        <h2>{employee.email}</h2>
+        <h2>{employee.phonenumber}</h2>
+      </>
     ) : (
+      <div>No employee found with that Id</div>
+    );
+  }
+  function shiftDetails() {
+    return (
       <table className="table table-striped">
         <thead>
           <tr>
-            <th className="text-start">Name</th>
-            <th className="text-start">Phone Number</th>
-            <th className="text-start">Email</th>
+            <th className="text-start">Shift Details</th>
+            <th className="text-start">Location</th>
+            <th className="text-start">Start Time</th>
+            <th className="text-start">End Time</th>
+            <th className="text-start">Status</th>
           </tr>
         </thead>
         <tbody>
-          {employees.map((e) => (
-            <tr
-              key={e.id}
-              className="grow grow:hover"
-              onClick={() => navigate(`/admin/view/employees/${e.id}`)}
-            >
-              <td className="text-start">{e.name}</td>
-              <td className="text-start">{e.phonenumber}</td>
-              <td className="text-start">{e.email}</td>
+          {shift?.map((s) => (
+            <tr>
+              <td className="text-start">{s.description}</td>
+              <td className="text-start">{s.location}</td>
+              <td className="text-start">{s.startTime}</td>
+              <td className="text-start">{s.startTime}</td>
+              <td className="text-start">{s.status}</td>
             </tr>
           ))}
         </tbody>
       </table>
     );
-
+  }
   return (
     <>
-      <PermissionLock roles={[ADMIN_ROLE]}>
-        <AddOfficer />
-        <h1>Admin Employee View</h1>
-        {contents}
-      </PermissionLock>
+      <div>{employeeDetails()}</div>
+      <div>{shiftDetails()}</div>
     </>
   );
-}
-
-export default EmployeeList;
+};
+export default EmployeeDetails;

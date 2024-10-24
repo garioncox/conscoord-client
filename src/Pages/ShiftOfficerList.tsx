@@ -5,22 +5,40 @@ import { useShiftRequests } from "../Functions/ShiftRequests";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
 import { useEmailRequests } from "../Functions/EmailRequests";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EmailRequest } from "../Data/Interfaces/Email";
-import PermissionLock, { PSO_ROLE } from "../Components/Auth/PermissionLock";
+import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
+import { useEmployeeRequests } from "../Functions/EmployeeRequests";
+import { useCustomToast } from "../Components/Toast";
+import { useProjectRequests } from "../Functions/ProjectRequests";
+import { Project } from "../Data/Interfaces/Project";
+import ProjectShift from "../Data/Interfaces/ProjectShift";
+import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
 
 function ShiftOfficerList() {
-  const { addEmployeeShift } = useEmpShiftRequests();
-  const { getAllShifts } = useShiftRequests();
+  const {
+    addEmployeeShift,
+    getSignedUpShifts,
+    deleteEmployeeShift,
+    getAllEmployeeShifts,
+  } = useEmpShiftRequests();
+  const { getEmployeeByEmail } = useEmployeeRequests();
+  const { getAllShifts} = useShiftRequests();
+  const { getAllProjects } = useProjectRequests();
+  const { getAllProjectShifts } = useProjectShiftRequests();
   const { sendEmail } = useEmailRequests();
   const { user } = useAuth0();
 
   const [shifts, setShifts] = useState<Shift[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [projectShifts, setProjectShifts] = useState<ProjectShift[]>([]);
   const [claimedShifts, setClaimedShifts] = useState<Shift[]>([]);
 
   useEffect(() => {
     populateShifts();
+    populateProjects();
+    populateProjectShifts();
   }, [user?.email]);
 
   const contents =
@@ -56,6 +74,16 @@ function ShiftOfficerList() {
                         claimedShifts.filter((shift) => shift.id !== s.id)
                       );
                       setShifts((prevShifts) => [...prevShifts, s]);
+
+                      if (user && user.email) {
+                        const email: EmailRequest = {
+                          email: user.email,
+                          subject: "Shift resignation notification",
+                          messageBody: ` ${user?.name}, you have resigned from the shift at ${s.location} from ${s.startTime} to ${s.endTime}. \n\n
+                            If you did not resign from this shift, please secure your account, otherwise you can disregard this email.`,
+                        };
+                        sendEmail(email);
+                      }
                     }}
                   >
                     Resign from shift
@@ -67,7 +95,7 @@ function ShiftOfficerList() {
         </table>
         <hr />
 
-        <h1>Shifts Still Open</h1>
+        <h1>Pick a Shift</h1>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -77,42 +105,63 @@ function ShiftOfficerList() {
             </tr>
           </thead>
           <tbody>
-            {shifts.map((s) => (
-              <tr key={s.id}>
-                <td>{s.location}</td>
-                <td>{s.startTime}</td>
-                <td>{s.endTime}</td>
-                <td>
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                      createToast(
-                        postEmployeeShift,
-                        s.id,
-                        "Signing up for shift..."
-                      );
-
-                      setClaimedShifts((prevClaimedShifts) => [
-                        ...prevClaimedShifts,
-                        s,
-                      ]);
-                      setShifts(shifts?.filter((shift) => shift.id !== s.id));
-
-                      if (user && user.email) {
-                        const email: EmailRequest = {
-                          Email: user.email,
-                          Subject: "Shift signup notification",
-                          MessageBody: ` ${user?.name}, you have signed up to the shift at ${s.location} from ${s.startTime} to ${s.endTime}`,
-                        };
-                        sendEmail(email);
-                      }
-                    }}
+            <div className="accordion">
+              {projects.map((p) => (
+                <div className="accordion-item">
+                  <div className="accordion-header">
+                    <button
+                      className="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target={`#collapse${p.id}`}
+                      aria-expanded="true"
+                      aria-controls={`collapse${p.id}`}
+                    >
+                      {p.name}
+                    </button>
+                  </div>
+                  <div
+                    id={`collapse${p.id}`}
+                    className="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample"
                   >
-                    Take This Shift
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    {shifts
+                      .filter((s) =>
+                        projectShifts.some(
+                          (ps) => ps.shiftId === s.id && ps.projectId === p.id
+                        )
+                      )
+                      .map((s) => (
+                        <div className="accordion-body">
+                          <tr key={s.id}>
+                            <td>{s.location}</td>
+                            <td>{s.startTime}</td>
+                            <td>{s.endTime}</td>
+                            <td>
+                              <button
+                                className="btn btn-primary"
+                                onClick={() => {
+                                  takeShift(s);
+                                  if (user && user.email) {
+                                    const email: EmailRequest = {
+                                      email: user.email,
+                                      subject: "Shift signup notification",
+                                      messageBody: ` ${user?.name}, you have signed up to the shift at ${s.location} from ${s.startTime} to ${s.endTime}`,
+                                    };
+                                    sendEmail(email);
+                                  }
+                                }}
+                              >
+                                Take This Shift
+                              </button>
+                            </td>
+                          </tr>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </tbody>
         </table>
       </>
@@ -133,15 +182,30 @@ function ShiftOfficerList() {
     }
   }
 
-  async function postEmployeeShift(id: number) {
-    if (user && user.email) {
+  async function populateProjects() {
+    setProjects(await getAllProjects());
+  }
+
+  async function populateProjectShifts() {
+    setProjectShifts(await getAllProjectShifts());
+  }
+
+  async function takeShift(s: Shift) {
+    const allTakenShifts = (await getAllEmployeeShifts()).filter(
+      (es) => es.shiftId == s.id
+    );
+    if (allTakenShifts.length >= s.requestedEmployees) {
+      toast.error("Sorry, Maximum number of officers reached");
+    } else if (user && user.email) {
       const currUser = await getEmployeeByEmail(user.email);
       const employee: EmployeeShiftDTO = {
         EmployeeId: currUser.id,
-        ShiftId: id,
+        ShiftId: s.id,
       };
+      await createToast(addEmployeeShift, employee, "Signing up for shift...");
 
-      await addEmployeeShift(employee);
+      setClaimedShifts((prevClaimedShifts) => [...prevClaimedShifts, s]);
+      setShifts(shifts?.filter((shift) => shift.id !== s.id));
     }
   }
 

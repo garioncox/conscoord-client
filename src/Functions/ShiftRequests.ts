@@ -8,14 +8,19 @@ export const useShiftRequests = () => {
     return response.data;
   };
 
-  const editShift = async (id: number, shift: Shift) => {
-    await axios.put(`/api/Shift/edit/${id}`, shift);
+  const editShift = async (shift: Shift) => {
+    await axios.put(`/api/Shift/edit/`, shift);
   };
 
   const getAllShifts = async (): Promise<Shift[]> => {
     const response = await axios.get(`/api/Shift/getAll`);
     return response.data;
   };
+
+  const getShiftById = async (id: number): Promise<Shift> => {
+    const response = await axios.get(`/api/Shift/get/${id}`);
+    return response.data;
+  }
 
   const getAllArchivedShifts = async (): Promise<Shift[]> => {
     const response = await axios.get(`/api/Shift/getAll/archived`);
@@ -29,6 +34,7 @@ export const useShiftRequests = () => {
   return {
     addShift,
     editShift,
+    getShiftById,
     getAllShifts,
     getAllArchivedShifts,
     archiveShift,
