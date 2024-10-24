@@ -35,12 +35,28 @@ function ShiftOfficerList() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectShifts, setProjectShifts] = useState<ProjectShift[]>([]);
   const [claimedShifts, setClaimedShifts] = useState<Shift[]>([]);
+  const [fulfilledShifts, setFulfilledShifts] = useState({});
 
   useEffect(() => {
     populateShifts();
     populateProjects();
     populateProjectShifts();
   }, [user?.email]);
+
+  useEffect(() => {
+    const fetchFulfilledShifts = async() => {
+      const results = await Promise.all(
+        shifts.map(s => getFulfilledShifts(s.id))
+      );
+      const fulfilledMap: Record<string, number | null> = {};
+      shifts.forEach((shift, index) => {
+          fulfilledMap[shift.id] = results[index];
+      });
+      setFulfilledShifts(fulfilledMap);
+    };
+
+    fetchFulfilledShifts();
+  }, [shifts])
 
   const contents =
     shifts === undefined ? (
@@ -97,15 +113,6 @@ function ShiftOfficerList() {
         <hr />
 
         <h1>Pick a Shift</h1>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-            </tr>
-          </thead>
-          <tbody>
             <div className="accordion">
               {projects.map((p) => (
                 <div className="accordion-item">
@@ -134,10 +141,24 @@ function ShiftOfficerList() {
                       )
                       .map((s) => (
                         <div className="accordion-body">
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th>Location</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Requested Officers</th>
+                                <th>Signed Up Officers</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
                           <tr key={s.id}>
                             <td>{s.location}</td>
                             <td>{s.startTime}</td>
                             <td>{s.endTime}</td>
+                            <td>{s.requestedEmployees}</td>
+                            <td>{fulfilledShifts[s.id] || 0}</td>
                             <td>
                               <button
                                 className="btn btn-primary"
@@ -157,14 +178,14 @@ function ShiftOfficerList() {
                               </button>
                             </td>
                           </tr>
+                          </tbody>
+                          </table>
                         </div>
                       ))}
                   </div>
                 </div>
               ))}
             </div>
-          </tbody>
-        </table>
       </>
     );
 
@@ -189,6 +210,13 @@ function ShiftOfficerList() {
 
   async function populateProjectShifts() {
     setProjectShifts(await getAllProjectShifts());
+  }
+
+  async function getFulfilledShifts(id: number) {
+    const allTakenShifts = (await getAllEmployeeShifts()).filter(
+      (es) => es.shiftId == id
+    );
+    return allTakenShifts.length;
   }
 
   async function takeShift(s: Shift) {
