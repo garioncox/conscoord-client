@@ -34,6 +34,11 @@ const Navbar = () => {
                 label={"Officer Shifts"}
                 roles={[PSO_ROLE]}
               />
+              <NavItem
+                to={"/shift/view/shifts"}
+                label={"My Shifts"}
+                roles={[PSO_ROLE]}
+              />
 
               {/* Client Items */}
               <NavItem

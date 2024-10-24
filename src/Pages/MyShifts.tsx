@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useEmailRequests } from "../Functions/EmailRequests";
 import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
@@ -7,15 +7,21 @@ import { EmailRequest } from "../Data/Interfaces/Email";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
 import { useCustomToast } from "../Components/Toast";
+import { useShiftRequests } from "../Functions/ShiftRequests";
 
 function MyShifts() {
     const { sendEmail } = useEmailRequests();
-    const {deleteEmployeeShift} = useEmpShiftRequests();
+    const {deleteEmployeeShift, getSignedUpShifts} = useEmpShiftRequests();
     const { createToast } = useCustomToast();
+    const { getAllShifts} = useShiftRequests();
     const { user } = useAuth0();
 
     const [claimedShifts, setClaimedShifts] = useState<Shift[]>([]);
     const [shifts, setShifts] = useState<Shift[]>([]);
+
+    useEffect(() => {
+        populateShifts();
+      }, [user?.email]);
 
     const contents = 
     shifts === undefined ? (
@@ -72,6 +78,22 @@ function MyShifts() {
         <hr />
         </>
     )
+
+    async function populateShifts() {
+        if (user && user.email !== undefined) {
+          const claimed = await getSignedUpShifts(user.email);
+          setClaimedShifts(claimed);
+          
+    
+          const allShifts = await getAllShifts();
+    
+          const availableShifts = allShifts.filter(
+            (shift) => !claimed.some((claimedShift) => claimedShift.id === shift.id)
+          );
+    
+          setShifts(availableShifts);
+        }
+      }
 
     return (
         <PermissionLock roles={[PSO_ROLE]}>

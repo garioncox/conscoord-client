@@ -20,7 +20,6 @@ function ShiftOfficerList() {
   const {
     addEmployeeShift,
     getSignedUpShifts,
-    deleteEmployeeShift,
     getAllEmployeeShifts,
   } = useEmpShiftRequests();
   const { getEmployeeByEmail } = useEmployeeRequests();
@@ -34,7 +33,7 @@ function ShiftOfficerList() {
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectShifts, setProjectShifts] = useState<ProjectShift[]>([]);
-  const [claimedShifts, setClaimedShifts] = useState<Shift[]>([]);
+  // const [claimedShifts, setClaimedShifts] = useState<Shift[]>([]);
   const [fulfilledShifts, setFulfilledShifts] = useState({});
 
   useEffect(() => {
@@ -63,55 +62,6 @@ function ShiftOfficerList() {
       <div className="spinner-border" role="status" />
     ) : (
       <>
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {claimedShifts?.map((s) => (
-              <tr key={s.id}>
-                <td>{s.location}</td>
-                <td>{s.startTime}</td>
-                <td>{s.endTime}</td>
-                <td>
-                  <button
-                    className="btn btn-danger"
-                    onClick={async () => {
-                      await createToast(
-                        deleteEmployeeShift,
-                        s.id,
-                        "Deleting shift..."
-                      );
-                      setClaimedShifts(
-                        claimedShifts.filter((shift) => shift.id !== s.id)
-                      );
-                      setShifts((prevShifts) => [...prevShifts, s]);
-
-                      if (user && user.email) {
-                        const email: EmailRequest = {
-                          email: user.email,
-                          subject: "Shift resignation notification",
-                          messageBody: ` ${user?.name}, you have resigned from the shift at ${s.location} from ${s.startTime} to ${s.endTime}. \n\n
-                            If you did not resign from this shift, please secure your account, otherwise you can disregard this email.`,
-                        };
-                        sendEmail(email);
-                      }
-                    }}
-                  >
-                    Resign from shift
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <hr />
-
         <h1>Pick a Shift</h1>
             <div className="accordion">
               {projects.map((p) => (
@@ -192,8 +142,6 @@ function ShiftOfficerList() {
   async function populateShifts() {
     if (user && user.email !== undefined) {
       const claimed = await getSignedUpShifts(user.email);
-      setClaimedShifts(claimed);
-
       const allShifts = await getAllShifts();
 
       const availableShifts = allShifts.filter(
@@ -233,7 +181,6 @@ function ShiftOfficerList() {
       };
       await createToast(addEmployeeShift, employee, "Signing up for shift...");
 
-      setClaimedShifts((prevClaimedShifts) => [...prevClaimedShifts, s]);
       setShifts(shifts?.filter((shift) => shift.id !== s.id));
     }
   }
