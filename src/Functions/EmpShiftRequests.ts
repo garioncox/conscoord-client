@@ -1,6 +1,7 @@
 import axios from "axios";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 import { Shift } from "../Data/Interfaces/Shift";
+import { EmployeeShift } from "../Data/Interfaces/EmployeeShift";
 
 export const useEmpShiftRequests = () => {
   const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
@@ -16,9 +17,15 @@ export const useEmpShiftRequests = () => {
     await axios.delete(`/api/EmployeeShift/delete/${id}`);
   };
 
+  const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
+    const response = await axios.get(`/api/EmployeeShift/getall`);
+    return response.data;
+  }
+
   return {
     addEmployeeShift,
     getSignedUpShifts,
     deleteEmployeeShift,
+    getAllEmployeeShifts
   };
 };
