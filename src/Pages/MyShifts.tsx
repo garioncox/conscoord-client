@@ -99,7 +99,6 @@ function MyShifts() {
         <PermissionLock roles={[PSO_ROLE]}>
           <h1 id="shifts">My Shifts</h1>
           {contents}
-          <ToastContainer position="top-center" />
         </PermissionLock>
       );
 }
