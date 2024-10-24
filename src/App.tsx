@@ -8,6 +8,7 @@ import EmployeeDetails from "./Pages/EmployeeDetails";
 import EmployeeList from "./Pages/EmployeeList";
 import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import { Home } from "./Pages/Home";
+import MyShifts from "./Pages/MyShifts";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="shift/view" element={<ShiftList />} />
       <Route path="shift/view/officer" element={<ShiftOfficerList />} />
+      <Route path="shift/view/shifts" element={<MyShifts />} />
       <Route path="project/view" element={<ProjectList />} />
       <Route path="shift/create" element={<CreateShift />} />
       <Route path="project/create" element={<CreateProject />} />
