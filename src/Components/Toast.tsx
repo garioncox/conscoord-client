@@ -7,7 +7,6 @@ export const useCustomToast = () => {
     params: any,
     defaultMessage: string
   ) => {
-    console.log(params);
     toast.promise(asyncFunction(params), {
       pending: `${defaultMessage}`,
       success: {
