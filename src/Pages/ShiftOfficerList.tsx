@@ -27,12 +27,12 @@ function ShiftOfficerList() {
   const { getAllProjects } = useProjectRequests();
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { sendEmail } = useEmailRequests();
+  const { createToast } = useCustomToast();
   const { user } = useAuth0();
 
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectShifts, setProjectShifts] = useState<ProjectShift[]>([]);
-  // const [claimedShifts, setClaimedShifts] = useState<Shift[]>([]);
   const [fulfilledShifts, setFulfilledShifts] = useState({});
 
   useEffect(() => {
