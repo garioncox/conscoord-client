@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import "../scss/default.scss";
-import MainLayout from "./Components/MainLayout.tsx";
+import MainLayout from "./Components/Layout/MainLayout.tsx";
 
 ReactDOM.render(
   <BrowserRouter>

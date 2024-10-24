@@ -1,4 +1,4 @@
-import Profile from "./Profile";
+import Profile from "../Auth/Profile";
 
 function Sidebar() {
   return (
@@ -11,3 +11,4 @@ function Sidebar() {
 }
 
 export default Sidebar;
+  

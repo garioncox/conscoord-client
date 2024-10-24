@@ -4,7 +4,7 @@ import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import PermissionLock, {
   CLIENT_ROLE,
   PSO_ROLE,
-} from "../Components/PermissionLock";
+} from "../Components/Auth/PermissionLock";
 
 export const Home = () => {
   const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
