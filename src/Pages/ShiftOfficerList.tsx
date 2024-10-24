@@ -8,13 +8,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EmailRequest } from "../Data/Interfaces/Email";
-import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import { useCustomToast } from "../Components/Toast";
 import { useProjectRequests } from "../Functions/ProjectRequests";
 import { Project } from "../Data/Interfaces/Project";
 import ProjectShift from "../Data/Interfaces/ProjectShift";
 import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
+import PermissionLock, { PSO_ROLE } from "../Components/Auth/PermissionLock";
+import { useCustomToast } from "../Components/Toast";
 
 function ShiftOfficerList() {
   const {
@@ -23,11 +23,10 @@ function ShiftOfficerList() {
     getAllEmployeeShifts,
   } = useEmpShiftRequests();
   const { getEmployeeByEmail } = useEmployeeRequests();
-  const { getAllShifts} = useShiftRequests();
+  const { getAllShifts } = useShiftRequests();
   const { getAllProjects } = useProjectRequests();
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { sendEmail } = useEmailRequests();
-  const { createToast } = useCustomToast();
   const { user } = useAuth0();
 
   const [shifts, setShifts] = useState<Shift[]>([]);

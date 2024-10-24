@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { useRoleQuery } from "../Functions/RoleProvider";
+import { useRoleQuery } from "../../Functions/RoleProvider";
 
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";
