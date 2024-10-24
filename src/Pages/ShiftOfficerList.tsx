@@ -5,23 +5,26 @@ import { useShiftRequests } from "../Functions/ShiftRequests";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
 import { useEmailRequests } from "../Functions/EmailRequests";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EmailRequest } from "../Data/Interfaces/Email";
 import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { useCustomToast } from "../Components/Toast";
-import ProjectList from "./ProjectList";
 import { useProjectRequests } from "../Functions/ProjectRequests";
 import { Project } from "../Data/Interfaces/Project";
 import ProjectShift from "../Data/Interfaces/ProjectShift";
 import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
 
 function ShiftOfficerList() {
-  const { addEmployeeShift, getSignedUpShifts, deleteEmployeeShift } =
-    useEmpShiftRequests();
+  const {
+    addEmployeeShift,
+    getSignedUpShifts,
+    deleteEmployeeShift,
+    getAllEmployeeShifts,
+  } = useEmpShiftRequests();
   const { getEmployeeByEmail } = useEmployeeRequests();
-  const { getAllShifts } = useShiftRequests();
+  const { getAllShifts} = useShiftRequests();
   const { getAllProjects } = useProjectRequests();
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { sendEmail } = useEmailRequests();
@@ -139,20 +142,7 @@ function ShiftOfficerList() {
                               <button
                                 className="btn btn-primary"
                                 onClick={() => {
-                                  createToast(
-                                    postEmployeeShift,
-                                    s.id,
-                                    "Signing up for shift..."
-                                  );
-
-                                  setClaimedShifts((prevClaimedShifts) => [
-                                    ...prevClaimedShifts,
-                                    s,
-                                  ]);
-                                  setShifts(
-                                    shifts?.filter((shift) => shift.id !== s.id)
-                                  );
-
+                                  takeShift(s);
                                   if (user && user.email) {
                                     const email: EmailRequest = {
                                       email: user.email,
@@ -201,14 +191,22 @@ function ShiftOfficerList() {
     setProjectShifts(await getAllProjectShifts());
   }
 
-  async function postEmployeeShift(id: number) {
-    if (user && user.email) {
+  async function takeShift(s: Shift) {
+    const allTakenShifts = (await getAllEmployeeShifts()).filter(
+      (es) => es.shiftId == s.id
+    );
+    if (allTakenShifts.length >= s.requestedEmployees) {
+      toast.error("Sorry, Maximum number of officers reached");
+    } else if (user && user.email) {
       const currUser = await getEmployeeByEmail(user.email);
       const employee: EmployeeShiftDTO = {
         EmployeeId: currUser.id,
-        ShiftId: id,
+        ShiftId: s.id,
       };
-      await addEmployeeShift(employee);
+      await createToast(addEmployeeShift, employee, "Signing up for shift...");
+
+      setClaimedShifts((prevClaimedShifts) => [...prevClaimedShifts, s]);
+      setShifts(shifts?.filter((shift) => shift.id !== s.id));
     }
   }
 

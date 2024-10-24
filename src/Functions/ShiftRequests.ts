@@ -17,6 +17,11 @@ export const useShiftRequests = () => {
     return response.data;
   };
 
+  const getShiftById = async (id: number): Promise<Shift> => {
+    const response = await axios.get(`/api/Shift/get/${id}`);
+    return response.data;
+  }
+
   const getAllArchivedShifts = async (): Promise<Shift[]> => {
     const response = await axios.get(`/api/Shift/getAll/archived`);
     return response.data;
@@ -29,6 +34,7 @@ export const useShiftRequests = () => {
   return {
     addShift,
     editShift,
+    getShiftById,
     getAllShifts,
     getAllArchivedShifts,
     archiveShift,
