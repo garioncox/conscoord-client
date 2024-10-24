@@ -195,7 +195,7 @@ function ShiftOfficerList() {
     const allTakenShifts = (await getAllEmployeeShifts()).filter(
       (es) => es.shiftId == s.id
     );
-    if (allTakenShifts.length == s.requestedEmployees) {
+    if (allTakenShifts.length >= s.requestedEmployees) {
       toast.error("Sorry, Maximum number of officers reached");
     } else if (user && user.email) {
       const currUser = await getEmployeeByEmail(user.email);
