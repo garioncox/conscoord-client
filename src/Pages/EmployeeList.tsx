@@ -5,9 +5,9 @@ import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { useRoleRequests } from "../Functions/RoleRequests";
 import AddOfficer from "./AddOfficer";
 import "../index.css";
-import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
 import { useCustomToast } from "../Components/Toast";
 import { ToastContainer } from "react-toastify";
+import PermissionLock, { ADMIN_ROLE } from "../Components/Auth/PermissionLock";
 
 export const EmployeeList = () => {
   const { employees, setEmployeesList, getEmployeeById, editEmployee } =
@@ -38,7 +38,7 @@ export const EmployeeList = () => {
         roleid: selectedRole ? selectedRole : 0,
       };
 
-      await createToast(editEmployee,updatedEmployee, "Updating Employee");
+      await createToast(editEmployee, updatedEmployee, "Updating Employee");
       await setEmployeesList();
       console.log("Employee updated successfully");
     } else {
@@ -137,7 +137,7 @@ export const EmployeeList = () => {
         <AddOfficer />
         <h1>Admin Employee View</h1>
         {contents}
-        <ToastContainer/>
+        <ToastContainer />
       </PermissionLock>
     </>
   );

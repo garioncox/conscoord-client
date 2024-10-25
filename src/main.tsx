@@ -6,6 +6,8 @@ import ReactDOM from "react-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import "../scss/default.scss";
 import MainLayout from "./Components/Layout/MainLayout.tsx";
+import { ErrorBoundary } from "react-error-boundary";
+import Error from "./Components/Error.tsx";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -19,7 +21,9 @@ ReactDOM.render(
         cacheLocation="localstorage"
       >
         <MainLayout>
-          <App />
+          <ErrorBoundary fallback={<Error />}>
+            <App />
+          </ErrorBoundary>
         </MainLayout>
       </Auth0Provider>
     </StrictMode>
