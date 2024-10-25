@@ -23,6 +23,11 @@ export const useProjectRequests = () => {
     return response.data;
   };
 
+  const getCompanyProjects = async (empId: number): Promise<Project[]> => {
+    const response = await axios.get(`/api/Project/getCompanyProjects/${empId}`);
+    return response.data;
+  };
+
   return {
     Projects,
     setProjects,
@@ -30,5 +35,6 @@ export const useProjectRequests = () => {
     addProject,
     updateProject,
     archiveProject,
+    getCompanyProjects,
   };
 };
