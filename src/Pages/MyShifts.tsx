@@ -6,7 +6,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
 import { useCustomToast } from "../Components/Toast";
 import { useShiftRequests } from "../Functions/ShiftRequests";
-import PermissionLock, { PSO_ROLE } from "../Components/Auth/PermissionLock";
 
 function MyShifts() {
   const { sendEmail } = useEmailRequests();
@@ -94,10 +93,10 @@ function MyShifts() {
   }
 
   return (
-    <PermissionLock roles={[PSO_ROLE]}>
+    <div>
       <h1 id="shifts">My Shifts</h1>
       {contents}
-    </PermissionLock>
+    </div>
   );
 }
 

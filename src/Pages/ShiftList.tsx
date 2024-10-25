@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useShiftRequests } from "../Functions/ShiftRequests";
-import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
-import { ToastContainer } from "react-toastify";
 import { useCustomToast } from "../Components/Toast";
 
 function ShiftList() {
@@ -15,7 +13,7 @@ function ShiftList() {
   const [selectDescription, setDescription] = useState<string>("");
   const [selectReqEmployees, setReqEmployees] = useState<number>(-1);
   const [shifts, setShifts] = useState<Shift[]>();
-  const {createToast} = useCustomToast();
+  const { createToast } = useCustomToast();
 
   useEffect(() => {
     populateShifts();
@@ -57,7 +55,7 @@ function ShiftList() {
   }
 
   async function handleArchive(shift: Shift) {
-    await createToast(archiveShift,shift.id, "Archiving Shift");
+    await createToast(archiveShift, shift.id, "Archiving Shift");
 
     setShifts((prevShifts) =>
       prevShifts?.map((s) => (s.id === shift.id ? shift : s))
@@ -80,7 +78,7 @@ function ShiftList() {
       status: s.status,
     };
 
-    await createToast(editShift,newShift, "Editing Shift");
+    await createToast(editShift, newShift, "Editing Shift");
 
     handleEdit(-1);
 
@@ -182,11 +180,10 @@ function ShiftList() {
     );
 
   return (
-    <PermissionLock roles={[CLIENT_ROLE]}>
+    <div>
       <h1 id="shifts"> Shift List</h1>
       {contents}
-      <ToastContainer />
-    </PermissionLock>
+    </div>
   );
 }
 export default ShiftList;

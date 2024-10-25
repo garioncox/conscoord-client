@@ -9,7 +9,7 @@ const EmployeeDetails = () => {
   const { id } = useParams();
   const [employee, setEmployees] = useState<Employee>();
   const [shift, setShift] = useState<Shift[]>();
-  
+
   useEffect(() => {
     getEmployee();
   }, []);
@@ -19,7 +19,7 @@ const EmployeeDetails = () => {
 
   async function getEmployee() {
     if (id === undefined) {
-      return
+      return;
     }
     const response = await getEmployeeById(Number(id));
     setEmployees(response);
@@ -72,4 +72,5 @@ const EmployeeDetails = () => {
     </>
   );
 };
+
 export default EmployeeDetails;

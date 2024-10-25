@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 import { FormatDate } from "../Functions/FormatDates";
 import { useShiftRequests } from "../Functions/ShiftRequests";
-import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
 import { toast } from "react-toastify";
 import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
 import { useProjectRequests } from "../Functions/ProjectRequests";
@@ -205,11 +204,7 @@ function CreateShift() {
     </>
   );
 
-  return (
-    <>
-      <PermissionLock roles={[CLIENT_ROLE]}>{content}</PermissionLock>
-    </>
-  );
+  return <div>{content}</div>;
 }
 
 export default CreateShift;
