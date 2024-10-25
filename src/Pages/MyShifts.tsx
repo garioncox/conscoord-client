@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useEmailRequests } from "../Functions/EmailRequests";
-import PermissionLock, { PSO_ROLE } from "../Components/PermissionLock";
-import { ToastContainer } from "react-toastify";
+import PermissionLock, { PSO_ROLE } from "../Components/Auth/PermissionLock";
 import { EmailRequest } from "../Data/Interfaces/Email";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";

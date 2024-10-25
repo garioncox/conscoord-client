@@ -5,7 +5,7 @@ import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { useRoleRequests } from "../Functions/RoleRequests";
 import AddOfficer from "./AddOfficer";
 import "../index.css";
-import PermissionLock, { ADMIN_ROLE } from "../Components/PermissionLock";
+import PermissionLock, { ADMIN_ROLE } from "../Components/Auth/PermissionLock";
 import { useCustomToast } from "../Components/Toast";
 import { ToastContainer } from "react-toastify";
 

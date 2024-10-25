@@ -1,4 +1,4 @@
-export default interface ProjectShift {
+export interface ProjectShift {
     id: number,
     projectId: number,
     shiftId: number
