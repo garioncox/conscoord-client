@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { Project } from "../Data/Interfaces/Project";
 import { useProjectRequests } from "../Functions/ProjectRequests";
 import { useCustomToast } from "../Components/Toast";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 
 function ProjectList() {
-  const { getAllProjects, archiveProject, updateProject } =
+  const { getCompanyProjects, archiveProject, updateProject } =
     useProjectRequests();
+  const { getEmployeeByEmail } = useEmployeeRequests();
   const { createToast } = useCustomToast();
   const [projects, setProjects] = useState<Project[]>();
   const [name, setName] = useState<string>("");
@@ -17,6 +20,8 @@ function ProjectList() {
   useEffect(() => {
     populateProjects();
   }, []);
+
+  const { user } = useAuth0();
 
   useEffect(() => {
     const project = findProject();
@@ -32,7 +37,12 @@ function ProjectList() {
   }, [selected]);
 
   async function populateProjects() {
-    setProjects(await getAllProjects());
+    if (user === undefined) {
+      return;
+    }
+    const u = await getEmployeeByEmail(user.email || "");
+    const projects = await getCompanyProjects(u.id);
+    setProjects(projects);
   }
 
   function findProject() {
@@ -128,7 +138,6 @@ function ProjectList() {
             <button
               onClick={() => {
                 setSelected(s.id);
-                setupEdit();
               }}
               className="btn btn-warning"
             >
@@ -169,7 +178,3 @@ function ProjectList() {
   );
 }
 export default ProjectList;
-
-function setupEdit() {
-  throw new Error("Function not implemented.");
-}
