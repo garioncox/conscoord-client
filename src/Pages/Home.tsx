@@ -1,10 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import PermissionLock, {
-  CLIENT_ROLE,
-  PSO_ROLE,
-} from "../Components/Auth/PermissionLock";
 
 export const Home = () => {
   const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
@@ -39,10 +35,8 @@ export const Home = () => {
   }, [user]);
 
   return (
-    <PermissionLock roles={[PSO_ROLE, CLIENT_ROLE]}>
-      <div className="d-flex justify-content-center align-items-center">
-        <h1>Welcome Home!</h1>
-      </div>
-    </PermissionLock>
+    <div className="d-flex justify-content-center align-items-center">
+      <h1>Welcome Home!</h1>
+    </div>
   );
 };
