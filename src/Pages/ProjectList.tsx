@@ -44,7 +44,6 @@ function ProjectList() {
     }
     const u = await getEmployeeByEmail(user.email || "");
     const projects = await getCompanyProjects(u.id);
-    console.log(projects);
     setProjects(projects);
   }
 
