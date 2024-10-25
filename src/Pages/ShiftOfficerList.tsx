@@ -5,7 +5,7 @@ import { useShiftRequests } from "../Functions/ShiftRequests";
 import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
 import { useEmailRequests } from "../Functions/EmailRequests";
 import { useAuth0 } from "@auth0/auth0-react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { EmailRequest } from "../Data/Interfaces/Email";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
@@ -13,15 +13,11 @@ import { useProjectRequests } from "../Functions/ProjectRequests";
 import { Project } from "../Data/Interfaces/Project";
 import ProjectShift from "../Data/Interfaces/ProjectShift";
 import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
-import PermissionLock, { PSO_ROLE } from "../Components/Auth/PermissionLock";
 import { useCustomToast } from "../Components/Toast";
 
 function ShiftOfficerList() {
-  const {
-    addEmployeeShift,
-    getSignedUpShifts,
-    getAllEmployeeShifts,
-  } = useEmpShiftRequests();
+  const { addEmployeeShift, getSignedUpShifts, getAllEmployeeShifts } =
+    useEmpShiftRequests();
   const { getEmployeeByEmail } = useEmployeeRequests();
   const { getAllShifts } = useShiftRequests();
   const { getAllProjects } = useProjectRequests();
@@ -42,19 +38,19 @@ function ShiftOfficerList() {
   }, [user?.email]);
 
   useEffect(() => {
-    const fetchFulfilledShifts = async() => {
+    const fetchFulfilledShifts = async () => {
       const results = await Promise.all(
-        shifts.map(s => getFulfilledShifts(s.id))
+        shifts.map((s) => getFulfilledShifts(s.id))
       );
       const fulfilledMap: Record<string, number | null> = {};
       shifts.forEach((shift, index) => {
-          fulfilledMap[shift.id] = results[index];
+        fulfilledMap[shift.id] = results[index];
       });
       setFulfilledShifts(fulfilledMap);
     };
 
     fetchFulfilledShifts();
-  }, [shifts])
+  }, [shifts]);
 
   const contents =
     shifts === undefined ? (
@@ -62,46 +58,46 @@ function ShiftOfficerList() {
     ) : (
       <>
         <h1>Pick a Shift</h1>
-            <div className="accordion">
-              {projects.map((p) => (
-                <div className="accordion-item">
-                  <div className="accordion-header">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target={`#collapse${p.id}`}
-                      aria-expanded="true"
-                      aria-controls={`collapse${p.id}`}
-                    >
-                      {p.name}
-                    </button>
-                  </div>
-                  <div
-                    id={`collapse${p.id}`}
-                    className="accordion-collapse collapse"
-                    data-bs-parent="#accordionExample"
-                  >
-                    {shifts
-                      .filter((s) =>
-                        projectShifts.some(
-                          (ps) => ps.shiftId === s.id && ps.projectId === p.id
-                        )
-                      )
-                      .map((s) => (
-                        <div className="accordion-body">
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th>Location</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Requested Officers</th>
-                                <th>Signed Up Officers</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
+        <div className="accordion">
+          {projects.map((p) => (
+            <div className="accordion-item">
+              <div className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#collapse${p.id}`}
+                  aria-expanded="true"
+                  aria-controls={`collapse${p.id}`}
+                >
+                  {p.name}
+                </button>
+              </div>
+              <div
+                id={`collapse${p.id}`}
+                className="accordion-collapse collapse"
+                data-bs-parent="#accordionExample"
+              >
+                {shifts
+                  .filter((s) =>
+                    projectShifts.some(
+                      (ps) => ps.shiftId === s.id && ps.projectId === p.id
+                    )
+                  )
+                  .map((s) => (
+                    <div className="accordion-body">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Location</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Requested Officers</th>
+                            <th>Signed Up Officers</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
                           <tr key={s.id}>
                             <td>{s.location}</td>
                             <td>{s.startTime}</td>
@@ -127,14 +123,14 @@ function ShiftOfficerList() {
                               </button>
                             </td>
                           </tr>
-                          </tbody>
-                          </table>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ))}
+              </div>
             </div>
+          ))}
+        </div>
       </>
     );
 
@@ -184,12 +180,7 @@ function ShiftOfficerList() {
     }
   }
 
-  return (
-    <PermissionLock roles={[PSO_ROLE]}>
-      {contents}
-      <ToastContainer position="top-center" />
-    </PermissionLock>
-  );
+  return <div>{contents}</div>;
 }
 
 export default ShiftOfficerList;

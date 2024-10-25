@@ -6,8 +6,6 @@ import { useRoleRequests } from "../Functions/RoleRequests";
 import AddOfficer from "./AddOfficer";
 import "../index.css";
 import { useCustomToast } from "../Components/Toast";
-import { ToastContainer } from "react-toastify";
-import PermissionLock, { ADMIN_ROLE } from "../Components/Auth/PermissionLock";
 
 export const EmployeeList = () => {
   const { employees, setEmployeesList, getEmployeeById, editEmployee } =
@@ -132,14 +130,11 @@ export const EmployeeList = () => {
     );
 
   return (
-    <>
-      <PermissionLock roles={[ADMIN_ROLE]}>
-        <AddOfficer />
-        <h1>Admin Employee View</h1>
-        {contents}
-        <ToastContainer />
-      </PermissionLock>
-    </>
+    <div>
+      <AddOfficer />
+      <h1>Admin Employee View</h1>
+      {contents}
+    </div>
   );
 };
 

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 import { FormatDate } from "../Functions/FormatDates";
 import { useProjectRequests } from "../Functions/ProjectRequests";
-import PermissionLock, { CLIENT_ROLE } from "../Components/Auth/PermissionLock";
 import { useCustomToast } from "../Components/Toast";
 import { ToastContainer } from "react-toastify";
 
@@ -194,11 +193,7 @@ const CreateProject = () => {
     </>
   );
 
-  return (
-    <>
-      <PermissionLock roles={[CLIENT_ROLE]}>{content}</PermissionLock>
-    </>
-  );
+  return <div>{content}</div>;
 };
 
 export default CreateProject;
