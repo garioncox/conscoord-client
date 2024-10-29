@@ -8,6 +8,12 @@ export interface GEmailInputController {
   error: string;
 }
 
+export function validateEmail(s: string) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return !emailRegex.test(s) ? "Please enter a valid email" : ""
+}
+
+
 export const useGEmailInput = (
   startValue: string = "",
   getErrorMessage: (value: string) => string

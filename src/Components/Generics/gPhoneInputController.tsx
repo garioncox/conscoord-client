@@ -8,6 +8,11 @@ export interface GPhoneInputController {
   error: string;
 }
 
+export function validatePhone(s: string) {
+  const phoneRegex = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+  return !phoneRegex.test(s) ? "Please enter a valid phone number" : ""
+}
+
 export const useGPhoneInput = (
   startValue: string = "",
   getErrorMessage: (value: string) => string
