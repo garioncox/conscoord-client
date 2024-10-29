@@ -9,76 +9,58 @@ const Navbar = () => {
   const { user } = useAuth0();
 
   return (
-    <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary py-3">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
-            Home
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              {/* PSO Items */}
-              <NavItem
-                to={"/shift/view/officer"}
-                label={"Officer Shifts"}
-                roles={[PSO_ROLE]}
-              />
-              <NavItem
-                to={"/shift/view/shifts"}
-                label={"My Shifts"}
-                roles={[PSO_ROLE]}
-              />
+    <nav className="bg-primary p-8 flex grow">
+      <div className="">
+        <Link className="text-4xl" to="/">
+          Home
+        </Link>
+      </div>
+      <div className="ms-20 flex" id="navbarNav">
+        {/* PSO Items */}
+        <NavItem
+          to={"/shift/view/officer"}
+          label={"Officer Shifts"}
+          roles={[PSO_ROLE]}
+        />
+        <NavItem
+          to={"/shift/view/shifts"}
+          label={"My Shifts"}
+          roles={[PSO_ROLE]}
+        />
 
-              {/* Client Items */}
-              <NavItem
-                to={"/project/view"}
-                label={"Projects"}
-                roles={[CLIENT_ROLE]}
-              />
-              <NavItem
-                to={"/project/create"}
-                label={"Create Project"}
-                roles={[CLIENT_ROLE]}
-              />
-              <NavItem
-                to={"/shift/view"}
-                label={"Client Shifts"}
-                roles={[CLIENT_ROLE]}
-              />
-              <NavItem
-                to={"/shift/create"}
-                label={"Create Shift"}
-                roles={[CLIENT_ROLE]}
-              />
+        {/* Client Items */}
+        <NavItem
+          to={"/project/view"}
+          label={"Projects"}
+          roles={[CLIENT_ROLE]}
+        />
+        <NavItem
+          to={"/project/create"}
+          label={"Create Project"}
+          roles={[CLIENT_ROLE]}
+        />
+        <NavItem
+          to={"/shift/view"}
+          label={"Client Shifts"}
+          roles={[CLIENT_ROLE]}
+        />
+        <NavItem
+          to={"/shift/create"}
+          label={"Create Shift"}
+          roles={[CLIENT_ROLE]}
+        />
 
-              {/* Admin Items */}
-              <NavItem
-                to={"/admin/view/employees"}
-                label={"View Employees"}
-                roles={[ADMIN_ROLE]}
-              />
-            </ul>
-
-            <ul className="ms-auto navbar-nav">
-              <li className="nav-item mx-2">
-                {user ? <LogoutButton /> : <LoginButton />}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </>
+        {/* Admin Items */}
+        <NavItem
+          to={"/admin/view/employees"}
+          label={"View Employees"}
+          roles={[ADMIN_ROLE]}
+        />
+      </div>
+      <div className="ml-auto flex items-center">
+        {user ? <LogoutButton /> : <LoginButton />}
+      </div>
+    </nav>
   );
 };
 
