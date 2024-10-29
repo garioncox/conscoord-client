@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { useRoleRequests } from "../Functions/RoleRequests";
-import AddOfficer from "./AddOfficer";
 import "../index.css";
 import { useCustomToast } from "../Components/Toast";
+import AddOfficer from "./AddOfficer";
 
 export const EmployeeList = () => {
   const { employees, setEmployeesList, getEmployeeById, editEmployee } =
@@ -14,6 +14,7 @@ export const EmployeeList = () => {
   const [selectedRole, setSelectedRole] = useState<number | undefined>(-1);
   const [selectedEmployee, setSelectedEmployee] = useState<number | null>(-1);
   const { createToast } = useCustomToast();
+  const [isAddingEmployee, setIsAddingEmployee] = useState(false);
 
   useEffect(() => {
     setEmployeesList();
@@ -46,6 +47,18 @@ export const EmployeeList = () => {
     setSelectedEmployee(null);
     setSelectedRole(undefined);
   };
+  const addingEmployee = isAddingEmployee === true ?
+  <AddOfficer />
+    :
+    <tr>
+      <button
+        className="btn btn-primary"
+        onClick={() => setIsAddingEmployee(true)}
+      >
+        Add Employee
+      </button>
+    </tr>
+
 
   const contents =
     employees === undefined ? (
@@ -125,17 +138,17 @@ export const EmployeeList = () => {
               )}
             </tr>
           ))}
+          {addingEmployee}
         </tbody>
       </table>
     );
-
   return (
     <div>
-      <AddOfficer />
       <h1>Admin Employee View</h1>
       {contents}
     </div>
   );
 };
+
 
 export default EmployeeList;
