@@ -9,7 +9,7 @@ const Navbar = () => {
   const { user } = useAuth0();
 
   return (
-    <nav className="bg-tsprimary p-8 flex grow">
+    <nav className="bg-primary p-8 flex grow">
       <div className="">
         <Link className="text-4xl" to="/">
           Home

@@ -17,10 +17,10 @@ const MainLayout: FC<{
           <Navbar />
         </div>
         <div className="flex flex-row w-full h-full">
-          <div className="bg-tssecondary hidden lg:inline">
+          <div className="bg-secondary hidden lg:inline">
             <Sidebar />
           </div>
-          <main className="bg-tsfaint w-full text-tsprimary flex grow justify-center mt-5">
+          <main className="bg-faint w-full text-primary flex grow justify-center mt-5">
             {children}
           </main>
         </div>

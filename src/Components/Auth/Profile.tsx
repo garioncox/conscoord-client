@@ -9,7 +9,7 @@ const Profile = () => {
 
   return (
     isAuthenticated && (
-      <div className="text-tsprimary flex grow flex-col items-center mt-auto mb-5 mx-5">
+      <div className="text-primary flex grow flex-col items-center mt-auto mb-5 mx-5">
         <img
           className="rounded-full mb-3"
           src={user?.picture}
