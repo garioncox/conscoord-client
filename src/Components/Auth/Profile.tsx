@@ -9,9 +9,13 @@ const Profile = () => {
 
   return (
     isAuthenticated && (
-      <div className="">
-        <img className="rounded-circle" src={user?.picture} alt={user?.name} />
-        <h2>{user?.name}</h2>
+      <div className="text-tsprimary flex grow flex-col items-center mt-auto mb-5 mx-5">
+        <img
+          className="rounded-full mb-3"
+          src={user?.picture}
+          alt={user?.name}
+        />
+        <p className="text-xl">{user?.name}</p>
         <p className="d-none d-md-inline">{user?.email}</p>
       </div>
     )
