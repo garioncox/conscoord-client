@@ -17,8 +17,6 @@ import {
 } from "@/Components/ui/select"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-
-
 // Define props interface
 interface PaginatedProjectTableProps {
   data: any[];
@@ -26,7 +24,7 @@ interface PaginatedProjectTableProps {
   rows: (keyof any)[];
 }
 
-export function PaginatedProjectTable({ data , tableHeaders,rows }: PaginatedProjectTableProps) {
+export function PaginatedProjectTable({ data, tableHeaders, rows }: PaginatedProjectTableProps) {
   const [currentPage, setCurrentPage] = React.useState(1)
   const [itemsPerPage, setItemsPerPage] = React.useState(5)
 
@@ -47,24 +45,24 @@ export function PaginatedProjectTable({ data , tableHeaders,rows }: PaginatedPro
 
   return (
     <div className="space-y-4">
-    <Table>
-      <TableHeader>
-        <TableRow>
-          {tableHeaders.map((header) => (
-            <TableHead key={header}>{header}</TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {currentItems.map((project) => (
-          <TableRow key={project.id}>
-            {rows.map((row) => (
-              <TableCell >{project[row]}</TableCell>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {tableHeaders.map((header) => (
+              <TableHead key={header}>{header}</TableHead>
             ))}
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {currentItems.map((project) => (
+            <TableRow key={project.id}>
+              {rows.map((row) => (
+                <TableCell >{project[row]}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">Items per page</p>
