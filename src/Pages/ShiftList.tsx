@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import { useCustomToast } from "../Components/Toast";
+import { PaginatedProjectTable } from "@/Components/paginated-table";
 
 function ShiftList() {
   const { getAllArchivedShifts, getAllShifts, archiveShift, editShift } =
@@ -12,7 +13,7 @@ function ShiftList() {
   const [selectEndTime, setEndTime] = useState<string>("");
   const [selectDescription, setDescription] = useState<string>("");
   const [selectReqEmployees, setReqEmployees] = useState<number>(-1);
-  const [shifts, setShifts] = useState<Shift[]>();
+  const [shifts, setShifts] = useState<Shift[]>([]);
   const { createToast } = useCustomToast();
 
   useEffect(() => {
@@ -182,7 +183,7 @@ function ShiftList() {
   return (
     <div>
       <h1 id="shifts"> Shift List</h1>
-      {contents}
+      <PaginatedProjectTable data={shifts} tableHeaders={["Location", "Start Time", "End Time", "Description", "Requested Employees", "Status"]} rows={["location", "startTime", "endTime", "description", "requestedEmployees", "status"]} />
     </div>
   );
 }

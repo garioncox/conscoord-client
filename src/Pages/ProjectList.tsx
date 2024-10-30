@@ -4,13 +4,14 @@ import { useProjectRequests } from "../Functions/ProjectRequests";
 import { useCustomToast } from "../Components/Toast";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
+import { PaginatedProjectTable } from "@/Components/paginated-table";
 
 function ProjectList() {
   const { getCompanyProjects, archiveProject, updateProject } =
     useProjectRequests();
   const { getEmployeeByEmail } = useEmployeeRequests();
   const { createToast } = useCustomToast();
-  const [projects, setProjects] = useState<Project[]>();
+  const [projects, setProjects] = useState<Project[]>([]);
   const [name, setName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
@@ -170,11 +171,17 @@ function ProjectList() {
       </table>
     );
 
+
   return (
     <div>
-      <h1 id="projects">Project List</h1>
-      {contents}
-    </div>
+    <h1 id="projects">Project List</h1>
+    <PaginatedProjectTable 
+        data={projects}
+        tableHeaders={["Name", "Location", "Start Date", "End Date", "Status"]}
+        rows={["name", "location", "startDate", "endDate", "status"]} 
+
+      />
+  </div>
   );
 }
 export default ProjectList;
