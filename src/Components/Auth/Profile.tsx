@@ -11,7 +11,7 @@ const Profile = () => {
     isAuthenticated && (
       <div className="text-primary flex grow flex-col items-center mt-auto mb-5 mx-5">
         <img
-          className="rounded-full mb-3"
+          className="rounded-full mb-3 border-4 border-tertiary"
           src={user?.picture}
           alt={user?.name}
         />

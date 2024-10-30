@@ -5,6 +5,7 @@ const LogoutButton = () => {
 
   return (
     <button
+      className="text-secondary hover:text-tertiary"
       onClick={() =>
         logout({ logoutParams: { returnTo: window.location.origin } })
       }
