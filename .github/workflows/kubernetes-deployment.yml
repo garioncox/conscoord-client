@@ -21,12 +21,12 @@ jobs:
       - name: Build image
         run: |
           docker build -t garioncox/conscoord-client:${{ github.run_number }} \
-          -t garioncox/conscoord-clien:latest \
+          -t garioncox/conscoord-client:latest \
           .
 
       - name: Push image
         run: |
-          docker push garioncox/conscoord-clien --all-tags
+          docker push garioncox/conscoord-client --all-tags
 
       - name: Deploy to Kubernetes
         run: |
