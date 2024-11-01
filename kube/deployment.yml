@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conscoord-deployment
+  namespace: kgb-conscoord
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conscoord-deployment
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: conscoord-deployment
+    spec:
+      containers:
+        - name: conscoord-deployment
+          image: garioncox/conscoord:${IMAGE_TAG}
+          ports:
+            - containerPort: 3086
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3086
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3086
+            initialDelaySeconds: 15
+            periodSeconds: 20

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react";
 import {
   Table,
   TableBody,
@@ -6,16 +6,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/Components/ui/table"
-import { Button } from "@/Components/ui/button"
+} from "@/Components/ui/table";
+import { Button } from "@/Components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/Components/ui/select"
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+} from "@/Components/ui/select";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Define props interface
 interface PaginatedProjectTableProps {
@@ -24,27 +24,31 @@ interface PaginatedProjectTableProps {
   rows: (keyof any)[];
 }
 
-export function PaginatedProjectTable({ data, tableHeaders, rows }: PaginatedProjectTableProps) {
-  const [currentPage, setCurrentPage] = React.useState(1)
-  const [itemsPerPage, setItemsPerPage] = React.useState(5)
+export function PaginatedProjectTable({
+  data,
+  tableHeaders,
+  rows,
+}: PaginatedProjectTableProps) {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(5);
 
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem)
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(data.length / itemsPerPage)
+  const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
   const handleItemsPerPageChange = (value: string) => {
-    setItemsPerPage(Number(value))
-    setCurrentPage(1)
-  }
+    setItemsPerPage(Number(value));
+    setCurrentPage(1);
+  };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 shadow-xl p-10 rounded-xl bg-tertiary">
       <Table>
         <TableHeader>
           <TableRow>
@@ -57,7 +61,7 @@ export function PaginatedProjectTable({ data, tableHeaders, rows }: PaginatedPro
           {currentItems.map((project) => (
             <TableRow key={project.id}>
               {rows.map((row) => (
-                <TableCell >{project[row]}</TableCell>
+                <TableCell>{project[row]}</TableCell>
               ))}
             </TableRow>
           ))}
@@ -104,5 +108,5 @@ export function PaginatedProjectTable({ data, tableHeaders, rows }: PaginatedPro
         </div>
       </div>
     </div>
-  )
+  );
 }
