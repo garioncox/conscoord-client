@@ -4,7 +4,7 @@ import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import { useState } from "react";
 
 export const useEmployeeRequests = () => {
-    const [employees, setEmployees] = useState<Employee[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
 
   const getEmployeeByEmail = async (email: string): Promise<Employee> => {
     const response = await axios.get(`/api/Employee/getByEmail/${email}`);
@@ -32,7 +32,6 @@ export const useEmployeeRequests = () => {
   const setEmployeesList = async () => {
     setEmployees(await getAllEmployees());
   };
-
 
   return {
     employees,

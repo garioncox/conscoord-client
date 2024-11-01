@@ -60,7 +60,12 @@ function CreateShift() {
       RequestedEmployees: psoCountControl.value,
       Status: "ACTIVE",
     };
-    const addShiftId: number = createToast(addShift, shift, "Adding Shift");
+
+    const addShiftId: number = await createToast(
+      addShift,
+      shift,
+      "Adding Shift"
+    );
 
     const newProjectShift: ProjectShiftDTO = {
       projectId: Projects!.find((p) => p.name == projectSelectControl.value)!
