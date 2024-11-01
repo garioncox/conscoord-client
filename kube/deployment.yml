@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: conscoord-deployment
-          image: garioncox/conscoord:${IMAGE_TAG}
+          image: garioncox/conscoord-client:${IMAGE_TAG}
           ports:
             - containerPort: 3086
           readinessProbe:
