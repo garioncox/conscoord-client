@@ -8,7 +8,7 @@ import EmployeeDetails from "./Pages/EmployeeDetails";
 import EmployeeList from "./Pages/EmployeeList";
 import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import { Home } from "./Pages/Home";
-import MyShifts from "./Pages/MyShifts";
+import MyShifts from "./Pages/MyShifts/MyShifts";
 import PermissionLock, {
   ADMIN_ROLE,
   CLIENT_ROLE,
