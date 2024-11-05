@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 import { useShiftRequests } from "../Functions/ShiftRequests";
@@ -14,10 +14,11 @@ import { Project } from "../Data/Interfaces/Project";
 import ProjectShift from "../Data/Interfaces/ProjectShift";
 import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
 import { useCustomToast } from "../Components/Toast";
+import { FulfilledShifts } from "@/Data/Interfaces/FulfilledShift";
 
-function ShiftOfficerList() {
-  const { addEmployeeShift, getSignedUpShifts, getAllEmployeeShifts } =
-    useEmpShiftRequests();
+
+const ShiftOfficerList: React.FC = () => {
+  const { addEmployeeShift, getSignedUpShifts, getAllEmployeeShifts } = useEmpShiftRequests();
   const { getEmployeeByEmail } = useEmployeeRequests();
   const { getAllShifts } = useShiftRequests();
   const { getAllProjects } = useProjectRequests();
@@ -29,7 +30,7 @@ function ShiftOfficerList() {
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectShifts, setProjectShifts] = useState<ProjectShift[]>([]);
-  const [fulfilledShifts, setFulfilledShifts] = useState({});
+  const [fulfilledShifts, setFulfilledShifts] = useState<FulfilledShifts>({});
 
   useEffect(() => {
     populateShifts();
@@ -42,7 +43,7 @@ function ShiftOfficerList() {
       const results = await Promise.all(
         shifts.map((s) => getFulfilledShifts(s.id))
       );
-      const fulfilledMap: Record<string, number | null> = {};
+      const fulfilledMap: FulfilledShifts = {};
       shifts.forEach((shift, index) => {
         fulfilledMap[shift.id] = results[index];
       });
@@ -52,15 +53,15 @@ function ShiftOfficerList() {
     fetchFulfilledShifts();
   }, [shifts]);
 
-  const contents =
-    shifts === undefined ? (
+  const contents: ReactNode =
+    shifts.length === 0 ? (
       <div className="spinner-border" role="status" />
     ) : (
       <>
         <h1>Pick a Shift</h1>
         <div className="accordion">
           {projects.map((p) => (
-            <div className="accordion-item">
+            <div className="accordion-item" key={p.id}>
               <div className="accordion-header">
                 <button
                   className="accordion-button collapsed"
@@ -85,7 +86,7 @@ function ShiftOfficerList() {
                     )
                   )
                   .map((s) => (
-                    <div className="accordion-body">
+                    <div className="accordion-body" key={s.id}>
                       <table className="table">
                         <thead>
                           <tr>
@@ -148,23 +149,25 @@ function ShiftOfficerList() {
   }
 
   async function populateProjects() {
-    setProjects(await getAllProjects());
+    const fetchedProjects = await getAllProjects();
+    setProjects(fetchedProjects);
   }
 
   async function populateProjectShifts() {
-    setProjectShifts(await getAllProjectShifts());
+    const fetchedProjectShifts = await getAllProjectShifts();
+    setProjectShifts(fetchedProjectShifts);
   }
 
-  async function getFulfilledShifts(id: number) {
+  async function getFulfilledShifts(id: number): Promise<number> {
     const allTakenShifts = (await getAllEmployeeShifts()).filter(
-      (es) => es.shiftId == id
+      (es) => es.shiftId === id
     );
     return allTakenShifts.length;
   }
 
   async function takeShift(s: Shift) {
     const allTakenShifts = (await getAllEmployeeShifts()).filter(
-      (es) => es.shiftId == s.id
+      (es) => es.shiftId === s.id
     );
     if (allTakenShifts.length >= s.requestedEmployees) {
       toast.error("Sorry, Maximum number of officers reached");
@@ -176,11 +179,11 @@ function ShiftOfficerList() {
       };
       await createToast(addEmployeeShift, employee, "Signing up for shift...");
 
-      setShifts(shifts?.filter((shift) => shift.id !== s.id));
+      setShifts(shifts.filter((shift) => shift.id !== s.id));
     }
   }
 
   return <div>{contents}</div>;
-}
+};
 
 export default ShiftOfficerList;

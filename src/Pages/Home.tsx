@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
+import { AxiosError } from "axios";
 
 export const Home = () => {
   const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
@@ -16,7 +17,8 @@ export const Home = () => {
       try {
         await getEmployeeByEmail(user.email!);
       } catch (error) {
-        if (error.status == 404) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response && axiosError.response.status === 404) {
           console.log("User is not in database...");
           console.log("Adding user");
 
@@ -32,7 +34,7 @@ export const Home = () => {
     };
 
     fetchUser();
-  }, [user]);
+  }, [addEmployee, getEmployeeByEmail, user]);
 
   return <p className="text-4xl">Welcome Home!</p>;
 };

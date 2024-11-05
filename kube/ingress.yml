@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: conscoord-ingress
+  namespace: kgb-conscoord
+spec:
+  rules:
+    - host: conscoord.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: conscoord-service
+                port:
+                  number: 80
