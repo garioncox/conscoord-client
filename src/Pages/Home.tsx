@@ -34,9 +34,5 @@ export const Home = () => {
     fetchUser();
   }, [user]);
 
-  return (
-    <div className="d-flex justify-content-center align-items-center">
-      <h1>Welcome Home!</h1>
-    </div>
-  );
+  return <p className="text-4xl">Welcome Home!</p>;
 };

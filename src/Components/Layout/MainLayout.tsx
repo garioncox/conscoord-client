@@ -12,24 +12,22 @@ const MainLayout: FC<{
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="text-center vh-100">
-        <div className="row h-100 mx-0">
-          {/*Sidebar*/}
-          <div className="col-2 bg-dark text-light py-5 d-flex justify-content-center">
+      <div className="flex grow flex-col h-dvh">
+        <div className="shadow-md shadow-primary rounded-b z-0">
+          <Navbar />
+        </div>
+        <div className="flex flex-row w-full h-full z-1 bg-faint">
+          <div className="bg-secondary hidden lg:inline shadow-inner shadow-primary">
             <Sidebar />
           </div>
-
-          {/*Main layout*/}
-          <div className="col-10 px-0">
-            <Navbar />
-            <div className="m-5">
-              <main>{children}</main>
-            </div>
-          </div>
+          <main className="w-full text-primary flex grow justify-center m-20">
+            {children}
+          </main>
         </div>
       </div>
       <ToastContainer position="bottom-right" />
     </QueryClientProvider>
   );
 };
+
 export default MainLayout;
