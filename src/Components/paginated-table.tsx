@@ -17,17 +17,18 @@ import {
 } from "@/Components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// Define props interface
 interface PaginatedProjectTableProps {
   data: any[];
   tableHeaders: string[];
   rows: (keyof any)[];
+  children?: React.ReactNode;
 }
 
 export function PaginatedProjectTable({
   data,
   tableHeaders,
   rows,
+  children,
 }: PaginatedProjectTableProps) {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(5);
@@ -46,6 +47,8 @@ export function PaginatedProjectTable({
     setItemsPerPage(Number(value));
     setCurrentPage(1);
   };
+
+  const [isAdding, setIsAdding] = React.useState(false);
 
   return (
     <div className="space-y-4 shadow-xl p-10 rounded-xl bg-tertiary">
@@ -67,6 +70,8 @@ export function PaginatedProjectTable({
           ))}
         </TableBody>
       </Table>
+      {isAdding && children}
+      <Button onClick={() => setIsAdding(!isAdding)}>Add</Button>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">Items per page</p>
