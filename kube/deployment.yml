@@ -22,17 +22,17 @@ spec:
         - name: conscoord-deployment
           image: garioncox/conscoord-client:${IMAGE_TAG}
           ports:
-            - containerPort: 5113
+            - containerPort: 80
           readinessProbe:
             httpGet:
               path: /
-              port: 8080
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 3
           livenessProbe:
             httpGet:
               path: /
-              port: 8080
+              port: 80
             initialDelaySeconds: 15
             periodSeconds: 20
