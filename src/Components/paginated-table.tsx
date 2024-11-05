@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/Components/ui/select";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CirclePlus } from "lucide-react";
 
 interface PaginatedProjectTableProps {
   data: any[];
@@ -68,10 +68,16 @@ export function PaginatedProjectTable({
               ))}
             </TableRow>
           ))}
+            {isAdding && children}
         </TableBody>
       </Table>
-      {isAdding && children}
-      <Button onClick={() => setIsAdding(!isAdding)}>Add</Button>
+      
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => setIsAdding(!isAdding)}>
+        <CirclePlus className="h-16 w-16"/>
+      </Button>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">Items per page</p>
