@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import CreateShift from "./Pages/CreateShift";
 import ProjectList from "./Pages/ProjectList";
 import ShiftList from "./Pages/ShiftList";
-import ShiftOfficerList from "./Pages/ShiftOfficerList";
+import ShiftOfficerList from "./Pages/ShiftOfficerList/ShiftOfficerList";
 import CreateProject from "./Pages/CreateProject";
 import EmployeeDetails from "./Pages/EmployeeDetails";
 import EmployeeList from "./Pages/EmployeeList";
