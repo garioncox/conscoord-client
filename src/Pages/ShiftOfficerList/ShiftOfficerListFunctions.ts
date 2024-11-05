@@ -1,4 +1,5 @@
 import { useCustomToast } from "@/Components/Toast";
+import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { FulfilledShifts } from "@/Data/Interfaces/FulfilledShift";
 import { Project } from "@/Data/Interfaces/Project";
 import ProjectShift from "@/Data/Interfaces/ProjectShift";
@@ -11,6 +12,7 @@ import { useProjectShiftRequests } from "@/Functions/ProjectShiftRequests";
 import { useShiftRequests } from "@/Functions/ShiftRequests";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 
 export const useShiftOfficerListFunctions = () => {
