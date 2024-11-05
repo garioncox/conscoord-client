@@ -11,8 +11,6 @@ function AddOfficer() {
   const { addEmployee } = useEmployeeRequests();
   const { createToast } = useCustomToast();
 
-//pass in setIsEditing and setemployeelist so that parent can update the list
-
   async function AddOfficer() {
     const myPhone = phoneControl.value.replace(/-/g, "");
 
