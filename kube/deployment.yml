@@ -26,13 +26,13 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: 5113
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 3
           livenessProbe:
             httpGet:
               path: /
-              port: 5113
+              port: 8080
             initialDelaySeconds: 15
             periodSeconds: 20
