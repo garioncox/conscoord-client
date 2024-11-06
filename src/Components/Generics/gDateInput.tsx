@@ -5,28 +5,24 @@ const GDateInput: React.FC<{
   control: GDateInputController;
 }> = ({ label, control }) => {
   return (
-    <>
-      <label className="form-label d-flex flex-column flex-grow-1">
-        {label}
+    <div className="relative pb-5 pt-8">
+      <label className="absolute top-0 left-2">{label}</label>
+      <div>
         <input
           type="date"
+          className="rounded shadow-inner p-2"
           value={control.value}
           onChange={(e) => {
             control.setValue(e.target.value);
             control.setHasBeenTouched(true);
           }}
-          className={`form-control ${
-            control.hasBeenTouched
-              ? control.error
-                ? "is-invalid"
-                : "is-valid"
-              : ""
-          }`}
           onBlur={() => control.setHasBeenTouched(true)}
         />
-        <p className="invalid-feedback">{control.error}</p>
-      </label>
-    </>
+      </div>
+      {control.hasBeenTouched && (
+        <p className="absolute text-sm text-red-500 left-3">{control.error}</p>
+      )}
+    </div>
   );
 };
 

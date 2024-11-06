@@ -1,5 +1,6 @@
 import { useAllShifts } from "../Functions/ShiftRequests";
 import { PaginatedProjectTable } from "@/Components/paginated-table";
+import { AddShift } from "@/Components/AddShift";
 
 function ShiftList() {
   const { data } = useAllShifts();

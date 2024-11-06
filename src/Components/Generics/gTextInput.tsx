@@ -8,19 +8,13 @@ const GTextInput: React.FC<{
   maxLength?: number;
 }> = ({ label, placeholder, control, minLength, maxLength }) => {
   return (
-    <>
-      <label className="form-label d-flex flex-column flex-grow-1">
-        {label}
+    <div className="relative pb-5 pt-8">
+      <label className="absolute top-0 left-2">{label}</label>
+      <div>
         <input
           type="text"
           placeholder={placeholder ?? ""}
-          className={`form-control ${
-            control.hasBeenTouched
-              ? control.error
-                ? "is-invalid"
-                : "is-valid"
-              : ""
-          }`}
+          className="rounded shadow-inner p-2"
           minLength={minLength ?? 0}
           maxLength={maxLength ?? 30}
           value={control.value}
@@ -30,9 +24,16 @@ const GTextInput: React.FC<{
           }}
           onBlur={() => control.setHasBeenTouched(true)}
         />
-        <p className="invalid-feedback">{control.error}</p>
-      </label>
-    </>
+        {control.error && control.hasBeenTouched ? (
+          <i className="bi bi-exclamation-circle absolute right-3 top-1/2 transform -translate-y-1/4 text-red-500" />
+        ) : (
+          ""
+        )}
+      </div>
+      {control.hasBeenTouched && (
+        <p className="absolute text-sm text-red-500 left-3">{control.error}</p>
+      )}
+    </div>
   );
 };
 

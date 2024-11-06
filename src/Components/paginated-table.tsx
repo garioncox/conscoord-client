@@ -15,19 +15,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/Components/ui/select";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleMinus, CirclePlus } from "lucide-react";
 
-// Define props interface
 interface PaginatedProjectTableProps {
   data: any[];
   tableHeaders: string[];
   rows: (keyof any)[];
+  children?: React.ReactNode;
 }
 
 export function PaginatedProjectTable({
   data,
   tableHeaders,
   rows,
+  children,
 }: PaginatedProjectTableProps) {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(5);
@@ -47,6 +48,8 @@ export function PaginatedProjectTable({
     setCurrentPage(1);
   };
 
+  const [addingCount, setAddingCount] = React.useState(0);
+
   return (
     <div className="space-y-4 shadow-xl p-10 rounded-xl bg-tertiary">
       <Table>
@@ -65,8 +68,21 @@ export function PaginatedProjectTable({
               ))}
             </TableRow>
           ))}
+            {addingCount > 0 && children}
         </TableBody>
       </Table>
+
+      {addingCount === 0 && 
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => setAddingCount(addingCount + 1)}>
+        <CirclePlus className="h-16 w-16" />
+      </Button>}
+      {addingCount >= 1 &&
+        <Button variant="outline" size="icon" onClick={() => setAddingCount(addingCount - 1)}>
+          <CircleMinus className="h-16 w-16" />
+        </Button>}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">Items per page</p>
