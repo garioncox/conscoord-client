@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
 import { FormatDate } from "../Functions/FormatDates";
-import { useShiftRequests } from "../Functions/ShiftRequests";
 import { toast } from "react-toastify";
 import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
 import { useProjectRequests } from "../Functions/ProjectRequests";
@@ -15,9 +14,10 @@ import { useGNumberInput } from "../Components/Generics/gNumberInputController";
 import GSelectInput from "../Components/Generics/gSelectInput";
 import { useGSelectInput } from "../Components/Generics/gSelectInputController";
 import { useCustomToast } from "../Components/Toast";
+import { useAddShift } from "@/Functions/ShiftRequests";
 
 function CreateShift() {
-  const { addShift } = useShiftRequests();
+  const addShift = useAddShift();
   const { addProjectShift } = useProjectShiftRequests();
   const { Projects, setProjects, getAllProjects } = useProjectRequests();
   const { createToast } = useCustomToast();

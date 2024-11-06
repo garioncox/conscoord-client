@@ -2,7 +2,7 @@ import { PaginatedProjectTable } from "@/Components/paginated-table";
 import { useAllProjectByLoggedInCompany } from "@/Functions/ProjectRequests";
 
 function ProjectList() {
-  const { data, error, isloading } = useAllProjectByLoggedInCompany();
+  const { data } = useAllProjectByLoggedInCompany();
 
   return (
     <div>
