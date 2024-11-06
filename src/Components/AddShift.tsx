@@ -47,8 +47,6 @@ export function AddShift() {
   const { addShift } = useShiftRequests();
 
   function AddShift() {
-    console.log("Adding shift");
-
     const shift: ShiftDTO = {
       StartTime: FormatDate(startDate.value),
       EndTime: FormatDate(endDate.value),
@@ -94,7 +92,7 @@ export function AddShift() {
       <TableCell>ACTIVE</TableCell>
       <TableCell>
         <div onClick={AddShift} className="text-primary hover:text-secondary">
-          <Save  />
+          <Save />
         </div>
       </TableCell>
     </TableRow>
