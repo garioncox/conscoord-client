@@ -1,20 +1,20 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Shift } from "../Data/Interfaces/Shift";
-import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
-import { useShiftRequests } from "../Functions/ShiftRequests";
-import { useEmpShiftRequests } from "../Functions/EmpShiftRequests";
-import { useEmailRequests } from "../Functions/EmailRequests";
-import { useAuth0 } from "@auth0/auth0-react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { EmailRequest } from "../Data/Interfaces/Email";
-import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import { useProjectRequests } from "../Functions/ProjectRequests";
-import { Project } from "../Data/Interfaces/Project";
-import ProjectShift from "../Data/Interfaces/ProjectShift";
-import { useProjectShiftRequests } from "../Functions/ProjectShiftRequests";
-import { useCustomToast } from "../Components/Toast";
+
 import { FulfilledShifts } from "@/Data/Interfaces/FulfilledShift";
+import { useEmpShiftRequests } from "@/Functions/EmpShiftRequests";
+import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
+import { useShiftRequests } from "@/Functions/ShiftRequests";
+import { useProjectRequests } from "@/Functions/ProjectRequests";
+import { useProjectShiftRequests } from "@/Functions/ProjectShiftRequests";
+import { useEmailRequests } from "@/Functions/EmailRequests";
+import { useCustomToast } from "@/Components/Toast";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Shift } from "@/Data/Interfaces/Shift";
+import { Project } from "@/Data/Interfaces/Project";
+import ProjectShift from "@/Data/Interfaces/ProjectShift";
+import { EmailRequest } from "@/Data/Interfaces/Email";
+import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
+import { toast } from "react-toastify";
 
 
 const ShiftOfficerList: React.FC = () => {
@@ -141,7 +141,7 @@ const ShiftOfficerList: React.FC = () => {
       const allShifts = await getAllShifts();
 
       const availableShifts = allShifts.filter(
-        (shift) => !claimed.some((claimedShift) => claimedShift.id === shift.id)
+        (shift: { id: number; }) => !claimed.some((claimedShift) => claimedShift.id === shift.id)
       );
 
       setShifts(availableShifts);
