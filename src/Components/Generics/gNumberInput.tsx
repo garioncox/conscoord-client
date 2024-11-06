@@ -7,30 +7,26 @@ const GNumberInput: React.FC<{
   maximum?: number;
 }> = ({ label, control, minimum, maximum }) => {
   return (
-    <>
-      <label className="form-label d-flex flex-column flex-grow-1">
-        {label}
+    <div className="relative pb-5 pt-8">
+      <label className="absolute top-0 left-2">{label}</label>
+      <div>
         <input
           type="number"
+          className="rounded shadow-inner p-2"
+          min={minimum ?? 0}
+          max={maximum ?? 10}
           value={control.value}
           onChange={(e) => {
             control.setValue(Number(e.target.value));
             control.setHasBeenTouched(true);
           }}
           onBlur={() => control.setHasBeenTouched(true)}
-          className={`form-control ${
-            control.hasBeenTouched
-              ? control.error
-                ? "is-invalid"
-                : "is-valid"
-              : ""
-          }`}
-          min={minimum ?? 0}
-          max={maximum ?? 10}
         />
-        <p className="invalid-feedback">{control.error}</p>
-      </label>
-    </>
+      </div>
+      {control.hasBeenTouched && (
+        <p className="absolute text-sm text-red-500 left-3">{control.error}</p>
+      )}
+    </div>
   );
 };
 

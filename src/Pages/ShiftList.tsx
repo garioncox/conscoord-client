@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Shift } from "../Data/Interfaces/Shift";
 import { useShiftRequests } from "../Functions/ShiftRequests";
 import { PaginatedProjectTable } from "@/Components/paginated-table";
+import { AddShift } from "@/Components/AddShift";
 
 function ShiftList() {
   const { getAllArchivedShifts, getAllShifts, } =
@@ -23,9 +24,11 @@ function ShiftList() {
     <div>
       <h1 id="shifts"> Shift List</h1>
       {shifts ?
-        <PaginatedProjectTable data={shifts}
-          tableHeaders={["Location", "Start Time", "End Time", "Description", "Requested Employees", "Status"]}
-          rows={["location", "startTime", "endTime", "description", "requestedEmployees", "status"]} />
+            <PaginatedProjectTable data={shifts}
+            tableHeaders={["Location", "Start Time", "End Time", "Description", "Requested Employees", "Status"]}
+            rows={["location", "startTime", "endTime", "description", "requestedEmployees", "status"]} >
+              <AddShift />
+            </PaginatedProjectTable> 
         : <div className="animate-spin"></div>}
     </div>
   );
