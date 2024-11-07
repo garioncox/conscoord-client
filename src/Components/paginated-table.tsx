@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { Button } from "@/Components/ui/button";
+<<<<<<< HEAD
 import {
   Select,
   SelectContent,
@@ -16,6 +17,12 @@ import {
   SelectValue,
 } from "@/Components/ui/select";
 import { ChevronLeft, ChevronRight, CircleMinus, CirclePlus } from "lucide-react";
+=======
+
+import { CircleMinus, CirclePlus } from "lucide-react";
+import { SetStateAction } from "react";
+import { Pagination } from "./Pagination";
+>>>>>>> c3c41e5db88a9024cb31140b9f1334f6e197f6cf
 
 interface PaginatedProjectTableProps {
   data: any[];
@@ -38,17 +45,6 @@ export function PaginatedTable({
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleItemsPerPageChange = (value: string) => {
-    setItemsPerPage(Number(value));
-    setCurrentPage(1);
-  };
 
   const [addingCount, setAddingCount] = React.useState(0);
 
@@ -85,46 +81,8 @@ export function PaginatedTable({
         <Button variant="outline" size="icon" onClick={() => setAddingCount(addingCount - 1)}>
           <CircleMinus className="h-16 w-16" />
         </Button>}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm text-muted-foreground">Items per page</p>
-          <Select
-            value={itemsPerPage.toString()}
-            onValueChange={handleItemsPerPageChange}
-          >
-            <SelectTrigger className="w-[70px]">
-              <SelectValue placeholder={itemsPerPage.toString()} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
-          </p>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+        
+      <Pagination setCurrentPage={setCurrentPage} setItemsPerPage={setItemsPerPage} datalength={data.length} itemsPerPage={itemsPerPage} currentPage={currentPage} />
     </div>
   );
 }
