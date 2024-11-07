@@ -16,19 +16,22 @@ import {
   SelectValue,
 } from "@/Components/ui/select";
 import { ChevronLeft, ChevronRight, CircleMinus, CirclePlus } from "lucide-react";
+import { SetStateAction } from "react";
 
 interface PaginatedProjectTableProps {
   data: any[];
   tableHeaders: string[];
   rows: (keyof any)[];
   children?: React.ReactNode;
+  setRowClicked: React.Dispatch<SetStateAction<number>>;
 }
 
-export function PaginatedProjectTable({
+export function PaginatedTable({
   data,
   tableHeaders,
   rows,
   children,
+  setRowClicked,
 }: PaginatedProjectTableProps) {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [itemsPerPage, setItemsPerPage] = React.useState(5);
@@ -62,23 +65,23 @@ export function PaginatedProjectTable({
         </TableHeader>
         <TableBody>
           {currentItems.map((project) => (
-            <TableRow key={project.id}>
+            <TableRow key={project.id} onClick={() => setRowClicked(project.id)}>
               {rows.map((row) => (
                 <TableCell>{project[row]}</TableCell>
               ))}
             </TableRow>
           ))}
-            {addingCount > 0 && children}
+          {addingCount > 0 && children}
         </TableBody>
       </Table>
 
-      {addingCount === 0 && 
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={() => setAddingCount(addingCount + 1)}>
-        <CirclePlus className="h-16 w-16" />
-      </Button>}
+      {addingCount === 0 &&
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setAddingCount(addingCount + 1)}>
+          <CirclePlus className="h-16 w-16" />
+        </Button>}
       {addingCount >= 1 &&
         <Button variant="outline" size="icon" onClick={() => setAddingCount(addingCount - 1)}>
           <CircleMinus className="h-16 w-16" />
