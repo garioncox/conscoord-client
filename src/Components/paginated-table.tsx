@@ -16,14 +16,13 @@ import {
   SelectValue,
 } from "@/Components/ui/select";
 import { ChevronLeft, ChevronRight, CircleMinus, CirclePlus } from "lucide-react";
-import { SetStateAction } from "react";
 
 interface PaginatedProjectTableProps {
   data: any[];
   tableHeaders: string[];
   rows: (keyof any)[];
   children?: React.ReactNode;
-  setRowClicked: React.Dispatch<SetStateAction<number>>;
+  setRowClicked: (id: number) => void
 }
 
 export function PaginatedTable({
