@@ -8,16 +8,15 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { Button } from "@/Components/ui/button";
-import {CircleMinus, CirclePlus } from "lucide-react";
+import { CircleMinus, CirclePlus } from "lucide-react";
 import { Pagination } from "./Pagination";
-
 
 interface PaginatedProjectTableProps {
   data: any[];
   tableHeaders: string[];
   rows: (keyof any)[];
   children?: React.ReactNode;
-  setRowClicked: (id: number) => void
+  setRowClicked: (id: number) => void;
 }
 
 export function PaginatedTable({
@@ -48,7 +47,10 @@ export function PaginatedTable({
         </TableHeader>
         <TableBody>
           {currentItems.map((project) => (
-            <TableRow key={project.id} onClick={() => setRowClicked(project.id)}>
+            <TableRow
+              key={project.id}
+              onClick={() => setRowClicked(project.id)}
+            >
               {rows.map((row) => (
                 <TableCell>{project[row]}</TableCell>
               ))}
@@ -58,19 +60,32 @@ export function PaginatedTable({
         </TableBody>
       </Table>
 
-      {addingCount === 0 &&
+      {addingCount === 0 && (
         <Button
           variant="outline"
           size="icon"
-          onClick={() => setAddingCount(addingCount + 1)}>
+          onClick={() => setAddingCount(addingCount + 1)}
+        >
           <CirclePlus className="h-16 w-16" />
-        </Button>}
-      {addingCount >= 1 &&
-        <Button variant="outline" size="icon" onClick={() => setAddingCount(addingCount - 1)}>
+        </Button>
+      )}
+      {addingCount >= 1 && (
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setAddingCount(addingCount - 1)}
+        >
           <CircleMinus className="h-16 w-16" />
-        </Button>}
-        
-      <Pagination setCurrentPage={setCurrentPage} setItemsPerPage={setItemsPerPage} datalength={data.length} itemsPerPage={itemsPerPage} currentPage={currentPage} />
+        </Button>
+      )}
+
+      <Pagination
+        setCurrentPage={setCurrentPage}
+        setItemsPerPage={setItemsPerPage}
+        datalength={data.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+      />
     </div>
   );
 }

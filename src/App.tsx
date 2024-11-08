@@ -76,14 +76,14 @@ function App() {
           </PermissionLock>
         }
       />
-        <Route
-          path="project/shifts/:id"
-          element={
-            <PermissionLock roles={[ADMIN_ROLE]}>
-              <ProjectShifts />
-            </PermissionLock>
-          }
-        />
+      <Route
+        path="project/shifts/:id"
+        element={
+          <PermissionLock roles={[ADMIN_ROLE]}>
+            <ProjectShifts />
+          </PermissionLock>
+        }
+      />
       <Route
         path="admin/view/employees"
         element={

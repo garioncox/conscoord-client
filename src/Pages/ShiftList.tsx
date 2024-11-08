@@ -13,10 +13,26 @@ function ShiftList() {
       <p>rowClicked: {rowClicked}</p>
       <h1 id="shifts"> Shift List</h1>
       {data ? (
-        <PaginatedTable data={data}
-        tableHeaders={["Location", "Start Time", "End Time", "Description", "Requested Employees", "Status"]}
-        rows={["location", "startTime", "endTime", "description", "requestedEmployees", "status"]} 
-        setRowClicked={setRowClicked} >
+        <PaginatedTable
+          data={data}
+          tableHeaders={[
+            "Location",
+            "Start Time",
+            "End Time",
+            "Description",
+            "Requested Employees",
+            "Status",
+          ]}
+          rows={[
+            "location",
+            "startTime",
+            "endTime",
+            "description",
+            "requestedEmployees",
+            "status",
+          ]}
+          setRowClicked={setRowClicked}
+        >
           <AddShift />
         </PaginatedTable>
       ) : (

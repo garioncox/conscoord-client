@@ -19,6 +19,9 @@ function MyShifts() {
         tableHeaders={["Location", "Start Time", "End Time", ""]}
         rows={["location", "startTime", "endTime"]}
         data={importVariables.claimedShifts}
+        setRowClicked={function (): void {
+          throw new Error("Function not implemented.");
+        }}
       />
     );
 

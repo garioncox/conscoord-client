@@ -30,33 +30,23 @@ const ProjectShifts = () => {
       (ps) => ps.projectId === Number(id)
     );
 
-    // Step 3: Extract the shiftIds from filteredProjectShifts
     const projectShiftIds = filteredProjectShifts.map((ps) => ps.shiftId);
-
-    // Step 4: Filter the main shifts array by matching shiftIds
     const matchingShifts = shifts.filter((shift) =>
       projectShiftIds.includes(shift.id)
     );
 
-    // Now set the shifts that match projectShifts to the state
     setShiftsToProject(matchingShifts);
     setCurrentProject(currProject);
-    console.log("currentProject " + currProject);
-    console.log("shiftsToProject is " + ShiftsToProject);
   }
 
   return (
     <div>
       <h1>Viewing Project:</h1>
-      <h2>{currentProject?.name} <br/>
-        {currentProject?.location} <br/>
-        {currentProject?.status}</h2>
-      {/* <PaginatedTable
-        data={currentProject}
-        tableHeaders={["Name", "Location", "Start Date", "End Date", "Status"]}
-        rows={["name", "location", "startDate", "endDate", "status"]} setRowClicked={function (id: number): void {
-          throw new Error("Function not implemented.");
-        } }      /> */}
+      <h2>
+        {currentProject?.name} <br />
+        {currentProject?.location} <br />
+        {currentProject?.status}
+      </h2>
       <PaginatedTable
         data={ShiftsToProject}
         tableHeaders={[
@@ -75,7 +65,7 @@ const ProjectShifts = () => {
           "requestedEmployees",
           "status",
         ]}
-        setRowClicked={function (id: number): void {
+        setRowClicked={function (): void {
           throw new Error("Function not implemented.");
         }}
       ></PaginatedTable>
