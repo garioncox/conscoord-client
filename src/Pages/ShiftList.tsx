@@ -1,7 +1,7 @@
-import { useAllShifts } from "../Functions/ShiftRequests";
-import { PaginatedTable } from "@/Components/paginated-table";
 import { AddShift } from "@/Components/AddShift";
+import { PaginatedTable } from "@/Components/paginated-table";
 import React from "react";
+import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 
 function ShiftList() {
   const { data } = useAllShifts();

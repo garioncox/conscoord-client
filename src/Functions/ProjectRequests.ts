@@ -2,11 +2,9 @@ import axios from "axios";
 import { Project } from "../Data/Interfaces/Project";
 import { ProjectDTO } from "../Data/DTOInterfaces/ProjectDTO";
 import { useState } from "react";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEmployeeRequests } from "./EmployeeRequests";
-
-export const queryClient = new QueryClient();
 
 /////////////////////////////////////
 export const useProjectRequests = () => {

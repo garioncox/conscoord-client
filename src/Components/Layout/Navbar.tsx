@@ -32,12 +32,7 @@ const Navbar = () => {
       >
         {/* PSO Items */}
         <NavItem
-          to={"/shift/view/officer"}
-          label={"Officer Shifts"}
-          roles={[PSO_ROLE]}
-        />
-        <NavItem
-          to={"/shift/view/shifts"}
+          to={"/shift/view/claimed"}
           label={"My Shifts"}
           roles={[PSO_ROLE]}
         />
@@ -54,14 +49,16 @@ const Navbar = () => {
           roles={[CLIENT_ROLE]}
         />
         <NavItem
-          to={"/shift/view"}
-          label={"Client Shifts"}
-          roles={[CLIENT_ROLE]}
-        />
-        <NavItem
           to={"/shift/create"}
           label={"Create Shift"}
           roles={[CLIENT_ROLE]}
+        />
+
+        {/* PSO + Client Items  */}
+        <NavItem
+          to={"/shift/view/available"}
+          label={"Available Shifts"}
+          roles={[CLIENT_ROLE, PSO_ROLE]}
         />
 
         {/* Admin Items */}
