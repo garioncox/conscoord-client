@@ -14,10 +14,10 @@ import { useGNumberInput } from "../Components/Generics/gNumberInputController";
 import GSelectInput from "../Components/Generics/gSelectInput";
 import { useGSelectInput } from "../Components/Generics/gSelectInputController";
 import { useCustomToast } from "../Components/Toast";
-import { useAddShift } from "@/Functions/ShiftRequests";
+import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 function CreateShift() {
-  const addShift = useAddShift();
+  const addShift = useAddShiftMutation();
   const { addProjectShift } = useProjectShiftRequests();
   const { Projects, setProjects, getAllProjects } = useProjectRequests();
   const { createToast } = useCustomToast();

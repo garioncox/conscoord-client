@@ -4,14 +4,16 @@ import GNumberInput from "./Generics/gNumberInput";
 import { useGNumberInput } from "./Generics/gNumberInputController";
 import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/gTextInputController";
-import { TableCell, TableRow, } from "./ui/table";
-import { useShiftRequests } from "@/Functions/ShiftRequests";
+import { TableCell, TableRow } from "./ui/table";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
 import { FormatDate } from "@/Functions/FormatDates";
 import { useGDateInput } from "./Generics/gDateInputController";
+import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 export function AddShift() {
-  const location = useGTextInput("", (v) => v.length === 0 ? "Pleae add a location" : "");
+  const location = useGTextInput("", (v) =>
+    v.length === 0 ? "Pleae add a location" : ""
+  );
   const startDate = useGDateInput("", (s: string) => {
     if (s === "") {
       return "Start date is required";
@@ -41,10 +43,12 @@ export function AddShift() {
 
     return "";
   });
-  const description = useGTextInput("", (v) => v.length === 0 ? "Please add a description" : "");
-  const reqEmp = useGNumberInput(0, (v) => v === 0 ? "Error" : "");
+  const description = useGTextInput("", (v) =>
+    v.length === 0 ? "Please add a description" : ""
+  );
+  const reqEmp = useGNumberInput(0, (v) => (v === 0 ? "Error" : ""));
 
-  const { addShift } = useShiftRequests();
+  const addShiftMutation = useAddShiftMutation();
 
   function AddShift() {
     const shift: ShiftDTO = {
@@ -55,7 +59,7 @@ export function AddShift() {
       RequestedEmployees: reqEmp.value,
       Status: "ACTIVE",
     };
-    addShift(shift);
+    addShiftMutation.mutate(shift);
 
     location.setValue("");
     description.setValue("");
@@ -96,5 +100,5 @@ export function AddShift() {
         </div>
       </TableCell>
     </TableRow>
-  )
+  );
 }

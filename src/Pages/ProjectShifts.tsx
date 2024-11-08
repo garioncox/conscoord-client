@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useProjectRequests } from "@/Functions/ProjectRequests";
 import { useParams } from "react-router-dom";
-import { useShiftRequests } from "@/Functions/ShiftRequests";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useProjectShiftRequests } from "@/Functions/ProjectShiftRequests";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { Project } from "@/Data/Interfaces/Project";
+import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 
 const ProjectShifts = () => {
-  const { getAllShifts } = useShiftRequests();
+  const allShifts = useAllShifts();
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { getAllProjects } = useProjectRequests();
   const { id } = useParams();
@@ -22,7 +22,6 @@ const ProjectShifts = () => {
 
   async function populateProjectShifts() {
     const projectShifts = await getAllProjectShifts();
-    const shifts = await getAllShifts();
     const allProjects = await getAllProjects();
     const currProject = allProjects.find((p) => p.id === Number(id));
 
@@ -31,7 +30,7 @@ const ProjectShifts = () => {
     );
 
     const projectShiftIds = filteredProjectShifts.map((ps) => ps.shiftId);
-    const matchingShifts = shifts.filter((shift) =>
+    const matchingShifts = allShifts.data!.filter((shift) =>
       projectShiftIds.includes(shift.id)
     );
 
