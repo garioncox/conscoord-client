@@ -8,21 +8,9 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { Button } from "@/Components/ui/button";
-<<<<<<< HEAD
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/Components/ui/select";
-import { ChevronLeft, ChevronRight, CircleMinus, CirclePlus } from "lucide-react";
-=======
-
-import { CircleMinus, CirclePlus } from "lucide-react";
-import { SetStateAction } from "react";
+import {CircleMinus, CirclePlus } from "lucide-react";
 import { Pagination } from "./Pagination";
->>>>>>> c3c41e5db88a9024cb31140b9f1334f6e197f6cf
+
 
 interface PaginatedProjectTableProps {
   data: any[];
