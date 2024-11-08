@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { Company } from "../Data/Interfaces/Company";
 import { useProjectRequests } from "@/Functions/ProjectRequests";
 import { useParams } from "react-router-dom";
 import { useShiftRequests } from "@/Functions/ShiftRequests";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useProjectShiftRequests } from "@/Functions/ProjectShiftRequests";
-import ProjectShift from "@/Data/Interfaces/ProjectShift";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { Project } from "@/Data/Interfaces/Project";
 
@@ -54,6 +52,7 @@ const ProjectShifts = () => {
     data={currentProject} 
     tableHeaders={["Name", "Location", "Start Date", "End Date", "Status"]} 
     rows={["name", "location", "startDate", "endDate", "status"]} 
+    
   />
 ) : (
   <p>Loading project data...</p>
