@@ -65,9 +65,7 @@ const ProjectShifts = () => {
           "requestedEmployees",
           "status",
         ]}
-        setRowClicked={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        setRowClicked={function (): void {}}
       ></PaginatedTable>
       {ShiftsToProject?.map((stp) => (
         <div key={stp.id}>{stp.description}</div>
