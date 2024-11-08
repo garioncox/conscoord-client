@@ -14,6 +14,7 @@ import PermissionLock, {
   CLIENT_ROLE,
   PSO_ROLE,
 } from "./Components/Auth/PermissionLock";
+import ProjectShifts from "./Pages/ProjectShifts";
 
 function App() {
   return (
@@ -72,6 +73,14 @@ function App() {
         element={
           <PermissionLock roles={[CLIENT_ROLE]}>
             <CreateProject />
+          </PermissionLock>
+        }
+      />
+      <Route
+        path="project/shifts/:id"
+        element={
+          <PermissionLock roles={[ADMIN_ROLE]}>
+            <ProjectShifts />
           </PermissionLock>
         }
       />

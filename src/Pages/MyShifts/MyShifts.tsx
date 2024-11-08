@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { PaginatedProjectTable } from "@/Components/paginated-table";
+import { PaginatedTable } from "@/Components/paginated-table";
 import { useMyShiftFunctions } from "./MyShiftsFunctions";
 
 function MyShifts() {
@@ -15,10 +15,11 @@ function MyShifts() {
     importVariables.claimedShifts === undefined ? (
       <div className="spinner-border" role="status" />
     ) : (
-      <PaginatedProjectTable
+      <PaginatedTable
         tableHeaders={["Location", "Start Time", "End Time", ""]}
         rows={["location", "startTime", "endTime"]}
         data={importVariables.claimedShifts}
+        setRowClicked={function (): void {}}
       />
     );
 
