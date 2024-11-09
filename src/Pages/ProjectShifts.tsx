@@ -5,14 +5,12 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import { useProjectShiftRequests } from "@/Functions/ProjectShiftRequests";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { Project } from "@/Data/Interfaces/Project";
-
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ShiftTable } from "@/Components/ShiftTable";
-import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
+import { getAllShifts } from "@/Functions/ShiftRequests";
 
 
 const ProjectShifts = () => {
-  const allShifts = useAllShifts();
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { getAllProjects } = useProjectRequests();
   const { id } = useParams();

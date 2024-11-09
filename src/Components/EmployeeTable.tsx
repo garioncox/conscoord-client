@@ -1,8 +1,4 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
-import { CircleMinus, CirclePlus, Table } from "lucide-react";
-import { AddShift } from "./AddShift";
-import { Button } from "./ui/button";
-import { TableHeader, TableRow, TableHead, TableBody, TableCell } from "./ui/table";
 import { useRoleRequests } from "@/Functions/RoleRequests";
 import { useEffect, useState } from "react";
 import Role from "@/Data/Interfaces/RoleInterface";
@@ -20,26 +16,21 @@ export function EmployeeTable({
     const [roles, setRoles] = useState<Role[]>([]);
 
     useEffect(() => {
-        populateRoles()
-    })
-
-    async function populateRoles() {
-        const roles = await getAllRoles();
-        setRoles(roles);
-    }
-
+        const getRoles = async () => {
+            const roles = await getAllRoles();
+            setRoles(roles);
+        }
+        getRoles();
+    }, [])
 
     return (
         <>
-        
-            <table className="table-auto">
+            <table>
                 <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>PhoneNumber</th>
-                        <th>Role</th>
-                    </tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>PhoneNumber</th>
+                    <th>Role</th>
                 </thead>
                 <tbody>
                     {data.map((employee) => (
@@ -52,8 +43,6 @@ export function EmployeeTable({
                     ))}
                 </tbody>
             </table>
-
-            
         </>
     )
 }
