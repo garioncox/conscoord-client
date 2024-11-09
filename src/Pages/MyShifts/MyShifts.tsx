@@ -24,6 +24,7 @@ function MyShifts() {
             throw new Error("Function not implemented.");
           } } />
       </PaginatedTable>
+
     );
 
   return (

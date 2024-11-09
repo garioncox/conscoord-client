@@ -9,10 +9,10 @@ function ProjectList() {
   const navigate = useNavigate();
   const control = usePaginatedTable(data ?? []);
 
-  // const [rowClicked, setRowClicked] = React.useState<number>(0);
   const clickOnAProject = (id: number) => {
     navigate(`/project/shifts/${id}`)
   }
+
 
   return (
     <div>
@@ -26,9 +26,8 @@ function ProjectList() {
         </PaginatedTable>
       ) : (
         <div className="animate-spin"></div>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
 export default ProjectList;

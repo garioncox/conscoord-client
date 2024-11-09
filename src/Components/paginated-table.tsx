@@ -1,10 +1,12 @@
 import * as React from "react";
+
 import { Pagination } from "./Pagination";
 import { PaginatedTableControl } from "./PaginatedTableHook";
 
 interface PaginatedProjectTableProps<T> {
   paginatedTableControl: PaginatedTableControl<T>;
   children: React.ReactNode;
+
 }
 
 export function PaginatedTable  <T>({
@@ -24,6 +26,7 @@ export function PaginatedTable  <T>({
         handlePageChange={paginatedTableControl.handlePageChange} 
         totalPages={paginatedTableControl.totalPages}    
         />
+
     </div>
   );
 }

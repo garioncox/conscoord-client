@@ -3,6 +3,11 @@ import { PaginatedTable } from "@/Components/paginated-table";
 import React from "react";
 import { ShiftTable } from "@/Components/ShiftTable";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { AddShift } from "@/Components/AddShift";
+import { PaginatedTable } from "@/Components/paginated-table";
+import React from "react";
+import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
+
 
 function ShiftList() {
   const { data } = useAllShifts();
@@ -20,6 +25,7 @@ function ShiftList() {
             data={control.currentItems}
             setRowClicked={setRowClicked}
           />
+
         </PaginatedTable>
       ) : (
         <div className="animate-spin"></div>
