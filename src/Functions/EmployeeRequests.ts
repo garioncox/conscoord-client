@@ -43,3 +43,8 @@ export const useEmployeeRequests = () => {
     setEmployeesList,
   };
 };
+
+export const getEmployeeByEmail = async (email: string): Promise<Employee> => {
+  const response = await axios.get(`/api/Employee/getByEmail/${email}`);
+  return response.data;
+};

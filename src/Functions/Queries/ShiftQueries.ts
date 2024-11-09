@@ -5,9 +5,11 @@ import {
   editShift,
   getAllArchivedShifts,
   getAllShifts,
+  getShiftById,
 } from "../ShiftRequests";
 import { toast } from "react-toastify";
 import { queryClient } from "./QueryClient";
+import { useAuthContext } from "@/Components/Auth/AuthContext/AuthContext";
 
 export const useAllShifts = () => {
   return useQuery({
@@ -20,6 +22,17 @@ export const useAllArchivedShifts = () => {
   return useQuery({
     queryKey: ["archivedShifts"],
     queryFn: getAllArchivedShifts,
+  });
+};
+
+export const useAllShiftsForLoggedInUser = () => {
+  const { currentUser } = useAuthContext();
+
+  return useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => {
+      getShiftById(currentUser?.id);
+    },
   });
 };
 
