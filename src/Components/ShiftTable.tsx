@@ -46,7 +46,6 @@ export function ShiftTable({
               <TableCell>{shift.description}</TableCell>
               <TableCell>{shift.requestedEmployees}</TableCell>
               <TableCell>{shift.status}</TableCell>
-              
           </TableRow>
             ))}
       </TableBody>
