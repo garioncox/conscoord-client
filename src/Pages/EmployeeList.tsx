@@ -6,6 +6,9 @@ import { useRoleRequests } from "../Functions/RoleRequests";
 import "../index.css";
 import { useCustomToast } from "../Components/Toast";
 import AddOfficer from "./AddOfficer";
+import { PaginatedTable } from "@/Components/paginated-table";
+import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { EmployeeTable } from "@/Components/EmployeeTable";
 
 export const EmployeeList = () => {
   const { employees, setEmployeesList, getEmployeeById, editEmployee } =
@@ -15,6 +18,8 @@ export const EmployeeList = () => {
   const [selectedEmployee, setSelectedEmployee] = useState<number | null>(-1);
   const { createToast } = useCustomToast();
   const [isAddingEmployee, setIsAddingEmployee] = useState(false);
+
+  const control = usePaginatedTable(employees ?? []);
 
   useEffect(() => {
     setEmployeesList();
@@ -64,83 +69,11 @@ export const EmployeeList = () => {
     employees === undefined ? (
       <div className="spinner-border" role="status" />
     ) : (
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th className="text-start">Name</th>
-            <th className="text-start">Phone Number</th>
-            <th className="text-start">Email</th>
-            <th className="text-start">Role</th>
-            <th className="text-start">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((e) => (
-            <tr key={e.id} className="grow grow:hover">
-              <td className="text-start">{e.name}</td>
-              <td className="text-start">{e.phonenumber}</td>
-              <td className="text-start">{e.email}</td>
-
-              {selectedEmployee === e.id ? (
-                <>
-                  <td className="text-start">
-                    <select
-                      className="form-select"
-                      name="selectRole"
-                      onChange={(e) => {
-                        setSelectedRole(Number(e.target.value));
-                      }}
-                    >
-                      <option value="" disabled>
-                        Default (No Role)
-                      </option>
-                      {roles.map((role) => (
-                        <option
-                          key={role.id}
-                          value={role.id}
-                          selected={role.id == e.roleid}
-                        >
-                          {role.rolename}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-info"
-                      onClick={() => saveUserRole(e.id)}
-                    >
-                      Save Changes
-                    </button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="text-start">
-                    {roles.find((role) => role.id === e.roleid)?.rolename}
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-info"
-                      onClick={() => updateUserRole(e.id, e.roleid)}
-                    >
-                      Update Role
-                    </button>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => navigate(`/admin/view/employees/${e.id}`)}
-                    >
-                      {" "}
-                      View Employee
-                    </button>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
-          {addingEmployee}
-        </tbody>
-      </table>
+      <PaginatedTable paginatedTableControl={control}>
+          <EmployeeTable data={control.currentItems} setRowClicked={function (id: number): void {
+            throw new Error("Function not implemented.");
+          } } />
+      </PaginatedTable>
     );
   return (
     <div>
