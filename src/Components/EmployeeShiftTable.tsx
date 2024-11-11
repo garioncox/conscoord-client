@@ -17,13 +17,9 @@ import { useEffect, useState } from "react";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { useCustomToast } from "./Toast";
 
-interface TableComponentProps {
-    data: Shift[];
-}
-
 export function EmployeeShiftTable({
     data,
-}: TableComponentProps) {
+}: {data: Shift[]}) {
 
     const [loggedinUser, setLoggedinUser] = useState<Employee>();
 
