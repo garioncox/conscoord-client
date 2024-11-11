@@ -48,9 +48,9 @@ export function ShiftTable({
               <TableCell>{shift.status}</TableCell>
           </TableRow>
             ))}
+        {addingCount > 0 && <AddShift />}
       </TableBody>
     </Table>
-    {addingCount > 0 && <AddShift />}
 
     {addingCount === 0 && (
         <Button

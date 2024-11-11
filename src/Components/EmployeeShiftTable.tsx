@@ -15,6 +15,7 @@ import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
+import { useCustomToast } from "./Toast";
 
 interface TableComponentProps {
     data: Shift[];
@@ -44,13 +45,14 @@ export function EmployeeShiftTable({
 
     const { addEmployeeShift } = useEmpShiftRequests();
     const { getEmployeeByEmail } = useEmployeeRequests();
+    const { createToast} = useCustomToast();
     const { user } = useAuth0();
 
-    const TakeShift = (id: number) => {
-        addEmployeeShift({
+    const TakeShift = async (id: number) => {
+        await createToast(addEmployeeShift, {
             EmployeeId: loggedinUser!.id,
             ShiftId: id
-        })
+        }, "Taking Shift");
     }
 
     return (
@@ -68,7 +70,7 @@ export function EmployeeShiftTable({
                 </TableHeader>
                 <TableBody>
                     {data.map((shift) => (
-                        <TableRow key={shift.id} onClick={() => TakeShift(shift.id)}>
+                        <TableRow key={shift.id}>
                             <TableCell>{shift.location}</TableCell>
                             <TableCell>{shift.startTime}</TableCell>
                             <TableCell>{shift.endTime}</TableCell>
