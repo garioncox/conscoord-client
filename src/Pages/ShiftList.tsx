@@ -2,6 +2,7 @@ import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
+import { Spinner } from "@/Components/Spinner";
 
 function ShiftList() {
   const { data } = useAllShifts();
@@ -12,13 +13,10 @@ function ShiftList() {
       <h1 id="shifts"> Shift List</h1>
       {data ? (
         <PaginatedTable paginatedTableControl={control}>
-          <EmployeeShiftTable 
-            data={control.currentItems}
-          />
-
+          <EmployeeShiftTable data={control.currentItems} />
         </PaginatedTable>
       ) : (
-        <div className="animate-spin"></div>
+        <Spinner />
       )}
     </div>
   );
