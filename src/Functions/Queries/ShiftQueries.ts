@@ -9,7 +9,8 @@ import {
 } from "../ShiftRequests";
 import { toast } from "react-toastify";
 import { queryClient } from "./QueryClient";
-import { useAuthContext } from "@/Components/Auth/AuthContext/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
+import { getShiftsSignedUpFor } from "../EmpShiftRequests";
 
 export const useAllShifts = () => {
   return useQuery({
@@ -26,12 +27,22 @@ export const useAllArchivedShifts = () => {
 };
 
 export const useAllShiftsForLoggedInUser = () => {
-  const { currentUser } = useAuthContext();
+  const { user, isAuthenticated } = useAuth0();
 
   return useQuery({
-    queryKey: ["currentUser"],
+    queryKey: ["shifts"],
     queryFn: () => {
-      getShiftById(currentUser?.id);
+      return getShiftsSignedUpFor(user!.email!);
+    },
+    enabled: !!(isAuthenticated && user),
+  });
+};
+
+export const useGetShiftById = (shiftId: number) => {
+  return useQuery({
+    queryKey: ["shift", shiftId],
+    queryFn: () => {
+      return getShiftById(shiftId);
     },
   });
 };
@@ -41,6 +52,7 @@ export const useAddShiftMutation = () => {
     mutationFn: addShift,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shifts"] });
+      toast.success("Successfully added shift!");
     },
     onError: () => {
       toast.error("Operation failed for Adding Shift");
@@ -53,6 +65,7 @@ export const useEditShiftMutation = () => {
     mutationFn: editShift,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shifts"] });
+      toast.success("Successfully edited shift!");
     },
     onError: () => {
       toast.error("Operation failed for Editing Shift");
@@ -65,6 +78,7 @@ export const useArchiveShiftMutation = () => {
     mutationFn: archiveShift,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shifts"] });
+      toast.success("Successfully archived shift!");
     },
     onError: () => {
       toast.error("Operation failed for Archiving Shift");

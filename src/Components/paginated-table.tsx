@@ -51,8 +51,8 @@ export function PaginatedTable({
               key={project.id}
               onClick={() => setRowClicked(project.id)}
             >
-              {rows.map((row) => (
-                <TableCell>{project[row]}</TableCell>
+              {rows.map((row, index) => (
+                <TableCell key={index}>{project[row]}</TableCell>
               ))}
             </TableRow>
           ))}
