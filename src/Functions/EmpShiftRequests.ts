@@ -22,10 +22,15 @@ export const useEmpShiftRequests = () => {
     return response.data;
   }
 
+  const updateEmpShiftTimes = async (empShift : EmployeeShift) => {
+    await axios.put(`/api/EmployeeShift/edit`, empShift);
+  }
+
   return {
     addEmployeeShift,
     getSignedUpShifts,
     deleteEmployeeShift,
-    getAllEmployeeShifts
+    getAllEmployeeShifts,
+    updateEmpShiftTimes
   };
 };
