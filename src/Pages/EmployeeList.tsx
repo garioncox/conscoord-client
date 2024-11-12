@@ -5,10 +5,10 @@ import "../index.css";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { EmployeeTable } from "@/Components/EmployeeTable";
+import { Spinner } from "@/Components/Spinner";
 
 export const EmployeeList = () => {
-  const { employees, setEmployeesList } =
-    useEmployeeRequests();
+  const { employees, setEmployeesList } = useEmployeeRequests();
   const { setRolesList } = useRoleRequests();
 
   const control = usePaginatedTable(employees ?? []);
@@ -16,14 +16,14 @@ export const EmployeeList = () => {
   useEffect(() => {
     setEmployeesList();
     setRolesList();
-  }, []); 
+  }, []);
 
   const contents =
     employees === undefined ? (
-      <div className="spinner-border" role="status" />
+      <Spinner />
     ) : (
       <PaginatedTable paginatedTableControl={control}>
-          <EmployeeTable data={control.currentItems} />
+        <EmployeeTable data={control.currentItems} />
       </PaginatedTable>
     );
   return (
@@ -33,6 +33,5 @@ export const EmployeeList = () => {
     </div>
   );
 };
-
 
 export default EmployeeList;

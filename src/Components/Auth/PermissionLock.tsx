@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { useRoleQuery } from "../../Functions/RoleProvider";
+import { Spinner } from "../Spinner";
 
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";
@@ -12,9 +13,7 @@ const PermissionLock: FC<{
   const roleQuery = useRoleQuery();
 
   if (!roleQuery) {
-    <div className="spinner-border" role="status">
-      <span className="sr-only">Loading...</span>
-    </div>;
+    <Spinner />;
   }
 
   if (

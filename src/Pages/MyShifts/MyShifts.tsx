@@ -1,6 +1,7 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ShiftTable } from "@/Components/ShiftTable";
+import { Spinner } from "@/Components/Spinner";
 import { useAllShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
 
 function MyShifts() {
@@ -9,7 +10,7 @@ function MyShifts() {
   const control = usePaginatedTable(shifts ?? []);
 
   if (!shifts) {
-    return <div className="spinner-border" role="status" />;
+    return <Spinner />;
   }
 
   return (
