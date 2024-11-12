@@ -17,6 +17,7 @@ function ShiftList() {
         </PaginatedTable>
       ) : (
         <Spinner />
+        <p>I am here!</p>
       )}
     </div>
   );
