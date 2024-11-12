@@ -13,4 +13,4 @@ jobs:
 
       - name: Build image
         run: |
-          docker build -t garioncox/conscoord-client:linting
+          docker build -t garioncox/conscoord-client .
