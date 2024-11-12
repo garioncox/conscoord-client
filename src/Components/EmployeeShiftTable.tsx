@@ -61,20 +61,19 @@ export function EmployeeShiftTable({
                         <TableHead>End Time</TableHead>
                         <TableHead>Description</TableHead>
                         <TableHead>Requested Employees</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead>Take Shift</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {data.map((shift) => (
-                        <TableRow key={shift.id}>
+                        <TableRow key={shift.id} className="hover:bg-slate-200">
                             <TableCell>{shift.location}</TableCell>
                             <TableCell>{shift.startTime}</TableCell>
                             <TableCell>{shift.endTime}</TableCell>
                             <TableCell>{shift.description}</TableCell>
                             <TableCell>{shift.requestedEmployees}</TableCell>
-                            <TableCell>{shift.status}</TableCell>
                             <TableCell>
-                                <Button onClick={() => TakeShift(shift.id)} variant="outline" size="icon">
+                                <Button className="border-slate-300 border-2 rounded-md" onClick={() => TakeShift(shift.id)} variant="outline" size="icon">
                                     <Plus className="h-16 w-16" />
                                 </Button>
                             </TableCell>
