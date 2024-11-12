@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
+} from "@/Components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -31,13 +31,7 @@ export function Pagination({
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-2">
         <p className="text-sm text-muted-foreground">Items per page</p>
-        <select onChange={(e) => handleItemsPerPageChange(e.target.value)} className="w-[70px]">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
         <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
-
           <SelectTrigger className="w-[70px]">
             <SelectValue placeholder={itemsPerPage.toString()} />
           </SelectTrigger>

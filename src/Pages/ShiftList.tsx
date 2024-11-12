@@ -1,24 +1,19 @@
 import { PaginatedTable } from "@/Components/paginated-table";
-import React from "react";
-import { ShiftTable } from "@/Components/ShiftTable";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
+import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 
 function ShiftList() {
   const { data } = useAllShifts();
-
   const control = usePaginatedTable(data ?? []);
-  const [rowClicked, setRowClicked] = React.useState<number>(0);
 
   return (
     <div>
-      <p>rowClicked: {rowClicked}</p>
       <h1 id="shifts"> Shift List</h1>
       {data ? (
         <PaginatedTable paginatedTableControl={control}>
-          <ShiftTable
+          <EmployeeShiftTable 
             data={control.currentItems}
-            setRowClicked={setRowClicked}
           />
 
         </PaginatedTable>
