@@ -20,12 +20,17 @@ export const useEmpShiftRequests = () => {
   const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
     const response = await axios.get(`/api/EmployeeShift/getall`);
     return response.data;
-  }
+  };
 
   return {
     addEmployeeShift,
     getSignedUpShifts,
     deleteEmployeeShift,
-    getAllEmployeeShifts
+    getAllEmployeeShifts,
   };
+};
+
+export const getShiftsSignedUpFor = async (email: string): Promise<Shift[]> => {
+  const response = await axios.get(`/api/EmployeeShift/get/${email}`);
+  return response.data;
 };
