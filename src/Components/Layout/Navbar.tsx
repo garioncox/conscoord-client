@@ -43,16 +43,6 @@ const Navbar = () => {
           label={"Projects"}
           roles={[CLIENT_ROLE]}
         />
-        <NavItem
-          to={"/project/create"}
-          label={"Create Project"}
-          roles={[CLIENT_ROLE]}
-        />
-        <NavItem
-          to={"/shift/create"}
-          label={"Create Shift"}
-          roles={[CLIENT_ROLE]}
-        />
 
         {/* PSO + Client Items  */}
         <NavItem

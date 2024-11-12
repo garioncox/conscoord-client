@@ -10,7 +10,7 @@ function ShiftList() {
 
   return (
     <div>
-      <h1 id="shifts"> Shift List</h1>
+      <h1 className="text-4xl pb-5">Available Shifts</h1>
       {shifts ? (
         <PaginatedTable paginatedTableControl={control}>
           <EmployeeShiftTable data={control.currentItems} />
@@ -21,4 +21,5 @@ function ShiftList() {
     </div>
   );
 }
+
 export default ShiftList;

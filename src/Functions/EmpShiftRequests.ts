@@ -30,7 +30,11 @@ export const useEmpShiftRequests = () => {
   };
 };
 
-export const getShiftsSignedUpFor = async (email: string): Promise<Shift[]> => {
+export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
+  await axios.post(`/api/EmployeeShift/add`, dto);
+};
+
+export const getClaimedShifts = async (email: string): Promise<Shift[]> => {
   const response = await axios.get(`/api/EmployeeShift/get/${email}`);
   return response.data;
 };
