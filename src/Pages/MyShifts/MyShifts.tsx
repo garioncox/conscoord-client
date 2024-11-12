@@ -3,7 +3,7 @@ import { useAllShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
 
 function MyShifts() {
   const { data: shifts } = useAllShiftsForLoggedInUser();
-
+    
   if (!shifts) {
     return <div className="spinner-border" role="status" />;
   }

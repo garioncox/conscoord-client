@@ -5,10 +5,12 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import { useProjectShiftRequests } from "@/Functions/ProjectShiftRequests";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { Project } from "@/Data/Interfaces/Project";
-import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
+import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { ShiftTable } from "@/Components/ShiftTable";
+import { getAllShifts } from "@/Functions/ShiftRequests";
+
 
 const ProjectShifts = () => {
-  const allShifts = useAllShifts();
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { getAllProjects } = useProjectRequests();
   const { id } = useParams();
@@ -16,12 +18,16 @@ const ProjectShifts = () => {
   const [ShiftsToProject, setShiftsToProject] = useState<Shift[]>([]);
   const [currentProject, setCurrentProject] = useState<Project>();
 
+  const control = usePaginatedTable(ShiftsToProject ?? []);
+
   useEffect(() => {
     populateProjectShifts();
   }, []);
 
   async function populateProjectShifts() {
     const projectShifts = await getAllProjectShifts();
+    const shifts = await getAllShifts();
+
     const allProjects = await getAllProjects();
     const currProject = allProjects.find((p) => p.id === Number(id));
 
@@ -30,7 +36,8 @@ const ProjectShifts = () => {
     );
 
     const projectShiftIds = filteredProjectShifts.map((ps) => ps.shiftId);
-    const matchingShifts = allShifts.data!.filter((shift) =>
+    const matchingShifts = shifts.filter((shift) =>
+
       projectShiftIds.includes(shift.id)
     );
 
@@ -46,26 +53,12 @@ const ProjectShifts = () => {
         {currentProject?.location} <br />
         {currentProject?.status}
       </h2>
-      <PaginatedTable
-        data={ShiftsToProject}
-        tableHeaders={[
-          "Location",
-          "Start Time",
-          "End Time",
-          "Description",
-          "Requested Employees",
-          "Status",
-        ]}
-        rows={[
-          "location",
-          "startTime",
-          "endTime",
-          "description",
-          "requestedEmployees",
-          "status",
-        ]}
-        setRowClicked={function (): void {}}
-      ></PaginatedTable>
+      <PaginatedTable paginatedTableControl={control}>
+        <ShiftTable data={control.currentItems} setRowClicked={function (id: number): void {
+          throw new Error("Function not implemented.");
+        }} />
+      </PaginatedTable>
+
       {ShiftsToProject?.map((stp) => (
         <div key={stp.id}>{stp.description}</div>
       ))}
