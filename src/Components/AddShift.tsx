@@ -5,10 +5,10 @@ import { useGNumberInput } from "./Generics/gNumberInputController";
 import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/gTextInputController";
 import { TableCell, TableRow } from "./ui/table";
-import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
-import { FormatDate } from "@/Functions/FormatDates";
+// import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
+// import { FormatDate } from "@/Functions/FormatDates";
 import { useGDateInput } from "./Generics/gDateInputController";
-import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
+// import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 export function AddShift() {
   const location = useGTextInput("", (v) =>
@@ -48,18 +48,18 @@ export function AddShift() {
   );
   const reqEmp = useGNumberInput(0, (v) => (v === 0 ? "Error" : ""));
 
-  const addShiftMutation = useAddShiftMutation();
+  // const addShiftMutation = useAddShiftMutation();
 
   function AddShift() {
-    const shift: ShiftDTO = {
-      StartTime: FormatDate(startDate.value),
-      EndTime: FormatDate(endDate.value),
-      Description: description.value,
-      Location: location.value,
-      RequestedEmployees: reqEmp.value,
-      Status: "ACTIVE",
-    };
-    addShiftMutation.mutate(shift);
+    // const shift: ShiftDTO = {
+    //   StartTime: FormatDate(startDate.value),
+    //   EndTime: FormatDate(endDate.value),
+    //   Description: description.value,
+    //   Location: location.value,
+    //   RequestedEmployees: reqEmp.value,
+    //   Status: "ACTIVE",
+    // };
+    // addShiftMutation.mutate(shift);
 
     location.setValue("");
     description.setValue("");
