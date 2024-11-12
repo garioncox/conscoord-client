@@ -13,7 +13,7 @@ const PermissionLock: FC<{
   const roleQuery = useRoleQuery();
 
   if (!roleQuery) {
-    <Spinner />;
+    return <Spinner />;
   }
 
   if (
