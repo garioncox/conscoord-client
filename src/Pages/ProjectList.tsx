@@ -1,14 +1,22 @@
+import { EmployeeProjectTable } from "@/Components/EmployeeProjectTable";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
-import { ProjectTable } from "@/Components/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
+import { Project } from "@/Data/Interfaces/Project";
 import { useAllProjectByLoggedInCompany } from "@/Functions/ProjectRequests";
+import React from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ProjectList() {
   const { data } = useAllProjectByLoggedInCompany();
   const navigate = useNavigate();
-  const control = usePaginatedTable(data ?? []);
+  const [filteredData, setFilteredData] = React.useState<Project[]>([]);  
+  const control = usePaginatedTable(filteredData ?? []);
+
+  useEffect(() => {
+    setFilteredData(data?.filter((project) => project.status !== "ARCHIVED") || []);
+  }, [data]);
 
   const clickOnAProject = (id: number) => {
     navigate(`/project/shifts/${id}`);
@@ -17,9 +25,9 @@ function ProjectList() {
   return (
     <div>
       <h1 id="projects">Project List</h1>
-      {data ? (
+      {filteredData ? (
         <PaginatedTable paginatedTableControl={control}>
-          <ProjectTable
+          <EmployeeProjectTable
             data={control.currentItems}
             setRowClicked={clickOnAProject}
           />
