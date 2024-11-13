@@ -20,7 +20,8 @@ import { CombineTime } from "@/Functions/CombineTime";
 
 export function EmployeeShiftTable({
     data,
-}: { data: Shift[] }) {
+    setRowClicked
+}: { data: Shift[],setRowClicked: (id: number) => void;}) {
 
     const [loggedinUser, setLoggedinUser] = useState<Employee>();
     const [userShifts, setUserShifts] = useState<Shift[]>([]);
@@ -81,7 +82,7 @@ export function EmployeeShiftTable({
                 </TableHeader>
                 <TableBody>
                     {data.map((shift) => (
-                        <TableRow key={shift.id} className="hover:bg-slate-200">
+                        <TableRow key={shift.id} className="hover:bg-slate-200" onClick={() => setRowClicked(shift.id)}>
                             <TableCell>{shift.location}</TableCell>
                             <TableCell>{CombineTime(shift.startTime, shift.endTime)}</TableCell>
                             <TableCell>{shift.description}</TableCell>
