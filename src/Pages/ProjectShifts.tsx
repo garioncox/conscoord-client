@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useProjectRequests } from "@/Functions/ProjectRequests";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useProjectShiftRequests } from "@/Functions/ProjectShiftRequests";
 import { PaginatedTable } from "@/Components/paginated-table";
@@ -15,6 +15,7 @@ const ProjectShifts = () => {
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { getAllProjects } = useProjectRequests();
   const { getEmployeeById } = useEmployeeRequests();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [ShiftsToProject, setShiftsToProject] = useState<Shift[]>([]);
@@ -57,6 +58,10 @@ const ProjectShifts = () => {
     setCurrentProject(currProject);
   }
 
+  const clickOnAShift = (id: number) => {
+    navigate(`/shift/view/details/${id}`)
+  }
+
   return (
     <div>
       <h1 className="mb-1 text-2xl text-extrabold">Viewing Project:</h1>
@@ -79,7 +84,7 @@ const ProjectShifts = () => {
         }
       </div>
       <PaginatedTable paginatedTableControl={control}>
-        <EmployeeShiftTable data={control.currentItems} />
+        <ShiftTable data={control.currentItems} setRowClicked={clickOnAShift} />
       </PaginatedTable>
     </div>
   );
