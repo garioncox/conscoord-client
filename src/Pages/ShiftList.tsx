@@ -13,7 +13,7 @@ function ShiftList() {
       <h1 id="shifts"> Shift List</h1>
       {shifts ? (
         <PaginatedTable paginatedTableControl={control}>
-          <EmployeeShiftTable data={control.currentItems} />
+          <EmployeeShiftTable data={control.currentItems} setRowClicked={() => { }} />
         </PaginatedTable>
       ) : (
         <Spinner />

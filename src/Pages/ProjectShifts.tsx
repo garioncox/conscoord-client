@@ -84,7 +84,7 @@ const ProjectShifts = () => {
         }
       </div>
       <PaginatedTable paginatedTableControl={control}>
-        <ShiftTable data={control.currentItems} setRowClicked={clickOnAShift} />
+        <EmployeeShiftTable data={control.currentItems} setRowClicked={clickOnAShift} />
       </PaginatedTable>
     </div>
   );
