@@ -2,6 +2,7 @@ import axios from "axios";
 import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShift } from "../Data/Interfaces/EmployeeShift";
+import { EditEmployeeShiftDTO } from "@/Data/DTOInterfaces/EditEmployeeShiftDTO";
 
 export const useEmpShiftRequests = () => {
   const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
@@ -22,7 +23,7 @@ export const useEmpShiftRequests = () => {
     return response.data;
   }
 
-  const updateEmpShiftTimes = async (empShift : EmployeeShift) => {
+  const updateEmpShiftTimes = async (empShift : EditEmployeeShiftDTO) => {
     await axios.put(`/api/EmployeeShift/edit`, empShift);
   }
 

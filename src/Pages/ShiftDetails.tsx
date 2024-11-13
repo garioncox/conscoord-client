@@ -11,56 +11,75 @@ import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { useEmpShiftRequests } from "@/Functions/EmpShiftRequests";
+import { EditEmployeeShiftDTO } from "@/Data/DTOInterfaces/EditEmployeeShiftDTO";
 
 const ShiftDetails = () => {
   const { id } = useParams();
-  const {user} = useAuth0();
+  const { user } = useAuth0();
   const [shift, setShift] = useState<Shift>();
   const [currUser, setCurrUser] = useState<Employee>();
   const [currEmpShift, setCurrEmpShift] = useState<EmployeeShift>();
   const [allCurrEmpShift, setAllCurrEmpShift] = useState<EmployeeShift[]>();
-  const [StartTime, setStartTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
-  const [EndTime, setEndTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
-  const [AdjustedStartTime, setAdjustedStartTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
-  const [AdjustedEndTime, setAdjustedEndTime] = useState<Dayjs | null>(dayjs("2022-04-17T15:30"));
+  const [StartTime, setStartTime] = useState<Dayjs | null>(
+    dayjs("2022-04-17T15:30")
+  );
+  const [EndTime, setEndTime] = useState<Dayjs | null>(
+    dayjs("2022-04-17T15:30")
+  );
+
   const { getEmployeeByEmail } = useEmployeeRequests();
-  const { getAllEmployeeShifts } = useEmpShiftRequests()
+  const { getAllEmployeeShifts, updateEmpShiftTimes } = useEmpShiftRequests();
 
   useEffect(() => {
     populateShift();
     getLoggedInUser();
     getCurrentEmployeeShift();
+    console.log("EmpShift is " + currEmpShift);
   }, []);
+
+  useEffect(() => {
+    // Wait for currUser, shift, and allCurrEmpShift to be set before running this
+    if (currUser && shift && allCurrEmpShift) {
+      setCurrEmpShift(
+        allCurrEmpShift.find(
+          (es) => es.empId === currUser.id && es.shiftId === shift.id
+        )
+      );
+    }
+  }, [currUser, shift, allCurrEmpShift]);
 
   async function populateShift() {
     setShift(await getShiftById(Number(id)));
   }
 
   async function getLoggedInUser() {
-    if(user && user.email)
-    setCurrUser(await getEmployeeByEmail(user.email));
+    if (user && user.email) setCurrUser(await getEmployeeByEmail(user.email));
   }
 
   async function getCurrentEmployeeShift() {
-    setAllCurrEmpShift(await getAllEmployeeShifts())
-    
-    if(currUser)
-    setCurrEmpShift(allCurrEmpShift?.find((es) => es.empId == currUser.id && es.shiftId == shift?.id))
-  }
+    setAllCurrEmpShift(await getAllEmployeeShifts());
 
-  function fixTimezoneStartDate(newValue: dayjs.Dayjs | null) {
-    if(newValue){
-    setStartTime(newValue);
-    //use these to change the times in the database
-    //time.get('hour') time.get('minute') time.get('hour')
-    setAdjustedStartTime(newValue.add(-6, 'hour')) 
+    if (currUser && shift) {
+      setCurrEmpShift(
+        allCurrEmpShift?.find(
+          (es) => es.empId == currUser.id && es.shiftId == shift.id
+        )
+      );
     }
   }
 
-  function fixTimezoneEndDate(newValue: dayjs.Dayjs | null) {
-    if(newValue){
-    setEndTime(newValue);
-    setAdjustedEndTime(newValue.add(-6, 'hour')) //use these to change the times in the database
+  function SaveShiftTimes(): void {
+    if (currEmpShift && StartTime && EndTime) {
+      const newEmpShift: EditEmployeeShiftDTO = {
+        id: currEmpShift.id,
+        clockInTime: `${StartTime.get("hour") + ":" + StartTime.get("minute")}`,
+        clockOutTime: `${EndTime.get("hour") + ":" + EndTime.get("minute")}`,
+        employeeId: currEmpShift.empId,
+        shiftId: currEmpShift.shiftId,
+      };
+      updateEmpShiftTimes(newEmpShift);
+    } else {
+      console.log("conditions were not met");
     }
   }
 
@@ -68,7 +87,6 @@ const ShiftDetails = () => {
     <>
       {shift ? (
         <div>
-            <p>startTime {AdjustedStartTime?.toString()} endTime {AdjustedEndTime?.toString()}</p>
           <div className="border border-gray-300 rounded-lg p-6 max-w-md mx-auto shadow-md bg-white">
             <h3 className="text-xl font-semibold mb-4 text-gray-700">
               Shift Details
@@ -94,19 +112,52 @@ const ShiftDetails = () => {
               <span className="font-medium">Status:</span> {shift.status}
             </p>
           </div>
-          <div className="mt-5">
+          <div
+            className={`mt-7 justify-center w-full ${
+              !currEmpShift ? "opacity-50 pointer-events-none" : ""
+            }`}
+          >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <TimePicker
                 label="Start Time"
                 value={StartTime}
-                onChange={(newValue) => fixTimezoneStartDate(newValue)}
+                onChange={(newValue) => setStartTime(newValue)}
+                disabled={!currEmpShift}
               />
               <TimePicker
                 label="End Time"
                 value={EndTime}
-                onChange={(newValue) => fixTimezoneEndDate(newValue)}
+                onChange={(newValue) => setEndTime(newValue)}
+                disabled={!currEmpShift}
               />
-            </LocalizationProvider>{" "}
+            </LocalizationProvider>
+            <button
+              className={`bg-blue-500 text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 
+                ${
+                  !currEmpShift
+                    ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
+                    : "hover:bg-blue-600"
+                }
+              `}
+              onClick={() => SaveShiftTimes()}
+              disabled={!currEmpShift}
+            >
+              Save Changes
+            </button>
+            {!currEmpShift ? (
+              <p className="mt-4 text-red-500 font-semibold text-center">
+                You have not signed up for this shift
+              </p>
+            ) : (
+              <div className="mt-4 text-center">
+                <p className="text-green-600 font-semibold">
+                  Start time now set at: {currEmpShift.clockInTime}
+                </p>
+                <p className="text-green-600 font-semibold">
+                  End time now set at: {currEmpShift.clockOutTime}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       ) : (
