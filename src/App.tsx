@@ -14,6 +14,7 @@ import PermissionLock, {
   PSO_ROLE,
 } from "./Components/Auth/PermissionLock";
 import ProjectShifts from "./Pages/ProjectShifts";
+import ShiftDetails from "./Pages/ShiftDetails";
 
 function App() {
   return (
@@ -88,6 +89,14 @@ function App() {
         element={
           <PermissionLock roles={[ADMIN_ROLE]}>
             <EmployeeDetails />
+          </PermissionLock>
+        }
+      />
+      <Route
+        path="shift/view/details/:id"
+        element={
+          <PermissionLock roles={[PSO_ROLE]}>
+            <ShiftDetails />
           </PermissionLock>
         }
       />
