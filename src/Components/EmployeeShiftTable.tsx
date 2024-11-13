@@ -8,7 +8,7 @@ import {
 } from "@/Components/ui/table";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { useEmpShiftRequests } from "@/Functions/EmpShiftRequests";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
@@ -19,9 +19,10 @@ import { useCustomToast } from "./Toast";
 
 export function EmployeeShiftTable({
     data,
-}: {data: Shift[]}) {
+}: { data: Shift[] }) {
 
     const [loggedinUser, setLoggedinUser] = useState<Employee>();
+    const [userShifts, setUserShifts] = useState<Shift[]>([]);
 
     useEffect(() => {
         const getemployee = async () => {
@@ -36,12 +37,18 @@ export function EmployeeShiftTable({
             const employee = await getEmployeeByEmail(user.email);
             setLoggedinUser(employee);
         }
+
+        if (loggedinUser !== undefined) {
+            getSignedUpShifts(loggedinUser.email).then(setUserShifts);
+        }
+
         getemployee();
+
     }, [data])
 
-    const { addEmployeeShift } = useEmpShiftRequests();
+    const { addEmployeeShift, getSignedUpShifts, deleteEmployeeShift } = useEmpShiftRequests();
     const { getEmployeeByEmail } = useEmployeeRequests();
-    const { createToast} = useCustomToast();
+    const { createToast } = useCustomToast();
     const { user } = useAuth0();
 
     const TakeShift = async (id: number) => {
@@ -49,6 +56,14 @@ export function EmployeeShiftTable({
             EmployeeId: loggedinUser!.id,
             ShiftId: id
         }, "Taking Shift");
+
+        getSignedUpShifts(loggedinUser!.email).then(setUserShifts);
+    }
+
+    const ResignFromShift = async (id: number) => {
+        await createToast(deleteEmployeeShift, id, "Resigning from Shift");
+
+        getSignedUpShifts(loggedinUser!.email).then(setUserShifts);
     }
 
     return (
@@ -73,9 +88,15 @@ export function EmployeeShiftTable({
                             <TableCell>{shift.description}</TableCell>
                             <TableCell>{shift.requestedEmployees}</TableCell>
                             <TableCell>
-                                <Button className="border-slate-300 border-2 rounded-md" onClick={() => TakeShift(shift.id)} variant="outline" size="icon">
-                                    <Plus className="h-16 w-16" />
-                                </Button>
+                                {userShifts?.some(userShift => userShift.id === shift.id) ?
+                                    <Button className="border-green-300 border-2 rounded-md" onClick={() => ResignFromShift(shift.id)} variant="outline" size="icon">
+                                        <Check className="h-16 w-16 text-green-300" />
+                                    </Button>
+                                    :
+                                    <Button className="border-slate-300 border-2 rounded-md" onClick={() => TakeShift(shift.id)} variant="outline" size="icon">
+                                        <Plus className="h-16 w-16" />
+                                    </Button>
+                                }
                             </TableCell>
                         </TableRow>
                     ))}

@@ -1,6 +1,7 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ProjectTable } from "@/Components/ProjectTable";
+import { Spinner } from "@/Components/Spinner";
 import { useAllProjectByLoggedInCompany } from "@/Functions/ProjectRequests";
 import { useNavigate } from "react-router-dom";
 
@@ -10,9 +11,8 @@ function ProjectList() {
   const control = usePaginatedTable(data ?? []);
 
   const clickOnAProject = (id: number) => {
-    navigate(`/project/shifts/${id}`)
-  }
-
+    navigate(`/project/shifts/${id}`);
+  };
 
   return (
     <div>
@@ -25,7 +25,7 @@ function ProjectList() {
           />
         </PaginatedTable>
       ) : (
-        <div className="animate-spin"></div>
+        <Spinner />
       )}
     </div>
   );

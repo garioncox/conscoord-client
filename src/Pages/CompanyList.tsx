@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Company } from "../Data/Interfaces/Company";
 import { useCompanyRequests } from "../Functions/CompanyRequests";
+import { Spinner } from "@/Components/Spinner";
 
 const CompanyList = () => {
   const { getCompanies } = useCompanyRequests();
@@ -17,7 +18,7 @@ const CompanyList = () => {
 
   const contents =
     companies === undefined ? (
-      <div className="spinner-border" role="status" />
+      <Spinner />
     ) : (
       <div>
         {companies.map((c) => (

@@ -9,7 +9,6 @@ import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ShiftTable } from "@/Components/ShiftTable";
 import { getAllShifts } from "@/Functions/ShiftRequests";
 
-
 const ProjectShifts = () => {
   const { getAllProjectShifts } = useProjectShiftRequests();
   const { getAllProjects } = useProjectRequests();
@@ -38,7 +37,6 @@ const ProjectShifts = () => {
 
     const projectShiftIds = filteredProjectShifts.map((ps) => ps.shiftId);
     const matchingShifts = shifts.filter((shift) =>
-
       projectShiftIds.includes(shift.id)
     );
 
