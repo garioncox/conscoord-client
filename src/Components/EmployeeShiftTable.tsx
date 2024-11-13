@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { useCustomToast } from "./Toast";
+import { CombineTime } from "@/Functions/CombineTime";
 
 export function EmployeeShiftTable({
     data,
@@ -72,8 +73,7 @@ export function EmployeeShiftTable({
                 <TableHeader>
                     <TableRow>
                         <TableHead>Location</TableHead>
-                        <TableHead>Start Time</TableHead>
-                        <TableHead>End Time</TableHead>
+                        <TableHead>Time</TableHead>
                         <TableHead>Description</TableHead>
                         <TableHead>Requested Employees</TableHead>
                         <TableHead>Take Shift</TableHead>
@@ -83,8 +83,7 @@ export function EmployeeShiftTable({
                     {data.map((shift) => (
                         <TableRow key={shift.id} className="hover:bg-slate-200">
                             <TableCell>{shift.location}</TableCell>
-                            <TableCell>{shift.startTime}</TableCell>
-                            <TableCell>{shift.endTime}</TableCell>
+                            <TableCell>{CombineTime(shift.startTime, shift.endTime)}</TableCell>
                             <TableCell>{shift.description}</TableCell>
                             <TableCell>{shift.requestedEmployees}</TableCell>
                             <TableCell>
