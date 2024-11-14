@@ -55,6 +55,8 @@ export const useShiftById = (shiftId: number) => {
 };
 
 export const useAddShiftMutation = () => {
+  const { createToast } = useCustomToast();
+
   return useMutation({
     mutationFn: async ({shift, projectId} : {shift: ShiftDTO, projectId: number}) => {
       const addedShiftId = await addShift(shift);
@@ -62,7 +64,7 @@ export const useAddShiftMutation = () => {
         shiftId: addedShiftId,
         projectId: projectId,
       };
-      await addProjectShift(dto);
+      await createToast(addProjectShift, dto, "Creating shift...");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.shifts });

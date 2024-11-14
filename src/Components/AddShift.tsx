@@ -11,6 +11,8 @@ import { useGDateInput } from "./Generics/gDateInputController";
 import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 export function AddShift() {
+  const addShiftMutation = useAddShiftMutation();
+
   const location = useGTextInput("", (v) =>
     v.length === 0 ? "Pleae add a location" : ""
   );
@@ -48,7 +50,7 @@ export function AddShift() {
   );
   const reqEmp = useGNumberInput(0, (v) => (v === 0 ? "Error" : ""));
 
-  function AddShift() {
+  function CreateShift() {
     const shift: ShiftDTO = {
       StartTime: FormatDate(startDate.value),
       EndTime: FormatDate(endDate.value),
@@ -58,9 +60,7 @@ export function AddShift() {
       Status: "ACTIVE",
     };
 
-
-    const addShiftMutation = useAddShiftMutation();
-    addShiftMutation.mutate({shift, projectId: 1}); // TODO: Remove hard coded project ID
+    addShiftMutation.mutate({ shift, projectId: 1 }); // TODO: Remove hard coded project ID
 
     location.setValue("");
     description.setValue("");
@@ -72,7 +72,7 @@ export function AddShift() {
   return (
     <TableRow>
       <TableCell>
-        <div className="">
+        <div>
           <GTextInput control={location} />
         </div>
       </TableCell>
@@ -96,7 +96,10 @@ export function AddShift() {
       </TableCell>
       <TableCell>ACTIVE</TableCell>
       <TableCell>
-        <div onClick={AddShift} className="text-primary hover:text-secondary">
+        <div
+          onClick={CreateShift}
+          className="text-primary hover:text-secondary"
+        >
           <Save />
         </div>
       </TableCell>
