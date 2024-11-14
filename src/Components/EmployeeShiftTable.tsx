@@ -15,6 +15,7 @@ import {
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "./Spinner";
 import { useCustomToast } from "./Toast";
+import { CombineTime } from "@/Functions/CombineTime";
 
 export function EmployeeShiftTable({ data }: { data: Shift[] }) {
   const { createToast } = useCustomToast();
