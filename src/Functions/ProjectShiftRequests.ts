@@ -31,3 +31,10 @@ export const useProjectShiftRequests = () => {
 export const addProjectShift = async (dto: ProjectShiftDTO) => {
   await axios.post(`/api/ProjectShift/add`, dto);
 };
+
+export const getAllProjectShiftsForProject = async (
+  projectId: number
+): Promise<ProjectShift[]> => {
+  const response = await axios.get(`/api/ProjectShift/get/${projectId}`);
+  return response.data;
+};
