@@ -14,10 +14,14 @@ import {
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "./Spinner";
-import { useCustomToast } from "./Toast";
-import { CombineTime } from "@/Functions/CombineTime";
 
-export function EmployeeShiftTable({ data }: { data: Shift[] }) {
+export function EmployeeShiftTable({
+  data,
+  setRowClicked,
+}: {
+  data: Shift[];
+  setRowClicked: (id: number) => void;
+}) {
   const { data: userShifts, isLoading } = useAllShiftsForLoggedInUser();
   const addMutation = useClaimShiftMutation();
 
@@ -45,7 +49,11 @@ export function EmployeeShiftTable({ data }: { data: Shift[] }) {
 
         <TableBody>
           {data.map((shift) => (
-            <TableRow key={shift.id} className="hover:bg-slate-200">
+            <TableRow
+              key={shift.id}
+              className="hover:bg-slate-200"
+              onClick={() => setRowClicked(shift.id)}
+            >
               <TableCell>{shift.location}</TableCell>
               <TableCell>{shift.startTime}</TableCell>
               <TableCell>{shift.endTime}</TableCell>
