@@ -14,16 +14,13 @@ import {
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "./Spinner";
-import { useCustomToast } from "./Toast";
 
 export function EmployeeShiftTable({ data }: { data: Shift[] }) {
-  const { createToast } = useCustomToast();
   const { data: userShifts, isLoading } = useAllShiftsForLoggedInUser();
-  const mutation = useClaimShiftMutation();
+  const addMutation = useClaimShiftMutation();
 
-  const TakeShift = async (shiftId: number) => {
-    console.log("claiming shift....");
-    await createToast(mutation.mutate, shiftId, "Taking Shift");
+  const TakeShift = (shiftId: number) => {
+    addMutation.mutate(shiftId);
   };
 
   if (isLoading) {

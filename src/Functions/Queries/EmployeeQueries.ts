@@ -7,7 +7,7 @@ export const useLoggedInEmployee = () => {
   const { user, isAuthenticated } = useAuth0();
 
   return useQuery({
-    queryKey: queryKeys.employeeByEmail(user!.email!),
+    queryKey: queryKeys.employees,
     queryFn: () => {
       return getEmployeeByEmail(user!.email!);
     },

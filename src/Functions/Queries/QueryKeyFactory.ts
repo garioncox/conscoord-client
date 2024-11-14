@@ -1,26 +1,10 @@
 export const queryKeys = {
-  all: ["shifts"],
-
+  all: ["shifts", "archivedShifts", "employeeShifts", "employees"],
   shifts: ["shifts"],
-  shiftById: (id: number) => {
-    return ["shifts", id];
-  },
-  shiftByUser: (email: string) => {
+  shiftsByUser: (email: string) => {
     return ["shifts", email];
   },
-
   archivedShifts: ["archivedShifts"],
-  archivedShiftById: (id: number) => {
-    return ["archivedShifts", id];
-  },
-
   employeeShifts: ["employeeShifts"],
-  employeeShiftById: (id: number) => {
-    return ["employeeShifts", id];
-  },
-
   employees: ["employees"],
-  employeeByEmail: (email: string) => {
-    return ["employees", email];
-  },
 };

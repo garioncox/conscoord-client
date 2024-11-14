@@ -17,6 +17,7 @@ import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { useLoggedInEmployee } from "./EmployeeQueries";
 import { queryKeys } from "./QueryKeyFactory";
 import { Shift } from "@/Data/Interfaces/Shift";
+import { useCustomToast } from "@/Components/Toast";
 
 export const useAllShifts = () => {
   return useQuery({
@@ -36,7 +37,7 @@ export const useAllShiftsForLoggedInUser = () => {
   const { user, isAuthenticated } = useAuth0();
 
   return useQuery({
-    queryKey: queryKeys.shiftByUser(user!.email!),
+    queryKey: queryKeys.shiftsByUser(user!.email!),
     queryFn: () => {
       return getClaimedShifts(user!.email!);
     },
@@ -46,7 +47,7 @@ export const useAllShiftsForLoggedInUser = () => {
 
 export const useShiftById = (shiftId: number) => {
   return useQuery({
-    queryKey: queryKeys.shiftById(shiftId),
+    queryKey: queryKeys.shifts,
     queryFn: () => {
       return getShiftById(shiftId);
     },
@@ -71,6 +72,8 @@ export const useAddShiftMutation = (shift: ShiftDTO, projectId: number) => {
 };
 
 export const useClaimShiftMutation = () => {
+  const { createToast } = useCustomToast();
+
   const { data: employee } = useLoggedInEmployee();
 
   return useMutation({
@@ -79,15 +82,11 @@ export const useClaimShiftMutation = () => {
         EmployeeId: employee!.id,
         ShiftId: shiftId,
       };
-      await addEmployeeShift(dto);
+      await createToast(addEmployeeShift, dto, "Claiming shift...");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.employeeShifts,
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.shiftByUser(employee!.email),
       });
 
       queryClient.invalidateQueries({
@@ -102,7 +101,7 @@ export const useEditShiftMutation = (shift: Shift) => {
     mutationFn: () => editShift(shift),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.shiftById(shift.id),
+        queryKey: queryKeys.shifts,
       });
     },
     onError: () => {},
@@ -114,7 +113,7 @@ export const useArchiveShiftMutation = (shiftId: number) => {
     mutationFn: () => archiveShift(shiftId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.archivedShiftById(shiftId),
+        queryKey: queryKeys.archivedShifts,
       });
     },
     onError: () => {},
