@@ -69,7 +69,6 @@ export const useAddShiftMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.shifts });
     },
-    onError: () => {},
   });
 };
 
@@ -106,7 +105,6 @@ export const useEditShiftMutation = (shift: Shift) => {
         queryKey: queryKeys.shifts,
       });
     },
-    onError: () => {},
   });
 };
 
@@ -118,6 +116,5 @@ export const useArchiveShiftMutation = (shiftId: number) => {
         queryKey: queryKeys.archivedShifts,
       });
     },
-    onError: () => {},
   });
 };
