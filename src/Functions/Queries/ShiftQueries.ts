@@ -83,10 +83,15 @@ export const useClaimShiftMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [
-          queryKeys.employeeShifts,
-          queryKeys.shiftByUser(employee!.email),
-        ],
+        queryKey: queryKeys.employeeShifts,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.shiftByUser(employee!.email),
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.shifts,
       });
     },
   });
