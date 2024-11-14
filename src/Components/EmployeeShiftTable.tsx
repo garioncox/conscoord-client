@@ -1,107 +1,89 @@
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/Components/ui/table";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { Button } from "./ui/button";
 import { Check, Plus } from "lucide-react";
-import { useEmpShiftRequests } from "@/Functions/EmpShiftRequests";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
-import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
-import { Employee } from "@/Data/Interfaces/EmployeeInterface";
-import { useCustomToast } from "./Toast";
-import { CombineTime } from "@/Functions/CombineTime";
+import {
+  useAllShiftsForLoggedInUser,
+  useClaimShiftMutation,
+} from "@/Functions/Queries/ShiftQueries";
+import { Spinner } from "./Spinner";
 
 export function EmployeeShiftTable({
-    data,
-    setRowClicked
-}: { data: Shift[],setRowClicked: (id: number) => void;}) {
+  data,
+  setRowClicked,
+}: {
+  data: Shift[];
+  setRowClicked: (id: number) => void;
+}) {
+  const { data: userShifts, isLoading } = useAllShiftsForLoggedInUser();
+  const addMutation = useClaimShiftMutation();
 
-    const [loggedinUser, setLoggedinUser] = useState<Employee>();
-    const [userShifts, setUserShifts] = useState<Shift[]>([]);
+  const TakeShift = (shiftId: number) => {
+    addMutation.mutate(shiftId);
+  };
 
-    useEffect(() => {
-        const getemployee = async () => {
-            if (user === undefined) {
-                toast.error("Please login to take a shift");
-                return;
-            }
-            if (user.email === undefined) {
-                toast.error("Verify that your email is correct");
-                return;
-            }
-            const employee = await getEmployeeByEmail(user.email);
-            setLoggedinUser(employee);
-        }
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-        if (loggedinUser !== undefined) {
-            getSignedUpShifts(loggedinUser.email).then(setUserShifts);
-        }
+  return (
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Location</TableHead>
+            <TableHead>Start Time</TableHead>
+            <TableHead>End Time</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Requested Employees</TableHead>
+            <TableHead>Take Shift</TableHead>
+          </TableRow>
+        </TableHeader>
 
-        getemployee();
+        <TableBody>
+          {data.map((shift) => (
+            <TableRow
+              key={shift.id}
+              className="hover:bg-slate-200"
+              onClick={() => setRowClicked(shift.id)}
+            >
+              <TableCell>{shift.location}</TableCell>
+              <TableCell>{shift.startTime}</TableCell>
+              <TableCell>{shift.endTime}</TableCell>
+              <TableCell>{shift.description}</TableCell>
+              <TableCell>{shift.requestedEmployees}</TableCell>
 
-    }, [data])
-
-    const { addEmployeeShift, getSignedUpShifts, deleteEmployeeShift } = useEmpShiftRequests();
-    const { getEmployeeByEmail } = useEmployeeRequests();
-    const { createToast } = useCustomToast();
-    const { user } = useAuth0();
-
-    const TakeShift = async (id: number) => {
-        await createToast(addEmployeeShift, {
-            EmployeeId: loggedinUser!.id,
-            ShiftId: id
-        }, "Taking Shift");
-
-        getSignedUpShifts(loggedinUser!.email).then(setUserShifts);
-    }
-
-    const ResignFromShift = async (id: number) => {
-        await createToast(deleteEmployeeShift, id, "Resigning from Shift");
-
-        getSignedUpShifts(loggedinUser!.email).then(setUserShifts);
-    }
-
-    return (
-        <>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Time</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Requested Employees</TableHead>
-                        <TableHead>Take Shift</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {data.map((shift) => (
-                        <TableRow key={shift.id} className="hover:bg-slate-200" onClick={() => setRowClicked(shift.id)}>
-                            <TableCell>{shift.location}</TableCell>
-                            <TableCell>{CombineTime(shift.startTime, shift.endTime)}</TableCell>
-                            <TableCell>{shift.description}</TableCell>
-                            <TableCell>{shift.requestedEmployees}</TableCell>
-                            <TableCell>
-                                {userShifts?.some(userShift => userShift.id === shift.id) ?
-                                    <Button className="border-green-300 border-2 rounded-md" onClick={() => ResignFromShift(shift.id)} variant="outline" size="icon">
-                                        <Check className="h-16 w-16 text-green-300" />
-                                    </Button>
-                                    :
-                                    <Button className="border-slate-300 border-2 rounded-md" onClick={() => TakeShift(shift.id)} variant="outline" size="icon">
-                                        <Plus className="h-16 w-16" />
-                                    </Button>
-                                }
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </>
-    );
+              <TableCell>
+                {userShifts?.some((userShift) => userShift.id === shift.id) ? (
+                  <Button
+                    className="group border-green-400 text-green-400 border-2 rounded-md"
+                    variant="outline"
+                    size="icon"
+                  >
+                    <Check className="h-16 w-16" />
+                  </Button>
+                ) : (
+                  <Button
+                    className="border-slate-300 border-2 rounded-md hover:border-blue-300 hover:text-blue-400"
+                    onClick={() => TakeShift(shift.id)}
+                    variant="outline"
+                    size="icon"
+                  >
+                    <Plus className="h-16 w-16" />
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
+  );
 }

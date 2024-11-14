@@ -1,13 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-import CreateShift from "./Pages/CreateShift";
 import ProjectList from "./Pages/ProjectList";
 import ShiftList from "./Pages/ShiftList";
-import CreateProject from "./Pages/CreateProject";
 import EmployeeDetails from "./Pages/EmployeeDetails";
 import EmployeeList from "./Pages/EmployeeList";
 import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import { Home } from "./Pages/Home";
-import MyShifts from "./Pages/MyShifts/MyShifts";
+import MyShifts from "./Pages/MyShifts";
 import PermissionLock, {
   ADMIN_ROLE,
   CLIENT_ROLE,
@@ -49,22 +47,6 @@ function App() {
         element={
           <PermissionLock roles={[CLIENT_ROLE]}>
             <ProjectList />
-          </PermissionLock>
-        }
-      />
-      <Route
-        path="shift/create"
-        element={
-          <PermissionLock roles={[CLIENT_ROLE]}>
-            <CreateShift />
-          </PermissionLock>
-        }
-      />
-      <Route
-        path="project/create"
-        element={
-          <PermissionLock roles={[CLIENT_ROLE]}>
-            <CreateProject />
           </PermissionLock>
         }
       />

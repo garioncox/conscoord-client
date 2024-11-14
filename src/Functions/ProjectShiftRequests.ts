@@ -4,26 +4,30 @@ import ProjectShift from "../Data/Interfaces/ProjectShift";
 import { useState } from "react";
 
 export const useProjectShiftRequests = () => {
-    const [ProjectShifts, setProjectShifts] = useState<ProjectShift[]>()
+  const [ProjectShifts, setProjectShifts] = useState<ProjectShift[]>();
 
-    const addProjectShift = async (dto: ProjectShiftDTO) => {
-        await axios.post(`/api/ProjectShift/add`, dto);
-    };
+  const addProjectShift = async (dto: ProjectShiftDTO) => {
+    await axios.post(`/api/ProjectShift/add`, dto);
+  };
 
-    const deleteProjectShift = async (projectShiftID: number) => {
-        await axios.delete(`/api/ProjectShift/delete/${projectShiftID}`)
-    }
+  const deleteProjectShift = async (projectShiftID: number) => {
+    await axios.delete(`/api/ProjectShift/delete/${projectShiftID}`);
+  };
 
-    const getAllProjectShifts = async (): Promise<ProjectShift[]> => {
-        const response = await axios.get(`/api/ProjectShift/getAll`);
-        return response.data;
-    }
+  const getAllProjectShifts = async (): Promise<ProjectShift[]> => {
+    const response = await axios.get(`/api/ProjectShift/getAll`);
+    return response.data;
+  };
 
-    return {
-        addProjectShift,
-        deleteProjectShift,
-        getAllProjectShifts,
-        ProjectShifts,
-        setProjectShifts
-    };
+  return {
+    addProjectShift,
+    deleteProjectShift,
+    getAllProjectShifts,
+    ProjectShifts,
+    setProjectShifts,
+  };
+};
+
+export const addProjectShift = async (dto: ProjectShiftDTO) => {
+  await axios.post(`/api/ProjectShift/add`, dto);
 };
