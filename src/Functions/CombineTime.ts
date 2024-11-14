@@ -5,6 +5,7 @@ export function CombineTime(startTime: string, endTime: string) {
 
     const _startTimeNoSeconds = _startTime.slice(0, -3);
     const _endTimeNoSeconds = _endTime.slice(0, -3);
+    const _startDateNoYear = _startDate.slice(5, 10);
 
-    return `${_startDate} ${_startTimeNoSeconds} - ${_endTimeNoSeconds}`;
+    return `${_startDateNoYear} at ${_startTimeNoSeconds} - ${_endTimeNoSeconds}`;
 }
