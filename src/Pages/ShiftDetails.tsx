@@ -90,26 +90,14 @@ const ShiftDetails = () => {
             <h3 className="text-xl font-semibold mb-4 text-gray-700 ">
               Shift Details
             </h3>
+            <p className="text-gray-600 mb-2">{shift.location}</p>
+            <p className="text-gray-600 mb-2">{shift.startTime}</p>
+            <p className="text-gray-600 mb-2">{shift.endTime}</p>
+            <p className="text-gray-600 mb-2">{shift.description}</p>
             <p className="text-gray-600 mb-2">
-               {shift.location}
-            </p>
-            <p className="text-gray-600 mb-2">
-               {shift.startTime}
-            </p>
-            <p className="text-gray-600 mb-2">
-              {shift.endTime}
-            </p>
-            <p className="text-gray-600 mb-2">
-              
-              {shift.description}
-            </p>
-            <p className="text-gray-600 mb-2">
-              
               {shift.requestedEmployees} REQUESTED EMPLOYEES
             </p>
-            <p className="text-gray-600">
-               {shift.status}
-            </p>
+            <p className="text-gray-600">{shift.status}</p>
           </div>
           <div
             className={`mt-7 justify-center w-full ${
@@ -117,20 +105,20 @@ const ShiftDetails = () => {
             }`}
           >
             <div>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <TimePicker
-                label="Start Time"
-                value={StartTime}
-                onChange={(newValue) => setStartTime(newValue)}
-                disabled={!currEmpShift}
-              />
-              <TimePicker
-                label="End Time"
-                value={EndTime}
-                onChange={(newValue) => setEndTime(newValue)}
-                disabled={!currEmpShift}
-              />
-            </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  label="Start Time"
+                  value={StartTime}
+                  onChange={(newValue) => setStartTime(newValue)}
+                  disabled={!currEmpShift}
+                />
+                <TimePicker
+                  label="End Time"
+                  value={EndTime}
+                  onChange={(newValue) => setEndTime(newValue)}
+                  disabled={!currEmpShift}
+                />
+              </LocalizationProvider>
             </div>
             <button
               className={`bg-blue-500 text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 
@@ -149,18 +137,16 @@ const ShiftDetails = () => {
               <p className="mt-4 text-red-500 font-semibold text-center">
                 You have not signed up for this shift
               </p>
-            ) : 
-              currEmpShift.clockInTime && currEmpShift.clockOutTime ? (
-                <div className="mt-4 text-center">
-                  <p className="text-green-600 font-semibold">
-                    Start time now set at: {currEmpShift.clockInTime}
-                  </p>
-                  <p className="text-green-600 font-semibold">
-                    End time now set at: {currEmpShift.clockOutTime}
-                  </p>
-                </div>
-              ) : null
-            }
+            ) : currEmpShift.clockInTime && currEmpShift.clockOutTime ? (
+              <div className="mt-4 text-center">
+                <p className="text-green-600 font-semibold">
+                  Start time now set at: {currEmpShift.clockInTime}
+                </p>
+                <p className="text-green-600 font-semibold">
+                  End time now set at: {currEmpShift.clockOutTime}
+                </p>
+              </div>
+            ) : null}
           </div>
         </div>
       ) : (
