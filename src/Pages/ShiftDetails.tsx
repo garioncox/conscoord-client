@@ -38,7 +38,6 @@ const ShiftDetails = () => {
   }, []);
 
   useEffect(() => {
-    // Wait for currUser, shift, and allCurrEmpShift to be set before running this
     if (currUser && shift && allCurrEmpShift) {
       setCurrEmpShift(
         allCurrEmpShift.find(
@@ -88,49 +87,39 @@ const ShiftDetails = () => {
       {shift ? (
         <div>
           <div className="border border-gray-300 rounded-lg p-6 max-w-md mx-auto shadow-md bg-white">
-            <h3 className="text-xl font-semibold mb-4 text-gray-700">
+            <h3 className="text-xl font-semibold mb-4 text-gray-700 ">
               Shift Details
             </h3>
+            <p className="text-gray-600 mb-2">{shift.location}</p>
+            <p className="text-gray-600 mb-2">{shift.startTime}</p>
+            <p className="text-gray-600 mb-2">{shift.endTime}</p>
+            <p className="text-gray-600 mb-2">{shift.description}</p>
             <p className="text-gray-600 mb-2">
-              <span className="font-medium">Location:</span> {shift.location}
+              {shift.requestedEmployees} REQUESTED EMPLOYEES
             </p>
-            <p className="text-gray-600 mb-2">
-              <span className="font-medium">Start Time:</span> {shift.startTime}
-            </p>
-            <p className="text-gray-600 mb-2">
-              <span className="font-medium">End Time:</span> {shift.endTime}
-            </p>
-            <p className="text-gray-600 mb-2">
-              <span className="font-medium">Description:</span>{" "}
-              {shift.description}
-            </p>
-            <p className="text-gray-600 mb-2">
-              <span className="font-medium">Requested Employees:</span>{" "}
-              {shift.requestedEmployees}
-            </p>
-            <p className="text-gray-600">
-              <span className="font-medium">Status:</span> {shift.status}
-            </p>
+            <p className="text-gray-600">{shift.status}</p>
           </div>
           <div
             className={`mt-7 justify-center w-full ${
               !currEmpShift ? "opacity-50 pointer-events-none" : ""
             }`}
           >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <TimePicker
-                label="Start Time"
-                value={StartTime}
-                onChange={(newValue) => setStartTime(newValue)}
-                disabled={!currEmpShift}
-              />
-              <TimePicker
-                label="End Time"
-                value={EndTime}
-                onChange={(newValue) => setEndTime(newValue)}
-                disabled={!currEmpShift}
-              />
-            </LocalizationProvider>
+            <div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <TimePicker
+                  label="Start Time"
+                  value={StartTime}
+                  onChange={(newValue) => setStartTime(newValue)}
+                  disabled={!currEmpShift}
+                />
+                <TimePicker
+                  label="End Time"
+                  value={EndTime}
+                  onChange={(newValue) => setEndTime(newValue)}
+                  disabled={!currEmpShift}
+                />
+              </LocalizationProvider>
+            </div>
             <button
               className={`bg-blue-500 text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 
                 ${
@@ -148,7 +137,7 @@ const ShiftDetails = () => {
               <p className="mt-4 text-red-500 font-semibold text-center">
                 You have not signed up for this shift
               </p>
-            ) : (
+            ) : currEmpShift.clockInTime && currEmpShift.clockOutTime ? (
               <div className="mt-4 text-center">
                 <p className="text-green-600 font-semibold">
                   Start time now set at: {currEmpShift.clockInTime}
@@ -157,7 +146,7 @@ const ShiftDetails = () => {
                   End time now set at: {currEmpShift.clockOutTime}
                 </p>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       ) : (
