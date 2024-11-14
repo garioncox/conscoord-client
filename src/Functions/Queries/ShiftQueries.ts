@@ -54,9 +54,9 @@ export const useShiftById = (shiftId: number) => {
   });
 };
 
-export const useAddShiftMutation = (shift: ShiftDTO, projectId: number) => {
+export const useAddShiftMutation = () => {
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({shift, projectId} : {shift: ShiftDTO, projectId: number}) => {
       const addedShiftId = await addShift(shift);
       const dto: ProjectShiftDTO = {
         shiftId: addedShiftId,

@@ -59,10 +59,8 @@ export function AddShift() {
     };
 
 
-    // TODO: Alex question - how do we call this with params?
-    const addShiftMutation = useAddShiftMutation(shift, 1); // TODO: Remove hard coded project ID
-
-    addShiftMutation.mutate();
+    const addShiftMutation = useAddShiftMutation();
+    addShiftMutation.mutate({shift, projectId: 1}); // TODO: Remove hard coded project ID
 
     location.setValue("");
     description.setValue("");
