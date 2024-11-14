@@ -7,19 +7,24 @@ export const useCustomToast = () => {
     params: any,
     defaultMessage: string
   ) => {
-    const response: any = await toast.promise(asyncFunction(params), {
-      pending: `${defaultMessage}`,
-      success: {
-        render() {
-          return `${defaultMessage} Successful!`;
-        },
+    const response: any = await toast.promise(
+      async () => {
+        await asyncFunction(params);
       },
-      error: {
-        render({ data }: { data: any }) {
-          return data.message || `Error ${defaultMessage}`;
+      {
+        pending: `${defaultMessage}`,
+        success: {
+          render() {
+            return `${defaultMessage} Successful!`;
+          },
         },
-      },
-    });
+        error: {
+          render({ data }: { data: any }) {
+            return data.message || `Error ${defaultMessage}`;
+          },
+        },
+      }
+    );
     return response;
   };
 
