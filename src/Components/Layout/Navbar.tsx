@@ -41,14 +41,14 @@ const Navbar = () => {
         <NavItem
           to={"/project/view"}
           label={"Projects"}
-          roles={[CLIENT_ROLE]}
+          roles={[PSO_ROLE]}
         />
 
         {/* PSO + Client Items  */}
         <NavItem
           to={"/shift/view/available"}
           label={"Available Shifts"}
-          roles={[CLIENT_ROLE, PSO_ROLE]}
+          roles={[PSO_ROLE]}
         />
 
         {/* Admin Items */}
