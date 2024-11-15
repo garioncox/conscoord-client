@@ -14,6 +14,7 @@ import {
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "./Spinner";
+import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 
 export function EmployeeShiftTable({
   data,
@@ -22,14 +23,14 @@ export function EmployeeShiftTable({
   data: Shift[];
   setRowClicked: (id: number) => void;
 }) {
-  const { data: userShifts, isLoading } = useClaimedShiftsForLoggedInUser();
+  const { data: userShifts, isLoading: shiftsLoading } = useClaimedShiftsForLoggedInUser();
   const addMutation = useClaimShiftMutation();
 
   const TakeShift = (shiftId: number) => {
     addMutation.mutate(shiftId);
   };
 
-  if (isLoading) {
+  if (shiftsLoading) {
     return <Spinner />;
   }
 
@@ -42,7 +43,7 @@ export function EmployeeShiftTable({
             <TableHead>Start Time</TableHead>
             <TableHead>End Time</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Requested Employees</TableHead>
+            <TableHead>Shifts Fulfilled</TableHead>
             <TableHead>Take Shift</TableHead>
           </TableRow>
         </TableHeader>
@@ -58,12 +59,17 @@ export function EmployeeShiftTable({
               <TableCell>{shift.startTime}</TableCell>
               <TableCell>{shift.endTime}</TableCell>
               <TableCell>{shift.description}</TableCell>
-              <TableCell>{shift.requestedEmployees}</TableCell>
-
+              <TableCell>
+                {employeeShiftsLoading
+                  ? "Loading..."
+                  : employeeShifts?.filter((es) => es.shiftId == shift.id)
+                      .length} / {shift.requestedEmployees}
+              </TableCell>
               <TableCell>
                 {userShifts?.some((userShift) => userShift.id === shift.id) ? (
                   <Button
-                    className="group border-green-400 text-green-400 border-2 rounded-md"
+                    onClick={(e) => e.stopPropagation()}
+                    className="group border-green-400 text-green-400 border-2 rounded-md cursor-default"
                     variant="outline"
                     size="icon"
                   >
@@ -72,7 +78,10 @@ export function EmployeeShiftTable({
                 ) : (
                   <Button
                     className="border-slate-300 border-2 rounded-md hover:border-blue-300 hover:text-blue-400"
-                    onClick={() => TakeShift(shift.id)}
+                    onClick={(e) => {
+                      TakeShift(shift.id);
+                      e.stopPropagation();
+                    }}
                     variant="outline"
                     size="icon"
                   >

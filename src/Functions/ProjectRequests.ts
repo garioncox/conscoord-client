@@ -33,6 +33,11 @@ export const useProjectRequests = () => {
     return response.data;
   };
 
+  const getArchivedProjects = async (): Promise<Project[]> => {
+    const response = await axios.get(`/api/Project/getAll/Archived`);
+    return response.data;
+  };
+
   return {
     Projects,
     setProjects,
@@ -41,6 +46,7 @@ export const useProjectRequests = () => {
     updateProject,
     archiveProject,
     getCompanyProjects,
+    getArchivedProjects,
   };
 };
 

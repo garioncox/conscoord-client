@@ -6,5 +6,6 @@ export const queryKeys = {
   },
   archivedShifts: ["archivedShifts"],
   employeeShifts: ["employeeShifts"],
+  projectShifts: ["projectShifts"],
   employees: ["employees"],
 };
