@@ -5,11 +5,12 @@ import {
   editShift,
   getAllArchivedShifts,
   getAllShifts,
+  getClaimedShifts,
   getShiftById,
 } from "../ShiftRequests";
 import { queryClient } from "./QueryClient";
 import { useAuth0 } from "@auth0/auth0-react";
-import { addEmployeeShift, getClaimedShifts } from "../EmpShiftRequests";
+import { addEmployeeShift } from "../EmpShiftRequests";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
 import { addProjectShift } from "../ProjectShiftRequests";
 import { ProjectShiftDTO } from "@/Data/DTOInterfaces/ProjectShiftDTO";
@@ -33,7 +34,7 @@ export const useAllArchivedShifts = () => {
   });
 };
 
-export const useAllShiftsForLoggedInUser = () => {
+export const useClaimedShiftsForLoggedInUser = () => {
   const { user, isAuthenticated } = useAuth0();
 
   return useQuery({
@@ -58,7 +59,13 @@ export const useAddShiftMutation = () => {
   const { createToast } = useCustomToast();
 
   return useMutation({
-    mutationFn: async ({shift, projectId} : {shift: ShiftDTO, projectId: number}) => {
+    mutationFn: async ({
+      shift,
+      projectId,
+    }: {
+      shift: ShiftDTO;
+      projectId: number;
+    }) => {
       const addedShiftId = await addShift(shift);
       const dto: ProjectShiftDTO = {
         shiftId: addedShiftId,
@@ -80,8 +87,11 @@ export const useClaimShiftMutation = () => {
   return useMutation({
     mutationFn: async (shiftId: number) => {
       const dto: EmployeeShiftDTO = {
-        EmployeeId: employee!.id,
-        ShiftId: shiftId,
+        id: null,
+        clockInTime: "",
+        clockOutTime: "",
+        employeeId: employee!.id,
+        shiftId: shiftId,
       };
       await createToast(addEmployeeShift, dto, "Claiming shift...");
     },
