@@ -11,14 +11,29 @@ import { Project } from "@/Data/Interfaces/Project";
 interface TableComponentProps {
   data: Project[];
   setRowClicked: (id: number) => void;
+  archived: boolean;
+  setArchived: (archived: boolean) => void;
 }
 
 export function EmployeeProjectTable({
   data,
   setRowClicked,
+  archived,
+  setArchived,
 }: TableComponentProps) {
   return (
     <>
+      <div className="flex grow justify-end">
+        <label>
+          Show Archived Projects
+          <input
+            checked={!archived}
+            onChange={() => setArchived(!archived)}
+            type="checkbox"
+            className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
+          />
+        </label>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>

@@ -1,8 +1,8 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
-import { ShiftTable } from "@/Components/ShiftTable";
 import { Spinner } from "@/Components/Spinner";
 import { useAllShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
+import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 
 function MyShifts() {
   const { data: shifts } = useAllShiftsForLoggedInUser();
@@ -16,7 +16,7 @@ function MyShifts() {
   return (
     <div>
       <PaginatedTable paginatedTableControl={control}>
-        <ShiftTable
+        <EmployeeShiftTable
           data={control.currentItems}
           setRowClicked={function (): void {}}
         />
