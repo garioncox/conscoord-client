@@ -14,6 +14,7 @@ import {
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "./Spinner";
+import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 
 export function EmployeeShiftTable({
   data,
@@ -22,14 +23,17 @@ export function EmployeeShiftTable({
   data: Shift[];
   setRowClicked: (id: number) => void;
 }) {
-  const { data: userShifts, isLoading } = useAllShiftsForLoggedInUser();
+  const { data: userShifts, isLoading: shiftsLoading } =
+    useAllShiftsForLoggedInUser();
+  const { data: employeeShifts, isLoading: employeeShiftsLoading } =
+    useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
 
   const TakeShift = (shiftId: number) => {
     addMutation.mutate(shiftId);
   };
 
-  if (isLoading) {
+  if (shiftsLoading) {
     return <Spinner />;
   }
 
@@ -42,7 +46,7 @@ export function EmployeeShiftTable({
             <TableHead>Start Time</TableHead>
             <TableHead>End Time</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Requested Employees</TableHead>
+            <TableHead>Shifts Fulfilled</TableHead>
             <TableHead>Take Shift</TableHead>
           </TableRow>
         </TableHeader>
@@ -58,8 +62,12 @@ export function EmployeeShiftTable({
               <TableCell>{shift.startTime}</TableCell>
               <TableCell>{shift.endTime}</TableCell>
               <TableCell>{shift.description}</TableCell>
-              <TableCell>{shift.requestedEmployees}</TableCell>
-
+              <TableCell>
+                {employeeShiftsLoading
+                  ? "Loading..."
+                  : employeeShifts?.filter((es) => es.shiftId == shift.id)
+                      .length} / {shift.requestedEmployees}
+              </TableCell>
               <TableCell>
                 {userShifts?.some((userShift) => userShift.id === shift.id) ? (
                   <Button
