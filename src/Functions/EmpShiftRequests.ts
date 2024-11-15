@@ -14,14 +14,13 @@ export const useEmpShiftRequests = () => {
     return response.data;
   };
 
+
+
   const deleteEmployeeShift = async (id: number) => {
     await axios.delete(`/api/EmployeeShift/delete/${id}`);
   };
 
-  const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
-    const response = await axios.get(`/api/EmployeeShift/getall`);
-    return response.data;
-  };
+
 
   const updateEmpShiftTimes = async (empShift : EditEmployeeShiftDTO) => {
     await axios.put(`/api/EmployeeShift/edit`, empShift);
@@ -42,5 +41,10 @@ export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
 
 export const getClaimedShifts = async (email: string): Promise<Shift[]> => {
   const response = await axios.get(`/api/EmployeeShift/get/${email}`);
+  return response.data;
+};
+
+export const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
+  const response = await axios.get(`/api/EmployeeShift/getall`);
   return response.data;
 };
