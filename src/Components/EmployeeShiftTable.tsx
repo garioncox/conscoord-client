@@ -71,7 +71,8 @@ export function EmployeeShiftTable({
               <TableCell>
                 {userShifts?.some((userShift) => userShift.id === shift.id) ? (
                   <Button
-                    className="group border-green-400 text-green-400 border-2 rounded-md"
+                    onClick={(e) => e.stopPropagation()}
+                    className="group border-green-400 text-green-400 border-2 rounded-md cursor-default"
                     variant="outline"
                     size="icon"
                   >
@@ -80,7 +81,10 @@ export function EmployeeShiftTable({
                 ) : (
                   <Button
                     className="border-slate-300 border-2 rounded-md hover:border-blue-300 hover:text-blue-400"
-                    onClick={() => TakeShift(shift.id)}
+                    onClick={(e) => {
+                      TakeShift(shift.id);
+                      e.stopPropagation();
+                    }}
                     variant="outline"
                     size="icon"
                   >

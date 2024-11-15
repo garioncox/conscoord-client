@@ -9,3 +9,10 @@ export function CombineTime(startTime: string, endTime: string) {
 
     return `${_startDateNoYear} at ${_startTimeNoSeconds} - ${_endTimeNoSeconds}`;
 }
+
+export function combineDates(startDate: string, endDate: string) {
+    const _startDate = startDate.split(" ")[0];
+    const _endDate = endDate.split(" ")[0];
+
+    return `${_startDate} - ${_endDate}`;
+}
