@@ -44,11 +44,6 @@ export const getClaimedShifts = async (email: string): Promise<Shift[]> => {
   return response.data;
 };
 
-export const getNumTakenShifts = async (shiftId: number) => {
-  const response = await axios.get(`/api/EmployeeShift/getNumTakenShifts/${shiftId}`);
-  return response.data;
-};
-
 export const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
   const response = await axios.get(`/api/EmployeeShift/getall`);
   return response.data;
