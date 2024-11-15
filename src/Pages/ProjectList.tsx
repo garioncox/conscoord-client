@@ -10,13 +10,15 @@ import { useNavigate } from "react-router-dom";
 function ProjectList() {
   const { data } = useAllProjects();
   const navigate = useNavigate();
-  const [filteredData, setFilteredData] = React.useState<Project[]>([]);  
+  const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
 
   const control = usePaginatedTable(archived ? filteredData : data ?? []);
 
   useEffect(() => {
-    setFilteredData(data?.filter((project) => project.status !== "ARCHIVED") || []);
+    setFilteredData(
+      data?.filter((project) => project.status !== "ARCHIVED") || []
+    );
   }, [data]);
 
   const clickOnAProject = (id: number) => {
@@ -29,11 +31,24 @@ function ProjectList() {
       {data ? (
         <>
           <PaginatedTable paginatedTableControl={control}>
+            <div className="flex grow justify-end">
+              <label>
+                Show Archived Projects
+                <input
+                  checked={!archived}
+                  onChange={() => {
+                    setArchived(!archived);
+                    control.setCurrentPage(1);
+                  }}
+                  type="checkbox"
+                  className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
+                />
+              </label>
+            </div>
             <EmployeeProjectTable
               data={control.currentItems}
-              setRowClicked={clickOnAProject} archived={archived} setArchived={setArchived}>
-                
-              </EmployeeProjectTable>
+              setRowClicked={clickOnAProject}
+            ></EmployeeProjectTable>
           </PaginatedTable>
         </>
       ) : (
