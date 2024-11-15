@@ -2,10 +2,10 @@ import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ShiftTable } from "@/Components/ShiftTable";
 import { Spinner } from "@/Components/Spinner";
-import { useAllShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
+import { useClaimedShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
 
 function MyShifts() {
-  const { data: shifts } = useAllShiftsForLoggedInUser();
+  const { data: shifts } = useClaimedShiftsForLoggedInUser();
 
   const control = usePaginatedTable(shifts ?? []);
 

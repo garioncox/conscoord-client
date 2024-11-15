@@ -33,7 +33,7 @@ export const useAllArchivedShifts = () => {
   });
 };
 
-export const useAllShiftsForLoggedInUser = () => {
+export const useClaimedShiftsForLoggedInUser = () => {
   const { user, isAuthenticated } = useAuth0();
 
   return useQuery({
@@ -58,7 +58,13 @@ export const useAddShiftMutation = () => {
   const { createToast } = useCustomToast();
 
   return useMutation({
-    mutationFn: async ({shift, projectId} : {shift: ShiftDTO, projectId: number}) => {
+    mutationFn: async ({
+      shift,
+      projectId,
+    }: {
+      shift: ShiftDTO;
+      projectId: number;
+    }) => {
       const addedShiftId = await addShift(shift);
       const dto: ProjectShiftDTO = {
         shiftId: addedShiftId,
@@ -80,8 +86,11 @@ export const useClaimShiftMutation = () => {
   return useMutation({
     mutationFn: async (shiftId: number) => {
       const dto: EmployeeShiftDTO = {
-        EmployeeId: employee!.id,
-        ShiftId: shiftId,
+        id: null,
+        clockInTime: "",
+        clockOutTime: "",
+        empId: employee!.id,
+        shiftId: shiftId,
       };
       await createToast(addEmployeeShift, dto, "Claiming shift...");
     },

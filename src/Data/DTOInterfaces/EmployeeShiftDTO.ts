@@ -1,4 +1,7 @@
 export interface EmployeeShiftDTO {
-  EmployeeId: number;
-  ShiftId: number;
+  id: number | null;
+  clockInTime: string;
+  clockOutTime: string;
+  empId: number;
+  shiftId: number;
 }

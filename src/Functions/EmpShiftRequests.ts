@@ -1,8 +1,7 @@
 import axios from "axios";
-import { EmployeeShiftDTO } from "../Data/DTOInterfaces/EmployeeShiftDTO";
 import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShift } from "../Data/Interfaces/EmployeeShift";
-import { EditEmployeeShiftDTO } from "@/Data/DTOInterfaces/EditEmployeeShiftDTO";
+import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 
 export const useEmpShiftRequests = () => {
   const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
@@ -23,16 +22,16 @@ export const useEmpShiftRequests = () => {
     return response.data;
   };
 
-  const updateEmpShiftTimes = async (empShift : EditEmployeeShiftDTO) => {
+  const updateEmpShiftTimes = async (empShift: EmployeeShiftDTO) => {
     await axios.put(`/api/EmployeeShift/edit`, empShift);
-  }
+  };
 
   return {
     addEmployeeShift,
     getSignedUpShifts,
     deleteEmployeeShift,
     getAllEmployeeShifts,
-    updateEmpShiftTimes
+    updateEmpShiftTimes,
   };
 };
 
@@ -43,4 +42,17 @@ export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
 export const getClaimedShifts = async (email: string): Promise<Shift[]> => {
   const response = await axios.get(`/api/EmployeeShift/get/${email}`);
   return response.data;
+};
+
+export const getClaimedShiftsByEmail = async (
+  email: string
+): Promise<EmployeeShift[]> => {
+  const response = await axios.get(`/api/EmployeeShift/get/${email}`);
+  console.log("In axios");
+  console.log(response.data[0].shiftId);
+  return response.data;
+};
+
+export const updateEmpShift = async (empShift: EmployeeShiftDTO) => {
+  await axios.put(`/api/EmployeeShift/edit`, empShift);
 };
