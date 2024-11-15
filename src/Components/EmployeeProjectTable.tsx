@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { Project } from "@/Data/Interfaces/Project";
+import { combineDates } from "@/Functions/CombineTime";
 
 interface TableComponentProps {
   data: Project[];
@@ -39,8 +40,7 @@ export function EmployeeProjectTable({
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Location</TableHead>
-            <TableHead>Start Time</TableHead>
-            <TableHead>End Time</TableHead>
+            <TableHead>Dates</TableHead>
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
@@ -56,10 +56,7 @@ export function EmployeeProjectTable({
                     {project.location}
                   </TableCell>
                   <TableCell className="text-slate-200">
-                    {project.startDate}
-                  </TableCell>
-                  <TableCell className="text-slate-200">
-                    {project.endDate}
+                    {combineDates(project.startDate, project.endDate)}
                   </TableCell>
                   <TableCell className="text-slate-200">
                     {project.status}
@@ -74,8 +71,7 @@ export function EmployeeProjectTable({
                 >
                   <TableCell>{project.name}</TableCell>
                   <TableCell>{project.location}</TableCell>
-                  <TableCell>{project.startDate}</TableCell>
-                  <TableCell>{project.endDate}</TableCell>
+                  <TableCell>{combineDates(project.startDate, project.endDate)}</TableCell>
                   <TableCell>{project.status}</TableCell>
                 </TableRow>
               );
