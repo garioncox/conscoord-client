@@ -33,9 +33,6 @@ export const ShiftDetails = () => {
 
   useEffect(() => {
     if (id && !isClaimedShiftsLoading) {
-      console.log(id);
-      console.log(claimedShifts?.length);
-      console.log(claimedShifts);
       setCurrentEmpShift(
         claimedShifts?.find((cs) => cs.shiftId === Number(id))
       );

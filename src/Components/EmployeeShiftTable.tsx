@@ -23,7 +23,10 @@ export function EmployeeShiftTable({
   data: Shift[];
   setRowClicked: (id: number) => void;
 }) {
-  const { data: userShifts, isLoading: shiftsLoading } = useClaimedShiftsForLoggedInUser();
+  const { data: userShifts, isLoading: shiftsLoading } =
+    useClaimedShiftsForLoggedInUser();
+  const { data: employeeShifts, isLoading: employeeShiftsLoading } =
+    useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
 
   const TakeShift = (shiftId: number) => {
@@ -63,7 +66,8 @@ export function EmployeeShiftTable({
                 {employeeShiftsLoading
                   ? "Loading..."
                   : employeeShifts?.filter((es) => es.shiftId == shift.id)
-                      .length} / {shift.requestedEmployees}
+                      .length}{" "}
+                / {shift.requestedEmployees}
               </TableCell>
               <TableCell>
                 {userShifts?.some((userShift) => userShift.id === shift.id) ? (
