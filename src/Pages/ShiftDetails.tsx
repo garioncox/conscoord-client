@@ -7,20 +7,19 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/L
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { useShiftById } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "@/Components/Spinner";
-import {
-  useEmpShiftsForLoggedInUser,
-  useEmpShiftTimeMutation,
-} from "@/Functions/Queries/EmpShiftQueries";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
+import {
+  useEmpShiftMutation,
+  useEmpShiftsForLoggedInUser,
+} from "@/Functions/Queries/EmployeeShiftQueries";
 
-const ShiftDetails = () => {
+export const ShiftDetails = () => {
   const { id } = useParams();
   const { data: claimedShifts, isLoading: isClaimedShiftsLoading } =
     useEmpShiftsForLoggedInUser();
   const { data: shiftFromParam, isLoading: isShiftFromParamLoading } =
     useShiftById(Number(id));
-
-  const empShiftMutation = useEmpShiftTimeMutation();
+  const empShiftMutation = useEmpShiftMutation();
 
   const [currentEmpShift, setCurrentEmpShift] = useState<
     EmployeeShift | undefined
@@ -53,7 +52,7 @@ const ShiftDetails = () => {
       id: currentEmpShift.id,
       clockInTime: `${StartTime.get("hour") + ":" + StartTime.get("minute")}`,
       clockOutTime: `${EndTime.get("hour") + ":" + EndTime.get("minute")}`,
-      empId: currentEmpShift.empId,
+      employeeId: currentEmpShift.employeeId,
       shiftId: currentEmpShift.shiftId,
     };
 
@@ -137,5 +136,3 @@ const ShiftDetails = () => {
     </>
   );
 };
-
-export default ShiftDetails;

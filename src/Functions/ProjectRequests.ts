@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEmployeeRequests } from "./EmployeeRequests";
 
-/////////////////////////////////////
 export const useProjectRequests = () => {
   const [Projects, setProjects] = useState<Project[]>();
 
@@ -50,7 +49,6 @@ const getAllProjects = async (): Promise<Project[]> => {
   return response.data;
 };
 
-// export const useAllProjects = () => {
 export const useAllProjects = () => {
   return useQuery({
     queryKey: ["Projects"],

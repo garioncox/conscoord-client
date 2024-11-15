@@ -35,16 +35,16 @@ export const useEmpShiftRequests = () => {
   };
 };
 
+export const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
+  const response = await axios.get(`/api/EmployeeShift/getall`);
+  return response.data;
+};
+
 export const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
   await axios.post(`/api/EmployeeShift/add`, dto);
 };
 
-export const getClaimedShifts = async (email: string): Promise<Shift[]> => {
-  const response = await axios.get(`/api/EmployeeShift/get/${email}`);
-  return response.data;
-};
-
-export const getClaimedShiftsByEmail = async (
+export const getClaimedEmployeeShiftsByEmail = async (
   email: string
 ): Promise<EmployeeShift[]> => {
   const response = await axios.get(`/api/EmployeeShift/get/${email}`);

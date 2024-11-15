@@ -5,11 +5,12 @@ import {
   editShift,
   getAllArchivedShifts,
   getAllShifts,
+  getClaimedShifts,
   getShiftById,
 } from "../ShiftRequests";
 import { queryClient } from "./QueryClient";
 import { useAuth0 } from "@auth0/auth0-react";
-import { addEmployeeShift, getClaimedShifts } from "../EmpShiftRequests";
+import { addEmployeeShift } from "../EmpShiftRequests";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
 import { addProjectShift } from "../ProjectShiftRequests";
 import { ProjectShiftDTO } from "@/Data/DTOInterfaces/ProjectShiftDTO";
@@ -89,7 +90,7 @@ export const useClaimShiftMutation = () => {
         id: null,
         clockInTime: "",
         clockOutTime: "",
-        empId: employee!.id,
+        employeeId: employee!.id,
         shiftId: shiftId,
       };
       await createToast(addEmployeeShift, dto, "Claiming shift...");

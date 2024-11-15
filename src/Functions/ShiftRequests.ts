@@ -29,3 +29,8 @@ export const getAllArchivedShifts = async (): Promise<Shift[]> => {
 export const archiveShift = async (shiftId: number) => {
   await axios.put(`/api/Shift/archive/${shiftId}`);
 };
+
+export const getClaimedShifts = async (email: string): Promise<Shift[]> => {
+  const response = await axios.get(`/api/Shift/getByEmail/${email}`);
+  return response.data;
+};
