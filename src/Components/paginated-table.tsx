@@ -11,7 +11,7 @@ export function PaginatedTable<T>({
   paginatedTableControl,
 }: PaginatedProjectTableProps<T>) {
   return (
-    <div className="space-y-4 shadow-xl p-10 rounded-xl bg-tertiary">
+    <div className="space-y-4 shadow-xl border p-10 rounded-xl bg-tertiary min-w-full">
       {children}
       <Pagination
         setCurrentPage={paginatedTableControl.setCurrentPage}

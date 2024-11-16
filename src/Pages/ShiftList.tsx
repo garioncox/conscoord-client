@@ -9,11 +9,14 @@ function ShiftList() {
   const control = usePaginatedTable(shifts ?? []);
 
   return (
-    <div>
+    <div className="min-w-full px-40">
       <h1 className="text-4xl pb-5">Available Shifts</h1>
       {shifts ? (
         <PaginatedTable paginatedTableControl={control}>
-          <EmployeeShiftTable data={control.currentItems} setRowClicked={() => { }} />
+          <EmployeeShiftTable
+            data={control.currentItems}
+            setRowClicked={() => {}}
+          />
         </PaginatedTable>
       ) : (
         <Spinner />

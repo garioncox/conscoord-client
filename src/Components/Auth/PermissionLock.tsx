@@ -20,7 +20,7 @@ const PermissionLock: FC<{
     (roleQuery.data && roles.includes(roleQuery.data)) ||
     roleQuery.data == ADMIN_ROLE
   ) {
-    return <div>{children}</div>;
+    return <>{children}</>;
   }
 
   return <p className="text-danger">401 Unauthorised</p>;
