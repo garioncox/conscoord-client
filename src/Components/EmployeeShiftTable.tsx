@@ -10,7 +10,7 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import { Button } from "./ui/button";
 import { Check, Plus } from "lucide-react";
 import {
-  useAllShiftsForLoggedInUser,
+  useClaimedShiftsForLoggedInUser,
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "./Spinner";
@@ -25,7 +25,7 @@ export function EmployeeShiftTable({
   setRowClicked: (id: number) => void;
 }) {
   const { data: userShifts, isLoading: shiftsLoading } =
-    useAllShiftsForLoggedInUser();
+    useClaimedShiftsForLoggedInUser();
   const { data: employeeShifts, isLoading: employeeShiftsLoading } =
     useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
