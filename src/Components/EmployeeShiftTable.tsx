@@ -15,6 +15,7 @@ import {
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "./Spinner";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
+import { CombineTime } from "@/Functions/CombineTime";
 
 export function EmployeeShiftTable({
   data,
@@ -43,8 +44,7 @@ export function EmployeeShiftTable({
         <TableHeader>
           <TableRow>
             <TableHead>Location</TableHead>
-            <TableHead>Start Time</TableHead>
-            <TableHead>End Time</TableHead>
+            <TableHead>Time</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Shifts Fulfilled</TableHead>
             <TableHead>Take Shift</TableHead>
@@ -59,37 +59,38 @@ export function EmployeeShiftTable({
               onClick={() => setRowClicked(shift.id)}
             >
               <TableCell>{shift.location}</TableCell>
-              <TableCell>{shift.startTime}</TableCell>
-              <TableCell>{shift.endTime}</TableCell>
+              <TableCell>
+                {CombineTime(shift.startTime, shift.endTime)}
+              </TableCell>
               <TableCell>{shift.description}</TableCell>
               <TableCell>
-                {employeeShiftsLoading
-                  ? "Loading..."
-                  : employeeShifts?.filter((es) => es.shiftId == shift.id)
-                      .length}{" "}
-                / {shift.requestedEmployees}
+                <p className="flex justify-center">
+                  {employeeShiftsLoading
+                    ? "Loading..."
+                    : employeeShifts?.filter((es) => es.shiftId == shift.id)
+                        .length}{" "}
+                  / {shift.requestedEmployees}
+                </p>
               </TableCell>
-              <TableCell>
+              <TableCell className="flex justify-center">
                 {userShifts?.some((userShift) => userShift.id === shift.id) ? (
                   <Button
                     onClick={(e) => e.stopPropagation()}
-                    className="group border-green-400 text-green-400 border-2 rounded-md cursor-default"
-                    variant="outline"
+                    className="bg-emerald-400 group rounded-full cursor-default hover:bg-emerald-400"
                     size="icon"
                   >
-                    <Check className="h-16 w-16" />
+                    <Check className="h-16 w-16 text-white" strokeWidth={5} />
                   </Button>
                 ) : (
                   <Button
-                    className="border-slate-300 border-2 rounded-md hover:border-blue-300 hover:text-blue-400"
+                    className="rounded-xl bg-tertiary text-slate-500 border-2 border-slate-500 hover:text-white hover:bg-blue-500 hover:border-blue-500"
                     onClick={(e) => {
                       TakeShift(shift.id);
                       e.stopPropagation();
                     }}
-                    variant="outline"
                     size="icon"
                   >
-                    <Plus className="h-16 w-16" />
+                    <Plus className="h-16 w-16" strokeWidth={3} />
                   </Button>
                 )}
               </TableCell>

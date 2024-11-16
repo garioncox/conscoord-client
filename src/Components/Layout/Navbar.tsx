@@ -12,15 +12,15 @@ const Navbar = () => {
 
   return (
     <nav className="flex items-center justify-between flex-wrap bg-primary text-secondary p-8">
-      <div className="text-secondary hover:text-tertiary">
-        <Link className="text-4xl font-bold" to="/">
-          Home
+      <div className="text-secondary hover:text-white">
+        <Link className="text-4xl font-semibold" to="/">
+          Conscoord
         </Link>
       </div>
       <div className="block lg:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center px-3 py-2 border rounded text-secondary border-secondary hover:border-tertiary"
+          className="flex items-center px-3 py-2 border rounded text-secondary border-secondary hover:border-white"
         >
           <i className="bi bi-list" />
         </button>
@@ -57,7 +57,7 @@ const Navbar = () => {
           label={"View Employees"}
           roles={[ADMIN_ROLE]}
         />
-        <div className="max-w-24 p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 border rounded border-secondary hover:text-tertiary hover:border-tertiary">
+        <div className="font-semibold text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
           {user ? <LogoutButton /> : <LoginButton />}
         </div>
       </div>
