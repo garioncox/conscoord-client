@@ -1,7 +1,4 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
-import { useRoleRequests } from "@/Functions/RoleRequests";
-import { useEffect, useState } from "react";
-import Role from "@/Data/Interfaces/RoleInterface";
 import {
   Table,
   TableBody,
@@ -10,22 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
+import { useAllRoles } from "@/Functions/Queries/RoleQueries";
 
 interface TableComponentProps {
   data: Employee[];
 }
 
 export function EmployeeTable({ data }: TableComponentProps) {
-  const { getAllRoles } = useRoleRequests();
-  const [roles, setRoles] = useState<Role[]>([]);
-
-  useEffect(() => {
-    const getRoles = async () => {
-      const roles = await getAllRoles();
-      setRoles(roles);
-    };
-    getRoles();
-  }, []);
+  const { data: roles } = useAllRoles();
 
   return (
     <>
@@ -43,7 +32,10 @@ export function EmployeeTable({ data }: TableComponentProps) {
               <TableCell>{employee.email}</TableCell>
               <TableCell>{employee.phonenumber}</TableCell>
               <TableCell>
-                {roles.find((role) => role.id === employee.roleid)?.rolename}
+                {roles
+                  ? roles.find((role) => role.id === employee.roleid)
+                      ?.rolename || "No Role Found"
+                  : "Loading Roles"}
               </TableCell>
             </TableRow>
           ))}
