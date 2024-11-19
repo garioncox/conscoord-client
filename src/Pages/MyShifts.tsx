@@ -41,7 +41,7 @@ function MyShifts() {
   }
 
   return (
-    <div className="min-w-full px-40">
+    <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">My Shifts</h1>
       <PaginatedTable paginatedTableControl={control}>
         <EmployeeShiftTable

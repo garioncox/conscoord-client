@@ -30,8 +30,8 @@ function ProjectList() {
   };
 
   return (
-    <div>
-      <h1 id="projects">Project List</h1>
+    <div className="min-w-full 2xl:px-40">
+      <h1 className="text-4xl pb-5">Project List</h1>
         <>
           <PaginatedTable paginatedTableControl={control} >
             <div className="flex grow justify-end">
