@@ -5,21 +5,22 @@ export interface PaginatedTableControl <T>{
     setItemsPerPage: React.Dispatch<React.SetStateAction<number>>;
     currentPage: number;
     itemsPerPage: number;
-    currentItems: T[];
+    currentItems: T[] | undefined;
     handlePageChange: (pageNumber: number) => void;
     handleItemsPerPageChange: (value: string) => void;
     totalPages: number;
   }
   
-  export function usePaginatedTable <T>(data: T[]) {
+  export function usePaginatedTable <T>(data: T[] | undefined) {
     const [currentPage, setCurrentPage] = React.useState(1);
     const [itemsPerPage, setItemsPerPage] = React.useState(5);
   
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+    console.log(data)
+    const currentItems = data ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
 
-    const totalPages = Math.ceil(data.length / itemsPerPage) || 1;
+    const totalPages = data ? Math.ceil(data.length / itemsPerPage) || 1 : 1;
 
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
