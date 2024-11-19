@@ -24,10 +24,7 @@ export const useEmployeeRequests = () => {
     await axios.put(`/api/Employee/edit`, employee);
   };
 
-  const getAllEmployees = async (): Promise<Employee[]> => {
-    const response = await axios.get(`/api/Employee/getAll`);
-    return response.data;
-  };
+
 
   const setEmployeesList = async () => {
     setEmployees(await getAllEmployees());
@@ -39,12 +36,16 @@ export const useEmployeeRequests = () => {
     getEmployeeById,
     addEmployee,
     editEmployee,
-    getAllEmployees,
     setEmployeesList,
   };
 };
 
 export const getEmployeeByEmail = async (email: string): Promise<Employee> => {
   const response = await axios.get(`/api/Employee/getByEmail/${email}`);
+  return response.data;
+};
+
+export const getAllEmployees = async (): Promise<Employee[]> => {
+  const response = await axios.get(`/api/Employee/getAll`);
   return response.data;
 };

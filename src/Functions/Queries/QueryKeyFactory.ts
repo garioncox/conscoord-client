@@ -1,5 +1,5 @@
 export const queryKeys = {
-  all: ["shifts", "archivedShifts", "employeeShifts", "employees"],
+  all: ["shifts", "archivedShifts", "employeeShifts", "loggedInEmployees"],
   shifts: ["shifts"],
   shiftsByUser: (email: string) => {
     return ["shifts", email];
@@ -7,5 +7,7 @@ export const queryKeys = {
   archivedShifts: ["archivedShifts"],
   employeeShifts: ["employeeShifts"],
   projectShifts: ["projectShifts"],
+  loggedInEmployees: ["loggedInEmployees"],
   employees: ["employees"],
+  roles: ["roles"],
 };

@@ -3,15 +3,27 @@ import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 import { Spinner } from "@/Components/Spinner";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 function ShiftList() {
+
   const { data: shifts, isLoading } = useAllShifts();
   
   const control = usePaginatedTable(shifts ?? []);
 
   if (isLoading) {
    return <Spinner />;
-  }
+
+  const navigate = useNavigate();
+  const { data: shifts } = useAllShifts();
+  const control = usePaginatedTable(shifts ?? []);
+
+  const clickOnAShift = (id: number) => {
+    navigate(`/shift/view/details/${id}`)
+
 
   return (
     <div>
@@ -22,6 +34,7 @@ function ShiftList() {
           setRowClicked={() => { }}
         />
       </PaginatedTable>
+
     </div>
   );
 }

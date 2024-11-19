@@ -33,7 +33,7 @@ function ProjectList() {
     <div>
       <h1 id="projects">Project List</h1>
         <>
-          <PaginatedTable paginatedTableControl={control}>
+          <PaginatedTable paginatedTableControl={control} >
             <div className="flex grow justify-end">
               <label>
                 Show Archived Projects

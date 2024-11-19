@@ -22,7 +22,7 @@ export function EmployeeProjectTable({
   return (
     <>
 
-      <Table>
+      <Table >
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
@@ -31,21 +31,22 @@ export function EmployeeProjectTable({
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody > 
           {data.map((project) => {
             if (project.status === "ARCHIVED") {
               return (
-                <TableRow key={project.id}>
-                  <TableCell className="text-slate-200">
+                
+                <TableRow key={project.id} className="text-slate-600 bg-slate-200 border-l-4 ">
+                  <TableCell className="border-l-4 border-red-400 pl-2">
                     {project.name}
                   </TableCell>
-                  <TableCell className="text-slate-200">
+                  <TableCell className="p-2">
                     {project.location}
                   </TableCell>
-                  <TableCell className="text-slate-200">
+                  <TableCell className="p-2">
                     {combineDates(project.startDate, project.endDate)}
                   </TableCell>
-                  <TableCell className="text-slate-200">
+                  <TableCell className="p-2">
                     {project.status}
                   </TableCell>
                 </TableRow>
@@ -55,11 +56,12 @@ export function EmployeeProjectTable({
                 <TableRow
                   key={project.id}
                   onClick={() => setRowClicked(project.id)}
+                  className="hover:bg-slate-200 py-4"
                 >
-                  <TableCell>{project.name}</TableCell>
-                  <TableCell>{project.location}</TableCell>
-                  <TableCell>{combineDates(project.startDate, project.endDate)}</TableCell>
-                  <TableCell>{project.status}</TableCell>
+                  <TableCell className="p-2">{project.name}</TableCell>
+                  <TableCell className="p-2">{project.location}</TableCell>
+                  <TableCell className="p-2">{combineDates(project.startDate, project.endDate)}</TableCell>
+                  <TableCell className="p-2">{project.status}</TableCell>
                 </TableRow>
               );
             }

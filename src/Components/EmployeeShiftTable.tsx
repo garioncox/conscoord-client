@@ -55,15 +55,15 @@ export function EmployeeShiftTable({
           {data.map((shift) => (
             <TableRow
               key={shift.id}
-              className="hover:bg-slate-200"
+              className="hover:bg-slate-200 py-4"
               onClick={() => setRowClicked(shift.id)}
             >
-              <TableCell>{shift.location}</TableCell>
-              <TableCell>
+              <TableCell className="px-2">{shift.location}</TableCell>
+              <TableCell className="px-2">
                 {CombineTime(shift.startTime, shift.endTime)}
               </TableCell>
-              <TableCell>{shift.description}</TableCell>
-              <TableCell>
+              <TableCell className="px-2">{shift.description}</TableCell>
+              <TableCell className="px-2">
                 <p className="flex justify-center">
                   {employeeShiftsLoading
                     ? "Loading..."
@@ -72,7 +72,7 @@ export function EmployeeShiftTable({
                   / {shift.requestedEmployees}
                 </p>
               </TableCell>
-              <TableCell className="flex justify-center">
+              <TableCell className="flex justify-center px-2">
                 {userShifts?.some((userShift) => userShift.id === shift.id) ? (
                   <Button
                     onClick={(e) => e.stopPropagation()}

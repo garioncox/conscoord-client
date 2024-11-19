@@ -1,22 +1,13 @@
-import { useEffect } from "react";
-import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import { useRoleRequests } from "../Functions/RoleRequests";
 import "../index.css";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { EmployeeTable } from "@/Components/EmployeeTable";
 import { Spinner } from "@/Components/Spinner";
+import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 
 export const EmployeeList = () => {
-  const { employees, setEmployeesList } = useEmployeeRequests();
-  const { setRolesList } = useRoleRequests();
-
+  const { data: employees } = useAllEmployees();
   const control = usePaginatedTable(employees ?? []);
-
-  useEffect(() => {
-    setEmployeesList();
-    setRolesList();
-  }, []);
 
   const contents =
     employees === undefined ? (
@@ -27,8 +18,8 @@ export const EmployeeList = () => {
       </PaginatedTable>
     );
   return (
-    <div>
-      <h1>Admin Employee View</h1>
+    <div className="min-w-full px-40">
+      <h1 className="text-4xl pb-5">Admin Employee View</h1>
       {contents}
     </div>
   );
