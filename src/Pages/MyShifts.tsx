@@ -3,12 +3,17 @@ import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { Spinner } from "@/Components/Spinner";
 import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 import { useClaimedShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function MyShifts() {
   const { data: shifts } = useClaimedShiftsForLoggedInUser();
+  const navigate = useNavigate();
 
   const control = usePaginatedTable(shifts ?? []);
+
+  const clickOnAShift = (id: number) => {
+    navigate(`/shift/view/details/${id}`)
+  }
 
   if (!shifts) {
     return <Spinner />;
@@ -37,11 +42,11 @@ function MyShifts() {
 
   return (
     <div className="min-w-full px-40">
-      <h1 className="text-4xl pb-5">My Shifts</h1>{" "}
+      <h1 className="text-4xl pb-5">My Shifts</h1>
       <PaginatedTable paginatedTableControl={control}>
         <EmployeeShiftTable
           data={control.currentItems}
-          setRowClicked={function (): void {}}
+          setRowClicked={clickOnAShift}
         />
       </PaginatedTable>
     </div>
