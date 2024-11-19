@@ -7,27 +7,26 @@ import { useNavigate } from "react-router-dom";
 
 
 function ShiftList() {
-
   const { data: shifts, isLoading } = useAllShifts();
   const control = usePaginatedTable(shifts ?? []);
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <Spinner />;
   }
 
-  const navigate = useNavigate();
 
   const clickOnAShift = (id: number) => {
     navigate(`/shift/view/details/${id}`)
   }
 
   return (
-    <div>
+    <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">Available Shifts</h1>
       <PaginatedTable paginatedTableControl={control}>
         <EmployeeShiftTable
           data={control.currentItems}
-          setRowClicked={() => { clickOnAShift }}
+          setRowClicked={clickOnAShift}
         />
       </PaginatedTable>
 

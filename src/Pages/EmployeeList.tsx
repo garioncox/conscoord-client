@@ -18,7 +18,7 @@ export const EmployeeList = () => {
       </PaginatedTable>
     );
   return (
-    <div className="min-w-full px-40">
+    <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">Admin Employee View</h1>
       {contents}
     </div>
