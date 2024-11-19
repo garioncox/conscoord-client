@@ -56,6 +56,7 @@ export function EmployeeProjectTable({
                 <TableRow
                   key={project.id}
                   onClick={() => setRowClicked(project.id)}
+                  className="hover:bg-slate-200 py-4"
                 >
                   <TableCell className="p-2">{project.name}</TableCell>
                   <TableCell className="p-2">{project.location}</TableCell>

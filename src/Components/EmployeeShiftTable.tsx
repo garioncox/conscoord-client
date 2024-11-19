@@ -55,10 +55,10 @@ export function EmployeeShiftTable({
           {data.map((shift) => (
             <TableRow
               key={shift.id}
-              className="hover:bg-slate-200"
+              className="hover:bg-slate-200 py-4"
               onClick={() => setRowClicked(shift.id)}
             >
-              <TableCell>{shift.location}</TableCell>
+              <TableCell >{shift.location}</TableCell>
               <TableCell>
                 {CombineTime(shift.startTime, shift.endTime)}
               </TableCell>
