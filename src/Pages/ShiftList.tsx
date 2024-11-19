@@ -6,24 +6,20 @@ import { Spinner } from "@/Components/Spinner";
 import { useNavigate } from "react-router-dom";
 
 
-
-
 function ShiftList() {
 
   const { data: shifts, isLoading } = useAllShifts();
-  
   const control = usePaginatedTable(shifts ?? []);
 
   if (isLoading) {
-   return <Spinner />;
+    return <Spinner />;
+  }
 
   const navigate = useNavigate();
-  const { data: shifts } = useAllShifts();
-  const control = usePaginatedTable(shifts ?? []);
 
   const clickOnAShift = (id: number) => {
     navigate(`/shift/view/details/${id}`)
-
+  }
 
   return (
     <div>
@@ -31,11 +27,12 @@ function ShiftList() {
       <PaginatedTable paginatedTableControl={control}>
         <EmployeeShiftTable
           data={control.currentItems}
-          setRowClicked={() => { }}
+          setRowClicked={() => { clickOnAShift }}
         />
       </PaginatedTable>
 
     </div>
   );
 }
+
 export default ShiftList;
