@@ -5,24 +5,24 @@ import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 import { Spinner } from "@/Components/Spinner";
 
 function ShiftList() {
-  const { data: shifts } = useAllShifts();
+  const { data: shifts, isLoading } = useAllShifts();
+  
   const control = usePaginatedTable(shifts ?? []);
 
+  if (isLoading) {
+   return <Spinner />;
+  }
+
   return (
-    <div className="min-w-full px-40">
+    <div>
       <h1 className="text-4xl pb-5">Available Shifts</h1>
-      {shifts ? (
-        <PaginatedTable paginatedTableControl={control}>
-          <EmployeeShiftTable
-            data={control.currentItems}
-            setRowClicked={() => {}}
-          />
-        </PaginatedTable>
-      ) : (
-        <Spinner />
-      )}
+      <PaginatedTable paginatedTableControl={control}>
+        <EmployeeShiftTable
+          data={control.currentItems}
+          setRowClicked={() => { }}
+        />
+      </PaginatedTable>
     </div>
   );
 }
-
 export default ShiftList;
