@@ -26,8 +26,8 @@ function ProjectList() {
   };
 
   return (
-    <div>
-      <h1 id="projects">Project List</h1>
+    <div className="min-w-full px-40">
+      <h1 className="text-4xl pb-5">Project List</h1>
       {data ? (
         <>
           <PaginatedTable paginatedTableControl={control}>
