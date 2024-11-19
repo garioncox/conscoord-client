@@ -12,7 +12,7 @@ const NavItem: FC<{
 
   if (data && (roles.includes(data) || data === ADMIN_ROLE)) {
     return (
-      <div className="px-3 flex items-center mt-4 lg:mt-0 text-secondary hover:text-tertiary">
+      <div className="text-lg px-3 flex items-center mt-4 lg:mt-0 text-secondary hover:text-tertiary">
         <Link to={to}>{label}</Link>
       </div>
     );

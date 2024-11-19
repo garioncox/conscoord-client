@@ -12,14 +12,14 @@ const MainLayout: FC<{
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex grow flex-col h-dvh">
-        <div className="shadow-md shadow-primary rounded-b z-0">
+        <div className="shadow shadow-primary z-0">
           <Navbar />
         </div>
         <div className="flex flex-row w-full h-full z-1 bg-faint">
-          <div className="bg-secondary hidden lg:inline shadow-inner shadow-primary">
+          <div className="bg-slate-200 hidden lg:inline shadow-md shadow-slate-400">
             <Sidebar />
           </div>
-          <main className="w-full text-primary flex grow justify-center m-20">
+          <main className="w-full text-primary flex grow justify-center my-5 mx-20">
             {children}
           </main>
         </div>

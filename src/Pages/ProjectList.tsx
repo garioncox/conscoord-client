@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ProjectList() {
-  const { data } = useAllProjects();
+  const { data, isLoading } = useAllProjects();
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
@@ -21,6 +21,10 @@ function ProjectList() {
     );
   }, [data]);
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   const clickOnAProject = (id: number) => {
     navigate(`/project/shifts/${id}`);
   };
@@ -28,9 +32,8 @@ function ProjectList() {
   return (
     <div>
       <h1 id="projects">Project List</h1>
-      {data ? (
         <>
-          <PaginatedTable paginatedTableControl={control}>
+          <PaginatedTable paginatedTableControl={control} >
             <div className="flex grow justify-end">
               <label>
                 Show Archived Projects
@@ -51,9 +54,6 @@ function ProjectList() {
             ></EmployeeProjectTable>
           </PaginatedTable>
         </>
-      ) : (
-        <Spinner />
-      )}
     </div>
   );
 }

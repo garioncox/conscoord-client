@@ -12,7 +12,7 @@ import PermissionLock, {
   PSO_ROLE,
 } from "./Components/Auth/PermissionLock";
 import ProjectShifts from "./Pages/ProjectShifts";
-import ShiftDetails from "./Pages/ShiftDetails";
+import { ShiftDetails } from "./Pages/ShiftDetails";
 
 function App() {
   return (

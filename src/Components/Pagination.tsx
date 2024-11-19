@@ -32,13 +32,13 @@ export function Pagination({
       <div className="flex items-center space-x-2">
         <p className="text-sm text-muted-foreground">Items per page</p>
         <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
-          <SelectTrigger className="w-[70px]">
+          <SelectTrigger className="w-[70px] bg-tertiary text-primary border-2 border-secondary">
             <SelectValue placeholder={itemsPerPage.toString()} />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="5">5</SelectItem>
-            <SelectItem value="10">10</SelectItem>
-            <SelectItem value="20">20</SelectItem>
+          <SelectContent className="bg-white text-black">
+            <SelectItem value="5" className="hover:bg-slate-200">5</SelectItem>
+            <SelectItem value="10" className="hover:bg-slate-200">10</SelectItem>
+            <SelectItem value="20" className="hover:bg-slate-200">20</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -49,6 +49,7 @@ export function Pagination({
           size="icon"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
+          className="w-[40px] bg-tertiary text-primary border-2 border-slate-300 hover:bg-slate-300"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -60,6 +61,7 @@ export function Pagination({
           size="icon"
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
+          className="w-[40px] bg-tertiary text-primary border-2 border-slate-300 hover:bg-slate-300"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
