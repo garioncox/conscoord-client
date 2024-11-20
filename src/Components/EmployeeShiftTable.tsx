@@ -16,6 +16,7 @@ import {
 import { Spinner } from "./Spinner";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { CombineTime } from "@/Functions/CombineTime";
+import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
 
 export function EmployeeShiftTable({
   data,
@@ -29,6 +30,7 @@ export function EmployeeShiftTable({
   const { data: employeeShifts, isLoading: employeeShiftsLoading } =
     useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
+  const {data:loggedInEmployee} = useLoggedInEmployee();
 
   const TakeShift = (shiftId: number) => {
     addMutation.mutate(shiftId);
@@ -47,7 +49,7 @@ export function EmployeeShiftTable({
             <TableHead>Time</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Shifts Fulfilled</TableHead>
-            <TableHead>Take Shift</TableHead>
+            {loggedInEmployee?.roleid != 3 ? <TableHead>Take Shift</TableHead> : ""}
           </TableRow>
         </TableHeader>
 
@@ -72,7 +74,7 @@ export function EmployeeShiftTable({
                   / {shift.requestedEmployees}
                 </p>
               </TableCell>
-              <TableCell className="flex justify-center px-2">
+              {loggedInEmployee?.roleid != 3 ? <TableCell className="flex justify-center px-2">
                 {userShifts?.some((userShift) => userShift.id === shift.id) ? (
                   <Button
                     onClick={(e) => e.stopPropagation()}
@@ -93,7 +95,7 @@ export function EmployeeShiftTable({
                     <Plus className="h-16 w-16" strokeWidth={3} />
                   </Button>
                 )}
-              </TableCell>
+              </TableCell> : "" }
             </TableRow>
           ))}
         </TableBody>

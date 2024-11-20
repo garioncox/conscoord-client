@@ -12,7 +12,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export const useAllEmployeeShifts = () => {
   return useQuery({
-    queryKey: queryKeys.employeeShifts,
+    queryKey: queryKeys.allEmployeeShifts,
     queryFn: getAllEmployeeShifts,
   });
 };
@@ -36,7 +36,7 @@ export const useEmpShiftMutation = () => {
       await createToast(updateEmpShift, empShift, "Creating shift...");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
+      queryClient.invalidateQueries({ queryKey: queryKeys.allEmployeeShifts });
     },
   });
 };
