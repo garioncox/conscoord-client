@@ -4,17 +4,11 @@ import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 import { Spinner } from "@/Components/Spinner";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 function ShiftList() {
   const { data: shifts, isLoading } = useAllShifts();
   const navigate = useNavigate();
-  const control = usePaginatedTable(shifts);
-
-  console.log(shifts)
-  useEffect(() => {
-    console.log("Shifts have changed:", shifts);
-  }, [shifts]);
+  const control = usePaginatedTable(shifts|| []);
 
   if (isLoading) {
     return <Spinner />;
