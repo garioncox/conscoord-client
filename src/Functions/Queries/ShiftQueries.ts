@@ -48,7 +48,7 @@ export const useClaimedShiftsForLoggedInUser = () => {
 
 export const useShiftById = (shiftId: number) => {
   return useQuery({
-    queryKey: queryKeys.shifts,
+    queryKey: queryKeys.shiftsById(shiftId),
     queryFn: () => {
       return getShiftById(shiftId);
     },
