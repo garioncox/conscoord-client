@@ -2,6 +2,6 @@ export interface EmployeeShift {
   id: number;
   clockInTime: string;
   clockOutTime: string;
-  employeeId: number;
+  empId: number;
   shiftId: number;
 }

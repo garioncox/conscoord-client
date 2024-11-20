@@ -77,7 +77,7 @@ function App() {
       <Route
         path="shift/view/details/:id"
         element={
-          <PermissionLock roles={[PSO_ROLE]}>
+          <PermissionLock roles={[PSO_ROLE, CLIENT_ROLE]}>
             <ShiftDetails />
           </PermissionLock>
         }

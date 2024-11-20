@@ -12,23 +12,30 @@ import {
   useEmpShiftMutation,
   useEmpShiftsForLoggedInUser,
 } from "@/Functions/Queries/EmployeeShiftQueries";
+import {
+  useEmployeesByShift,
+  useLoggedInEmployee,
+} from "@/Functions/Queries/EmployeeQueries";
 
 export const ShiftDetails = () => {
   const { id } = useParams();
+
+  const empShiftMutation = useEmpShiftMutation();
+  const { data: loggedInEmployee } = useLoggedInEmployee();
   const { data: claimedShifts, isLoading: isClaimedShiftsLoading } =
     useEmpShiftsForLoggedInUser();
   const { data: shiftFromParam, isLoading: isShiftFromParamLoading } =
     useShiftById(Number(id));
-  const empShiftMutation = useEmpShiftMutation();
+  const { data: signedUpEmployees } = useEmployeesByShift(Number(id));
 
   const [currentEmpShift, setCurrentEmpShift] = useState<
     EmployeeShift | undefined
   >(undefined);
   const [StartTime, setStartTime] = useState<Dayjs | null>(
-    dayjs("2022-04-17T15:30")
+    dayjs("2024-04-17T00:00")
   );
   const [EndTime, setEndTime] = useState<Dayjs | null>(
-    dayjs("2022-04-17T15:30")
+    dayjs("2024-04-17T00:00")
   );
 
   useEffect(() => {
@@ -49,7 +56,7 @@ export const ShiftDetails = () => {
       id: currentEmpShift.id,
       clockInTime: `${StartTime.get("hour") + ":" + StartTime.get("minute")}`,
       clockOutTime: `${EndTime.get("hour") + ":" + EndTime.get("minute")}`,
-      employeeId: currentEmpShift.employeeId,
+      employeeId: currentEmpShift.empId,
       shiftId: currentEmpShift.shiftId,
     };
 
@@ -73,59 +80,105 @@ export const ShiftDetails = () => {
             <p className="text-gray-600 mb-2">{shiftFromParam.endTime}</p>
             <p className="text-gray-600 mb-2">{shiftFromParam.description}</p>
             <p className="text-gray-600 mb-2">
-              {shiftFromParam.requestedEmployees} REQUESTED EMPLOYEES
+              {signedUpEmployees?.length}/{shiftFromParam.requestedEmployees}{" "}
+              Shifts Filled
             </p>
             <p className="text-gray-600">{shiftFromParam.status}</p>
           </div>
-          <div
-            className={`mt-7 justify-center w-full ${
-              !currentEmpShift ? "opacity-50 pointer-events-none" : ""
-            }`}
-          >
-            <div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker
-                  label="Start Time"
-                  value={StartTime}
-                  onChange={(newValue) => setStartTime(newValue)}
-                  disabled={!currentEmpShift}
-                />
-                <TimePicker
-                  label="End Time"
-                  value={EndTime}
-                  onChange={(newValue) => setEndTime(newValue)}
-                  disabled={!currentEmpShift}
-                />
-              </LocalizationProvider>
-            </div>
-            <button
-              className={`bg-blue-500 text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 
+          {loggedInEmployee?.roleid != 3 ? (
+            <div
+              className={`mt-7 justify-center w-full ${
+                !currentEmpShift ? "opacity-50 pointer-events-none" : ""
+              }`}
+            >
+              <div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Start Time"
+                    value={StartTime}
+                    onChange={(newValue) => setStartTime(newValue)}
+                    disabled={!currentEmpShift}
+                  />
+                  <TimePicker
+                    label="End Time"
+                    value={EndTime}
+                    onChange={(newValue) => setEndTime(newValue)}
+                    disabled={!currentEmpShift}
+                  />
+                </LocalizationProvider>
+              </div>
+              <button
+                className={`bg-blue-500 text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 
                 ${
                   !currentEmpShift
                     ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
                     : "hover:bg-blue-600"
                 }
               `}
-              onClick={() => SaveShiftTimes()}
-              disabled={!currentEmpShift}
-            >
-              Save Changes
-            </button>
-            {!currentEmpShift ? (
-              <p className="mt-4 text-red-500 font-semibold text-center">
-                You have not signed up for this shift
-              </p>
-            ) : currentEmpShift.clockInTime && currentEmpShift.clockOutTime ? (
-              <div className="mt-4 text-center">
-                <p className="text-green-600 font-semibold">
-                  Start time now set at: {currentEmpShift.clockInTime}
+                onClick={() => SaveShiftTimes()}
+                disabled={!currentEmpShift}
+              >
+                Submit Time
+              </button>
+              {!currentEmpShift ? (
+                <p className="mt-4 text-red-500 font-semibold text-center">
+                  You have not signed up for this shift
                 </p>
-                <p className="text-green-600 font-semibold">
-                  End time now set at: {currentEmpShift.clockOutTime}
-                </p>
+              ) : currentEmpShift.clockInTime &&
+                currentEmpShift.clockOutTime ? (
+                <div className="mt-4 text-center">
+                  <p className="text-green-600 font-semibold">
+                    Start time now set at: {currentEmpShift.clockInTime}
+                  </p>
+                  <p className="text-green-600 font-semibold">
+                    End time now set at: {currentEmpShift.clockOutTime}
+                  </p>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div>
+              <div className="mt-10 mb-5 text-4xl font-bold">
+                Signed Up Employees:
               </div>
-            ) : null}
-          </div>
+
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full border-collapse border border-gray-300">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="border border-gray-300 px-4 py-2 text-left">
+                        Name
+                      </th>
+                      <th className="border border-gray-300 px-4 py-2 text-left">
+                        Email
+                      </th>
+                      <th className="border border-gray-300 px-4 py-2 text-left">
+                        Phone Number
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {signedUpEmployees?.map((s, index) => (
+                      <tr
+                        key={index}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      >
+                        <td className="border border-gray-300 px-4 py-2">
+                          {s.name}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {s.email}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {s.phonenumber}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <p className="text-center text-gray-500">Loading...</p>

@@ -24,8 +24,6 @@ export const useEmployeeRequests = () => {
     await axios.put(`/api/Employee/edit`, employee);
   };
 
-
-
   const setEmployeesList = async () => {
     setEmployees(await getAllEmployees());
   };
