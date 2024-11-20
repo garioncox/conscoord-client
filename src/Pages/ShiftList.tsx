@@ -5,20 +5,18 @@ import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 import { Spinner } from "@/Components/Spinner";
 import { useNavigate } from "react-router-dom";
 
-
 function ShiftList() {
   const { data: shifts, isLoading } = useAllShifts();
-  const control = usePaginatedTable(shifts ?? []);
   const navigate = useNavigate();
+  const control = usePaginatedTable(shifts|| []);
 
   if (isLoading) {
     return <Spinner />;
   }
 
-
   const clickOnAShift = (id: number) => {
-    navigate(`/shift/view/details/${id}`)
-  }
+    navigate(`/shift/view/details/${id}`);
+  };
 
   return (
     <div className="min-w-full 2xl:px-40">
@@ -29,7 +27,6 @@ function ShiftList() {
           setRowClicked={clickOnAShift}
         />
       </PaginatedTable>
-
     </div>
   );
 }

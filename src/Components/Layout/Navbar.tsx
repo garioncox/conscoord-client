@@ -30,13 +30,6 @@ const Navbar = () => {
           isOpen ? "" : "hidden"
         } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
       >
-        {/* PSO Items */}
-        <NavItem
-          to={"/shift/view/claimed"}
-          label={"My Shifts"}
-          roles={[PSO_ROLE]}
-        />
-
         {/* Client Items */}
         <NavItem
           to={"/project/view"}
@@ -49,6 +42,13 @@ const Navbar = () => {
           to={"/shift/view/available"}
           label={"Available Shifts"}
           roles={[CLIENT_ROLE, PSO_ROLE]}
+        />
+
+        {/* PSO Items */}
+        <NavItem
+          to={"/shift/view/claimed"}
+          label={"My Shifts"}
+          roles={[PSO_ROLE]}
         />
 
         {/* Admin Items */}

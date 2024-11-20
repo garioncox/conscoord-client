@@ -22,7 +22,7 @@ import { useCustomToast } from "@/Components/Toast";
 
 export const useAllShifts = () => {
   return useQuery({
-    queryKey: queryKeys.shifts,
+    queryKey: [queryKeys.shifts],
     queryFn: getAllShifts,
   });
 };
@@ -48,7 +48,7 @@ export const useClaimedShiftsForLoggedInUser = () => {
 
 export const useShiftById = (shiftId: number) => {
   return useQuery({
-    queryKey: queryKeys.shifts,
+    queryKey: [queryKeys.shiftsById(shiftId), queryKeys.shifts, shiftId],
     queryFn: () => {
       return getShiftById(shiftId);
     },

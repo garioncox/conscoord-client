@@ -17,9 +17,9 @@ export interface PaginatedTableControl <T>{
   
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = data ? data.slice(indexOfFirstItem, indexOfLastItem) : [];
 
-    const totalPages = Math.ceil(data.length / itemsPerPage) || 1;
+    const totalPages = data ? Math.ceil(data.length / itemsPerPage) || 1 : 1;
 
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
