@@ -31,31 +31,53 @@ export const ShiftDetails = () => {
   const [currentEmpShift, setCurrentEmpShift] = useState<
     EmployeeShift | undefined
   >(undefined);
-  const [StartTime, setStartTime] = useState<Dayjs | null>(
-    dayjs("2024-04-17T00:00")
-  );
-  const [EndTime, setEndTime] = useState<Dayjs | null>(
-    dayjs("2024-04-17T00:00")
-  );
+  const [startTime, setStartTime] = useState<Dayjs | null>(null);
+  const [endTime, setEndTime] = useState<Dayjs | null>(null);
+  const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
 
   useEffect(() => {
     if (id && !isClaimedShiftsLoading) {
       setCurrentEmpShift(
         claimedShifts?.find((cs) => cs.shiftId === Number(id))
       );
+      if (
+        !currentEmpShift ||
+        (currentEmpShift?.clockInTime && currentEmpShift?.clockOutTime)
+      ) {
+        setIsFormDisabled(true);
+      }
     }
-  }, [claimedShifts, id, isClaimedShiftsLoading]);
+  }, [
+    claimedShifts,
+    currentEmpShift,
+    currentEmpShift?.clockInTime,
+    currentEmpShift?.clockOutTime,
+    id,
+    isClaimedShiftsLoading,
+  ]);
+
+  useEffect(() => {
+    if (shiftFromParam && !isShiftFromParamLoading) {
+      setStartTime(dayjs(new Date(shiftFromParam!.startTime).toISOString()));
+      setEndTime(dayjs(new Date(shiftFromParam!.endTime).toISOString()));
+    }
+  }, [shiftFromParam, isShiftFromParamLoading]);
 
   function SaveShiftTimes(): void {
-    if (!(currentEmpShift && StartTime && EndTime)) {
+    if (!(currentEmpShift && startTime && endTime)) {
       console.log("conditions were not met");
       return;
     }
 
+    const startPad = String(startTime.get("minute")).length <= 1 ? "0" : "";
+    const endPad = String(endTime.get("minute")).length <= 1 ? "0" : "";
+
     const newEmpShift: EmployeeShiftDTO = {
       id: currentEmpShift.id,
-      clockInTime: `${StartTime.get("hour") + ":" + StartTime.get("minute")}`,
-      clockOutTime: `${EndTime.get("hour") + ":" + EndTime.get("minute")}`,
+      clockInTime: `${startTime.get("hour")}:${startPad}${startTime.get(
+        "minute"
+      )}`,
+      clockOutTime: `${endTime.get("hour")}:${endPad}${endTime.get("minute")}`,
       employeeId: currentEmpShift.empId,
       shiftId: currentEmpShift.shiftId,
     };
@@ -95,28 +117,27 @@ export const ShiftDetails = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <TimePicker
                     label="Start Time"
-                    value={StartTime}
+                    value={startTime}
                     onChange={(newValue) => setStartTime(newValue)}
-                    disabled={!currentEmpShift}
+                    disabled={isFormDisabled}
                   />
                   <TimePicker
                     label="End Time"
-                    value={EndTime}
+                    value={endTime}
                     onChange={(newValue) => setEndTime(newValue)}
-                    disabled={!currentEmpShift}
+                    disabled={isFormDisabled}
                   />
                 </LocalizationProvider>
               </div>
               <button
-                className={`bg-blue-500 text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 
-                ${
-                  !currentEmpShift
+                className={`text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 ${
+                  isFormDisabled
                     ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
-                    : "hover:bg-blue-600"
+                    : "bg-blue-500 hover:bg-blue-600"
                 }
               `}
                 onClick={() => SaveShiftTimes()}
-                disabled={!currentEmpShift}
+                disabled={isFormDisabled}
               >
                 Submit Time
               </button>
