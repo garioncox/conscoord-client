@@ -22,42 +22,26 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
   const [addingCount, setAddingCount] = useState(0);
   const [sortValue, setSortValue] = useState<string>("");
 
-  const SortData = () => {
-    const sorted = [...data];
-    switch (sortValue) {
-      case "startDateAsc":
-        data.sort(
-          (a, b) =>
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-        );
-        break;
-      case "startDateDesc":
-        data.sort(
-          (a, b) =>
-            new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-        );
-        break;
-      case "endDateAsc":
-        data.sort(
-          (a, b) =>
-            new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
-        );
-        break;
-      case "endDateDesc":
-        data.sort(
-          (a, b) =>
-            new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
-        );
-        break;
-      case "Name":
-        data.sort((a, b) => a.name.localeCompare(b.name));
+  const sortMethods: { [key: string]: (a: Project, b: Project) => number } = {
+    startDateAsc: (a, b) =>
+      new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    startDateDesc: (a, b) =>
+      new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+    endDateAsc: (a, b) =>
+      new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
+    endDateDesc: (a, b) =>
+      new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
+    Name: (a, b) => a.name.localeCompare(b.name),
+    Location: (a, b) => a.location.localeCompare(b.location),
+  };
 
-        break;
-      case "Location":
-        data.sort((a, b) => a.location.localeCompare(b.location));
-        break;
+  const SortData = () => {
+    const sorted = [...data]; 
+    const sortFunction = sortMethods[sortValue]; 
+    if (sortFunction) {
+      sorted.sort(sortFunction); 
     }
-    return sorted;
+    return sorted; 
   };
 
   return (
