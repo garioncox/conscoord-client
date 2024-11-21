@@ -8,7 +8,7 @@ import {
 } from "@/Components/ui/table";
 import { Button } from "./ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { AddProject } from "./AddProject";
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
@@ -18,15 +18,64 @@ interface TableComponentProps {
   setRowClicked: (id: number) => void;
 }
 
-export function ProjectTable({
-  data,
-  setRowClicked,
-}: TableComponentProps) {
+export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
+  const [addingCount, setAddingCount] = useState(0);
+  const [sortValue, setSortValue] = useState<string>("");
 
-  const [addingCount, setAddingCount] = React.useState(0);
+  const SortData = () => {
+    const sorted = [...data];
+    switch (sortValue) {
+      case "startDateAsc":
+        data.sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
+        break;
+      case "startDateDesc":
+        data.sort(
+          (a, b) =>
+            new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        );
+        break;
+      case "endDateAsc":
+        data.sort(
+          (a, b) =>
+            new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+        );
+        break;
+      case "endDateDesc":
+        data.sort(
+          (a, b) =>
+            new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+        );
+        break;
+      case "Name":
+        data.sort((a, b) => a.name.localeCompare(b.name));
+
+        break;
+      case "Location":
+        data.sort((a, b) => a.location.localeCompare(b.location));
+        break;
+    }
+    return sorted;
+  };
 
   return (
     <>
+      <label>Sort By</label>
+      <select
+        className="text-black"
+        onChange={(e) => {
+          setSortValue(e.target.value);
+        }}
+      >
+        <option value="Name">Name</option>
+        <option value="Location">Location</option>
+        <option value="startDateAsc">Start Date Ascending</option>
+        <option value="startDateDesc">Start Date Descending</option>
+        <option value="endDateAsc">End Date Ascending</option>
+        <option value="endDateDesc">End Date Descending</option>
+      </select>
       <Table>
         <TableHeader>
           <TableRow>
@@ -37,23 +86,21 @@ export function ProjectTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-        {data.map((project) => {
+          {SortData().map((project) => {
             if (project.status === "ARCHIVED") {
               return (
-                
-                <TableRow key={project.id} className="text-slate-600 bg-slate-200 border-l-4 ">
+                <TableRow
+                  key={project.id}
+                  className="text-slate-600 bg-slate-200 border-l-4 "
+                >
                   <TableCell className="border-l-4 border-red-400 pl-2">
                     {project.name}
                   </TableCell>
-                  <TableCell className="p-2">
-                    {project.location}
-                  </TableCell>
+                  <TableCell className="p-2">{project.location}</TableCell>
                   <TableCell className="p-2">
                     {combineDates(project.startDate, project.endDate)}
                   </TableCell>
-                  <TableCell className="p-2">
-                    {project.status}
-                  </TableCell>
+                  <TableCell className="p-2">{project.status}</TableCell>
                 </TableRow>
               );
             } else {
@@ -65,7 +112,9 @@ export function ProjectTable({
                 >
                   <TableCell className="p-2">{project.name}</TableCell>
                   <TableCell className="p-2">{project.location}</TableCell>
-                  <TableCell className="p-2">{combineDates(project.startDate, project.endDate)}</TableCell>
+                  <TableCell className="p-2">
+                    {combineDates(project.startDate, project.endDate)}
+                  </TableCell>
                   <TableCell className="p-2">{project.status}</TableCell>
                 </TableRow>
               );

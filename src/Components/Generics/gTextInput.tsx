@@ -14,7 +14,7 @@ const GTextInput: React.FC<{
         <input
           type="text"
           placeholder={placeholder ?? ""}
-          className="rounded shadow-inner p-2"
+          className="rounded shadow-inner p-2 text-black"
           minLength={minLength ?? 0}
           maxLength={maxLength ?? 30}
           value={control.value}
@@ -23,6 +23,7 @@ const GTextInput: React.FC<{
             control.setHasBeenTouched(true);
           }}
           onBlur={() => control.setHasBeenTouched(true)}
+          
         />
         {control.error && control.hasBeenTouched ? (
           <i className="bi bi-exclamation-circle absolute right-3 top-1/2 transform -translate-y-1/4 text-red-500" />
