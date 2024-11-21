@@ -10,7 +10,7 @@ const GDateInput: React.FC<{
       <div>
         <input
           type="date"
-          className="rounded shadow-inner p-2"
+          className="rounded shadow-inner p-2 text-black"
           value={control.value}
           onChange={(e) => {
             control.setValue(e.target.value);

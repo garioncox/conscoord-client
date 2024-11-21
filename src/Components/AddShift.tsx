@@ -10,46 +10,42 @@ import { FormatDate } from "@/Functions/FormatDates";
 import { useGDateInput } from "./Generics/gDateInputController";
 import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
-
-
 export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   const addShiftMutation = useAddShiftMutation();
+  const today = new Date().toISOString().split("T")[0];
 
   const location = useGTextInput("", (v) =>
-    v.length === 0 ? "Pleae add a location" : ""
+    v.length === 0 ? "Please add a location" : ""
   );
+
   const startDate = useGDateInput("", (s: string) => {
     if (s === "") {
       return "Start date is required";
     }
-
-    const today = new Date().toISOString().split("T")[0];
-
     if (s < today) {
       return "Start date cannot be in the past";
     }
 
     return "";
   });
+
   const endDate = useGDateInput("", (s: string) => {
     if (s === "") {
       return "End date is required";
     }
-
-    const today = new Date().toISOString().split("T")[0];
-
     if (s < today) {
       return "End date cannot be in the past";
     }
     if (startDate.value !== "" && s < endDate.value) {
       return "End date cannot be before start date";
     }
-
     return "";
   });
+
   const description = useGTextInput("", (v) =>
     v.length === 0 ? "Please add a description" : ""
   );
+
   const reqEmp = useGNumberInput(0, (v) => (v === 0 ? "Error" : ""));
 
   function CreateShift() {
@@ -62,7 +58,7 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       Status: "ACTIVE",
     };
 
-    addShiftMutation.mutate({ shift, projectId: projectId }); 
+    addShiftMutation.mutate({ shift, projectId: projectId });
 
     location.setValue("");
     description.setValue("");
@@ -96,7 +92,6 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       <TableCell>
         <GNumberInput control={reqEmp} />
       </TableCell>
-      <TableCell>ACTIVE</TableCell>
       <TableCell>
         <div
           onClick={CreateShift}
@@ -107,4 +102,4 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       </TableCell>
     </TableRow>
   );
-}
+};
