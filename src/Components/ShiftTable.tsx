@@ -11,15 +11,22 @@ import { Button } from "./ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
 import React from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
+import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 
 interface TableComponentProps {
   data: Shift[];
   setRowClicked: (id: number) => void;
+  projectId: number;
 }
 
-export function ShiftTable({ data, setRowClicked }: TableComponentProps) {
+export function ShiftTable({
+  data,
+  setRowClicked,
+  projectId,
+}: TableComponentProps) {
   const [addingCount, setAddingCount] = React.useState(0);
-
+  const { data: employeeShifts, isLoading: employeeShiftsLoading } =
+    useAllEmployeeShifts();
   return (
     <>
       <Table>
@@ -40,11 +47,17 @@ export function ShiftTable({ data, setRowClicked }: TableComponentProps) {
               <TableCell>{shift.startTime}</TableCell>
               <TableCell>{shift.endTime}</TableCell>
               <TableCell>{shift.description}</TableCell>
-              <TableCell>{shift.requestedEmployees}</TableCell>
+              <TableCell className="flex justify-center">
+                {employeeShiftsLoading
+                  ? "Loading..."
+                  : employeeShifts?.filter((es) => es.shiftId == shift.id)
+                      .length}{" "}
+                / {shift.requestedEmployees}
+              </TableCell>
               <TableCell>{shift.status}</TableCell>
             </TableRow>
           ))}
-          {addingCount > 0 && <AddShift />}
+          {addingCount > 0 && <AddShift projectId={projectId} />}
         </TableBody>
       </Table>
 

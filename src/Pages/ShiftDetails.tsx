@@ -105,7 +105,6 @@ export const ShiftDetails = () => {
               {signedUpEmployees?.length}/{shiftFromParam.requestedEmployees}{" "}
               Shifts Filled
             </p>
-            <p className="text-gray-600">{shiftFromParam.status}</p>
           </div>
           {loggedInEmployee?.roleid != 3 ? (
             <div

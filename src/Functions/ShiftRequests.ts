@@ -34,3 +34,8 @@ export const getClaimedShifts = async (email: string): Promise<Shift[]> => {
   const response = await axios.get(`/api/Shift/getByEmail/${email}`);
   return response.data;
 };
+
+export const getShiftsByProject = async (id: number): Promise<Shift[]> => {
+  const response = await axios.get(`/api/Shift/getAll/projectId/${id}`);
+  return response.data;
+};

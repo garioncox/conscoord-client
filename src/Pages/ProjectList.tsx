@@ -1,14 +1,17 @@
 import { EmployeeProjectTable } from "@/Components/EmployeeProjectTable";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { ProjectTable } from "@/Components/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
 import { useAllProjects } from "@/Functions/ProjectRequests";
+import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
+  const { data: loggedInEmployee } = useLoggedInEmployee();
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
@@ -48,10 +51,17 @@ function ProjectList() {
                 />
               </label>
             </div>
+            {loggedInEmployee?.roleid != 3 ? (
             <EmployeeProjectTable
               data={control.currentItems}
               setRowClicked={clickOnAProject}
             ></EmployeeProjectTable>
+           ) : (
+            <ProjectTable
+              data={control.currentItems}
+              setRowClicked={clickOnAProject}
+            ></ProjectTable>
+          )}
           </PaginatedTable>
         </>
     </div>

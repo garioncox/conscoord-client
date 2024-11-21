@@ -10,6 +10,8 @@ export const queryKeys = {
   archivedShifts: ["archivedShifts"],
   employeeShifts: ["employeeShifts"],
   allEmployeeShifts: ["allEmployeeShifts"],
+  numProjectShifts: ["numProjectShifts"],
+  shiftsByProject: ["shiftsByProject"],
   projectShifts: ["projectShifts"],
   loggedInEmployees: ["loggedInEmployees"],
   employees: ["employees"],
