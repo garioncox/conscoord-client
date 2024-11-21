@@ -74,7 +74,7 @@ export const useAddShiftMutation = () => {
       await createToast(addProjectShift, dto, "Creating shift...");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.shifts });
+      queryClient.invalidateQueries({ queryKey: queryKeys.shiftsByProject });
     },
   });
 };

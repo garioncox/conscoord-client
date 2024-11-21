@@ -15,11 +15,12 @@ import { Shift } from "@/Data/Interfaces/Shift";
 interface TableComponentProps {
   data: Shift[];
   setRowClicked: (id: number) => void;
+  projectId: number
 }
 
-export function ShiftTable({ data, setRowClicked }: TableComponentProps) {
+export function ShiftTable({ data, setRowClicked, projectId }: TableComponentProps) {
   const [addingCount, setAddingCount] = React.useState(0);
-
+console.log(projectId)
   return (
     <>
       <Table>
@@ -44,7 +45,7 @@ export function ShiftTable({ data, setRowClicked }: TableComponentProps) {
               <TableCell>{shift.status}</TableCell>
             </TableRow>
           ))}
-          {addingCount > 0 && <AddShift />}
+          {addingCount > 0 && <AddShift projectId={projectId}/>}
         </TableBody>
       </Table>
 

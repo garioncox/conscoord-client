@@ -10,7 +10,9 @@ import { FormatDate } from "@/Functions/FormatDates";
 import { useGDateInput } from "./Generics/gDateInputController";
 import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
-export function AddShift() {
+
+
+export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   const addShiftMutation = useAddShiftMutation();
 
   const location = useGTextInput("", (v) =>
@@ -60,7 +62,7 @@ export function AddShift() {
       Status: "ACTIVE",
     };
 
-    addShiftMutation.mutate({ shift, projectId: 1 }); // TODO: Remove hard coded project ID
+    addShiftMutation.mutate({ shift, projectId: projectId }); 
 
     location.setValue("");
     description.setValue("");

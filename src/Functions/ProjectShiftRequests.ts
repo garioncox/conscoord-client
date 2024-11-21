@@ -14,27 +14,26 @@ export const useProjectShiftRequests = () => {
     await axios.delete(`/api/ProjectShift/delete/${projectShiftID}`);
   };
 
-  const getAllProjectShifts = async (): Promise<ProjectShift[]> => {
-    const response = await axios.get(`/api/ProjectShift/getAll`);
-    return response.data;
-  };
-
   return {
     addProjectShift,
     deleteProjectShift,
-    getAllProjectShifts,
     ProjectShifts,
     setProjectShifts,
   };
+};
+
+export const getAllProjectShifts = async (): Promise<ProjectShift[]> => {
+  const response = await axios.get(`/api/ProjectShift/getAll`);
+  return response.data;
 };
 
 export const addProjectShift = async (dto: ProjectShiftDTO) => {
   await axios.post(`/api/ProjectShift/add`, dto);
 };
 
-export const getAllProjectShiftsForProject = async (
-  projectId: number
-) => {
-  const response = await axios.get(`/api/ProjectShift/getShiftNumPerProject/${projectId}`);
+export const getNumProjectShiftsForProject = async (projectId: number) => {
+  const response = await axios.get(
+    `/api/ProjectShift/getShiftNumPerProject/${projectId}`
+  );
   return response.data;
 };
