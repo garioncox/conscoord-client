@@ -36,7 +36,7 @@ export const useEmpShiftMutation = () => {
       await createToast(updateEmpShift, empShift, "Creating shift...");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.allEmployeeShifts });
+      queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
     },
   });
 };
