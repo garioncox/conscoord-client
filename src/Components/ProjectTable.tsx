@@ -8,7 +8,7 @@ import {
 } from "@/Components/ui/table";
 import { Button } from "./ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { AddProject } from "./AddProject";
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
