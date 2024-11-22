@@ -19,7 +19,6 @@ import { useLoggedInEmployee } from "./EmployeeQueries";
 import { queryKeys } from "./QueryKeyFactory";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useCustomToast } from "@/Components/Toast";
-import { toast } from "react-toastify";
 
 export const useAllShifts = () => {
   return useQuery({
@@ -109,8 +108,9 @@ export const useClaimShiftMutation = () => {
 };
 
 export const useEditShiftMutation = (shift: Shift) => {
+  const { createToast } = useCustomToast();
   return useMutation({
-    mutationFn: () => editShift(shift),
+    mutationFn: async () => await createToast(editShift, shift, "Editing shift..."),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.shifts,
@@ -120,10 +120,12 @@ export const useEditShiftMutation = (shift: Shift) => {
 };
 
 export const useArchiveShiftMutation = () => {
+  const { createToast } = useCustomToast();
   return useMutation({
-    mutationFn: (shiftId:number) => archiveShift(shiftId),
+    mutationFn: async (shiftId:number) => {
+      await createToast(archiveShift, shiftId, "Archiving shift...");
+    },
     onSuccess: () => {
-      toast.success("Shift archived successfully");
       queryClient.invalidateQueries({
         queryKey: queryKeys.archivedShifts,
       });
