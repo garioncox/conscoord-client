@@ -73,6 +73,7 @@ const ProjectShifts = () => {
           </div>
         )}
       </div>
+      <button >Cancel Project</button>
       <PaginatedTable paginatedTableControl={control}>
         <ShiftTable
           data={control.currentItems}
