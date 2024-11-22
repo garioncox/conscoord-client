@@ -1,19 +1,45 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { Spinner } from "@/Components/Spinner";
-import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
 import { useClaimedShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
 import { Link, useNavigate } from "react-router-dom";
+import { Shift } from "@/Data/Interfaces/Shift";
+import { CombineTime } from "@/Functions/CombineTime";
+import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
+import { useEmpShiftsForLoggedInUser } from "@/Functions/Queries/EmployeeShiftQueries";
 
 function MyShifts() {
   const { data: shifts } = useClaimedShiftsForLoggedInUser();
+  const { data: employeeShifts } = useEmpShiftsForLoggedInUser();
   const navigate = useNavigate();
-
   const control = usePaginatedTable(shifts ?? []);
 
-  const clickOnAShift = (id: number) => {
-    navigate(`/shift/view/details/${id}`)
-  }
+  const getNumEmployeesSignedUpForShift = (s: Shift) => {
+    return (
+      employeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
+        .length ?? 0
+    );
+  };
+
+  const getColor = (s: Shift) => {
+    const percentage =
+      getNumEmployeesSignedUpForShift(s) / s.requestedEmployees;
+
+    return percentage <= 0.2 ? "red" : percentage <= 0.8 ? "yellow" : "green";
+  };
+
+  const shiftNeedsTimeEntered = (shift: Shift) => {
+    const empShift = employeeShifts?.filter(
+      (es: EmployeeShift) => es.shiftId == shift.id
+    )[0];
+
+    const hasEnteredTime = empShift?.clockInTime && empShift?.clockOutTime;
+    if (hasEnteredTime) {
+      return false;
+    }
+
+    return true;
+  };
 
   if (!shifts) {
     return <Spinner />;
@@ -44,10 +70,41 @@ function MyShifts() {
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">My Shifts</h1>
       <PaginatedTable paginatedTableControl={control}>
-        <EmployeeShiftTable
-          data={control.currentItems}
-          setRowClicked={clickOnAShift}
-        />
+        <div>
+          <div className="px-3 font-semibold border-b-2 border-slate-200">
+            <div className="grid grid-cols-4 gap-10 pb-3">
+              <p>Location</p>
+              <p>Time</p>
+              <p>Description</p>
+              <p className="text-end">Shifts Fulfilled</p>
+            </div>
+          </div>
+          {control.currentItems.map((s: Shift) => {
+            return (
+              <div
+                className={`grid grid-cols-4 gap-10 py-5 px-3 hover:bg-slate-200 border-b-2 border-slate-200 relative ${
+                  shiftNeedsTimeEntered(s)
+                    ? "border-l-8 border-l-yellow-500"
+                    : ""
+                } hover:cursor-pointer`}
+                key={s.id}
+                title={`${
+                  shiftNeedsTimeEntered(s) ? "Shift needs time entered" : ""
+                }`}
+                onClick={() => navigate(`/shift/view/details/${s.id}`)}
+              >
+                <p>{s.location}</p>
+                <p>{CombineTime(s.startTime, s.endTime)}</p>
+                <p>{s.description}</p>
+                <p className={`text-end font-semibold text-${getColor(s)}-500`}>
+                  {getNumEmployeesSignedUpForShift(s)}
+                  {" / "}
+                  {s.requestedEmployees}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </PaginatedTable>
     </div>
   );

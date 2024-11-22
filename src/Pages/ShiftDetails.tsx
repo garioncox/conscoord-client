@@ -31,24 +31,15 @@ export const ShiftDetails = () => {
 
   useEffect(() => {
     if (id && !isClaimedShiftsLoading) {
-      setCurrentEmpShift(
-        claimedShifts?.find((cs) => cs.shiftId === Number(id))
-      );
-      if (
-        !currentEmpShift ||
-        (currentEmpShift?.clockInTime && currentEmpShift?.clockOutTime)
-      ) {
+      const shift = claimedShifts?.find((cs) => cs.shiftId === Number(id));
+      setCurrentEmpShift(shift);
+
+      if (!shift || (shift.clockInTime && shift.clockOutTime)) {
+        console.log(shift);
         setIsFormDisabled(true);
       }
     }
-  }, [
-    claimedShifts,
-    currentEmpShift,
-    currentEmpShift?.clockInTime,
-    currentEmpShift?.clockOutTime,
-    id,
-    isClaimedShiftsLoading,
-  ]);
+  }, [claimedShifts, id, isClaimedShiftsLoading]);
 
   useEffect(() => {
     if (shiftFromParam && !isShiftFromParamLoading) {
