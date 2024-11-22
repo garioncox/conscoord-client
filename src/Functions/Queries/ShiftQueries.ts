@@ -118,9 +118,9 @@ export const useEditShiftMutation = (shift: Shift) => {
   });
 };
 
-export const useArchiveShiftMutation = (shiftId: number) => {
+export const useArchiveShiftMutation = () => {
   return useMutation({
-    mutationFn: () => archiveShift(shiftId),
+    mutationFn: (shiftId:number) => archiveShift(shiftId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.archivedShifts,
