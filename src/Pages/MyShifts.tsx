@@ -23,7 +23,9 @@ function MyShifts() {
 
   const getColor = (s: Shift) => {
     const percentage =
-      getNumEmployeesSignedUpForShift(s) / s.requestedEmployees;
+      s.requestedEmployees > 0
+        ? getNumEmployeesSignedUpForShift(s) / s.requestedEmployees
+        : 0;
 
     return percentage <= 0.2 ? "red" : percentage <= 0.8 ? "yellow" : "green";
   };
