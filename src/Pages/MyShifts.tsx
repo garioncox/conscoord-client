@@ -21,22 +21,14 @@ function MyShifts() {
     );
   };
 
-  const getColor = (s: Shift) => {
-    const percentage =
-      s.requestedEmployees > 0
-        ? getNumEmployeesSignedUpForShift(s) / s.requestedEmployees
-        : 0;
-
-    return percentage <= 0.2 ? "red" : percentage <= 0.8 ? "yellow" : "green";
-  };
-
   const shiftNeedsTimeEntered = (shift: Shift) => {
     const empShift = employeeShifts?.filter(
       (es: EmployeeShift) => es.shiftId == shift.id
     )[0];
 
     const hasEnteredTime = empShift?.clockInTime && empShift?.clockOutTime;
-    if (hasEnteredTime) {
+    const isFutureShift = new Date(empShift!.clockOutTime) < new Date();
+    if (hasEnteredTime || isFutureShift) {
       return false;
     }
 
@@ -98,7 +90,7 @@ function MyShifts() {
                 <p>{s.location}</p>
                 <p>{CombineTime(s.startTime, s.endTime)}</p>
                 <p>{s.description}</p>
-                <p className={`text-end font-semibold text-${getColor(s)}-500`}>
+                <p className={`text-end font-semibold`}>
                   {getNumEmployeesSignedUpForShift(s)}
                   {" / "}
                   {s.requestedEmployees}
