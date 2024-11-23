@@ -9,10 +9,6 @@ import { useEmployeeRequests } from "./EmployeeRequests";
 export const useProjectRequests = () => {
   const [Projects, setProjects] = useState<Project[]>();
 
-  const archiveProject = async (project: Project) => {
-    await axios.put(`/api/Project/archive/`, project);
-  };
-
   const addProject = async (project: ProjectDTO) => {
     await axios.post(`/api/Project/add`, project);
   };
@@ -44,7 +40,6 @@ export const useProjectRequests = () => {
     getAllProjects,
     addProject,
     updateProject,
-    archiveProject,
     getCompanyProjects,
     getArchivedProjects,
   };
@@ -82,4 +77,8 @@ export const useAllProjectByLoggedInCompany = () => {
       }
     },
   });
+};
+
+export const archiveProject = async (project: Project) => {
+  await axios.put(`/api/Project/archive/`, project);
 };

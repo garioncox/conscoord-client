@@ -8,6 +8,9 @@ import { ShiftTable } from "@/Components/ShiftTable";
 import { useProjectShiftsByProjectId } from "@/Functions/Queries/ProjectShiftQueries";
 import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
+import { useArchiveProjectMutation } from "@/Functions/Queries/ProjectQueries";
+import { Spinner } from "@/Components/Spinner";
+import Modal from "@/Components/Modal";
 
 const ProjectShifts = () => {
   const navigate = useNavigate();
@@ -22,13 +25,15 @@ const ProjectShifts = () => {
 
   const control = usePaginatedTable(shifts ?? []);
 
+  const archiveProjectMutation = useArchiveProjectMutation();
+
   useEffect(() => {
     if (!projectsLoading && !employeesLoading) {
       const currProject = projects?.find((p) => p.id === Number(id));
       if (!currentProject && currProject) {
         setCurrentProject(currProject);
       }
-  
+
       if (currProject) {
         const contactPerson = employees?.find(
           (e) => e.id === currProject.contactinfo
@@ -37,15 +42,22 @@ const ProjectShifts = () => {
         setContactPerson(contactPerson || null);
       }
     }
-  }, [projectsLoading, employeesLoading, projects, employees, id]); 
-  
+  }, [projectsLoading, employeesLoading, projects, employees, id]);
 
   if (projectsLoading || shiftLoading || employeesLoading) {
-    return <div>...Loading</div>;
+    <Spinner />;
   }
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   const clickOnAShift = (id: number) => {
     navigate(`/shift/view/details/${id}`);
+  };
+
+  const archiveProject = () => {
+    if (!currentProject || !currentProject.id) return;
+    archiveProjectMutation.mutate(currentProject);
   };
 
   return (
@@ -80,6 +92,40 @@ const ProjectShifts = () => {
           projectId={Number(id)}
         />
       </PaginatedTable>
+      <div className="flex justify-end mt-2">
+        <button
+          onClick={toggleModal}
+          disabled={currentProject?.status === "ARCHIVED"}
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+        >
+          Cancel Project
+        </button>
+      </div>
+
+      <Modal isOpen={isModalOpen} onClose={toggleModal}>
+        <div className="">
+          <div>
+            <p>
+              Are you sure you want to cancel this project? You cannot undo this
+              action.
+            </p>
+          </div>
+          <div className="flex grow flex-row mt-5">
+            <button
+              onClick={toggleModal}
+              className="ms-auto me-3 p-2 px-4 bg-slate-400 text-white rounded hover:bg-slate-500"
+            >
+              Close
+            </button>
+            <button
+              onClick={archiveProject}
+              className="p-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded"
+            >
+              Yes, Cancel Project
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
