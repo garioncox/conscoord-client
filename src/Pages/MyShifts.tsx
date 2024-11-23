@@ -27,7 +27,7 @@ function MyShifts() {
     )[0];
 
     const hasEnteredTime = empShift?.clockInTime && empShift?.clockOutTime;
-    const isFutureShift = new Date(empShift!.clockOutTime) < new Date();
+    const isFutureShift = new Date(shift.endTime) > new Date();
     if (hasEnteredTime || isFutureShift) {
       return false;
     }
@@ -78,7 +78,7 @@ function MyShifts() {
               <div
                 className={`grid grid-cols-4 gap-10 py-5 px-3 hover:bg-slate-200 border-b-2 border-slate-200 relative ${
                   shiftNeedsTimeEntered(s)
-                    ? "border-l-8 border-l-yellow-500"
+                    ? "border-l-8 border-l-amber-300"
                     : ""
                 } hover:cursor-pointer`}
                 key={s.id}
