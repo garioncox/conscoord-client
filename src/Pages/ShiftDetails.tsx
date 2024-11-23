@@ -35,7 +35,6 @@ export const ShiftDetails = () => {
       setCurrentEmpShift(shift);
 
       if (!shift || (shift.clockInTime && shift.clockOutTime)) {
-        console.log(shift);
         setIsFormDisabled(true);
       }
     }
