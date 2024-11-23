@@ -3,8 +3,8 @@ export const queryKeys = {
   shifts: ["shifts"],
   shiftsByUser: (email: string) => {
     return ["shifts", "email", email];
-  }, 
-   shiftsById: (id: number) => {
+  },
+  shiftsById: (id: number) => {
     return ["shifts", "id", id];
   },
   archivedShifts: ["archivedShifts"],
@@ -19,4 +19,5 @@ export const queryKeys = {
   employeesByShift: (shiftId: number) => {
     return ["employeesByShift", shiftId];
   },
+  archivedProjects: ["archivedProjects"],
 };
