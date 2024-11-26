@@ -9,7 +9,7 @@ import {
 import { AddShift } from "../AddShift";
 import { Button } from "../ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import ShiftSort from "../Sorting/ShiftSort";
@@ -30,6 +30,12 @@ export function ShiftTable({
     useAllEmployeeShifts();
   const [sortedData, setSortedData] = useState<Shift[]>(data);
 
+  useEffect(() => {
+    if (data) {
+      setSortedData(data); 
+    }
+  }, [data]);
+  
   return (
     <>
       <ShiftSort data={data} onSortChange={setSortedData} />
