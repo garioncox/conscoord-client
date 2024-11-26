@@ -17,6 +17,7 @@ import { Spinner } from "./Spinner";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { CombineTime } from "@/Functions/CombineTime";
 import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
+import { useState } from "react";
 
 export function EmployeeShiftTable({
   data,
@@ -31,6 +32,20 @@ export function EmployeeShiftTable({
     useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
   const {data:loggedInEmployee} = useLoggedInEmployee();
+  const [sortValue, setSortValue] = useState<string>("");
+
+  const sortMethods: { [key: string]: (a: Employee, b: Employee) => number } = {
+    Name: (a, b) => a.name.localeCompare(b.name),
+  };
+
+  const SortData = () => {
+    const sorted = [...data];
+    const sortFunction = sortMethods[sortValue];
+    if (sortFunction) {
+      sorted.sort(sortFunction);
+    }
+    return sorted;
+  };
 
   const TakeShift = (shiftId: number) => {
     addMutation.mutate(shiftId);

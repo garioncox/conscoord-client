@@ -53,6 +53,7 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
           setSortValue(e.target.value);
         }}
       >
+        <option value="" selected disabled>Choose Sort Value</option>
         <option value="Name">Name</option>
         <option value="Location">Location</option>
         <option value="startDateAsc">Start Date Ascending</option>
