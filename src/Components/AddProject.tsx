@@ -4,9 +4,10 @@ import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/gTextInputController";
 import { TableCell, TableRow } from "./ui/table";
 import { useGDateInput } from "./Generics/gDateInputController";
-import { useProjectRequests } from "@/Functions/ProjectRequests";
+// import { useProjectRequests } from "@/Functions/ProjectRequests";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
 import { FormatDate } from "@/Functions/FormatDates";
+import { useAddProjectMutation } from "@/Functions/Queries/ProjectQueries";
 
 export function AddProject() {
   const location = useGTextInput("", (v) =>
@@ -45,7 +46,7 @@ export function AddProject() {
     v.length === 0 ? "Please add a name" : ""
   );
 
-  const { addProject } = useProjectRequests();
+  const addProject = useAddProjectMutation();
 
   function AddProject() {
     const project: ProjectDTO = {
@@ -54,7 +55,7 @@ export function AddProject() {
       startDate: FormatDate(startDate.value),
       endDate: FormatDate(endDate.value),
     };
-    addProject(project);
+    addProject.mutate({ project });
 
     location.setValue("");
     description.setValue("");
