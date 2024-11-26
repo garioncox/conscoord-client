@@ -12,6 +12,7 @@ import { CirclePlus, CircleMinus } from "lucide-react";
 import React from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
+import { useAllProjects } from "@/Functions/ProjectRequests";
 
 interface TableComponentProps {
   data: Shift[];
@@ -27,6 +28,8 @@ export function ShiftTable({
   const [addingCount, setAddingCount] = React.useState(0);
   const { data: employeeShifts, isLoading: employeeShiftsLoading } =
     useAllEmployeeShifts();
+  const projects = useAllProjects();
+  const project = projects.data?.find((p) => p.id === projectId);
   return (
     <>
       <Table>
@@ -65,6 +68,7 @@ export function ShiftTable({
         <Button
           variant="outline"
           size="icon"
+          disabled={project?.status === "ARCHIVED"}
           onClick={() => setAddingCount(addingCount + 1)}
         >
           <CirclePlus className="h-16 w-16" />
