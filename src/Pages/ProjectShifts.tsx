@@ -11,6 +11,7 @@ import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { useArchiveProjectMutation } from "@/Functions/Queries/ProjectQueries";
 import { Spinner } from "@/Components/Spinner";
 import Modal from "@/Components/Modal";
+import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 const ProjectShifts = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const ProjectShifts = () => {
   const control = usePaginatedTable(shifts ?? []);
 
   const archiveProjectMutation = useArchiveProjectMutation();
+  const archiveShiftMutation = useArchiveShiftMutation();
 
   useEffect(() => {
     if (!projectsLoading && !employeesLoading) {
@@ -57,6 +59,10 @@ const ProjectShifts = () => {
   const archiveProject = () => {
     if (!currentProject || !currentProject.id) return;
     archiveProjectMutation.mutate(currentProject);
+    if (shifts)
+      shifts.forEach((shift) => {
+        archiveShiftMutation.mutate(shift.id);
+      });
   };
 
   return (
