@@ -9,7 +9,6 @@ interface ClientViewProps {
 
 const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
   const archiveShiftMutation = useArchiveShiftMutation();
-  console.log(shift);
 
   const archiveShift = () => {
     if (!shift || !shift.id) return;
