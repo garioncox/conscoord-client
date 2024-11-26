@@ -89,7 +89,7 @@ export function ShiftTable({
           variant="outline"
           size="icon"
           disabled={project?.status === "ARCHIVED"}
-          onClick={() => setAddingCount(addingCount + 1)}
+          onClick={() => setIsAdding(true)}
         >
           <CirclePlus className="h-16 w-16" />
         </Button>

@@ -64,7 +64,7 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
     <TableRow>
       <TableCell>
         <div>
-          <GTextInput control={location} />
+          <GTextInput control={location} maxLength={50} />
         </div>
       </TableCell>
       <TableCell>
