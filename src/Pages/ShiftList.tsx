@@ -1,14 +1,14 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
-import { EmployeeShiftTable } from "@/Components/EmployeeShiftTable";
+import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
 import { Spinner } from "@/Components/Spinner";
 import { useNavigate } from "react-router-dom";
 
 function ShiftList() {
   const { data: shifts, isLoading } = useAllShifts();
   const navigate = useNavigate();
-  const control = usePaginatedTable(shifts|| []);
+  const control = usePaginatedTable(shifts || []);
 
   if (isLoading) {
     return <Spinner />;

@@ -7,17 +7,18 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { Shift } from "@/Data/Interfaces/Shift";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Check, Plus } from "lucide-react";
 import {
   useClaimedShiftsForLoggedInUser,
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
-import { Spinner } from "./Spinner";
+import { Spinner } from "../Spinner";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { CombineTime } from "@/Functions/CombineTime";
 import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ShiftSort from "../Sorting/ShiftSort";
 
 export function EmployeeShiftTable({
   data,
@@ -32,29 +33,14 @@ export function EmployeeShiftTable({
     useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
   const { data: loggedInEmployee } = useLoggedInEmployee();
-  const [sortValue, setSortValue] = useState<string>("");
+  const [sortedData, setSortedData] = useState<Shift[]>(data);
 
-  const sortMethods: { [key: string]: (a: Shift, b: Shift) => number } = {
-    startDateAsc: (a, b) =>
-      new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
-    startDateDesc: (a, b) =>
-      new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
-    endDateAsc: (a, b) =>
-      new Date(a.endTime).getTime() - new Date(b.endTime).getTime(),
-    endDateDesc: (a, b) =>
-      new Date(b.endTime).getTime() - new Date(a.endTime).getTime(),
-    Location: (a, b) => a.location.localeCompare(b.location),
-  };
-
-  const SortData = () => {
-    const sorted = [...data];
-    const sortFunction = sortMethods[sortValue];
-    if (sortFunction) {
-      sorted.sort(sortFunction);
+  useEffect(() => {
+    if (data) {
+      setSortedData(data); 
     }
-    return sorted;
-  };
-
+  }, [data]);
+  
   const TakeShift = (shiftId: number) => {
     addMutation.mutate(shiftId);
   };
@@ -65,22 +51,7 @@ export function EmployeeShiftTable({
 
   return (
     <>
-      <label className="mr-3">Sort By</label>
-      <select
-        className="text-black"
-        onChange={(e) => {
-          setSortValue(e.target.value);
-        }}
-      >
-        <option value="" selected disabled>
-          Choose A Sort Value
-        </option>
-        <option value="Location">Location</option>
-        <option value="startDateAsc">Start Date Ascending</option>
-        <option value="startDateDesc">Start Date Descending</option>
-        <option value="endDateAsc">End Date Ascending</option>
-        <option value="endDateDesc">End Date Descending</option>
-      </select>
+      <ShiftSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -97,7 +68,7 @@ export function EmployeeShiftTable({
         </TableHeader>
 
         <TableBody>
-          {SortData().map((shift) => (
+          {sortedData.map((shift) => (
             <TableRow
               key={shift.id}
               className="hover:bg-slate-200 py-4"

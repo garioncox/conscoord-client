@@ -8,7 +8,8 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import EmployeeSort from "../Sorting/EmployeeSort";
 
 interface TableComponentProps {
   data: Employee[];
@@ -16,33 +17,17 @@ interface TableComponentProps {
 
 export function EmployeeTable({ data }: TableComponentProps) {
   const { data: roles } = useAllRoles();
-  const [sortValue, setSortValue] = useState<string>("");
-
-  const sortMethods: { [key: string]: (a: Employee, b: Employee) => number } = {
-    Name: (a, b) => a.name.localeCompare(b.name),
-  };
-
-  const SortData = () => {
-    const sorted = [...data];
-    const sortFunction = sortMethods[sortValue];
-    if (sortFunction) {
-      sorted.sort(sortFunction);
+  const [sortedData, setSortedData] = useState<Employee[]>(data);
+  
+  useEffect(() => {
+    if (data) {
+      setSortedData(data); 
     }
-    return sorted;
-  };
+  }, [data]);
 
   return (
     <>
-      <label className="mr-3">Sort By</label>
-      <select
-        className="text-black"
-        onChange={(e) => {
-          setSortValue(e.target.value);
-        }}
-      >
-        <option value="" selected disabled>Choose a value</option>
-        <option value="Name">Name</option>
-      </select>
+      <EmployeeSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableHead>Name</TableHead>
@@ -51,7 +36,7 @@ export function EmployeeTable({ data }: TableComponentProps) {
           <TableHead>Role</TableHead>
         </TableHeader>
         <TableBody>
-          {SortData().map((employee) => (
+          {sortedData.map((employee) => (
             <TableRow key={employee.id}>
               <TableCell>{employee.name}</TableCell>
               <TableCell>{employee.email}</TableCell>

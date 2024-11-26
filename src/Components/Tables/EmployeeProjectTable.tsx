@@ -8,7 +8,8 @@ import {
 } from "@/Components/ui/table";
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ProjectSort from "../Sorting/ProjectSort";
 
 interface TableComponentProps {
   data: Project[];
@@ -19,49 +20,17 @@ export function EmployeeProjectTable({
   data,
   setRowClicked,
 }: TableComponentProps) {
-  const [sortValue, setSortValue] = useState<string>("");
+  const [sortedData, setSortedData] = useState<Project[]>(data);
 
-  const sortMethods: { [key: string]: (a: Project, b: Project) => number } = {
-    startDateAsc: (a, b) =>
-      new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    startDateDesc: (a, b) =>
-      new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-    endDateAsc: (a, b) =>
-      new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
-    endDateDesc: (a, b) =>
-      new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
-    Name: (a, b) => a.name.localeCompare(b.name),
-    Location: (a, b) => a.location.localeCompare(b.location),
-  };
-
-  const SortData = () => {
-    const sorted = [...data];
-    const sortFunction = sortMethods[sortValue];
-    if (sortFunction) {
-      sorted.sort(sortFunction);
+  useEffect(() => {
+    if (data) {
+      setSortedData(data); 
     }
-    return sorted;
-  };
+  }, [data]);
 
   return (
     <>
-      <label className="mr-3">Sort By</label>
-      <select
-        className="text-black"
-        onChange={(e) => {
-          setSortValue(e.target.value);
-        }}
-      >
-        <option value="" selected disabled>
-          Choose A Sort Value
-        </option>
-        <option value="Name">Name</option>
-        <option value="Location">Location</option>
-        <option value="startDateAsc">Soonest First</option>
-        <option value="startDateDesc">Latest First</option>
-        <option value="endDateAsc">Soonest End Date First</option>
-        <option value="endDateDesc">Latest End Date First</option>
-      </select>
+      <ProjectSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -72,7 +41,7 @@ export function EmployeeProjectTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {SortData().map((project) => {
+          {sortedData.map((project) => {
             if (project.status === "ARCHIVED") {
               return (
                 <TableRow
