@@ -61,10 +61,10 @@ const ProjectShifts = () => {
     if (!currentProject || !currentProject.id) return;
     archiveProjectMutation.mutate(currentProject);
     if (shifts)
-    shifts.forEach(shift => {
-      archiveShiftMutation.mutate(shift.id)
-    })
-    };
+      shifts.forEach((shift) => {
+        archiveShiftMutation.mutate(shift.id);
+      });
+  };
 
   return (
     <div className="min-w-full 2xl:px-40">
