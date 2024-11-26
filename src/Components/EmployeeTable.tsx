@@ -33,7 +33,7 @@ export function EmployeeTable({ data }: TableComponentProps) {
 
   return (
     <>
-      <label>Sort By</label>
+      <label className="mr-3">Sort By</label>
       <select
         className="text-black"
         onChange={(e) => {

@@ -46,7 +46,7 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
 
   return (
     <>
-      <label>Sort By</label>
+      <label className="mr-3">Sort By</label>
       <select
         className="text-black"
         onChange={(e) => {
