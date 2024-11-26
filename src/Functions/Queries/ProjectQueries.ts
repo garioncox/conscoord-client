@@ -2,8 +2,9 @@ import { useCustomToast } from "@/Components/Toast";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "./QueryClient";
 import { queryKeys } from "./QueryKeyFactory";
-import { archiveProject } from "../ProjectRequests";
+import { addProject, archiveProject } from "../ProjectRequests";
 import { Project } from "@/Data/Interfaces/Project";
+import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
 
 export const useArchiveProjectMutation = () => {
   const { createToast } = useCustomToast();
@@ -15,6 +16,23 @@ export const useArchiveProjectMutation = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.archivedProjects,
       });
+    },
+  });
+};
+
+export const useAddProjectMutation = () => {
+  const { createToast } = useCustomToast();
+
+  return useMutation({
+    mutationFn: async ({
+      project,
+    }: {
+      project: ProjectDTO;
+    }) => {
+      await createToast(addProject, project, "Creating shift...");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.projects });
     },
   });
 };

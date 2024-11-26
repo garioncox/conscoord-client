@@ -11,7 +11,7 @@ import { useGDateInput } from "./Generics/gDateInputController";
 import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
-  const addShiftMutation = useAddShiftMutation();
+  const addShiftMutation = useAddShiftMutation(projectId);
   const today = new Date().toISOString().split("T")[0];
 
   const location = useGTextInput("", (v) =>

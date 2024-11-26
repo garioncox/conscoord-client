@@ -20,4 +20,5 @@ export const queryKeys = {
     return ["employeesByShift", shiftId];
   },
   archivedProjects: ["archivedProjects"],
+  projects: ["allProjects"],
 };
