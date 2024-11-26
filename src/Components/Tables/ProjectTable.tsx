@@ -8,7 +8,7 @@ import {
 } from "@/Components/ui/table";
 import { Button } from "../ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddProject } from "../AddProject";
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
@@ -22,7 +22,13 @@ interface TableComponentProps {
 export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
   const [addingCount, setAddingCount] = useState(0);
   const [sortedData, setSortedData] = useState<Project[]>(data);
-
+  
+  useEffect(() => {
+    if (data) {
+      setSortedData(data);
+    }
+  }, [data]);
+  
   return (
     <>
       <ProjectSort data={data} onSortChange={setSortedData} />
