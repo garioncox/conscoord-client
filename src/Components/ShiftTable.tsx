@@ -13,6 +13,7 @@ import { useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
+import { useAllProjects } from "@/Functions/ProjectRequests";
 
 interface TableComponentProps {
   data: Shift[];
@@ -27,6 +28,8 @@ export function ShiftTable({
 }: TableComponentProps) {
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const { data: employeeShifts, isLoading } = useAllEmployeeShifts();
+  const projects = useAllProjects();
+  const project = projects.data?.find((p) => p.id === projectId);
 
   const getNumEmployeesSignedUpForShift = (s: Shift) => {
     return (
@@ -81,9 +84,13 @@ export function ShiftTable({
           {isAdding && <AddShift projectId={projectId} />}
         </TableBody>
       </Table>
-
       {!isAdding && (
-        <Button variant="outline" size="icon" onClick={() => setIsAdding(true)}>
+        <Button
+          variant="outline"
+          size="icon"
+          disabled={project?.status === "ARCHIVED"}
+          onClick={() => setAddingCount(addingCount + 1)}
+        >
           <CirclePlus className="h-16 w-16" />
         </Button>
       )}
