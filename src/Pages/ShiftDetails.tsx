@@ -30,15 +30,25 @@ export const ShiftDetails = () => {
   const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
 
   useEffect(() => {
-    if (id && !isClaimedShiftsLoading) {
+    if (id && !isClaimedShiftsLoading && !isShiftFromParamLoading) {
       const shift = claimedShifts?.find((cs) => cs.shiftId === Number(id));
       setCurrentEmpShift(shift);
 
-      if (!shift || (shift.clockInTime && shift.clockOutTime)) {
+      if (
+        !shift ||
+        (shift.clockInTime && shift.clockOutTime) ||
+        new Date(shiftFromParam!.startTime) > new Date()
+      ) {
         setIsFormDisabled(true);
       }
     }
-  }, [claimedShifts, id, isClaimedShiftsLoading]);
+  }, [
+    claimedShifts,
+    id,
+    isClaimedShiftsLoading,
+    isShiftFromParamLoading,
+    shiftFromParam,
+  ]);
 
   useEffect(() => {
     if (shiftFromParam && !isShiftFromParamLoading) {
