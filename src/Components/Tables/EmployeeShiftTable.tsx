@@ -7,16 +7,18 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { Shift } from "@/Data/Interfaces/Shift";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Check, Plus } from "lucide-react";
 import {
   useClaimedShiftsForLoggedInUser,
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
-import { Spinner } from "./Spinner";
+import { Spinner } from "../Spinner";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { CombineTime } from "@/Functions/CombineTime";
 import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
+import { useEffect, useState } from "react";
+import ShiftSort from "../Sorting/ShiftSort";
 
 export function EmployeeShiftTable({
   data,
@@ -30,8 +32,15 @@ export function EmployeeShiftTable({
   const { data: employeeShifts, isLoading: employeeShiftsLoading } =
     useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
-  const {data:loggedInEmployee} = useLoggedInEmployee();
+  const { data: loggedInEmployee } = useLoggedInEmployee();
+  const [sortedData, setSortedData] = useState<Shift[]>(data);
 
+  useEffect(() => {
+    if (data) {
+      setSortedData(data); 
+    }
+  }, [data]);
+  
   const TakeShift = (shiftId: number) => {
     addMutation.mutate(shiftId);
   };
@@ -42,6 +51,7 @@ export function EmployeeShiftTable({
 
   return (
     <>
+      <ShiftSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -49,12 +59,16 @@ export function EmployeeShiftTable({
             <TableHead>Time</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Shifts Fulfilled</TableHead>
-            {loggedInEmployee?.roleid != 3 ? <TableHead>Take Shift</TableHead> : ""}
+            {loggedInEmployee?.roleid != 3 ? (
+              <TableHead>Take Shift</TableHead>
+            ) : (
+              ""
+            )}
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {data.map((shift) => (
+          {sortedData.map((shift) => (
             <TableRow
               key={shift.id}
               className="hover:bg-slate-200 py-4"
@@ -74,28 +88,34 @@ export function EmployeeShiftTable({
                   / {shift.requestedEmployees}
                 </p>
               </TableCell>
-              {loggedInEmployee?.roleid != 3 ? <TableCell className="flex justify-center px-2">
-                {userShifts?.some((userShift) => userShift.id === shift.id) ? (
-                  <Button
-                    onClick={(e) => e.stopPropagation()}
-                    className="bg-emerald-400 group rounded-full cursor-default hover:bg-emerald-400"
-                    size="icon"
-                  >
-                    <Check className="h-16 w-16 text-white" strokeWidth={5} />
-                  </Button>
-                ) : (
-                  <Button
-                    className="rounded-xl bg-tertiary text-slate-500 border-2 border-slate-500 hover:text-white hover:bg-blue-500 hover:border-blue-500"
-                    onClick={(e) => {
-                      TakeShift(shift.id);
-                      e.stopPropagation();
-                    }}
-                    size="icon"
-                  >
-                    <Plus className="h-16 w-16" strokeWidth={3} />
-                  </Button>
-                )}
-              </TableCell> : "" }
+              {loggedInEmployee?.roleid != 3 ? (
+                <TableCell className="flex justify-center px-2">
+                  {userShifts?.some(
+                    (userShift) => userShift.id === shift.id
+                  ) ? (
+                    <Button
+                      onClick={(e) => e.stopPropagation()}
+                      className="bg-emerald-400 group rounded-full cursor-default hover:bg-emerald-400"
+                      size="icon"
+                    >
+                      <Check className="h-16 w-16 text-white" strokeWidth={5} />
+                    </Button>
+                  ) : (
+                    <Button
+                      className="rounded-xl bg-tertiary text-slate-500 border-2 border-slate-500 hover:text-white hover:bg-blue-500 hover:border-blue-500"
+                      onClick={(e) => {
+                        TakeShift(shift.id);
+                        e.stopPropagation();
+                      }}
+                      size="icon"
+                    >
+                      <Plus className="h-16 w-16" strokeWidth={3} />
+                    </Button>
+                  )}
+                </TableCell>
+              ) : (
+                ""
+              )}
             </TableRow>
           ))}
         </TableBody>

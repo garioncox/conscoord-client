@@ -8,6 +8,8 @@ import {
 } from "@/Components/ui/table";
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
+import { useEffect, useState } from "react";
+import ProjectSort from "../Sorting/ProjectSort";
 
 interface TableComponentProps {
   data: Project[];
@@ -17,12 +19,19 @@ interface TableComponentProps {
 export function EmployeeProjectTable({
   data,
   setRowClicked,
-
 }: TableComponentProps) {
+  const [sortedData, setSortedData] = useState<Project[]>(data);
+
+  useEffect(() => {
+    if (data) {
+      setSortedData(data); 
+    }
+  }, [data]);
+
   return (
     <>
-
-      <Table >
+      <ProjectSort data={data} onSortChange={setSortedData} />
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
@@ -31,24 +40,22 @@ export function EmployeeProjectTable({
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody > 
-          {data.map((project) => {
+        <TableBody>
+          {sortedData.map((project) => {
             if (project.status === "ARCHIVED") {
               return (
-                
-                <TableRow key={project.id} className="text-slate-600 bg-slate-200 border-l-4 ">
+                <TableRow
+                  key={project.id}
+                  className="text-slate-600 bg-slate-200 border-l-4 "
+                >
                   <TableCell className="border-l-4 border-red-400 pl-2">
                     {project.name}
                   </TableCell>
-                  <TableCell className="p-2">
-                    {project.location}
-                  </TableCell>
+                  <TableCell className="p-2">{project.location}</TableCell>
                   <TableCell className="p-2">
                     {combineDates(project.startDate, project.endDate)}
                   </TableCell>
-                  <TableCell className="p-2">
-                    {project.status}
-                  </TableCell>
+                  <TableCell className="p-2">{project.status}</TableCell>
                 </TableRow>
               );
             } else {
@@ -60,7 +67,9 @@ export function EmployeeProjectTable({
                 >
                   <TableCell className="p-2">{project.name}</TableCell>
                   <TableCell className="p-2">{project.location}</TableCell>
-                  <TableCell className="p-2">{combineDates(project.startDate, project.endDate)}</TableCell>
+                  <TableCell className="p-2">
+                    {combineDates(project.startDate, project.endDate)}
+                  </TableCell>
                   <TableCell className="p-2">{project.status}</TableCell>
                 </TableRow>
               );

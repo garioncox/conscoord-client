@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { Project } from "@/Data/Interfaces/Project";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
-import { ShiftTable } from "@/Components/ShiftTable";
+import { ShiftTable } from "@/Components/Tables/ShiftTable";
 import { useProjectShiftsByProjectId } from "@/Functions/Queries/ProjectShiftQueries";
 import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
@@ -40,7 +40,6 @@ const ProjectShifts = () => {
         const contactPerson = employees?.find(
           (e) => e.id === currProject.contactinfo
         );
-        console.log("contact me " + contactPerson?.email);
         setContactPerson(contactPerson || null);
       }
     }

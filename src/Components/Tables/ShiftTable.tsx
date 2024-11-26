@@ -6,14 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
-import { AddShift } from "./AddShift";
-import { Button } from "./ui/button";
+import { AddShift } from "../AddShift";
+import { Button } from "../ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
+import ShiftSort from "../Sorting/ShiftSort";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
-import { useAllProjects } from "@/Functions/ProjectRequests";
 
 interface TableComponentProps {
   data: Shift[];
@@ -26,10 +26,10 @@ export function ShiftTable({
   setRowClicked,
   projectId,
 }: TableComponentProps) {
+  const { data: employeeShifts, isLoading: employeeShiftsLoading } =
+    useAllEmployeeShifts();
+  const [sortedData, setSortedData] = useState<Shift[]>(data);
   const [isAdding, setIsAdding] = useState<boolean>(false);
-  const { data: employeeShifts, isLoading } = useAllEmployeeShifts();
-  const projects = useAllProjects();
-  const project = projects.data?.find((p) => p.id === projectId);
 
   const getNumEmployeesSignedUpForShift = (s: Shift) => {
     return (
@@ -49,8 +49,15 @@ export function ShiftTable({
       : "text-green-600";
   };
 
+  useEffect(() => {
+    if (data) {
+      setSortedData(data);
+    }
+  }, [data]);
+
   return (
     <>
+      <ShiftSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -62,7 +69,7 @@ export function ShiftTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((shift) => (
+          {sortedData.map((shift) => (
             <TableRow key={shift.id} onClick={() => setRowClicked(shift.id)}>
               <TableCell>{shift.location}</TableCell>
               <TableCell>{shift.startTime}</TableCell>
@@ -73,7 +80,7 @@ export function ShiftTable({
                   shift
                 )}`}
               >
-                {isLoading
+                {employeeShiftsLoading
                   ? "Loading..."
                   : employeeShifts?.filter((es) => es.shiftId == shift.id)
                       .length}{" "}
@@ -81,20 +88,20 @@ export function ShiftTable({
               </TableCell>
             </TableRow>
           ))}
-          {isAdding && <AddShift projectId={projectId} />}
+          {isAdding === true && <AddShift projectId={projectId} />}
         </TableBody>
       </Table>
-      {!isAdding && (
+
+      {isAdding === false && (
         <Button
           variant="outline"
           size="icon"
-          disabled={project?.status === "ARCHIVED"}
           onClick={() => setIsAdding(true)}
         >
           <CirclePlus className="h-16 w-16" />
         </Button>
       )}
-      {isAdding && (
+      {isAdding === true && (
         <Button
           variant="outline"
           size="icon"

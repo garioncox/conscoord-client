@@ -6,12 +6,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
 import { useState } from "react";
-import { AddProject } from "./AddProject";
+import { AddProject } from "../AddProject";
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
+import ProjectSort from "../Sorting/ProjectSort";
 
 interface TableComponentProps {
   data: Project[];
@@ -20,46 +21,11 @@ interface TableComponentProps {
 
 export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
   const [addingCount, setAddingCount] = useState(0);
-  const [sortValue, setSortValue] = useState<string>("");
-
-  const sortMethods: { [key: string]: (a: Project, b: Project) => number } = {
-    startDateAsc: (a, b) =>
-      new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-    startDateDesc: (a, b) =>
-      new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-    endDateAsc: (a, b) =>
-      new Date(a.endDate).getTime() - new Date(b.endDate).getTime(),
-    endDateDesc: (a, b) =>
-      new Date(b.endDate).getTime() - new Date(a.endDate).getTime(),
-    Name: (a, b) => a.name.localeCompare(b.name),
-    Location: (a, b) => a.location.localeCompare(b.location),
-  };
-
-  const SortData = () => {
-    const sorted = [...data]; 
-    const sortFunction = sortMethods[sortValue]; 
-    if (sortFunction) {
-      sorted.sort(sortFunction); 
-    }
-    return sorted; 
-  };
+  const [sortedData, setSortedData] = useState<Project[]>(data);
 
   return (
     <>
-      <label>Sort By</label>
-      <select
-        className="text-black"
-        onChange={(e) => {
-          setSortValue(e.target.value);
-        }}
-      >
-        <option value="Name">Name</option>
-        <option value="Location">Location</option>
-        <option value="startDateAsc">Start Date Ascending</option>
-        <option value="startDateDesc">Start Date Descending</option>
-        <option value="endDateAsc">End Date Ascending</option>
-        <option value="endDateDesc">End Date Descending</option>
-      </select>
+      <ProjectSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>
@@ -70,7 +36,7 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {SortData().map((project) => {
+          {sortedData.map((project) => {
             if (project.status === "ARCHIVED") {
               return (
                 <TableRow

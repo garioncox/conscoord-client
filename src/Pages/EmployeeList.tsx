@@ -1,7 +1,7 @@
 import "../index.css";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePaginatedTable } from "@/Components/PaginatedTableHook";
-import { EmployeeTable } from "@/Components/EmployeeTable";
+import { EmployeeTable } from "@/Components/Tables/EmployeeTable";
 import { Spinner } from "@/Components/Spinner";
 import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 

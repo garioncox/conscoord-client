@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
+import { useEffect, useState } from "react";
+import EmployeeSort from "../Sorting/EmployeeSort";
 
 interface TableComponentProps {
   data: Employee[];
@@ -15,9 +17,17 @@ interface TableComponentProps {
 
 export function EmployeeTable({ data }: TableComponentProps) {
   const { data: roles } = useAllRoles();
+  const [sortedData, setSortedData] = useState<Employee[]>(data);
+  
+  useEffect(() => {
+    if (data) {
+      setSortedData(data); 
+    }
+  }, [data]);
 
   return (
     <>
+      <EmployeeSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableHead>Name</TableHead>
@@ -26,7 +36,7 @@ export function EmployeeTable({ data }: TableComponentProps) {
           <TableHead>Role</TableHead>
         </TableHeader>
         <TableBody>
-          {data.map((employee) => (
+          {sortedData.map((employee) => (
             <TableRow key={employee.id}>
               <TableCell>{employee.name}</TableCell>
               <TableCell>{employee.email}</TableCell>
