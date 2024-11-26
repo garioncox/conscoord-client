@@ -6,17 +6,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { CombineTime } from "@/Functions/CombineTime";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
-import { useEmpShiftsForLoggedInUser } from "@/Functions/Queries/EmployeeShiftQueries";
+import {
+  useAllEmployeeShifts,
+  useEmpShiftsForLoggedInUser,
+} from "@/Functions/Queries/EmployeeShiftQueries";
 
 function MyShifts() {
   const { data: shifts } = useClaimedShiftsForLoggedInUser();
   const { data: employeeShifts } = useEmpShiftsForLoggedInUser();
+  const { data: allEmployeeShifts } = useAllEmployeeShifts();
   const navigate = useNavigate();
   const control = usePaginatedTable(shifts ?? []);
 
   const getNumEmployeesSignedUpForShift = (s: Shift) => {
     return (
-      employeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
+      allEmployeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
         .length ?? 0
     );
   };
@@ -33,6 +37,17 @@ function MyShifts() {
     }
 
     return true;
+  };
+
+  const getEmpShiftCountColor = (s: Shift) => {
+    const numSignedUp = getNumEmployeesSignedUpForShift(s);
+
+    const percentageFilled = (numSignedUp / s.requestedEmployees) * 100;
+    return percentageFilled <= 20
+      ? "text-red-500"
+      : percentageFilled <= 80
+      ? "text-yellow-600"
+      : "text-green-600";
   };
 
   if (!shifts) {
@@ -90,7 +105,11 @@ function MyShifts() {
                 <p>{s.location}</p>
                 <p>{CombineTime(s.startTime, s.endTime)}</p>
                 <p>{s.description}</p>
-                <p className={`text-end font-semibold`}>
+                <p
+                  className={`text-end font-semibold ${getEmpShiftCountColor(
+                    s
+                  )}`}
+                >
                   {getNumEmployeesSignedUpForShift(s)}
                   {" / "}
                   {s.requestedEmployees}

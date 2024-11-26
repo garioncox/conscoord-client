@@ -36,17 +36,16 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
     if (s < today) {
       return "End date cannot be in the past";
     }
-    if (startDate.value !== "" && s < endDate.value) {
+    if (startDate.value !== "" && s < startDate.value) {
       return "End date cannot be before start date";
     }
+
     return "";
   });
 
-  const description = useGTextInput("", (v) =>
-    v.length === 0 ? "Please add a description" : ""
-  );
+  const description = useGTextInput("", () => "");
 
-  const reqEmp = useGNumberInput(0, (v) => (v === 0 ? "Error" : ""));
+  const reqEmp = useGNumberInput(1, (v) => (v === 0 ? "Invalid Input" : ""));
 
   function CreateShift() {
     const shift: ShiftDTO = {
@@ -59,12 +58,6 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
     };
 
     addShiftMutation.mutate({ shift, projectId: projectId });
-
-    location.setValue("");
-    description.setValue("");
-    startDate.setValue("");
-    endDate.setValue("");
-    reqEmp.setValue(0);
   }
 
   return (
@@ -86,7 +79,7 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       </TableCell>
       <TableCell>
         <div>
-          <GTextInput control={description} />
+          <GTextInput control={description} maxLength={199} />
         </div>
       </TableCell>
       <TableCell>

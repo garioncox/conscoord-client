@@ -9,9 +9,10 @@ import {
 import { AddShift } from "./AddShift";
 import { Button } from "./ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import React from "react";
+import { useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
+import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 
 interface TableComponentProps {
   data: Shift[];
@@ -24,9 +25,27 @@ export function ShiftTable({
   setRowClicked,
   projectId,
 }: TableComponentProps) {
-  const [addingCount, setAddingCount] = React.useState(0);
-  const { data: employeeShifts, isLoading: employeeShiftsLoading } =
-    useAllEmployeeShifts();
+  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const { data: employeeShifts, isLoading } = useAllEmployeeShifts();
+
+  const getNumEmployeesSignedUpForShift = (s: Shift) => {
+    return (
+      employeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
+        .length ?? 0
+    );
+  };
+
+  const getEmpShiftCountColor = (s: Shift) => {
+    const numSignedUp = getNumEmployeesSignedUpForShift(s);
+
+    const percentageFilled = (numSignedUp / s.requestedEmployees) * 100;
+    return percentageFilled <= 20
+      ? "text-red-500"
+      : percentageFilled <= 80
+      ? "text-yellow-600"
+      : "text-green-600";
+  };
+
   return (
     <>
       <Table>
@@ -37,7 +56,6 @@ export function ShiftTable({
             <TableHead>End Time</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Requested Employees</TableHead>
-            <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -47,34 +65,33 @@ export function ShiftTable({
               <TableCell>{shift.startTime}</TableCell>
               <TableCell>{shift.endTime}</TableCell>
               <TableCell>{shift.description}</TableCell>
-              <TableCell className="flex justify-center">
-                {employeeShiftsLoading
+              <TableCell
+                className={`flex justify-center font-semibold ${getEmpShiftCountColor(
+                  shift
+                )}`}
+              >
+                {isLoading
                   ? "Loading..."
                   : employeeShifts?.filter((es) => es.shiftId == shift.id)
                       .length}{" "}
                 / {shift.requestedEmployees}
               </TableCell>
-              <TableCell>{shift.status}</TableCell>
             </TableRow>
           ))}
-          {addingCount > 0 && <AddShift projectId={projectId} />}
+          {isAdding && <AddShift projectId={projectId} />}
         </TableBody>
       </Table>
 
-      {addingCount === 0 && (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setAddingCount(addingCount + 1)}
-        >
+      {!isAdding && (
+        <Button variant="outline" size="icon" onClick={() => setIsAdding(true)}>
           <CirclePlus className="h-16 w-16" />
         </Button>
       )}
-      {addingCount >= 1 && (
+      {isAdding && (
         <Button
           variant="outline"
           size="icon"
-          onClick={() => setAddingCount(addingCount - 1)}
+          onClick={() => setIsAdding(false)}
         >
           <CircleMinus className="h-16 w-16" />
         </Button>
