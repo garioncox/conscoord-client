@@ -1,13 +1,10 @@
 import { Save } from "lucide-react";
-// import GDateInput from "./Generics/gDateInput";
 import GNumberInput from "./Generics/gNumberInput";
 import { useGNumberInput } from "./Generics/gNumberInputController";
 import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/gTextInputController";
 import { TableCell, TableRow } from "./ui/table";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
-import { FormatDate } from "@/Functions/FormatDates";
-// import { useGDateInput } from "./Generics/gDateInputController";
 import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
@@ -19,7 +16,6 @@ import { useAllProjects } from "@/Functions/ProjectRequests";
 export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   const addShiftMutation = useAddShiftMutation(projectId);
   const {data: projects} = useAllProjects();
-  // const today = new Date().toISOString().split("T")[0];
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
   const location = useGTextInput("", (v) =>
@@ -38,31 +34,6 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   }, [projects, projectId]);
 
 
-  // const startDate = useGDateInput("", (s: string) => {
-  //   if (s === "") {
-  //     return "Start date is required";
-  //   }
-  //   if (s < today) {
-  //     return "Start date cannot be in the past";
-  //   }
-
-  //   return "";
-  // });
-
-  // const endDate = useGDateInput("", (s: string) => {
-  //   if (s === "") {
-  //     return "End date is required";
-  //   }
-  //   if (s < today) {
-  //     return "End date cannot be in the past";
-  //   }
-  //   if (startDate.value !== "" && s < startDate.value) {
-  //     return "End date cannot be before start date";
-  //   }
-
-  //   return "";
-  // });
-
   const description = useGTextInput("", () => "");
 
   const reqEmp = useGNumberInput(1, (v) => (v === 0 ? "Invalid Input" : ""));
@@ -78,7 +49,7 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       RequestedEmployees: reqEmp.value,
       Status: "ACTIVE",
     };
-
+console.log("here")
     addShiftMutation.mutate({ shift, projectId: projectId });
   }
 
@@ -122,5 +93,6 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
         </div>
       </TableCell>
     </TableRow>
+       // {/* <div className="text-red-200 bg-red-600 flex justify-center my-7 text-lg">{errorMessage}</div> */} //where to put this?
   );
 };
