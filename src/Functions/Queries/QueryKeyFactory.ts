@@ -7,6 +7,7 @@ export const queryKeys = {
   shiftsById: (id: number) => {
     return ["shifts", "id", id];
   },
+  employeeByEmail: ["employeeByEmail"],
   archivedShifts: ["archivedShifts"],
   employeeShifts: ["employeeShifts"],
   allEmployeeShifts: ["allEmployeeShifts"],

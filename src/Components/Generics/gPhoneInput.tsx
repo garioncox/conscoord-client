@@ -30,7 +30,7 @@ const GPhoneInput: React.FC<{
         <input
           type="text"
           placeholder={"555-555-5555"}
-          className={`form-control ${
+          className={`form-control rounded shadow-inner p-2 text-black ${
             control.hasBeenTouched
               ? control.error
                 ? "is-invalid"
@@ -45,7 +45,7 @@ const GPhoneInput: React.FC<{
           }}
           onBlur={() => control.setHasBeenTouched(true)}
         />
-        <p className="invalid-feedback">{control.error}</p>
+        <p className="invalid-feedback text-red-500">{control.error}</p>
       </label>
     </>
   );
