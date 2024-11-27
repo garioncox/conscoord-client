@@ -4,4 +4,5 @@ export interface EmployeeShiftDTO {
   clockOutTime: string;
   employeeId: number;
   shiftId: number;
+  notes?: string;
 }

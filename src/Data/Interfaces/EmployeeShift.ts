@@ -4,4 +4,5 @@ export interface EmployeeShift {
   clockOutTime: string;
   empId: number;
   shiftId: number;
+  notes: string;
 }
