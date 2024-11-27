@@ -8,11 +8,12 @@ import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
 import { FormatDate } from "@/Functions/FormatDates";
 import { useAddProjectMutation } from "@/Functions/Queries/ProjectQueries";
 import { useState } from "react";
-import { useAddEmployeeMutation, useGetEmployeeByEmail, useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
+import { useAddEmployeeMutation, useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
 import Modal from "./Modal";
 import { useGEmailInput, validateEmail } from "./Generics/gEmailInputController";
 import { useGPhoneInput, validatePhone } from "./Generics/gPhoneInputController";
-import {  } from "@/Functions/EmployeeRequests";
+import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
+import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 
 export function AddProject() {
   const [selfAsContact, setSelfAsContact] = useState<boolean>(true);
@@ -22,6 +23,7 @@ export function AddProject() {
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   const addEmployeeMutation = useAddEmployeeMutation();
+  const employeeRequests = useEmployeeRequests();
 
   const location = useGTextInput("", (v) =>
     v.length === 0 ? "Pleae add a location" : ""
@@ -70,7 +72,6 @@ export function AddProject() {
   const phonenumber = useGPhoneInput("", validatePhone);
 
   const addProjectMutation = useAddProjectMutation();
-  const { refetch: fetchEmployee, data: newEmp } = useGetEmployeeByEmail(email.value);
 
   function ProjectControl(id:number) {
     if (selfAsContact) {
@@ -93,12 +94,24 @@ export function AddProject() {
     addProjectMutation.mutate({ project });
   }
 
-  function AddEmployee() {
-    addEmployeeMutation.mutate({
+  async function AddEmployee() {
+    try {
+      const existingEmp = await employeeRequests.getEmployeeByEmail(email.value);
+  
+      if (existingEmp) {
+        return existingEmp;
+      }
+    } catch (error) {
+      console.error("Error checking if employee exists:", error);
+    }
+  
+    await addEmployeeMutation.mutateAsync({
       name: name.value,
       email: email.value,
       phonenumber: phonenumber.value,
     });
+  
+    return employeeRequests.getEmployeeByEmail(email.value);
   }
 
   return (
@@ -127,7 +140,7 @@ export function AddProject() {
 
         <TableCell className="p-4">
           <label htmlFor="remember">
-            Your contact info listed?
+            Show your contact info?
             <div>
               <input type="checkbox" className="checkbox" onChange={() => setSelfAsContact(!selfAsContact)} checked={selfAsContact} name="YourContact" id="Contact" />
             </div>
@@ -162,16 +175,19 @@ export function AddProject() {
               Close
             </button>
             <button
-              onClick={async () => {
-                AddEmployee();
-                await fetchEmployee(); 
-                if (newEmp)
-                  await AddProject(newEmp.id);
-                email.setValue("");
-                phonenumber.setValue("");
-                name.setValue("");
-                toggleModal();
-              }}
+                onClick={async () => {
+                  try {
+                    const newEmp = await AddEmployee();
+              
+                    if (newEmp) {
+                      await AddProject(newEmp.id);
+                    }
+              
+                    toggleModal();
+                  } catch (error) {
+                    console.error("Error adding employee or creating project:", error);
+                  }
+                }}
               className="p-2 px-4 bg-green-500 hover:bg-green-600 text-black rounded"
             >
               Add Contact Info
