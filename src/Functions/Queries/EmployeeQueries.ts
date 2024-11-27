@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllEmployees, getEmployeeByEmail } from "../EmployeeRequests";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getAllEmployees, getEmployeeByEmail, useEmployeeRequests } from "../EmployeeRequests";
 import { useAuth0 } from "@auth0/auth0-react";
 import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
@@ -15,6 +15,22 @@ export const useLoggedInEmployee = () => {
       return getEmployeeByEmail(user!.email!);
     },
     enabled: !!(isAuthenticated && user),
+  });
+};
+
+export const useAddEmployeeMutation = () => {
+  const { addEmployee } = useEmployeeRequests();
+  return useMutation({
+    mutationFn: addEmployee
+  });
+};
+
+export const useGetEmployeeByEmail = (email: string) => {
+  const { getEmployeeByEmail } = useEmployeeRequests();
+  return useQuery({
+    queryKey: queryKeys.employeeByEmail,
+    queryFn: () => getEmployeeByEmail(email),
+    enabled: !!email,
   });
 };
 
