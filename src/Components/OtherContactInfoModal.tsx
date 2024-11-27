@@ -50,28 +50,22 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
         return employeeRequests.getEmployeeByEmail(email.value);
     }
 
-    function Validate(){
+    function Validate() {
         if (name.error || email.error || phonenumber.error) {
             toast.error("Please fill in all required fields");
             return false;
         }
     }
-    
+
     return (
         <Modal isOpen={isModalOpen} onClose={toggleModal}>
 
             <div className="">
                 <div>
                     <h1>Add contact info</h1>
-                    <label>Name
-                        <GTextInput control={name} />
-                    </label>
-                    <label>Email
-                        <GEmailInput control={email} />
-                    </label>
-                    <label>Phone Number
-                        <GPhoneInput control={phonenumber} />
-                    </label>
+                    <GTextInput control={name} label="Name" />
+                    <GEmailInput control={email} label="Email" />
+                    <GPhoneInput control={phonenumber} label="Phone Number" />
                 </div>
                 <div className="flex grow flex-row mt-5">
                     <button

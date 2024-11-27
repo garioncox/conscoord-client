@@ -25,15 +25,6 @@ export const useAddEmployeeMutation = () => {
   });
 };
 
-export const useGetEmployeeByEmail = (email: string) => {
-  const { getEmployeeByEmail } = useEmployeeRequests();
-  return useQuery({
-    queryKey: [queryKeys.employeeByEmail, email],
-    queryFn: () => getEmployeeByEmail(email),
-    enabled: !!email,
-  });
-};
-
 export const useEmployeesByShift = (shiftId: number) => {
   return useQuery({
     queryKey: [queryKeys.employeesByShift, shiftId],
