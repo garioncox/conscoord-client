@@ -11,9 +11,8 @@ import { Button } from "../ui/button";
 import { CirclePlus, CircleMinus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
-import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import ShiftSort from "../Sorting/ShiftSort";
-import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
+import { useShiftsFulfilledUtils } from "../ShiftsFulfilledHook";
 
 interface TableComponentProps {
   data: Shift[];
@@ -26,28 +25,10 @@ export function ShiftTable({
   setRowClicked,
   projectId,
 }: TableComponentProps) {
-  const { data: employeeShifts, isLoading: employeeShiftsLoading } =
-    useAllEmployeeShifts();
+  const { shiftFractionString, shiftFractionStyles } =
+    useShiftsFulfilledUtils();
   const [sortedData, setSortedData] = useState<Shift[]>(data);
   const [isAdding, setIsAdding] = useState<boolean>(false);
-
-  const getNumEmployeesSignedUpForShift = (s: Shift) => {
-    return (
-      employeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
-        .length ?? 0
-    );
-  };
-
-  const getEmpShiftCountColor = (s: Shift) => {
-    const numSignedUp = getNumEmployeesSignedUpForShift(s);
-
-    const percentageFilled = (numSignedUp / s.requestedEmployees) * 100;
-    return percentageFilled <= 20
-      ? "text-red-500"
-      : percentageFilled <= 80
-      ? "text-yellow-600"
-      : "text-green-600";
-  };
 
   useEffect(() => {
     if (data) {
@@ -76,15 +57,11 @@ export function ShiftTable({
               <TableCell>{shift.endTime}</TableCell>
               <TableCell>{shift.description}</TableCell>
               <TableCell
-                className={`flex justify-center font-semibold ${getEmpShiftCountColor(
+                className={`flex justify-center font-semibold ${shiftFractionStyles(
                   shift
                 )}`}
               >
-                {employeeShiftsLoading
-                  ? "Loading..."
-                  : employeeShifts?.filter((es) => es.shiftId == shift.id)
-                      .length}{" "}
-                / {shift.requestedEmployees}
+                {shiftFractionString(shift)}
               </TableCell>
             </TableRow>
           ))}
@@ -93,11 +70,7 @@ export function ShiftTable({
       </Table>
 
       {isAdding === false && (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setIsAdding(true)}
-        >
+        <Button variant="outline" size="icon" onClick={() => setIsAdding(true)}>
           <CirclePlus className="h-16 w-16" />
         </Button>
       )}
