@@ -14,12 +14,12 @@ import {
   useClaimShiftMutation,
 } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "../Spinner";
-import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { CombineTime } from "@/Functions/CombineTime";
 import { useEffect, useState } from "react";
 import ShiftSort from "../Sorting/ShiftSort";
 import PermissionComponentLock from "../Auth/PermissionComponentLock";
 import { PSO_ROLE } from "../Auth/PermissionLock";
+import { useShiftsFulfilledUtils } from "../ShiftsFulfilledHook";
 
 export function EmployeeShiftTable({
   data,
@@ -30,10 +30,10 @@ export function EmployeeShiftTable({
 }) {
   const { data: userShifts, isLoading: shiftsLoading } =
     useClaimedShiftsForLoggedInUser();
-  const { data: employeeShifts, isLoading: employeeShiftsLoading } =
-    useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
   const [sortedData, setSortedData] = useState<Shift[]>(data);
+  const { shiftFractionString, shiftFractionStyles, shiftFraction } =
+    useShiftsFulfilledUtils();
 
   useEffect(() => {
     if (data) {
@@ -69,7 +69,7 @@ export function EmployeeShiftTable({
           {sortedData.map((shift) => (
             <TableRow
               key={shift.id}
-              className="hover:bg-slate-200 py-4"
+              className="hover:bg-slate-200 py-4 cursor-pointer"
               onClick={() => setRowClicked(shift.id)}
             >
               <TableCell className="px-2">{shift.location}</TableCell>
@@ -78,12 +78,12 @@ export function EmployeeShiftTable({
               </TableCell>
               <TableCell className="px-2">{shift.description}</TableCell>
               <TableCell className="px-2">
-                <p className="flex justify-center">
-                  {employeeShiftsLoading
-                    ? "Loading..."
-                    : employeeShifts?.filter((es) => es.shiftId == shift.id)
-                        .length}{" "}
-                  / {shift.requestedEmployees}
+                <p
+                  className={`flex justify-center ${shiftFractionStyles(
+                    shift
+                  )}`}
+                >
+                  {shiftFractionString(shift)}
                 </p>
               </TableCell>
               <PermissionComponentLock roles={[PSO_ROLE]}>
@@ -100,10 +100,19 @@ export function EmployeeShiftTable({
                     </Button>
                   ) : (
                     <Button
-                      className="rounded-xl bg-tertiary text-slate-500 border-2 border-slate-500 hover:text-white hover:bg-blue-500 hover:border-blue-500"
+                      className={`rounded-xl bg-tertiary ${
+                        shiftFraction(shift) >= 1
+                          ? "text-slate-300 border-slate-300 hover:bg-slate-100 cursor-not-allowed"
+                          : "text-slate-500 border-slate-500 hover:text-white hover:bg-blue-500 hover:border-blue-500"
+                      } border-2 `}
                       onClick={(e) => {
-                        TakeShift(shift.id);
                         e.stopPropagation();
+
+                        if (shiftFraction(shift) >= 1) {
+                          return;
+                        }
+
+                        TakeShift(shift.id);
                       }}
                       size="icon"
                     >

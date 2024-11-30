@@ -139,7 +139,9 @@ const PSOView: React.FC<PSOViewProps> = ({
         <div>
           <div
             className={`flex flex-row space-x-3 ${
-              confirmedNotWorked ? "cursor-default" : "cursor-pointer"
+              confirmedNotWorked || isFormDisabled
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
             }`}
             onClick={() => {
               if (!confirmedNotWorked) {
@@ -149,19 +151,27 @@ const PSOView: React.FC<PSOViewProps> = ({
           >
             <input
               className={`${
-                confirmedNotWorked ? "cursor-not-allowed" : "cursor-pointer"
+                confirmedNotWorked || isFormDisabled
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
               }`}
               type="checkbox"
+              onChange={() => {}}
               checked={confirmedNotWorked}
-              disabled={confirmedNotWorked}
+              disabled={confirmedNotWorked || isFormDisabled}
             />
             <div>I did not work this shift</div>
           </div>
+          
           <div
             className={`flex flex-row space-x-3 ${
               confirmedNotWorked ? "inline" : "hidden"
             } 
-            ${confirmShiftCanceled ? "cursor-default" : "cursor-pointer"}`}
+            ${
+              confirmShiftCanceled || isFormDisabled
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
             onClick={() => {
               if (!confirmShiftCanceled) {
                 toggleShiftCanceledModal();
@@ -170,11 +180,14 @@ const PSOView: React.FC<PSOViewProps> = ({
           >
             <input
               className={`${
-                confirmShiftCanceled ? "cursor-not-allowed" : "cursor-pointer"
+                confirmShiftCanceled || isFormDisabled
+                  ? "cursor-not-allowed"
+                  : "cursor-pointer"
               }`}
+              onChange={() => {}}
               type="checkbox"
               checked={confirmShiftCanceled}
-              disabled={confirmShiftCanceled}
+              disabled={confirmShiftCanceled || isFormDisabled}
             />
             <div>This shift was canceled</div>
           </div>

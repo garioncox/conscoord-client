@@ -11,6 +11,7 @@ import {
 } from "@/Functions/Queries/EmployeeQueries";
 import PSOView from "./ShiftDetails/PSOView";
 import ClientView from "./ShiftDetails/ClientView";
+import { useShiftsFulfilledUtils } from "@/Components/ShiftsFulfilledHook";
 
 export const ShiftDetails = () => {
   const { id } = useParams();
@@ -21,6 +22,8 @@ export const ShiftDetails = () => {
   const { data: shiftFromParam, isLoading: isShiftFromParamLoading } =
     useShiftById(Number(id));
   const { data: signedUpEmployees } = useEmployeesByShift(Number(id));
+  const { shiftFraction, shiftFractionStyles, shiftsAvailable, shiftsClaimed } =
+    useShiftsFulfilledUtils();
 
   const [currentEmpShift, setCurrentEmpShift] = useState<
     EmployeeShift | undefined
@@ -30,25 +33,24 @@ export const ShiftDetails = () => {
   const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
 
   useEffect(() => {
-    if (id && !isClaimedShiftsLoading && !isShiftFromParamLoading) {
+    if (
+      id &&
+      !isClaimedShiftsLoading &&
+      !isShiftFromParamLoading
+    ) {
       const shift = claimedShifts?.find((cs) => cs.shiftId === Number(id));
       setCurrentEmpShift(shift);
 
       if (
         !shift ||
         (shift.clockInTime && shift.clockOutTime) ||
-        new Date(shiftFromParam!.startTime) > new Date()
+        new Date(shiftFromParam!.startTime) > new Date() ||
+        shiftsClaimed(shiftFromParam!) / shiftsAvailable(shiftFromParam!) >= 1
       ) {
         setIsFormDisabled(true);
       }
     }
-  }, [
-    claimedShifts,
-    id,
-    isClaimedShiftsLoading,
-    isShiftFromParamLoading,
-    shiftFromParam,
-  ]);
+  }, [claimedShifts, id, isClaimedShiftsLoading, isShiftFromParamLoading, shiftFromParam, shiftsAvailable, shiftsClaimed]);
 
   useEffect(() => {
     if (shiftFromParam && !isShiftFromParamLoading) {
@@ -69,13 +71,16 @@ export const ShiftDetails = () => {
             <h3 className="text-xl font-semibold mb-4 text-gray-700 ">
               Shift Details
             </h3>
-            <p className="text-gray-600 ">{shiftFromParam.location}</p>
-            <p className="text-gray-600 ">{shiftFromParam.startTime}</p>
-            <p className="text-gray-600 ">{shiftFromParam.endTime}</p>
-            <p className="text-gray-600 ">{shiftFromParam.description}</p>
-            <p className="text-gray-600 ">
-              {signedUpEmployees?.length}/{shiftFromParam.requestedEmployees}{" "}
-              Shifts Filled
+            <p className="text-gray-600">{shiftFromParam.location}</p>
+            <p className="text-gray-600">{shiftFromParam.startTime}</p>
+            <p className="text-gray-600">{shiftFromParam.endTime}</p>
+            <p className="text-gray-600">{shiftFromParam.description}</p>
+            <p
+              className={`text-gray-600 font-semibold ${shiftFractionStyles(
+                shiftFromParam
+              )}`}
+            >
+              {shiftFraction(shiftFromParam)} Shifts Filled
             </p>
           </div>
 
