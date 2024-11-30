@@ -16,9 +16,10 @@ import {
 import { Spinner } from "../Spinner";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { CombineTime } from "@/Functions/CombineTime";
-import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
 import { useEffect, useState } from "react";
 import ShiftSort from "../Sorting/ShiftSort";
+import PermissionComponentLock from "../Auth/PermissionComponentLock";
+import { PSO_ROLE } from "../Auth/PermissionLock";
 
 export function EmployeeShiftTable({
   data,
@@ -32,15 +33,14 @@ export function EmployeeShiftTable({
   const { data: employeeShifts, isLoading: employeeShiftsLoading } =
     useAllEmployeeShifts();
   const addMutation = useClaimShiftMutation();
-  const { data: loggedInEmployee } = useLoggedInEmployee();
   const [sortedData, setSortedData] = useState<Shift[]>(data);
 
   useEffect(() => {
     if (data) {
-      setSortedData(data); 
+      setSortedData(data);
     }
   }, [data]);
-  
+
   const TakeShift = (shiftId: number) => {
     addMutation.mutate(shiftId);
   };
@@ -59,11 +59,9 @@ export function EmployeeShiftTable({
             <TableHead>Time</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Shifts Fulfilled</TableHead>
-            {loggedInEmployee?.roleid != 3 ? (
+            <PermissionComponentLock roles={[PSO_ROLE]}>
               <TableHead>Take Shift</TableHead>
-            ) : (
-              ""
-            )}
+            </PermissionComponentLock>
           </TableRow>
         </TableHeader>
 
@@ -88,7 +86,7 @@ export function EmployeeShiftTable({
                   / {shift.requestedEmployees}
                 </p>
               </TableCell>
-              {loggedInEmployee?.roleid != 3 ? (
+              <PermissionComponentLock roles={[PSO_ROLE]}>
                 <TableCell className="flex justify-center px-2">
                   {userShifts?.some(
                     (userShift) => userShift.id === shift.id
@@ -113,9 +111,7 @@ export function EmployeeShiftTable({
                     </Button>
                   )}
                 </TableCell>
-              ) : (
-                ""
-              )}
+              </PermissionComponentLock>
             </TableRow>
           ))}
         </TableBody>

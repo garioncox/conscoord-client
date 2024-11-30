@@ -5,13 +5,17 @@ import { ProjectTable } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
 import { useAllProjects } from "@/Functions/ProjectRequests";
-import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  ADMIN_ROLE,
+  CLIENT_ROLE,
+  PSO_ROLE,
+} from "@/Components/Auth/PermissionLock";
+import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
-  const { data: loggedInEmployee } = useLoggedInEmployee();
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
@@ -51,17 +55,19 @@ function ProjectList() {
               />
             </label>
           </div>
-          {loggedInEmployee?.roleid != 3 ? (
+          <PermissionComponentLock roles={[PSO_ROLE, ADMIN_ROLE]}>
             <EmployeeProjectTable
               data={control.currentItems}
               setRowClicked={clickOnAProject}
-            ></EmployeeProjectTable>
-          ) : (
+            />
+          </PermissionComponentLock>
+
+          <PermissionComponentLock roles={[CLIENT_ROLE]}>
             <ProjectTable
               data={control.currentItems}
               setRowClicked={clickOnAProject}
-            ></ProjectTable>
-          )}
+            />
+          </PermissionComponentLock>
         </PaginatedTable>
       </>
     </div>
