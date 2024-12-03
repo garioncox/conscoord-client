@@ -11,12 +11,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/L
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { useState } from "react";
 import { Dayjs } from "dayjs";
-// import { useAllProjects } from "@/Functions/ProjectRequests";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   const addShiftMutation = useAddShiftMutation(projectId);
-  // const { data: projects } = useAllProjects();
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
   const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>(null);
@@ -24,16 +22,6 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
     v.length === 0 ? "Please add a location" : ""
   );
 
-  // useEffect(() => {
-  //   if (projects) {
-  //     const currProject = projects.find((p) => p.id === projectId);
-
-  //     if (currProject) {
-  //       setStartTime(dayjs(selectedStartDate, "YYYY/MM/DD HH:mm:ss"));
-  //       setEndTime(dayjs(selectedStartDate, "YYYY/MM/DD HH:mm:ss"));
-  //     }
-  //   }
-  // }, [projects, projectId]);
 
   const description = useGTextInput("", () => "");
 
