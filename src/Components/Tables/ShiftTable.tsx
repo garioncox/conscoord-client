@@ -14,7 +14,7 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import ShiftSort from "../Sorting/ShiftSort";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
-import { combineDates, combineTimes } from "@/Functions/CombineTime";
+import { combineTimes } from "@/Functions/CombineTime";
 
 interface TableComponentProps {
   data: Shift[];
