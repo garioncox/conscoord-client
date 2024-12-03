@@ -13,12 +13,8 @@ import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import ShiftSort from "../Sorting/ShiftSort";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
-<<<<<<< HEAD
-import { combineTimes } from "@/Functions/CombineTime";
-=======
 import { combineDates, combineTimes } from "@/Functions/CombineTime";
 import { useShiftsFulfilledUtils } from "../ShiftsFulfilledHook";
->>>>>>> 5d5494b4dec26439889c8d74e76d6141c9552fe3
 
 interface TableComponentProps {
   data: Shift[];
