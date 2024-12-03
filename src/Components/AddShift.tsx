@@ -1,4 +1,4 @@
-import { Save } from "lucide-react";
+import { Minus, Save } from "lucide-react";
 import GNumberInput from "./Generics/gNumberInput";
 import { useGNumberInput } from "./Generics/gNumberInputController";
 import GTextInput from "./Generics/gTextInput";
@@ -10,18 +10,20 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { useState } from "react";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TextField } from "@mui/material";
 
 export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   const addShiftMutation = useAddShiftMutation(projectId);
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
-  const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>(
+    null
+  );
   const location = useGTextInput("", (v) =>
     v.length === 0 ? "Please add a location" : ""
   );
-
 
   const description = useGTextInput("", () => "");
 
@@ -45,10 +47,72 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   function handleDateChange(newValue: Dayjs | null) {
     if (newValue) {
       setSelectedStartDate(newValue);
-      setStartTime(newValue); 
-      setEndTime(newValue);   
+      setStartTime(newValue);
+      setEndTime(newValue);
     }
   }
+
+  return (
+    <>
+      <TextField
+        required
+        error={!!(location.hasBeenTouched && location.error !== "")}
+        id="outlined-required"
+        label="Location"
+        value={location.value}
+        onChange={(e) => {
+          location.setHasBeenTouched(true);
+          location.setValue(e.target.value);
+        }}
+        onBlur={() => location.setHasBeenTouched(true)}
+        slotProps={{ htmlInput: { maxLength: 50 } }}
+      />
+
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Start Date"
+          value={selectedStartDate}
+          onChange={handleDateChange}
+        />
+        <div className="flex flex-row grow align-middle">
+          <TimePicker
+            label="Start Time"
+            value={startTime}
+            onChange={(newValue) => setStartTime(newValue!)}
+          />
+
+          <div className="px-1 flex items-center">
+            <Minus />
+          </div>
+
+          <TimePicker
+            maxTime={dayjs().add(24, "hours")}
+            label="End Time"
+            value={endTime}
+            onChange={(newValue) => setEndTime(newValue!)}
+          />
+        </div>
+      </LocalizationProvider>
+
+      <TextField
+        error={!!(description.hasBeenTouched && description.error !== "")}
+        multiline
+        rows={4}
+        label="Description"
+        value={description.value}
+        onChange={(e) => {
+          description.setHasBeenTouched(true);
+          description.setValue(e.target.value);
+        }}
+        onBlur={() => description.setHasBeenTouched(true)}
+        slotProps={{ htmlInput: { maxLength: 50 } }}
+      />
+
+      <div onClick={CreateShift} className="text-primary hover:text-secondary">
+        <Save />
+      </div>
+    </>
+  );
 
   return (
     <TableRow>
@@ -58,7 +122,11 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TableCell>
           <div className="min-w-32">
-            <DatePicker label="Start Date" value={selectedStartDate} onChange={handleDateChange}/>
+            <DatePicker
+              label="Start Date"
+              value={selectedStartDate}
+              onChange={handleDateChange}
+            />
           </div>
         </TableCell>
         <TableCell className="min-w-36">
@@ -93,6 +161,5 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
         </div>
       </TableCell>
     </TableRow>
-    // {/* <div className="text-red-200 bg-red-600 flex justify-center my-7 text-lg">{errorMessage}</div> */} //where to put this?
   );
 };
