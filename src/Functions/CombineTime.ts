@@ -16,3 +16,10 @@ export function combineDates(startDate: string, endDate: string) {
 
     return `${_startDate} - ${_endDate}`;
 }
+
+export function combineTimes(startDate: string, endDate: string) {
+    const _startDate = startDate.split(" ")[1];
+    const _endDate = endDate.split(" ")[1];
+
+    return `${_startDate} - ${_endDate}`;
+}

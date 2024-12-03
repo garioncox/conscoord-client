@@ -9,38 +9,40 @@ import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { useEffect, useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
-import { useAllProjects } from "@/Functions/ProjectRequests";
+import { useState } from "react";
+import { Dayjs } from "dayjs";
+// import { useAllProjects } from "@/Functions/ProjectRequests";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   const addShiftMutation = useAddShiftMutation(projectId);
-  const {data: projects} = useAllProjects();
+  // const { data: projects } = useAllProjects();
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>(null);
   const location = useGTextInput("", (v) =>
     v.length === 0 ? "Please add a location" : ""
   );
 
-  useEffect(() => {
-    if (projects) {
-      const currProject = projects.find((p) => p.id === projectId);
+  // useEffect(() => {
+  //   if (projects) {
+  //     const currProject = projects.find((p) => p.id === projectId);
 
-      if (currProject) {
-        setStartTime(dayjs(currProject.startDate, "YYYY/MM/DD HH:mm:ss"));
-        setEndTime(dayjs(currProject.startDate, "YYYY/MM/DD HH:mm:ss"));
-      }
-    }
-  }, [projects, projectId]);
-
+  //     if (currProject) {
+  //       setStartTime(dayjs(selectedStartDate, "YYYY/MM/DD HH:mm:ss"));
+  //       setEndTime(dayjs(selectedStartDate, "YYYY/MM/DD HH:mm:ss"));
+  //     }
+  //   }
+  // }, [projects, projectId]);
 
   const description = useGTextInput("", () => "");
 
   const reqEmp = useGNumberInput(1, (v) => (v === 0 ? "Invalid Input" : ""));
 
   function CreateShift() {
-    if(!startTime || !endTime)
-    {return;}
+    if (!startTime || !endTime) {
+      return;
+    }
     const shift: ShiftDTO = {
       StartTime: startTime.format("YYYY/MM/DD HH:mm:ss"),
       EndTime: endTime.format("YYYY/MM/DD HH:mm:ss"),
@@ -49,18 +51,28 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       RequestedEmployees: reqEmp.value,
       Status: "ACTIVE",
     };
-console.log("here")
     addShiftMutation.mutate({ shift, projectId: projectId });
+  }
+
+  function handleDateChange(newValue: Dayjs | null) {
+    if (newValue) {
+      setSelectedStartDate(newValue);
+      setStartTime(newValue); 
+      setEndTime(newValue);   
+    }
   }
 
   return (
     <TableRow>
       <TableCell>
-        <div>
-          <GTextInput control={location} maxLength={50} />
-        </div>
+        <GTextInput control={location} maxLength={50} />
       </TableCell>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TableCell>
+          <div className="min-w-32">
+            <DatePicker label="Start Date" value={selectedStartDate} onChange={handleDateChange}/>
+          </div>
+        </TableCell>
         <TableCell className="min-w-36">
           <TimePicker
             label="Start Time"
@@ -93,6 +105,6 @@ console.log("here")
         </div>
       </TableCell>
     </TableRow>
-       // {/* <div className="text-red-200 bg-red-600 flex justify-center my-7 text-lg">{errorMessage}</div> */} //where to put this?
+    // {/* <div className="text-red-200 bg-red-600 flex justify-center my-7 text-lg">{errorMessage}</div> */} //where to put this?
   );
 };
