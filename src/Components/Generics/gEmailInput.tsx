@@ -12,7 +12,7 @@ const GEmailInput: React.FC<{
         <input
           type="email"
           placeholder="example@email.com"
-          className={`form-control ${
+          className={`rounded shadow-inner p-2 text-black form-control ${
             control.hasBeenTouched
               ? control.error
                 ? "is-invalid"
@@ -26,7 +26,7 @@ const GEmailInput: React.FC<{
           }}
           onBlur={() => control.setHasBeenTouched(true)}
         />
-        <p className="invalid-feedback">{control.error}</p>
+        <p className="invalid-feedback text-red-500">{control.error}</p>
       </label>
     </>
   );

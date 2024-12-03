@@ -3,4 +3,5 @@ export interface ProjectDTO {
   location: string;
   startDate: string;
   endDate: string;
+  contactinfo: number;
 }

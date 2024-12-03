@@ -34,7 +34,7 @@ const Navbar = () => {
         <NavItem
           to={"/project/view"}
           label={"Projects"}
-          roles={[CLIENT_ROLE]}
+          roles={[CLIENT_ROLE, PSO_ROLE]}
         />
 
         {/* PSO + Client Items  */}

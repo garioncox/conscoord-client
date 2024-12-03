@@ -11,6 +11,7 @@ const Profile = () => {
     isAuthenticated && (
       <div className="text-primary flex grow flex-col items-center mt-auto mb-5 mx-5">
         <img
+          referrerPolicy="no-referrer"
           className="rounded-full mb-3 border-4 border-slate-400 min-h-28 min-w-min-h-28"
           src={user?.picture}
           alt=""
