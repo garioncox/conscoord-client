@@ -12,6 +12,7 @@ import { CirclePlus, CircleMinus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import ShiftSort from "../Sorting/ShiftSort";
+import { combineTimes } from "@/Functions/CombineTime";
 import { useShiftsFulfilledUtils } from "../ShiftsFulfilledHook";
 
 interface TableComponentProps {
@@ -43,8 +44,8 @@ export function ShiftTable({
         <TableHeader>
           <TableRow>
             <TableHead>Location</TableHead>
-            <TableHead>Start Time</TableHead>
-            <TableHead>End Time</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Shift Times</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Requested Employees</TableHead>
           </TableRow>
@@ -53,8 +54,8 @@ export function ShiftTable({
           {sortedData.map((shift) => (
             <TableRow key={shift.id} onClick={() => setRowClicked(shift.id)}>
               <TableCell>{shift.location}</TableCell>
-              <TableCell>{shift.startTime}</TableCell>
-              <TableCell>{shift.endTime}</TableCell>
+              <TableCell>{new Date(shift.startTime).toLocaleDateString()}</TableCell>
+              <TableCell>{combineTimes(shift.startTime,shift.endTime)}</TableCell>
               <TableCell>{shift.description}</TableCell>
               <TableCell
                 className={`flex justify-center font-semibold ${shiftFractionStyles(

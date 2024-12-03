@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.1.6",
     "@mui/styled-engine-sc": "^6.1.6",
-    "@mui/x-date-pickers": "^7.22.2",
+    "@mui/x-date-pickers": "^7.23.0",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-select": "^2.1.2",

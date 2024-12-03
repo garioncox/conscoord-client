@@ -85,7 +85,7 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
                                 }
 
                                 toggleModal();
-                            } catch (error) {
+                            } catch {
                                 toast.error("Error adding employee or creating project");
                             }
                         }}
