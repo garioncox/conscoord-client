@@ -1,3 +1,4 @@
+import { TextField } from "@mui/material";
 import { GTextInputController } from "./gTextInputController";
 
 const GEmailInput: React.FC<{
@@ -9,7 +10,7 @@ const GEmailInput: React.FC<{
     <>
       <label className="form-label d-flex flex-column flex-grow-1">
         {label}
-        <input
+        <TextField
           type="email"
           placeholder="example@email.com"
           className={`rounded shadow-inner p-2 text-black form-control ${

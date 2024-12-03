@@ -1,3 +1,4 @@
+import { TextField } from "@mui/material";
 import { GDateInputController } from "./gDateInputController";
 
 const GDateInput: React.FC<{
@@ -8,7 +9,7 @@ const GDateInput: React.FC<{
     <div className="relative pb-5 pt-8">
       <label className="absolute top-0 left-2">{label}</label>
       <div>
-        <input
+        <TextField
           type="date"
           className="rounded shadow-inner p-2 text-black"
           value={control.value}

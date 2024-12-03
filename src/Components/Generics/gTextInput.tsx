@@ -1,3 +1,4 @@
+import { TextField } from "@mui/material";
 import { GTextInputController } from "./gTextInputController";
 
 const GTextInput: React.FC<{
@@ -11,17 +12,17 @@ const GTextInput: React.FC<{
     <div className="relative pb-5 pt-8">
       <label className="absolute top-0 left-2">{label}</label>
       <div>
-        <input
+        <TextField
           type="text"
           placeholder={placeholder ?? ""}
           className="rounded shadow-inner p-2 text-black"
-          minLength={minLength ?? 0}
-          maxLength={maxLength ?? 30}
           value={control.value}
           onChange={(e) => {
             control.setValue(e.target.value);
             control.setHasBeenTouched(true);
           }}
+          slotProps={{ htmlInput:{minLength: minLength ?? 0, maxLength: maxLength ?? 10} }}
+
           onBlur={() => control.setHasBeenTouched(true)}
           
         />

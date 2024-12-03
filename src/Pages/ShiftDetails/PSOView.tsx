@@ -2,6 +2,7 @@ import Modal from "@/Components/Modal";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { useEmpShiftMutation } from "@/Functions/Queries/EmployeeShiftQueries";
+import { Checkbox } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -149,13 +150,12 @@ const PSOView: React.FC<PSOViewProps> = ({
               }
             }}
           >
-            <input
+            <Checkbox
               className={`${
                 confirmedNotWorked || isFormDisabled
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
               }`}
-              type="checkbox"
               onChange={() => {}}
               checked={confirmedNotWorked}
               disabled={confirmedNotWorked || isFormDisabled}
@@ -178,14 +178,13 @@ const PSOView: React.FC<PSOViewProps> = ({
               }
             }}
           >
-            <input
+            <Checkbox
               className={`${
                 confirmShiftCanceled || isFormDisabled
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
               }`}
               onChange={() => {}}
-              type="checkbox"
               checked={confirmShiftCanceled}
               disabled={confirmShiftCanceled || isFormDisabled}
             />

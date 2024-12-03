@@ -1,4 +1,5 @@
 import { Project } from "@/Data/Interfaces/Project";
+import { MenuItem, Select } from "@mui/material";
 import { FC } from "react";
 
 interface ProjectSortProps {
@@ -32,23 +33,23 @@ const ProjectSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
   return (
     <>
       <label className="mr-3">Sort By</label>
-      <select
+      <Select
         className="text-black"
         defaultValue=""
         onChange={(e) => {
           handleSortChange(e.target.value);
         }}
       >
-        <option value="" disabled>
+        <MenuItem value="" disabled>
           Choose A Sort Value
-        </option>
-        <option value="Name">Name</option>
-        <option value="Location">Location</option>
-        <option value="startDateAsc">Soonest First</option>
-        <option value="startDateDesc">Latest First</option>
-        <option value="endDateAsc">Soonest End Date First</option>
-        <option value="endDateDesc">Latest End Date First</option>
-      </select>
+        </MenuItem>
+        <MenuItem value="Name">Name</MenuItem>
+        <MenuItem value="Location">Location</MenuItem>
+        <MenuItem value="startDateAsc">Soonest First</MenuItem>
+        <MenuItem value="startDateDesc">Latest First</MenuItem>
+        <MenuItem value="endDateAsc">Soonest End Date First</MenuItem>
+        <MenuItem value="endDateDesc">Latest End Date First</MenuItem>
+      </Select>
     </>
   );
 };

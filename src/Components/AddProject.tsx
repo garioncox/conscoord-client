@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
 import OtherContactInfoModal from "./OtherContactInfoModal";
 import { toast } from "react-toastify";
-
+import { Checkbox } from "@mui/material";
 
 export function AddProject() {
   const [selfAsContact, setSelfAsContact] = useState<boolean>(true);
@@ -63,12 +63,12 @@ export function AddProject() {
   function Validate() {
     if (startDate.error || endDate.error || description.error) {
       toast.error("Please fill in all required fields");
-      return false
+      return false;
     }
-    return true
+    return true;
   }
 
-  function ProjectControl(id:number) {
+  function ProjectControl(id: number) {
     if (!Validate()) return;
     if (selfAsContact) {
       AddProject(id);
@@ -79,13 +79,16 @@ export function AddProject() {
   }
 
   function AddProject(id: number) {
-    if (!loggedInEmployee) { console.log("No employee found"); return; }
+    if (!loggedInEmployee) {
+      console.log("No employee found");
+      return;
+    }
     const project: ProjectDTO = {
       name: description.value,
       location: location.value,
       startDate: FormatDate(startDate.value),
       endDate: FormatDate(endDate.value),
-      contactinfo:id,
+      contactinfo: id,
     };
     addProjectMutation.mutate({ project });
   }
@@ -115,21 +118,38 @@ export function AddProject() {
         </TableCell>
 
         <TableCell className="p-4">
-          <label htmlFor="contact" title="If an officer needs to contact someone, this will be who they contact while on shift">
+          <label
+            htmlFor="contact"
+            title="If an officer needs to contact someone, this will be who they contact while on shift"
+          >
             Use your contact info?
             <div>
-              <input type="checkbox" className="checkbox" onChange={() => setSelfAsContact(!selfAsContact)} checked={selfAsContact} name="YourContact" id="Contact" />
+              <Checkbox
+                onChange={() => setSelfAsContact(!selfAsContact)}
+                checked={selfAsContact}
+                name="YourContact"
+                id="Contact"
+              />
             </div>
           </label>
         </TableCell>
         <TableCell>
-          <div onClick={() => ProjectControl(loggedInEmployee?.id ? loggedInEmployee?.id : -1)} className="text-primary hover:text-secondary">
+          <div
+            onClick={() =>
+              ProjectControl(loggedInEmployee?.id ? loggedInEmployee?.id : -1)
+            }
+            className="text-primary hover:text-secondary"
+          >
             <Save />
           </div>
         </TableCell>
       </TableRow>
 
-      <OtherContactInfoModal isModalOpen={isModalOpen} toggleModal={toggleModal} AddProject={AddProject} />
+      <OtherContactInfoModal
+        isModalOpen={isModalOpen}
+        toggleModal={toggleModal}
+        AddProject={AddProject}
+      />
     </>
   );
 }

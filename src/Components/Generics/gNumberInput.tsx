@@ -1,3 +1,4 @@
+import { TextField } from "@mui/material";
 import { GNumberInputController } from "./gNumberInputController";
 
 const GNumberInput: React.FC<{
@@ -10,11 +11,10 @@ const GNumberInput: React.FC<{
     <div className="relative pb-5 pt-8">
       <label className="absolute top-0 left-2">{label}</label>
       <div>
-        <input
+        <TextField
           type="number"
-          className="rounded shadow-inner p-2"
-          min={minimum ?? 0}
-          max={maximum ?? 10}
+          className="rounded text-black shadow-inner p-2"
+          slotProps={{ htmlInput:{min: minimum ?? 0, max: maximum ?? 10} }}
           value={control.value}
           onChange={(e) => {
             control.setValue(Number(e.target.value));

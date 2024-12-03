@@ -1,4 +1,5 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
+import { MenuItem, Select } from "@mui/material";
 import { FC } from "react";
 
 interface ProjectSortProps {
@@ -21,18 +22,18 @@ const EmployeeSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
   return (
     <>
       <label className="mr-3">Sort By</label>
-      <select
+      <Select
         className="text-black"
         defaultValue=""
         onChange={(e) => {
           handleSortChange(e.target.value);
         }}
       >
-        <option value="" disabled>
+        <MenuItem value="" disabled>
           Choose A Sort Value
-        </option>
-        <option value="Name">Name</option>
-      </select>
+        </MenuItem>
+        <MenuItem value="Name">Name</MenuItem>
+      </Select>
     </>
   );
 };
