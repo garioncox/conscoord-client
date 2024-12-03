@@ -12,6 +12,8 @@ import { useArchiveProjectMutation } from "@/Functions/Queries/ProjectQueries";
 import { Spinner } from "@/Components/Spinner";
 import Modal from "@/Components/Modal";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
+import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
+import { CLIENT_ROLE } from "@/Components/Auth/PermissionLock";
 
 const ProjectShifts = () => {
   const navigate = useNavigate();
@@ -97,15 +99,17 @@ const ProjectShifts = () => {
           projectId={Number(id)}
         />
       </PaginatedTable>
-      <div className="flex justify-end mt-2">
-        <button
-          onClick={toggleModal}
-          disabled={currentProject?.status === "ARCHIVED"}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-        >
-          Cancel Project
-        </button>
-      </div>
+      <PermissionComponentLock roles={[CLIENT_ROLE]}>
+        <div className="flex justify-end mt-2">
+          <button
+            onClick={toggleModal}
+            disabled={currentProject?.status === "ARCHIVED"}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+          >
+            Cancel Project
+          </button>
+        </div>
+      </PermissionComponentLock>
 
       <Modal isOpen={isModalOpen} onClose={toggleModal}>
         <div className="">
