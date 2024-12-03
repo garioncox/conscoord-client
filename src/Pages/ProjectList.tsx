@@ -13,6 +13,7 @@ import {
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
+import { Checkbox } from "@mui/material";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
@@ -44,13 +45,12 @@ function ProjectList() {
           <div className="flex grow justify-end">
             <label>
               Show Archived Projects
-              <input
+              <Checkbox
                 checked={!archived}
                 onChange={() => {
                   setArchived(!archived);
                   control.setCurrentPage(1);
                 }}
-                type="checkbox"
                 className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
               />
             </label>

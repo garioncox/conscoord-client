@@ -1,4 +1,5 @@
 import { Shift } from "@/Data/Interfaces/Shift";
+import { MenuItem, Select } from "@mui/material";
 import { FC } from "react";
 
 interface ShiftSortProps {
@@ -29,22 +30,22 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
   return (
     <>
       <label className="mr-3">Sort By</label>
-      <select
+      <Select
         className="text-black"
         defaultValue=""
         onChange={(e) => {
           handleSortChange(e.target.value);
         }}
       >
-        <option value="" disabled>
+        <MenuItem value="" disabled>
           Choose A Sort Value
-        </option>
-        <option value="Location">Location</option>
-        <option value="startDateAsc">Start Date Ascending</option>
-        <option value="startDateDesc">Start Date Descending</option>
-        <option value="endDateAsc">End Date Ascending</option>
-        <option value="endDateDesc">End Date Descending</option>
-      </select>
+        </MenuItem>
+        <MenuItem value="Location">Location</MenuItem>
+        <MenuItem value="startDateAsc">Start Date Ascending</MenuItem>
+        <MenuItem value="startDateDesc">Start Date Descending</MenuItem>
+        <MenuItem value="endDateAsc">End Date Ascending</MenuItem>
+        <MenuItem value="endDateDesc">End Date Descending</MenuItem>
+      </Select>
     </>
   );
 };

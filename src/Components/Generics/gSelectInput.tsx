@@ -1,4 +1,5 @@
 import { GSelectInputController } from "./gSelectInputController";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 const GSelectInput: React.FC<{
   label?: string;
@@ -8,32 +9,27 @@ const GSelectInput: React.FC<{
     control.setHasBeenTouched(true);
   }
 
+  const handleChange = (e: SelectChangeEvent) => {
+    control.setValue(e.target.value);
+    control.setHasBeenTouched(true);
+  };
+
   return (
     <>
       <label className="form-label d-flex flex-column flex-grow-1">
         {label}
-        <select
-          className={`form-control ${
-            control.hasBeenTouched
-              ? control.error
-                ? "is-invalid"
-                : "is-valid"
-              : ""
-          }`}
+        <Select
           value={control.value}
-          onChange={(e) => {
-            control.setValue(e.target.value);
-            control.setHasBeenTouched(true);
-          }}
+          onChange={handleChange}
           onBlur={() => control.setHasBeenTouched(true)}
         >
-          <option value="" disabled />
+          <MenuItem value="" disabled />
           {control.possibleValues.map((v) => (
-            <option key={v} value={v}>
+            <MenuItem key={v} value={v}>
               {v}
-            </option>
+            </MenuItem>
           ))}
-        </select>
+        </Select>
         <p className="invalid-feedback">{control.error}</p>
       </label>
     </>

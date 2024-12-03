@@ -1,3 +1,4 @@
+import { TextField } from "@mui/material";
 import { GTextInputController } from "./gTextInputController";
 
 const GPhoneInput: React.FC<{
@@ -27,7 +28,7 @@ const GPhoneInput: React.FC<{
       <label className="form-label d-flex flex-column flex-grow-1">
         {label}
         
-        <input
+        <TextField
           type="text"
           placeholder={"555-555-5555"}
           className={`form-control rounded shadow-inner p-2 text-black ${
