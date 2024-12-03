@@ -7,7 +7,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { Dayjs } from "dayjs";
-import { Check } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface PSOViewProps {

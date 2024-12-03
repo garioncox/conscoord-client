@@ -1,4 +1,4 @@
-import { Check, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import GDateInput from "./Generics/gDateInput";
 import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/gTextInputController";
