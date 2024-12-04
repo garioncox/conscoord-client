@@ -51,7 +51,6 @@ export function EmployeeShiftTable({
 
   return (
     <>
-      <ShiftSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>

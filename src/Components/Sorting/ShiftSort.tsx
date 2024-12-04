@@ -1,6 +1,6 @@
 import { Shift } from "@/Data/Interfaces/Shift";
 import { MenuItem, Select } from "@mui/material";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 
 interface ShiftSortProps {
   onSortChange: (sortedData: Shift[]) => void;
@@ -8,6 +8,8 @@ interface ShiftSortProps {
 }
 
 const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
+  const [sortValue, setSortValue] = useState<string>("startDateAsc");
+
   const sortMethods: { [key: string]: (a: Shift, b: Shift) => number } = {
     startDateAsc: (a, b) =>
       new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
@@ -19,13 +21,14 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
       new Date(b.endTime).getTime() - new Date(a.endTime).getTime(),
     Location: (a, b) => a.location.localeCompare(b.location),
   };
-  useEffect(() => {
-    handleSortChange("startDateAsc");
-  }, [data]);
 
-  const handleSortChange = (sortValue: string) => {
-    if (!sortValue) return;
-    const sortFunction = sortMethods[sortValue];
+  useEffect(() => {
+    handleSortChange(sortValue);
+  }, []);
+
+  const handleSortChange = (value: string) => {
+    setSortValue(value);
+    const sortFunction = sortMethods[value];
     const sortedData = sortFunction ? [...data].sort(sortFunction) : data;
     onSortChange(sortedData);
   };
@@ -36,6 +39,7 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
       <Select
         className="text-black min-w-52"
         defaultValue=""
+        value={sortValue} 
         onChange={(e) => {
           handleSortChange(e.target.value);
         }}
