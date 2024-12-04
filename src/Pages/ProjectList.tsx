@@ -5,7 +5,7 @@ import { ProjectTable } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
 import { useAllProjects } from "@/Functions/ProjectRequests";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ADMIN_ROLE,
@@ -14,6 +14,7 @@ import {
 } from "@/Components/Auth/PermissionLock";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import { Checkbox } from "@mui/material";
+import ProjectSort from "@/Components/Sorting/ProjectSort";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
@@ -21,7 +22,28 @@ function ProjectList() {
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
 
-  const control = usePaginatedTable(archived ? filteredData : data ?? []);
+  const [sortedData, setSortedData] = useState<Project[] | null>([]);
+  const control = usePaginatedTable(sortedData || []);
+
+  useEffect(() => {
+    if (data) {
+      if(archived)
+      {
+      const defaultSort = [...filteredData].sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      );
+      setSortedData(defaultSort);
+    }
+    else {
+      const defaultSort = [...data].sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      );
+      setSortedData(defaultSort);
+    }
+    }
+  }, [data, filteredData, archived]);
 
   useEffect(() => {
     setFilteredData(
@@ -42,6 +64,8 @@ function ProjectList() {
       <h1 className="text-4xl pb-5">Project List</h1>
       <>
         <PaginatedTable paginatedTableControl={control}>
+          <ProjectSort data={data!} onSortChange={setSortedData} />
+
           <div className="flex grow justify-end">
             <label>
               Show Archived Projects

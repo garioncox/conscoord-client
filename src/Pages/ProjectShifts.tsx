@@ -14,6 +14,8 @@ import Modal from "@/Components/Modal";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import { CLIENT_ROLE } from "@/Components/Auth/PermissionLock";
+import ShiftSort from "@/Components/Sorting/ShiftSort";
+import { Shift } from "@/Data/Interfaces/Shift";
 
 const ProjectShifts = () => {
   const navigate = useNavigate();
@@ -26,7 +28,17 @@ const ProjectShifts = () => {
   const [contactPerson, setContactPerson] = useState<Employee | null>(null);
   const [currentProject, setCurrentProject] = useState<Project>();
 
-  const control = usePaginatedTable(shifts ?? []);
+  const [sortedData, setSortedData] = useState<Shift[] | null>([]);
+  const control = usePaginatedTable(sortedData || []);
+
+  useEffect(() => {
+    if (shifts) {
+      const defaultSort = [...shifts].sort(
+        (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+      );
+      setSortedData(defaultSort);
+    }
+  }, [shifts]);
 
   const archiveProjectMutation = useArchiveProjectMutation();
   const archiveShiftMutation = useArchiveShiftMutation();
@@ -93,6 +105,7 @@ const ProjectShifts = () => {
         )}
       </div>
       <PaginatedTable paginatedTableControl={control}>
+      <ShiftSort data={sortedData!} onSortChange={setSortedData} />
         <ShiftTable
           data={control.currentItems}
           setRowClicked={clickOnAShift}
