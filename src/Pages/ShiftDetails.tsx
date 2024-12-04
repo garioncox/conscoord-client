@@ -22,7 +22,7 @@ export const ShiftDetails = () => {
   const { data: shiftFromParam, isLoading: isShiftFromParamLoading } =
     useShiftById(Number(id));
   const { data: signedUpEmployees } = useEmployeesByShift(Number(id));
-  const { shiftFraction, shiftFractionStyles, shiftsAvailable, shiftsClaimed } =
+  const { shiftFractionString, shiftFractionStyles, shiftsAvailable, shiftsClaimed } =
     useShiftsFulfilledUtils();
 
   const [currentEmpShift, setCurrentEmpShift] = useState<
@@ -80,7 +80,7 @@ export const ShiftDetails = () => {
                 shiftFromParam
               )}`}
             >
-              {shiftFraction(shiftFromParam)} Shifts Filled
+              {shiftFractionString(shiftFromParam)} Shifts Filled
             </p>
           </div>
 
