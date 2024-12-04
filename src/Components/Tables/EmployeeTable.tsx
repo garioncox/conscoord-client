@@ -9,7 +9,6 @@ import {
 } from "@/Components/ui/table";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
 import { useEffect, useState } from "react";
-import EmployeeSort from "../Sorting/EmployeeSort";
 
 interface TableComponentProps {
   data: Employee[];
@@ -27,7 +26,6 @@ export function EmployeeTable({ data }: TableComponentProps) {
 
   return (
     <>
-      <EmployeeSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableHead>Name</TableHead>

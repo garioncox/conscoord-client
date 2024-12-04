@@ -16,7 +16,6 @@ import {
 import { Spinner } from "../Spinner";
 import { CombineTime } from "@/Functions/CombineTime";
 import { useEffect, useState } from "react";
-import ShiftSort from "../Sorting/ShiftSort";
 import PermissionComponentLock from "../Auth/PermissionComponentLock";
 import { PSO_ROLE } from "../Auth/PermissionLock";
 import { useShiftsFulfilledUtils } from "../ShiftsFulfilledHook";
@@ -51,7 +50,6 @@ export function EmployeeShiftTable({
 
   return (
     <>
-      <ShiftSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>

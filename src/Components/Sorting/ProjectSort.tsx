@@ -1,6 +1,6 @@
 import { Project } from "@/Data/Interfaces/Project";
 import { MenuItem, Select } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 interface ProjectSortProps {
   onSortChange: (sortedData: Project[]) => void;
@@ -8,6 +8,8 @@ interface ProjectSortProps {
 }
 
 const ProjectSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
+  const [sortValue, setSortValue] = useState<string>("startDateAsc");
+
   const sortMethods: { [key: string]: (a: Project, b: Project) => number } = {
     startDateAsc: (a, b) =>
       new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
@@ -21,12 +23,14 @@ const ProjectSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
     Location: (a, b) => a.location.localeCompare(b.location),
   };
 
-  const handleSortChange = (sortValue: string) => {
-    if (!sortValue) return;
+  useEffect(() => {
+    handleSortChange(sortValue)
+  }, [])
 
-    const sortFunction = sortMethods[sortValue];
+  const handleSortChange = (value: string) => {
+    setSortValue(value);
+    const sortFunction = sortMethods[value];
     const sortedData = sortFunction ? [...data].sort(sortFunction) : data;
-
     onSortChange(sortedData);
   };
 
@@ -34,8 +38,9 @@ const ProjectSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
     <>
       <label className="mr-3">Sort By</label>
       <Select
-        className="text-black"
+        className="text-black min-w-52 bg-secondary"
         defaultValue=""
+        value={sortValue} 
         onChange={(e) => {
           handleSortChange(e.target.value);
         }}

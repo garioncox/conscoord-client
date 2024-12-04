@@ -9,7 +9,6 @@ import {
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
 import { useEffect, useState } from "react";
-import ProjectSort from "../Sorting/ProjectSort";
 
 interface TableComponentProps {
   data: Project[];
@@ -30,7 +29,6 @@ export function EmployeeProjectTable({
 
   return (
     <>
-      <ProjectSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>
