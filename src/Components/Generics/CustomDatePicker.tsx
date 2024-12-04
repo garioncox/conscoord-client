@@ -1,16 +1,15 @@
-import { CustomTimePickerControl } from "./control/CustomTimePickerControl";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { CustomDatePickerControl } from "./control/CustomDatePickerControl";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const CustomTimePicker: React.FC<{
+const CustomDatePicker: React.FC<{
   label?: string;
-  control: CustomTimePickerControl;
+  control: CustomDatePickerControl;
 }> = ({ label, control }) => {
   return (
     <div className="relative pb-2 pt-8">
       <div>
-        <TimePicker
+        <DatePicker
           label={label}
-          ampm={false}
           sx={
             control.error
               ? {
@@ -48,4 +47,4 @@ const CustomTimePicker: React.FC<{
   );
 };
 
-export default CustomTimePicker;
+export default CustomDatePicker;
