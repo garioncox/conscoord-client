@@ -1,33 +1,32 @@
 import { TextField } from "@mui/material";
-import { GTextInputController } from "./gTextInputController";
+import { GTextInputController } from "./control/gTextInputController";
 
 const GPhoneInput: React.FC<{
   label?: string;
   control: GTextInputController;
+}> = ({ label, control }) => {
+  function formatPhoneNumber(value: string) {
+    // Remove non-digit characters
+    const digits = value.replace(/\D/g, "");
+    let formattedValue = "";
 
-}> = ({ label,  control }) => {
-    function formatPhoneNumber(value: string) {
-        // Remove non-digit characters
-        const digits = value.replace(/\D/g, "");
-        let formattedValue = "";
-    
-        if (digits.length > 0) {
-          formattedValue += digits.substring(0, 3); // Area code
-        }
-        if (digits.length > 3) {
-          formattedValue += "-" + digits.substring(3, 6); // First 3 digits
-        }
-        if (digits.length > 6) {
-          formattedValue += "-" + digits.substring(6, 10); // Last 4 digits
-        }
-        return formattedValue;
-      }
+    if (digits.length > 0) {
+      formattedValue += digits.substring(0, 3); // Area code
+    }
+    if (digits.length > 3) {
+      formattedValue += "-" + digits.substring(3, 6); // First 3 digits
+    }
+    if (digits.length > 6) {
+      formattedValue += "-" + digits.substring(6, 10); // Last 4 digits
+    }
+    return formattedValue;
+  }
 
   return (
     <>
       <label className="form-label d-flex flex-column flex-grow-1">
         {label}
-        
+
         <TextField
           type="text"
           placeholder={"555-555-5555"}

@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { GTextInputController } from "./gTextInputController";
+import { GTextInputController } from "./control/gTextInputController";
 
 const GTextInput: React.FC<{
   label?: string;
@@ -21,10 +21,13 @@ const GTextInput: React.FC<{
             control.setValue(e.target.value);
             control.setHasBeenTouched(true);
           }}
-          slotProps={{ htmlInput:{minLength: minLength ?? 0, maxLength: maxLength ?? 10} }}
-
+          slotProps={{
+            htmlInput: {
+              minLength: minLength ?? 0,
+              maxLength: maxLength ?? 10,
+            },
+          }}
           onBlur={() => control.setHasBeenTouched(true)}
-          
         />
         {control.error && control.hasBeenTouched ? (
           <i className="bi bi-exclamation-circle absolute right-3 top-1/2 transform -translate-y-1/4 text-red-500" />
