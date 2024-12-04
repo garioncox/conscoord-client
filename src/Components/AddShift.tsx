@@ -17,11 +17,12 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   const addShiftMutation = useAddShiftMutation(projectId);
   const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
-  const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>(
+    null
+  );
   const location = useGTextInput("", (v) =>
     v.length === 0 ? "Please add a location" : ""
   );
-
 
   const description = useGTextInput("", () => "");
 
@@ -45,8 +46,8 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
   function handleDateChange(newValue: Dayjs | null) {
     if (newValue) {
       setSelectedStartDate(newValue);
-      setStartTime(newValue); 
-      setEndTime(newValue);   
+      setStartTime(newValue);
+      setEndTime(newValue);
     }
   }
 
@@ -58,7 +59,11 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TableCell>
           <div className="min-w-36">
-            <DatePicker label="Start Date" value={selectedStartDate} onChange={handleDateChange}/>
+            <DatePicker
+              label="Start Date"
+              value={selectedStartDate}
+              onChange={handleDateChange}
+            />
           </div>
         </TableCell>
         <TableCell className="min-w-36">
@@ -83,7 +88,7 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       </TableCell>
       <TableCell>
         <div className="min-w-14">
-        <GNumberInput control={reqEmp} />
+          <GNumberInput control={reqEmp} />
         </div>
       </TableCell>
       <TableCell>

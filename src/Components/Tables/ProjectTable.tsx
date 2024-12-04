@@ -21,17 +21,15 @@ interface TableComponentProps {
 export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
   const [addingCount, setAddingCount] = useState(0);
   const [sortedData, setSortedData] = useState<Project[]>(data);
-  
+
   useEffect(() => {
     if (data) {
       setSortedData(data);
     }
   }, [data]);
-  
+
   return (
     <>
-          {/* <ProjectSort data={data} onSortChange={setSortedData} /> */}
-
       <Table>
         <TableHeader>
           <TableRow>

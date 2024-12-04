@@ -27,21 +27,19 @@ function ProjectList() {
 
   useEffect(() => {
     if (data) {
-      if(archived)
-      {
-      const defaultSort = [...filteredData].sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-      );
-      setSortedData(defaultSort);
-    }
-    else {
-      const defaultSort = [...data].sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-      );
-      setSortedData(defaultSort);
-    }
+      if (archived) {
+        const defaultSort = [...filteredData].sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
+        setSortedData(defaultSort);
+      } else {
+        const defaultSort = [...data].sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
+        setSortedData(defaultSort);
+      }
     }
   }, [data, filteredData, archived]);
 
@@ -64,7 +62,7 @@ function ProjectList() {
       <h1 className="text-4xl pb-5">Project List</h1>
       <>
         <PaginatedTable paginatedTableControl={control}>
-          <ProjectSort data={data!} onSortChange={setSortedData} />
+          <ProjectSort data={sortedData!} onSortChange={setSortedData} />
 
           <div className="flex grow justify-end">
             <label>
