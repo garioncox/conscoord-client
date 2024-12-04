@@ -57,7 +57,7 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
       </TableCell>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TableCell>
-          <div className="min-w-32">
+          <div className="min-w-36">
             <DatePicker label="Start Date" value={selectedStartDate} onChange={handleDateChange}/>
           </div>
         </TableCell>
@@ -82,7 +82,9 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
         </div>
       </TableCell>
       <TableCell>
+        <div className="min-w-14">
         <GNumberInput control={reqEmp} />
+        </div>
       </TableCell>
       <TableCell>
         <div

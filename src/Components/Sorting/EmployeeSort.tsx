@@ -1,6 +1,6 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { MenuItem, Select } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 interface ProjectSortProps {
   onSortChange: (sortedData: Employee[]) => void;
@@ -11,6 +11,10 @@ const EmployeeSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
   const sortMethods: { [key: string]: (a: Employee, b: Employee) => number } = {
     Name: (a, b) => a.name.localeCompare(b.name),
   };
+
+  useEffect(() => {
+    handleSortChange("Name")
+  }, [data])
 
   const handleSortChange = (sortValue: string) => {
     if (!sortValue) return;
@@ -23,7 +27,7 @@ const EmployeeSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
     <>
       <label className="mr-3">Sort By</label>
       <Select
-        className="text-black"
+        className="text-black min-w-52"
         defaultValue=""
         onChange={(e) => {
           handleSortChange(e.target.value);

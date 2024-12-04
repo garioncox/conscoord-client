@@ -1,6 +1,6 @@
 import { Shift } from "@/Data/Interfaces/Shift";
 import { MenuItem, Select } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 interface ShiftSortProps {
   onSortChange: (sortedData: Shift[]) => void;
@@ -19,6 +19,9 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
       new Date(b.endTime).getTime() - new Date(a.endTime).getTime(),
     Location: (a, b) => a.location.localeCompare(b.location),
   };
+  useEffect(() => {
+    handleSortChange("startDateAsc");
+  }, [data]);
 
   const handleSortChange = (sortValue: string) => {
     if (!sortValue) return;
@@ -31,7 +34,7 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
     <>
       <label className="mr-3">Sort By</label>
       <Select
-        className="text-black"
+        className="text-black min-w-52"
         defaultValue=""
         onChange={(e) => {
           handleSortChange(e.target.value);
@@ -40,9 +43,9 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
         <MenuItem value="" disabled>
           Choose A Sort Value
         </MenuItem>
+        <MenuItem value="startDateAsc">Soonest First</MenuItem>
+        <MenuItem value="startDateDesc">Latest First</MenuItem>
         <MenuItem value="Location">Location</MenuItem>
-        <MenuItem value="startDateAsc">Start Date Ascending</MenuItem>
-        <MenuItem value="startDateDesc">Start Date Descending</MenuItem>
         <MenuItem value="endDateAsc">End Date Ascending</MenuItem>
         <MenuItem value="endDateDesc">End Date Descending</MenuItem>
       </Select>
