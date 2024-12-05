@@ -12,21 +12,24 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
   const [sortValue, setSortValue] = useState<string>("startDateAsc");
   const { data: empShifts, isLoading } = useAllEmployeeShifts();
 
-  if(isLoading)
-    return <div>...Loading</div>
+  if (isLoading) return <div>...Loading</div>;
 
   const sortMethods: { [key: string]: (a: Shift, b: Shift) => number } = {
     officersNeeded: (a, b) => {
       // Calculate employees assigned and needed for shift 'a'
-      const employeesAssignedA = empShifts!.filter((es) => es.shiftId == a.id).length; 
+      const employeesAssignedA = empShifts!.filter(
+        (es) => es.shiftId == a.id
+      ).length;
       const employeesNeededA = a.requestedEmployees - employeesAssignedA;
 
       // Calculate employees assigned and needed for shift 'b'
-      const employeesAssignedB = empShifts!.filter((es) => es.shiftId == b.id).length; 
+      const employeesAssignedB = empShifts!.filter(
+        (es) => es.shiftId == b.id
+      ).length;
       const employeesNeededB = b.requestedEmployees - employeesAssignedB;
 
       // Compare based on employees needed
-      return  employeesNeededB - employeesNeededA;
+      return employeesNeededB - employeesNeededA;
     },
     startDateAsc: (a, b) =>
       new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
@@ -76,12 +79,3 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
 };
 
 export default ShiftSort;
-// const shiftsClaimed = (shift: Shift) => {
-//   return employeeShifts
-//     ? employeeShifts!.filter((es) => es.shiftId == shift.id).length
-//     : 0;
-// };
-
-// const shiftsAvailable = (shift: Shift) => {
-//   return shift.requestedEmployees;
-// };
