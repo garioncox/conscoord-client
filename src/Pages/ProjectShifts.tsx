@@ -13,7 +13,8 @@ import { Spinner } from "@/Components/Spinner";
 import Modal from "@/Components/Modal";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
-import { CLIENT_ROLE } from "@/Components/Auth/PermissionLock";
+import { ADMIN_ROLE, CLIENT_ROLE, PSO_ROLE } from "@/Components/Auth/PermissionLock";
+import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
 
 const ProjectShifts = () => {
   const navigate = useNavigate();
@@ -93,13 +94,22 @@ const ProjectShifts = () => {
         )}
       </div>
       <PaginatedTable paginatedTableControl={control}>
+        <PermissionComponentLock roles={[PSO_ROLE]}>
+          <EmployeeShiftTable
+            data={control.currentItems}
+            setRowClicked={clickOnAShift}
+          />
+        </PermissionComponentLock>
+        
+        <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
         <ShiftTable
           data={control.currentItems}
           setRowClicked={clickOnAShift}
           projectId={Number(id)}
-        />
+          />
+          </PermissionComponentLock>
       </PaginatedTable>
-      <PermissionComponentLock roles={[CLIENT_ROLE]}>
+      <PermissionComponentLock roles={[ADMIN_ROLE]}>
         <div className="flex justify-end mt-2">
           <button
             onClick={toggleModal}

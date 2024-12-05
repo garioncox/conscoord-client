@@ -4,7 +4,10 @@ import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ProjectTable } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
-import { useAllProjects } from "@/Functions/ProjectRequests";
+import {
+  useAllProjectByLoggedInCompany,
+  useAllProjects,
+} from "@/Functions/ProjectRequests";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,14 +17,25 @@ import {
 } from "@/Components/Auth/PermissionLock";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import { Checkbox } from "@mui/material";
+import { useRoleQuery } from "@/Functions/RoleProvider";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
+  const roleQuery = useRoleQuery();
+  const { data: clientProjects } = useAllProjectByLoggedInCompany();
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
 
-  const control = usePaginatedTable(archived ? filteredData : data ?? []);
+  function DecideProjectsToShow() {
+    return roleQuery && roleQuery.data !== CLIENT_ROLE
+      ? archived
+        ? filteredData
+        : data
+      : clientProjects;
+  }
+
+  const control = usePaginatedTable(DecideProjectsToShow() ?? []);
 
   useEffect(() => {
     setFilteredData(
@@ -55,14 +69,14 @@ function ProjectList() {
               />
             </label>
           </div>
-          <PermissionComponentLock roles={[PSO_ROLE, ADMIN_ROLE]}>
+          <PermissionComponentLock roles={[PSO_ROLE]}>
             <EmployeeProjectTable
               data={control.currentItems}
               setRowClicked={clickOnAProject}
             />
           </PermissionComponentLock>
 
-          <PermissionComponentLock roles={[CLIENT_ROLE]}>
+          <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
             <ProjectTable
               data={control.currentItems}
               setRowClicked={clickOnAProject}
