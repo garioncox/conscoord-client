@@ -1,5 +1,7 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { Shift } from "@/Data/Interfaces/Shift";
+import { useEmailRequests } from "@/Functions/EmailRequests";
+import { useEmployeesByShift } from "@/Functions/Queries/EmployeeQueries";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 interface ClientViewProps {
@@ -9,10 +11,22 @@ interface ClientViewProps {
 
 const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
   const archiveShiftMutation = useArchiveShiftMutation();
+  const getEmployeesByShiftId = useEmployeesByShift(Number(shift?.id));
+  const { sendEmail } = useEmailRequests();
 
-  const archiveShift = () => {
+  const archiveShift = async() => {
     if (!shift || !shift.id) return;
     archiveShiftMutation.mutate(shift.id);
+    const employees = await getEmployeesByShiftId.data;
+    if (employees) {
+      employees.map(e => {
+        sendEmail({
+          email: e.email,
+          subject: "Your shift has been canceled",
+          messageBody: `The shift at ${shift.location} has been canceled, for more information, log in to see the contact info of the person who canceled the shift.`,
+        })
+      })
+    }
   };
 
   return (

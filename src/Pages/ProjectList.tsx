@@ -8,7 +8,7 @@ import {
   useAllProjectByLoggedInCompany,
   useAllProjects,
 } from "@/Functions/ProjectRequests";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ADMIN_ROLE,
@@ -18,6 +18,7 @@ import {
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import { Checkbox } from "@mui/material";
 import { useRoleQuery } from "@/Functions/RoleProvider";
+import ProjectSort from "@/Components/Sorting/ProjectSort";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
@@ -26,16 +27,35 @@ function ProjectList() {
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
+  const [sortedData, setSortedData] = useState<Project[] | null>([]);
+  const control = usePaginatedTable(sortedData || []);
 
-  function DecideProjectsToShow() {
-    return roleQuery && roleQuery.data !== CLIENT_ROLE
-      ? archived
-        ? filteredData
-        : data
-      : clientProjects;
-  }
-
-  const control = usePaginatedTable(DecideProjectsToShow() ?? []);
+  useEffect(() => {
+    console.log(roleQuery.data);
+    console.log(clientProjects);
+    if (roleQuery && roleQuery.data === CLIENT_ROLE && clientProjects) {
+      const defaultSort = [...clientProjects].sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      );
+      setSortedData(defaultSort);
+    }
+    else if (data) {
+      if (archived) {
+        const defaultSort = [...filteredData].sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
+        setSortedData(defaultSort);
+      } else {
+        const defaultSort = [...data].sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
+        setSortedData(defaultSort);
+      }
+    }
+  }, [data, filteredData, archived, clientProjects]);
 
   useEffect(() => {
     setFilteredData(
@@ -56,6 +76,8 @@ function ProjectList() {
       <h1 className="text-4xl pb-5">Project List</h1>
       <>
         <PaginatedTable paginatedTableControl={control}>
+          <ProjectSort data={sortedData!} onSortChange={setSortedData} />
+
           <div className="flex grow justify-end">
             <label>
               Show Archived Projects
