@@ -1,4 +1,5 @@
 import { Shift } from "@/Data/Interfaces/Shift";
+import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { MenuItem, Select } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 
@@ -9,8 +10,24 @@ interface ShiftSortProps {
 
 const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
   const [sortValue, setSortValue] = useState<string>("startDateAsc");
+  const { data: empShifts, isLoading } = useAllEmployeeShifts();
+
+  if(isLoading)
+    return <div>...Loading</div>
 
   const sortMethods: { [key: string]: (a: Shift, b: Shift) => number } = {
+    officersNeeded: (a, b) => {
+      // Calculate employees assigned and needed for shift 'a'
+      const employeesAssignedA = empShifts!.filter((es) => es.shiftId == a.id).length; 
+      const employeesNeededA = a.requestedEmployees - employeesAssignedA;
+
+      // Calculate employees assigned and needed for shift 'b'
+      const employeesAssignedB = empShifts!.filter((es) => es.shiftId == b.id).length; 
+      const employeesNeededB = b.requestedEmployees - employeesAssignedB;
+
+      // Compare based on employees needed
+      return  employeesNeededB - employeesNeededA;
+    },
     startDateAsc: (a, b) =>
       new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
     startDateDesc: (a, b) =>
@@ -39,7 +56,7 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
       <Select
         className="text-black min-w-52"
         defaultValue=""
-        value={sortValue} 
+        value={sortValue}
         onChange={(e) => {
           handleSortChange(e.target.value);
         }}
@@ -47,6 +64,7 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
         <MenuItem value="" disabled>
           Choose A Sort Value
         </MenuItem>
+        <MenuItem value="officersNeeded">Officers Needed</MenuItem>
         <MenuItem value="startDateAsc">Soonest First</MenuItem>
         <MenuItem value="startDateDesc">Latest First</MenuItem>
         <MenuItem value="Location">Location</MenuItem>
@@ -58,3 +76,12 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
 };
 
 export default ShiftSort;
+// const shiftsClaimed = (shift: Shift) => {
+//   return employeeShifts
+//     ? employeeShifts!.filter((es) => es.shiftId == shift.id).length
+//     : 0;
+// };
+
+// const shiftsAvailable = (shift: Shift) => {
+//   return shift.requestedEmployees;
+// };
