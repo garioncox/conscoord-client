@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useAllProjects } from "@/Functions/ProjectRequests";
 import { useNavigate, useParams } from "react-router-dom";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { Project } from "@/Data/Interfaces/Project";
@@ -8,7 +7,7 @@ import { ShiftTable } from "@/Components/Tables/ShiftTable";
 import { useProjectShiftsByProjectId } from "@/Functions/Queries/ProjectShiftQueries";
 import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
-import { useArchiveProjectMutation } from "@/Functions/Queries/ProjectQueries";
+import { useAllProjects, useArchiveProjectMutation } from "@/Functions/Queries/ProjectQueries";
 import { Spinner } from "@/Components/Spinner";
 import Modal from "@/Components/Modal";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
@@ -58,7 +57,7 @@ const ProjectShifts = () => {
         setContactPerson(contactPerson || null);
       }
     }
-  }, [projectsLoading, employeesLoading, projects, employees, id]);
+  }, [projectsLoading, employeesLoading, currentProject, projects, employees, id]);
 
   if (projectsLoading || shiftLoading || employeesLoading) {
     <Spinner />;
