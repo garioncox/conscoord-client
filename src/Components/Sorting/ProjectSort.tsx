@@ -11,8 +11,19 @@ const ProjectSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
   const [sortValue, setSortValue] = useState<string>("startDateAsc");
 
   const sortMethods: { [key: string]: (a: Project, b: Project) => number } = {
-    startDateAsc: (a, b) =>
-      new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    startDateAsc: (a, b) => {
+      const now = new Date().getTime();
+      const aEndDate = a.endDate ? new Date(a.endDate).getTime() : Infinity;
+      const bEndDate = b.endDate ? new Date(b.endDate).getTime() : Infinity;
+    
+      // If both projects are in the past or both are ongoing, sort by startDate
+      if (aEndDate < now && bEndDate < now || aEndDate >= now && bEndDate >= now) {
+        return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      }
+      
+      // Push past projects to the end
+      return aEndDate < now ? 1 : -1;
+    },
     startDateDesc: (a, b) =>
       new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
     endDateAsc: (a, b) =>
