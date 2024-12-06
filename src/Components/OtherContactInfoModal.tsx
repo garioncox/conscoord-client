@@ -49,12 +49,8 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
       if (existingEmp) {
         return existingEmp;
       }
-    } catch (error) {
-      console.error("Error checking if employee exists:", error);
-    }
-
-    await addEmployeeMutation.mutateAsync(
-      signedinEmployee.data
+    } catch {
+      const employeeData = signedinEmployee.data
         ? {
             name: name.value,
             email: email.value,
@@ -65,8 +61,9 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
             name: name.value,
             email: email.value,
             phonenumber: phonenumber.value,
-          }
-    );
+          };
+      await addEmployeeMutation.mutateAsync(employeeData);
+    }
 
     return employeeRequests.getEmployeeByEmail(email.value);
   }
@@ -76,6 +73,7 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
       toast.error("Please fill in all required fields");
       return false;
     }
+    return true;
   }
 
   return (
@@ -96,7 +94,9 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
           </button>
           <button
             onClick={async () => {
-              if (!Validate()) return;
+              if (!Validate()) {
+                return;
+              }
               try {
                 const newEmp = await AddEmployee();
 
