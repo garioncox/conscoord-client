@@ -1,3 +1,5 @@
+import { useGTextInput } from "@/Components/Generics/control/gTextInputController";
+import GTextInput from "@/Components/Generics/gTextInput";
 import Modal from "@/Components/Modal";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
@@ -39,6 +41,8 @@ const PSOView: React.FC<PSOViewProps> = ({
     setIsShiftCanceledModalOpen(!isShiftCanceledModalOpen);
   const [confirmShiftCanceled, setConfirmShiftCanceled] = useState(false);
 
+  const noteControl = useGTextInput("", () => "");
+
   useEffect(() => {
     if (!currentEmpShift) {
       return;
@@ -77,7 +81,7 @@ const PSOView: React.FC<PSOViewProps> = ({
     empShiftMutation.mutate(newEmpShift);
   }
 
-  function SaveZeroedShiftTimes(): void {
+  function MarkShiftNotWorked(): void {
     if (!(currentEmpShift && startTime && endTime)) {
       console.log("conditions were not met");
       return;
@@ -89,6 +93,7 @@ const PSOView: React.FC<PSOViewProps> = ({
       clockOutTime: "00:00",
       employeeId: currentEmpShift.empId,
       shiftId: currentEmpShift.shiftId,
+      notes: noteControl.value ?? "",
     };
 
     empShiftMutation.mutate(newEmpShift);
@@ -137,15 +142,16 @@ const PSOView: React.FC<PSOViewProps> = ({
           />
         </LocalizationProvider>
 
+        {/* Did not work + Canceled checkboxes */}
         <div>
           <div
-            className={`flex flex-row space-x-3 ${
+            className={`flex flex-row items-center ${
               confirmedNotWorked || isFormDisabled
                 ? "cursor-not-allowed"
                 : "cursor-pointer"
             }`}
             onClick={() => {
-              if (!confirmedNotWorked) {
+              if (!confirmedNotWorked && !isFormDisabled) {
                 toggleShiftNotWorkedModal();
               }
             }}
@@ -162,9 +168,9 @@ const PSOView: React.FC<PSOViewProps> = ({
             />
             <div>I did not work this shift</div>
           </div>
-          
+
           <div
-            className={`flex flex-row space-x-3 ${
+            className={`flex flex-row items-center ${
               confirmedNotWorked ? "inline" : "hidden"
             } 
             ${
@@ -173,7 +179,7 @@ const PSOView: React.FC<PSOViewProps> = ({
                 : "cursor-pointer"
             }`}
             onClick={() => {
-              if (!confirmShiftCanceled) {
+              if (!confirmShiftCanceled && !isFormDisabled) {
                 toggleShiftCanceledModal();
               }
             }}
@@ -203,22 +209,31 @@ const PSOView: React.FC<PSOViewProps> = ({
       >
         Submit Time
       </button>
+
       {!currentEmpShift && (
         <p className="mt-4 text-red-500 font-semibold text-center">
           You have not signed up for this shift
         </p>
       )}
+
       <Modal
         isOpen={isShiftNotWorkedModalOpen}
         onClose={toggleShiftNotWorkedModal}
       >
         <div className="ps-5 pe-2">
           <div>
-            <p>
-              Are you sure you want to mark this shift as not completed? You
-              cannot undo this action.
+            <p>Are you sure you want to mark this shift as not completed?</p>
+            <p className="text-red-500 text-md ps-5">
+              *You cannot undo this action.
             </p>
           </div>
+          <GTextInput
+            label="Notes"
+            control={noteControl}
+            maxLength={500}
+            multiline={true}
+            lines={4}
+          />
           <div className="flex grow flex-row mt-5">
             <button
               onClick={toggleShiftNotWorkedModal}
@@ -229,7 +244,7 @@ const PSOView: React.FC<PSOViewProps> = ({
             <button
               onClick={() => {
                 setConfirmedNotWorked(true);
-                SaveZeroedShiftTimes();
+                MarkShiftNotWorked();
                 toggleShiftNotWorkedModal();
               }}
               className="p-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded"
@@ -239,6 +254,7 @@ const PSOView: React.FC<PSOViewProps> = ({
           </div>
         </div>
       </Modal>
+
       <Modal
         isOpen={isShiftCanceledModalOpen}
         onClose={toggleShiftCanceledModal}
@@ -246,7 +262,7 @@ const PSOView: React.FC<PSOViewProps> = ({
         <div className="ps-5 pe-2">
           <div>
             <p>
-              Are you sure you want to mark this shift as canceled? You cannot
+              Are you sure you want to report this shift as canceled? You cannot
               undo this action.
             </p>
           </div>

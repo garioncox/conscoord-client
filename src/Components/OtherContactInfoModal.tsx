@@ -1,4 +1,5 @@
 import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
+
 import {
   useAddEmployeeMutation,
   useLoggedInEmployee,
@@ -6,13 +7,13 @@ import {
 import {
   useGEmailInput,
   validateEmail,
-} from "./Generics/gEmailInputController";
+} from "./Generics/control/gEmailInputController";
 import {
   useGPhoneInput,
   validatePhone,
-} from "./Generics/gPhoneInputController";
+} from "./Generics/control/gPhoneInputController";
 import GTextInput from "./Generics/gTextInput";
-import { useGTextInput } from "./Generics/gTextInputController";
+import { useGTextInput } from "./Generics/control/gTextInputController";
 import Modal from "./Modal";
 import { toast } from "react-toastify";
 import GEmailInput from "./Generics/gEmailInput";
@@ -34,6 +35,7 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
   );
 
   const signedinEmployee = useLoggedInEmployee();
+
   const addEmployeeMutation = useAddEmployeeMutation();
   const employeeRequests = useEmployeeRequests();
 
@@ -75,7 +77,7 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
     }
     return true;
   }
-
+        
   return (
     <Modal isOpen={isModalOpen} onClose={toggleModal}>
       <div className="">
@@ -94,9 +96,8 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
           </button>
           <button
             onClick={async () => {
-              if (!Validate()) {
-                return;
-              }
+              if (!Validate()) return;
+
               try {
                 const newEmp = await AddEmployee();
 

@@ -1,4 +1,4 @@
-import { GSelectInputController } from "./gSelectInputController";
+import { GSelectInputController } from "./control/gSelectInputController";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 const GSelectInput: React.FC<{

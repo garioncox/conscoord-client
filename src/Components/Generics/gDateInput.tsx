@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { GDateInputController } from "./gDateInputController";
+import { GDateInputController } from "./control/gDateInputController";
 
 const GDateInput: React.FC<{
   label?: string;
