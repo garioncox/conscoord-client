@@ -11,7 +11,6 @@ import { Button } from "../ui/button";
 import { CirclePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
-import ShiftSort from "../Sorting/ShiftSort";
 import { combineTimes } from "@/Functions/CombineTime";
 import { useShiftsFulfilledUtils } from "../ShiftsFulfilledHook";
 
@@ -42,7 +41,6 @@ export function ShiftTable({
 
   return (
     <>
-      <ShiftSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>

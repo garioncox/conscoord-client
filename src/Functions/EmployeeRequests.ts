@@ -47,3 +47,8 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
   const response = await axios.get(`/api/Employee/getAll`);
   return response.data;
 };
+
+export const getEmployeesByShiftId = async (shiftId: number): Promise<Employee[]> => {
+  const response = await axios.get(`/api/Employee/getByShift/${shiftId}`);
+  return response.data;
+};

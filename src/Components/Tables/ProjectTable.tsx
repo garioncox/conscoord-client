@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import { AddProject } from "../AddProject";
 import { Project } from "@/Data/Interfaces/Project";
 import { combineDates } from "@/Functions/CombineTime";
-import ProjectSort from "../Sorting/ProjectSort";
 
 interface TableComponentProps {
   data: Project[];
@@ -22,16 +21,15 @@ interface TableComponentProps {
 export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
   const [addingCount, setAddingCount] = useState(0);
   const [sortedData, setSortedData] = useState<Project[]>(data);
-  
+
   useEffect(() => {
     if (data) {
       setSortedData(data);
     }
   }, [data]);
-  
+
   return (
     <>
-      <ProjectSort data={data} onSortChange={setSortedData} />
       <Table>
         <TableHeader>
           <TableRow>
