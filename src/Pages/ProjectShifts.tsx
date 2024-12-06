@@ -82,10 +82,10 @@ const ProjectShifts = () => {
 
   return (
     <div className="min-w-full 2xl:px-40">
-      <h1 className="text-4xl pb-5">Viewing Project</h1>
-      <h2 className="text-center">
-        {currentProject?.name} <br />
-        {currentProject?.location} <br />
+      <h1 className="text-4xl">Viewing Project</h1>
+      <h2 className="text-center capitalize font-semibold">
+        Name: {currentProject?.name} <br />
+        Location: {currentProject?.location} <br />
         {currentProject?.status}
       </h2>
       <div>
