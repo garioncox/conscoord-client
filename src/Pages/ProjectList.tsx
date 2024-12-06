@@ -4,7 +4,6 @@ import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ProjectTable } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
-import { useAllProjects } from "@/Functions/ProjectRequests";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,19 +13,29 @@ import {
 } from "@/Components/Auth/PermissionLock";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import { Checkbox } from "@mui/material";
+import { useRoleQuery } from "@/Functions/RoleProvider";
 import ProjectSort from "@/Components/Sorting/ProjectSort";
+import { useAllProjects, useAllProjectByLoggedInCompany } from "@/Functions/Queries/ProjectQueries";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
+  const roleQuery = useRoleQuery();
+  const { data: clientProjects } = useAllProjectByLoggedInCompany();
   const navigate = useNavigate();
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
-
   const [sortedData, setSortedData] = useState<Project[] | null>([]);
   const control = usePaginatedTable(sortedData || []);
 
   useEffect(() => {
-    if (data) {
+    if (roleQuery && roleQuery.data === CLIENT_ROLE && clientProjects) {
+      const defaultSort = [...clientProjects].sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      );
+      setSortedData(defaultSort);
+    }
+    else if (data) {
       if (archived) {
         const defaultSort = [...filteredData].sort(
           (a, b) =>
@@ -41,7 +50,7 @@ function ProjectList() {
         setSortedData(defaultSort);
       }
     }
-  }, [data, filteredData, archived]);
+  }, [data, filteredData, archived, roleQuery, clientProjects]);
 
   useEffect(() => {
     setFilteredData(
@@ -77,14 +86,14 @@ function ProjectList() {
               />
             </label>
           </div>
-          <PermissionComponentLock roles={[PSO_ROLE, ADMIN_ROLE]}>
+          <PermissionComponentLock roles={[PSO_ROLE]}>
             <EmployeeProjectTable
               data={control.currentItems}
               setRowClicked={clickOnAProject}
             />
           </PermissionComponentLock>
 
-          <PermissionComponentLock roles={[CLIENT_ROLE]}>
+          <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
             <ProjectTable
               data={control.currentItems}
               setRowClicked={clickOnAProject}

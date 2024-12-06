@@ -1,10 +1,12 @@
 import { useCustomToast } from "@/Components/Toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "./QueryClient";
 import { queryKeys } from "./QueryKeyFactory";
-import { addProject, archiveProject } from "../ProjectRequests";
+import { addProject, archiveProject, getAllProjects, useProjectRequests } from "../ProjectRequests";
 import { Project } from "@/Data/Interfaces/Project";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEmployeeRequests } from "../EmployeeRequests";
 
 export const useArchiveProjectMutation = () => {
   const { createToast } = useCustomToast();
@@ -33,6 +35,36 @@ export const useAddProjectMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.projects });
+    },
+  });
+};
+
+
+export const useAllProjects = () => {
+  return useQuery({
+    queryKey: queryKeys.projects,
+    queryFn: getAllProjects,
+  });
+};
+
+export const useAllProjectByLoggedInCompany = () => {
+  const { user } = useAuth0();
+  const { getEmployeeByEmail } = useEmployeeRequests();
+  const { getCompanyProjects } = useProjectRequests();
+
+  return useQuery({
+    queryKey: ["companyProjects"],
+    queryFn: async () => {
+      if (user) {
+        const currentUser = await getEmployeeByEmail(user.email || "");
+        const projects = await getCompanyProjects(currentUser.id);
+
+        if (projects) {
+          return projects;
+        }
+
+        return [];
+      }
     },
   });
 };
