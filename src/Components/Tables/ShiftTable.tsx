@@ -8,7 +8,7 @@ import {
 } from "@/Components/ui/table";
 import { AddShift } from "../AddShift";
 import { Button } from "../ui/button";
-import { CirclePlus, CircleMinus } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { combineTimes } from "@/Functions/CombineTime";
@@ -28,7 +28,10 @@ export function ShiftTable({
   const { shiftFractionString, shiftFractionStyles } =
     useShiftsFulfilledUtils();
   const [sortedData, setSortedData] = useState<Shift[]>(data);
-  const [isAdding, setIsAdding] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   useEffect(() => {
     if (data) {
@@ -52,8 +55,12 @@ export function ShiftTable({
           {sortedData.map((shift) => (
             <TableRow key={shift.id} onClick={() => setRowClicked(shift.id)}>
               <TableCell>{shift.location}</TableCell>
-              <TableCell>{new Date(shift.startTime).toLocaleDateString()}</TableCell>
-              <TableCell>{combineTimes(shift.startTime,shift.endTime)}</TableCell>
+              <TableCell>
+                {new Date(shift.startTime).toLocaleDateString()}
+              </TableCell>
+              <TableCell>
+                {combineTimes(shift.startTime, shift.endTime)}
+              </TableCell>
               <TableCell>{shift.description}</TableCell>
               <TableCell
                 className={`flex justify-center font-semibold ${shiftFractionStyles(
@@ -64,24 +71,19 @@ export function ShiftTable({
               </TableCell>
             </TableRow>
           ))}
-          {isAdding === true && <AddShift projectId={projectId} />}
+          {isModalOpen === true && (
+            <AddShift
+              projectId={projectId}
+              toggleModal={toggleModal}
+              isModalOpen={isModalOpen}
+            />
+          )}
         </TableBody>
       </Table>
 
-      {isAdding === false && (
-        <Button variant="outline" size="icon" onClick={() => setIsAdding(true)}>
-          <CirclePlus className="h-16 w-16" />
-        </Button>
-      )}
-      {isAdding === true && (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setIsAdding(false)}
-        >
-          <CircleMinus className="h-16 w-16" />
-        </Button>
-      )}
+      <Button variant="outline" size="icon" onClick={() => toggleModal()}>
+        <CirclePlus className="h-16 w-16" />
+      </Button>
     </>
   );
 }
