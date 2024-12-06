@@ -50,7 +50,7 @@ function ProjectList() {
         setSortedData(defaultSort);
       }
     }
-  }, [data, filteredData, archived, roleQuery, clientProjects]);
+  }, [data, filteredData, archived, clientProjects]);
 
   useEffect(() => {
     setFilteredData(
