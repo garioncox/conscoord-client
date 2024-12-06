@@ -4,10 +4,6 @@ import { usePaginatedTable } from "@/Components/PaginatedTableHook";
 import { ProjectTable } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
-import {
-  useAllProjectByLoggedInCompany,
-  useAllProjects,
-} from "@/Functions/ProjectRequests";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,6 +15,7 @@ import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import { Checkbox } from "@mui/material";
 import { useRoleQuery } from "@/Functions/RoleProvider";
 import ProjectSort from "@/Components/Sorting/ProjectSort";
+import { useAllProjects, useAllProjectByLoggedInCompany } from "@/Functions/Queries/ProjectQueries";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
@@ -31,8 +28,6 @@ function ProjectList() {
   const control = usePaginatedTable(sortedData || []);
 
   useEffect(() => {
-    console.log(roleQuery.data);
-    console.log(clientProjects);
     if (roleQuery && roleQuery.data === CLIENT_ROLE && clientProjects) {
       const defaultSort = [...clientProjects].sort(
         (a, b) =>
