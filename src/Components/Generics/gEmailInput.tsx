@@ -1,11 +1,11 @@
 import { TextField } from "@mui/material";
-import { GTextInputController } from "./gTextInputController";
+import { GTextInputController } from "./control/gTextInputController";
 
 const GEmailInput: React.FC<{
   label?: string;
 
   control: GTextInputController;
-}> = ({ label, control, }) => {
+}> = ({ label, control }) => {
   return (
     <>
       <label className="form-label d-flex flex-column flex-grow-1">

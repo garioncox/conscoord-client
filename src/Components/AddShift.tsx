@@ -1,95 +1,172 @@
-import { Save } from "lucide-react";
+import { Minus, Save } from "lucide-react";
 import GNumberInput from "./Generics/gNumberInput";
-import { useGNumberInput } from "./Generics/gNumberInputController";
+import { useGNumberInput } from "./Generics/control/gNumberInputController";
 import GTextInput from "./Generics/gTextInput";
-import { useGTextInput } from "./Generics/gTextInputController";
+import { useGTextInput } from "./Generics/control/gTextInputController";
 import { TableCell, TableRow } from "./ui/table";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
 import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { useState } from "react";
 import { Dayjs } from "dayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import CustomTimePicker from "./Generics/CustomTimePicker";
+import { useCustomTimePickerControl } from "./Generics/control/CustomTimePickerControl";
+import { useCustomDatePickerControl } from "./Generics/control/CustomDatePickerControl";
+import CustomDatePicker from "./Generics/CustomDatePicker";
+import Modal from "./Modal";
 
-export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
+export const AddShift: React.FC<{
+  projectId: number;
+  toggleModal: () => void;
+  isModalOpen: boolean;
+}> = ({ projectId, toggleModal, isModalOpen }) => {
   const addShiftMutation = useAddShiftMutation(projectId);
-  const [startTime, setStartTime] = useState<Dayjs | null>(null);
-  const [endTime, setEndTime] = useState<Dayjs | null>(null);
-  const [selectedStartDate, setSelectedStartDate] = useState<Dayjs | null>(
-    null
+
+  const locationControl = useGTextInput("", (v) =>
+    v.length === 0 ? "*Required" : ""
   );
-  const location = useGTextInput("", (v) =>
-    v.length === 0 ? "Please add a location" : ""
+  const descriptionControl = useGTextInput("", () => "");
+  const reqEmpControl = useGNumberInput(1, (v) => {
+    if (v < 1 || v > 15) {
+      return "Error";
+    }
+    return "";
+  });
+  const startTimeControl = useCustomTimePickerControl(
+    null,
+    (value: Dayjs | null) => (value ? "" : "*Required")
+  );
+  const endTimeControl = useCustomTimePickerControl(
+    null,
+    (value: Dayjs | null) => (value ? "" : "*Required")
+  );
+  const dateControl = useCustomDatePickerControl(null, (value: Dayjs | null) =>
+    value ? "" : "*Required"
   );
 
-  const description = useGTextInput("", () => "");
+  const validateShift = () => {
+    return !(
+      locationControl.error ||
+      descriptionControl.error ||
+      reqEmpControl.error ||
+      startTimeControl.error ||
+      endTimeControl.error ||
+      dateControl.error
+    );
+  };
 
-  const reqEmp = useGNumberInput(1, (v) => (v === 0 ? "Invalid Input" : ""));
+  const setControlsTouched = () => {
+    locationControl.setHasBeenTouched(true);
+    descriptionControl.setHasBeenTouched(true);
+    reqEmpControl.setHasBeenTouched(true);
+    startTimeControl.setHasBeenTouched(true);
+    endTimeControl.setHasBeenTouched(true);
+    dateControl.setHasBeenTouched(true);
+  };
 
   function CreateShift() {
-    if (!startTime || !endTime) {
-      return;
-    }
-    const shift: ShiftDTO = {
-      StartTime: startTime.format("YYYY/MM/DD HH:mm:ss"),
-      EndTime: endTime.format("YYYY/MM/DD HH:mm:ss"),
-      Description: description.value,
-      Location: location.value,
-      RequestedEmployees: reqEmp.value,
-      Status: "ACTIVE",
-    };
-    addShiftMutation.mutate({ shift, projectId: projectId });
-  }
+    setControlsTouched();
 
-  function handleDateChange(newValue: Dayjs | null) {
-    if (newValue) {
-      setSelectedStartDate(newValue);
-      setStartTime(newValue);
-      setEndTime(newValue);
+    if (validateShift()) {
+      const shift: ShiftDTO = {
+        StartTime: startTimeControl.value!.format("YYYY/MM/DD HH:mm:ss"),
+        EndTime: endTimeControl.value!.format("YYYY/MM/DD HH:mm:ss"),
+        Description: descriptionControl.value,
+        Location: locationControl.value,
+        RequestedEmployees: reqEmpControl.value,
+        Status: "ACTIVE",
+      };
+      addShiftMutation.mutate({ shift, projectId: projectId });
     }
   }
 
   return (
+    <Modal isOpen={isModalOpen} onClose={toggleModal}>
+      <p className="flex font-semibold text-2xl justify-center border-b pb-3">
+        Add a shift
+      </p>
+      <div className="flex flex-row items-center border-b pb-8">
+        <GTextInput label="Location" control={locationControl} maxLength={50} />
+        <div className="w-1/2 items-center justify-center justify-items-center flex">
+          <GNumberInput
+            label="Requested Officers"
+            control={reqEmpControl}
+            minimum={1}
+            maximum={15}
+          />
+        </div>
+      </div>
+
+      <div className="border-b pb-8">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div className="">
+            <CustomDatePicker label="Start Date" control={dateControl} />
+          </div>
+
+          <div className="flex flex-row items-center space-x-2">
+            <CustomTimePicker label="Start Time" control={startTimeControl} />
+            <div className="pt-6">
+              <Minus />
+            </div>
+            <CustomTimePicker label="End Time" control={endTimeControl} />
+          </div>
+        </LocalizationProvider>
+      </div>
+
+      <GTextInput
+        label="Description"
+        control={descriptionControl}
+        maxLength={200}
+        multiline={true}
+        lines={4}
+      />
+
+      <div className="flex grow flex-row my-3">
+        <button
+          onClick={toggleModal}
+          className="ms-auto me-3 p-2 px-4 bg-slate-400 text-white rounded hover:bg-slate-500"
+        >
+          Close
+        </button>
+        <button
+          onClick={CreateShift}
+          className="p-2 px-4 bg-green-500 hover:bg-green-600 text-white rounded"
+        >
+          Create Shift
+        </button>
+      </div>
+    </Modal>
+  );
+
+  return (
     <TableRow>
       <TableCell>
-        <GTextInput control={location} maxLength={50} />
+        <GTextInput label="Location" control={locationControl} maxLength={50} />
       </TableCell>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TableCell>
-          <div className="min-w-36">
-            <DatePicker
-              label="Start Date"
-              value={selectedStartDate}
-              onChange={handleDateChange}
-            />
+          <div className="min-w-32">
+            <CustomDatePicker label="Start Date" control={dateControl} />
           </div>
         </TableCell>
         <TableCell className="min-w-36">
-          <TimePicker
-            label="Start Time"
-            value={startTime}
-            onChange={(newValue) => setStartTime(newValue!)}
-          />
+          <CustomTimePicker label="Start Time" control={startTimeControl} />
         </TableCell>
         <TableCell className="min-w-36">
-          <TimePicker
-            label="End Time"
-            value={endTime}
-            onChange={(newValue) => setEndTime(newValue!)}
-          />
+          <CustomTimePicker label="End Time" control={endTimeControl} />
         </TableCell>
       </LocalizationProvider>
       <TableCell>
         <div>
-          <GTextInput control={description} maxLength={199} />
+          <GTextInput
+            label="Description"
+            control={descriptionControl}
+            maxLength={200}
+          />
         </div>
       </TableCell>
       <TableCell>
-        <div className="min-w-14">
-          <GNumberInput control={reqEmp} />
-        </div>
+        <GNumberInput label="Requested Officers" control={reqEmpControl} />
       </TableCell>
       <TableCell>
         <div
@@ -100,6 +177,5 @@ export const AddShift: React.FC<{ projectId: number }> = ({ projectId }) => {
         </div>
       </TableCell>
     </TableRow>
-    // {/* <div className="text-red-200 bg-red-600 flex justify-center my-7 text-lg">{errorMessage}</div> */} //where to put this?
   );
 };

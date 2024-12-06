@@ -139,13 +139,13 @@ const PSOView: React.FC<PSOViewProps> = ({
 
         <div>
           <div
-            className={`flex flex-row space-x-3 ${
+            className={`flex flex-row items-center ${
               confirmedNotWorked || isFormDisabled
                 ? "cursor-not-allowed"
                 : "cursor-pointer"
             }`}
             onClick={() => {
-              if (!confirmedNotWorked) {
+              if (!confirmedNotWorked && !isFormDisabled) {
                 toggleShiftNotWorkedModal();
               }
             }}
@@ -162,9 +162,9 @@ const PSOView: React.FC<PSOViewProps> = ({
             />
             <div>I did not work this shift</div>
           </div>
-          
+
           <div
-            className={`flex flex-row space-x-3 ${
+            className={`flex flex-row items-center ${
               confirmedNotWorked ? "inline" : "hidden"
             } 
             ${
@@ -173,7 +173,7 @@ const PSOView: React.FC<PSOViewProps> = ({
                 : "cursor-pointer"
             }`}
             onClick={() => {
-              if (!confirmShiftCanceled) {
+              if (!confirmShiftCanceled && !isFormDisabled) {
                 toggleShiftCanceledModal();
               }
             }}
