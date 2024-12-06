@@ -22,8 +22,12 @@ export const ShiftDetails = () => {
   const { data: shiftFromParam, isLoading: isShiftFromParamLoading } =
     useShiftById(Number(id));
   const { data: signedUpEmployees } = useEmployeesByShift(Number(id));
-  const { shiftFractionString, shiftFractionStyles, shiftsAvailable, shiftsClaimed } =
-    useShiftsFulfilledUtils();
+  const {
+    shiftFractionString,
+    shiftFractionStyles,
+    shiftsAvailable,
+    shiftsClaimed,
+  } = useShiftsFulfilledUtils();
 
   const [currentEmpShift, setCurrentEmpShift] = useState<
     EmployeeShift | undefined
@@ -33,24 +37,27 @@ export const ShiftDetails = () => {
   const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
 
   useEffect(() => {
-    if (
-      id &&
-      !isClaimedShiftsLoading &&
-      !isShiftFromParamLoading
-    ) {
+    if (id && !isClaimedShiftsLoading && !isShiftFromParamLoading) {
       const shift = claimedShifts?.find((cs) => cs.shiftId === Number(id));
       setCurrentEmpShift(shift);
 
       if (
         !shift ||
         (shift.clockInTime && shift.clockOutTime) ||
-        new Date(shiftFromParam!.startTime) > new Date() ||
-        shiftsClaimed(shiftFromParam!) / shiftsAvailable(shiftFromParam!) >= 1
+        new Date(shiftFromParam!.startTime) > new Date()
       ) {
         setIsFormDisabled(true);
       }
     }
-  }, [claimedShifts, id, isClaimedShiftsLoading, isShiftFromParamLoading, shiftFromParam, shiftsAvailable, shiftsClaimed]);
+  }, [
+    claimedShifts,
+    id,
+    isClaimedShiftsLoading,
+    isShiftFromParamLoading,
+    shiftFromParam,
+    shiftsAvailable,
+    shiftsClaimed,
+  ]);
 
   useEffect(() => {
     if (shiftFromParam && !isShiftFromParamLoading) {

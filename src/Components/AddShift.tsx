@@ -1,9 +1,8 @@
-import { Minus, Save } from "lucide-react";
+import { Minus } from "lucide-react";
 import GNumberInput from "./Generics/gNumberInput";
 import { useGNumberInput } from "./Generics/control/gNumberInputController";
 import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/control/gTextInputController";
-import { TableCell, TableRow } from "./ui/table";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
 import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -136,46 +135,5 @@ export const AddShift: React.FC<{
         </button>
       </div>
     </Modal>
-  );
-
-  return (
-    <TableRow>
-      <TableCell>
-        <GTextInput label="Location" control={locationControl} maxLength={50} />
-      </TableCell>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TableCell>
-          <div className="min-w-32">
-            <CustomDatePicker label="Start Date" control={dateControl} />
-          </div>
-        </TableCell>
-        <TableCell className="min-w-36">
-          <CustomTimePicker label="Start Time" control={startTimeControl} />
-        </TableCell>
-        <TableCell className="min-w-36">
-          <CustomTimePicker label="End Time" control={endTimeControl} />
-        </TableCell>
-      </LocalizationProvider>
-      <TableCell>
-        <div>
-          <GTextInput
-            label="Description"
-            control={descriptionControl}
-            maxLength={200}
-          />
-        </div>
-      </TableCell>
-      <TableCell>
-        <GNumberInput label="Requested Officers" control={reqEmpControl} />
-      </TableCell>
-      <TableCell>
-        <div
-          onClick={CreateShift}
-          className="text-primary hover:text-secondary"
-        >
-          <Save />
-        </div>
-      </TableCell>
-    </TableRow>
   );
 };
