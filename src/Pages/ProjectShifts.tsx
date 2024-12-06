@@ -34,7 +34,8 @@ const ProjectShifts = () => {
   useEffect(() => {
     if (shifts) {
       const defaultSort = [...shifts].sort(
-        (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+        (a, b) =>
+          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
       );
       setSortedData(defaultSort);
     }
@@ -104,14 +105,16 @@ const ProjectShifts = () => {
           </div>
         )}
       </div>
-      <PaginatedTable paginatedTableControl={control}>
-      <ShiftSort data={sortedData!} onSortChange={setSortedData} />
-        <ShiftTable
-          data={control.currentItems}
-          setRowClicked={clickOnAShift}
-          projectId={Number(id)}
-        />
-      </PaginatedTable>
+      <div className="overflow-y-auto max-h-[650px]">
+        <PaginatedTable paginatedTableControl={control}>
+          <ShiftSort data={sortedData!} onSortChange={setSortedData} />
+          <ShiftTable
+            data={control.currentItems}
+            setRowClicked={clickOnAShift}
+            projectId={Number(id)}
+          />
+        </PaginatedTable>
+      </div>
       <PermissionComponentLock roles={[CLIENT_ROLE]}>
         <div className="flex justify-end mt-2">
           <button
