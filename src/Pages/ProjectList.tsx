@@ -61,38 +61,37 @@ function ProjectList() {
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">Project List</h1>
       <>
-      <div className="overflow-y-auto max-h-[650px]">
+        <div className="overflow-y-auto max-h-[650px]">
+          <PaginatedTable paginatedTableControl={control}>
+            <ProjectSort data={sortedData!} onSortChange={setSortedData} />
 
-        <PaginatedTable paginatedTableControl={control}>
-          <ProjectSort data={sortedData!} onSortChange={setSortedData} />
-
-          <div className="flex grow justify-end">
-            <label>
-              Show Archived Projects
-              <Checkbox
-                checked={!archived}
-                onChange={() => {
-                  setArchived(!archived);
-                  control.setCurrentPage(1);
-                }}
-                className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
+            <div className="flex grow justify-end">
+              <label>
+                Show Archived Projects
+                <Checkbox
+                  checked={!archived}
+                  onChange={() => {
+                    setArchived(!archived);
+                    control.setCurrentPage(1);
+                  }}
+                  className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
+                />
+              </label>
+            </div>
+            <PermissionComponentLock roles={[PSO_ROLE, ADMIN_ROLE]}>
+              <EmployeeProjectTable
+                data={control.currentItems}
+                setRowClicked={clickOnAProject}
               />
-            </label>
-          </div>
-          <PermissionComponentLock roles={[PSO_ROLE, ADMIN_ROLE]}>
-            <EmployeeProjectTable
-              data={control.currentItems}
-              setRowClicked={clickOnAProject}
-            />
-          </PermissionComponentLock>
+            </PermissionComponentLock>
 
-          <PermissionComponentLock roles={[CLIENT_ROLE]}>
-            <ProjectTable
-              data={control.currentItems}
-              setRowClicked={clickOnAProject}
-            />
-          </PermissionComponentLock>
-        </PaginatedTable>
+            <PermissionComponentLock roles={[CLIENT_ROLE]}>
+              <ProjectTable
+                data={control.currentItems}
+                setRowClicked={clickOnAProject}
+              />
+            </PermissionComponentLock>
+          </PaginatedTable>
         </div>
       </>
     </div>
