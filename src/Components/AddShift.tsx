@@ -45,7 +45,7 @@ export const AddShift: React.FC<{
   );
 
   const validateShift = () => {
-    return (
+    return !(
       locationControl.error ||
       descriptionControl.error ||
       reqEmpControl.error ||
