@@ -1,9 +1,9 @@
 import { Save } from "lucide-react";
 import GDateInput from "./Generics/gDateInput";
 import GTextInput from "./Generics/gTextInput";
-import { useGTextInput } from "./Generics/gTextInputController";
+import { useGTextInput } from "./Generics/control/gTextInputController";
 import { TableCell, TableRow } from "./ui/table";
-import { useGDateInput } from "./Generics/gDateInputController";
+import { useGDateInput } from "./Generics/control/gDateInputController";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
 import { FormatDate } from "@/Functions/FormatDates";
 import { useAddProjectMutation } from "@/Functions/Queries/ProjectQueries";
