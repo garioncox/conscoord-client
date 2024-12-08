@@ -34,7 +34,8 @@ const ProjectShifts = () => {
   useEffect(() => {
     if (shifts) {
       const defaultSort = [...shifts].sort(
-        (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+        (a, b) =>
+          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
       );
       setSortedData(defaultSort);
     }
@@ -81,10 +82,10 @@ const ProjectShifts = () => {
 
   return (
     <div className="min-w-full 2xl:px-40">
-      <h1 className="text-4xl pb-5">Viewing Project</h1>
-      <h2 className="text-center">
-        {currentProject?.name} <br />
-        {currentProject?.location} <br />
+      <h1 className="text-4xl">Viewing Project</h1>
+      <h2 className="text-center capitalize font-semibold">
+        Name: {currentProject?.name} <br />
+        Location: {currentProject?.location} <br />
         {currentProject?.status}
       </h2>
       <div>
@@ -104,6 +105,7 @@ const ProjectShifts = () => {
           </div>
         )}
       </div>
+     <div className="overflow-y-auto max-h-[650px]">
       <PaginatedTable paginatedTableControl={control}>
         <PermissionComponentLock roles={[PSO_ROLE]}>
           <EmployeeShiftTable
@@ -121,6 +123,7 @@ const ProjectShifts = () => {
           />
           </PermissionComponentLock>
       </PaginatedTable>
+      </div>
       <PermissionComponentLock roles={[ADMIN_ROLE]}>
         <div className="flex justify-end mt-2">
           <button

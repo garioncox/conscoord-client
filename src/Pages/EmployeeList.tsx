@@ -26,10 +26,12 @@ export const EmployeeList = () => {
     employees === undefined ? (
       <Spinner />
     ) : (
-      <PaginatedTable paginatedTableControl={control}>
-        <EmployeeSort data={sortedData!} onSortChange={setSortedData} />
-        <EmployeeTable data={control.currentItems} />
-      </PaginatedTable>
+      <div className="overflow-y-auto max-h-[650px]">
+        <PaginatedTable paginatedTableControl={control}>
+          <EmployeeSort data={sortedData!} onSortChange={setSortedData} />
+          <EmployeeTable data={control.currentItems} />
+        </PaginatedTable>
+      </div>
     );
   return (
     <div className="min-w-full 2xl:px-40">
