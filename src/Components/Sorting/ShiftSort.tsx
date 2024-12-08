@@ -12,8 +12,6 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
   const [sortValue, setSortValue] = useState<string>("startDateAsc");
   const { data: empShifts, isLoading } = useAllEmployeeShifts();
 
-  if (isLoading) return <div>...Loading</div>;
-
   const sortMethods: { [key: string]: (a: Shift, b: Shift) => number } = {
     officersNeeded: (a, b) => {
       // Calculate employees assigned and needed for shift 'a'
@@ -52,6 +50,8 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
     const sortedData = sortFunction ? [...data].sort(sortFunction) : data;
     onSortChange(sortedData);
   };
+
+  if (isLoading) return <div>...Loading</div>;
 
   return (
     <>
