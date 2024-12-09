@@ -19,7 +19,7 @@ const MainLayout: FC<{
           <div className="bg-slate-200 hidden lg:inline shadow-md shadow-slate-400">
             <Sidebar />
           </div>
-          <main className="w-full text-primary flex grow justify-center my-5 px-5 xl:mx-20">
+          <main className="w-full text-primary flex grow justify-center my-5 px-5 xl:mx-20   overflow-auto">
             {children}
           </main>
         </div>

@@ -78,47 +78,49 @@ function MyShifts() {
   return (
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">My Shifts</h1>
-      <PaginatedTable paginatedTableControl={control}>
-        <div>
-          <div className="px-3 font-semibold border-b-2 border-slate-200">
-            <div className="grid grid-cols-4 gap-10 pb-3">
-              <p>Location</p>
-              <p>Time</p>
-              <p>Description</p>
-              <p className="text-end">Shifts Fulfilled</p>
-            </div>
-          </div>
-          {control.currentItems.map((s: Shift) => {
-            return (
-              <div
-                className={`grid grid-cols-4 gap-10 py-5 px-3 hover:bg-slate-200 border-b-2 border-slate-200 relative ${
-                  shiftNeedsTimeEntered(s)
-                    ? "border-l-8 border-l-amber-300"
-                    : ""
-                } hover:cursor-pointer`}
-                key={s.id}
-                title={`${
-                  shiftNeedsTimeEntered(s) ? "Shift needs time entered" : ""
-                }`}
-                onClick={() => navigate(`/shift/view/details/${s.id}`)}
-              >
-                <p>{s.location}</p>
-                <p>{CombineTime(s.startTime, s.endTime)}</p>
-                <p>{s.description}</p>
-                <p
-                  className={`text-end font-semibold ${getEmpShiftCountColor(
-                    s
-                  )}`}
-                >
-                  {getNumEmployeesSignedUpForShift(s)}
-                  {" / "}
-                  {s.requestedEmployees}
-                </p>
+      <div className="overflow-y-auto max-h-[650px]">
+        <PaginatedTable paginatedTableControl={control}>
+          <div>
+            <div className="px-3 font-semibold border-b-2 border-slate-200">
+              <div className="grid grid-cols-4 gap-10 pb-3">
+                <p>Location</p>
+                <p>Time</p>
+                <p>Description</p>
+                <p className="text-end">Shifts Fulfilled</p>
               </div>
-            );
-          })}
-        </div>
-      </PaginatedTable>
+            </div>
+            {control.currentItems.map((s: Shift) => {
+              return (
+                <div
+                  className={`grid grid-cols-4 gap-10 py-5 px-3 hover:bg-slate-200 border-b-2 border-slate-200 relative ${
+                    shiftNeedsTimeEntered(s)
+                      ? "border-l-8 border-l-amber-300"
+                      : ""
+                  } hover:cursor-pointer`}
+                  key={s.id}
+                  title={`${
+                    shiftNeedsTimeEntered(s) ? "Shift needs time entered" : ""
+                  }`}
+                  onClick={() => navigate(`/shift/view/details/${s.id}`)}
+                >
+                  <p>{s.location}</p>
+                  <p>{CombineTime(s.startTime, s.endTime)}</p>
+                  <p>{s.description}</p>
+                  <p
+                    className={`text-end font-semibold ${getEmpShiftCountColor(
+                      s
+                    )}`}
+                  >
+                    {getNumEmployeesSignedUpForShift(s)}
+                    {" / "}
+                    {s.requestedEmployees}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </PaginatedTable>
+      </div>
     </div>
   );
 }

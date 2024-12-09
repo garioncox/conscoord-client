@@ -15,7 +15,10 @@ import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import { Checkbox } from "@mui/material";
 import { useRoleQuery } from "@/Functions/RoleProvider";
 import ProjectSort from "@/Components/Sorting/ProjectSort";
-import { useAllProjects, useAllProjectByLoggedInCompany } from "@/Functions/Queries/ProjectQueries";
+import {
+  useAllProjects,
+  useAllProjectByLoggedInCompany,
+} from "@/Functions/Queries/ProjectQueries";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
@@ -34,8 +37,7 @@ function ProjectList() {
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
       );
       setSortedData(defaultSort);
-    }
-    else if (data) {
+    } else if (data) {
       if (archived) {
         const defaultSort = [...filteredData].sort(
           (a, b) =>
@@ -70,36 +72,38 @@ function ProjectList() {
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">Project List</h1>
       <>
-        <PaginatedTable paginatedTableControl={control}>
-          <ProjectSort data={sortedData!} onSortChange={setSortedData} />
+        <div className="overflow-y-auto max-h-[650px]">
+          <PaginatedTable paginatedTableControl={control}>
+            <ProjectSort data={sortedData!} onSortChange={setSortedData} />
 
-          <div className="flex grow justify-end">
-            <label>
-              Show Archived Projects
-              <Checkbox
-                checked={!archived}
-                onChange={() => {
-                  setArchived(!archived);
-                  control.setCurrentPage(1);
-                }}
-                className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
+            <div className="flex grow justify-end">
+              <label>
+                Show Archived Projects
+                <Checkbox
+                  checked={!archived}
+                  onChange={() => {
+                    setArchived(!archived);
+                    control.setCurrentPage(1);
+                  }}
+                  className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
+                />
+              </label>
+            </div>
+            <PermissionComponentLock roles={[PSO_ROLE]}>
+              <EmployeeProjectTable
+                data={control.currentItems}
+                setRowClicked={clickOnAProject}
               />
-            </label>
-          </div>
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <EmployeeProjectTable
-              data={control.currentItems}
-              setRowClicked={clickOnAProject}
-            />
-          </PermissionComponentLock>
+            </PermissionComponentLock>
 
-          <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
-            <ProjectTable
-              data={control.currentItems}
-              setRowClicked={clickOnAProject}
-            />
-          </PermissionComponentLock>
-        </PaginatedTable>
+            <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
+              <ProjectTable
+                data={control.currentItems}
+                setRowClicked={clickOnAProject}
+              />
+            </PermissionComponentLock>
+          </PaginatedTable>
+        </div>
       </>
     </div>
   );

@@ -34,6 +34,7 @@ function ShiftList() {
   return (
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">Available Shifts</h1>
+      <div className="overflow-y-auto max-h-[650px]">
       <PaginatedTable paginatedTableControl={control}>
       <ShiftSort data={sortedData!} onSortChange={setSortedData} />
         <EmployeeShiftTable
@@ -41,6 +42,7 @@ function ShiftList() {
           setRowClicked={clickOnAShift}
         />
       </PaginatedTable>
+      </div>
     </div>
   );
 }
