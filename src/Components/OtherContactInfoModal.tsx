@@ -1,5 +1,9 @@
 import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
-import { useAddEmployeeMutation } from "@/Functions/Queries/EmployeeQueries";
+
+import {
+  useAddEmployeeMutation,
+  useLoggedInEmployee,
+} from "@/Functions/Queries/EmployeeQueries";
 import {
   useGEmailInput,
   validateEmail,
@@ -30,6 +34,8 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
     v.length === 0 ? "Please add a name" : ""
   );
 
+  const signedinEmployee = useLoggedInEmployee();
+
   const addEmployeeMutation = useAddEmployeeMutation();
   const employeeRequests = useEmployeeRequests();
 
@@ -45,15 +51,21 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
       if (existingEmp) {
         return existingEmp;
       }
-    } catch (error) {
-      console.error("Error checking if employee exists:", error);
+    } catch {
+      const employeeData = signedinEmployee.data
+        ? {
+            name: name.value,
+            email: email.value,
+            phonenumber: phonenumber.value,
+            companyId: signedinEmployee.data.companyid,
+          }
+        : {
+            name: name.value,
+            email: email.value,
+            phonenumber: phonenumber.value,
+          };
+      await addEmployeeMutation.mutateAsync(employeeData);
     }
-
-    await addEmployeeMutation.mutateAsync({
-      name: name.value,
-      email: email.value,
-      phonenumber: phonenumber.value,
-    });
 
     return employeeRequests.getEmployeeByEmail(email.value);
   }
@@ -63,8 +75,9 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
       toast.error("Please fill in all required fields");
       return false;
     }
+    return true;
   }
-
+        
   return (
     <Modal isOpen={isModalOpen} onClose={toggleModal}>
       <div className="">
@@ -84,6 +97,7 @@ const OtherContactInfoModal: React.FC<OtherContactInfoModalProps> = ({
           <button
             onClick={async () => {
               if (!Validate()) return;
+
               try {
                 const newEmp = await AddEmployee();
 

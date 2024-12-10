@@ -53,7 +53,7 @@ export const useAllProjectByLoggedInCompany = () => {
   const { getCompanyProjects } = useProjectRequests();
 
   return useQuery({
-    queryKey: ["companyProjects"],
+    queryKey: queryKeys.companyProjects,
     queryFn: async () => {
       if (user) {
         const currentUser = await getEmployeeByEmail(user.email || "");

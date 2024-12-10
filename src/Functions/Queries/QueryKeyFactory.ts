@@ -18,6 +18,7 @@ export const queryKeys = {
   employees: ["employees"],
   roles: ["roles"],
   employeeId: ["employeeId"],
+  companyProjects: ["companyProjects"],
   employeesByShift: (shiftId: number) => {
     return ["employeesByShift", shiftId];
   },
