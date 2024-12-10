@@ -45,7 +45,7 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
               return (
                 <TableRow
                   key={project.id}
-                  className="text-slate-600 bg-slate-200 border-l-4 "
+                  className="text-slate-600 bg-slate-200 border-l-4 hover:cursor-pointer "
                 >
                   <TableCell className="border-l-4 border-red-400 pl-2">
                     {project.name}

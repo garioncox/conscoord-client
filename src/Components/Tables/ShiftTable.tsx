@@ -53,7 +53,11 @@ export function ShiftTable({
         </TableHeader>
         <TableBody>
           {sortedData.map((shift) => (
-            <TableRow key={shift.id} onClick={() => setRowClicked(shift.id)}>
+            <TableRow
+              key={shift.id}
+              onClick={() => setRowClicked(shift.id)}
+              className="hover:bg-slate-200 py-4 hover:cursor-pointer "
+            >
               <TableCell>{shift.location}</TableCell>
               <TableCell>
                 {new Date(shift.startTime).toLocaleDateString()}
