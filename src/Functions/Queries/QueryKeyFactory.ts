@@ -24,6 +24,4 @@ export const queryKeys = {
   },
   archivedProjects: ["archivedProjects"],
   projects: ["allProjects"],
-
-  fulfilledShifts: ["employeeShifts", "allEmployeeShifts", "projectShifts", "shifts", "allProjects" ]
 };
