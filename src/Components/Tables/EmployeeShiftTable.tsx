@@ -67,7 +67,7 @@ export function EmployeeShiftTable({
           {sortedData.map((shift) => (
             <TableRow
               key={shift.id}
-              className="hover:bg-slate-200 py-4 cursor-pointer"
+              className="hover:bg-slate-200 py-4 hover:cursor-pointer "
               onClick={() => setRowClicked(shift.id)}
             >
               <TableCell className="px-2">{shift.location}</TableCell>
@@ -114,7 +114,6 @@ export function EmployeeShiftTable({
                       }
                       onClick={(e) => {
                         e.stopPropagation();
-
                         if (
                           shiftFraction(shift) >= 1 ||
                           shift.status == "ARCHIVED"
