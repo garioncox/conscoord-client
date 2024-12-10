@@ -78,7 +78,7 @@ function MyShifts() {
   return (
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">My Shifts</h1>
-      <div className="overflow-y-auto max-h-[650px]">
+      <div className="overflow-y-auto max-h-[80%]">
         <PaginatedTable paginatedTableControl={control}>
           <div>
             <div className="px-3 font-semibold border-b-2 border-slate-200">

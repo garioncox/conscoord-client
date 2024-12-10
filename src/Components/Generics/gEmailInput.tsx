@@ -3,7 +3,6 @@ import { GTextInputController } from "./control/gTextInputController";
 
 const GEmailInput: React.FC<{
   label?: string;
-
   control: GTextInputController;
 }> = ({ label, control }) => {
   return (
