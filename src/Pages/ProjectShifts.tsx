@@ -29,7 +29,7 @@ const ProjectShifts = () => {
   const [currentProject, setCurrentProject] = useState<Project>();
 
   const [sortedData, setSortedData] = useState<Shift[] | null>([]);
-  const control = usePaginatedTable(sortedData || []);
+  const control = usePaginatedTable((sortedData?.filter(s => s.status !== "ARCHIVED")) || []);
 
   useEffect(() => {
     if (shifts) {

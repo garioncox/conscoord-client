@@ -76,6 +76,7 @@ export const AddShift: React.FC<{
         Status: "ACTIVE",
       };
       addShiftMutation.mutate({ shift, projectId: projectId });
+      toggleModal();
     }
   }
 
