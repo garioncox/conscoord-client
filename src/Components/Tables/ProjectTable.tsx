@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { Button } from "../ui/button";
-import { CirclePlus, CircleMinus } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AddProject } from "../AddProject";
 import { Project } from "@/Data/Interfaces/Project";
@@ -19,8 +19,12 @@ interface TableComponentProps {
 }
 
 export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
-  const [addingCount, setAddingCount] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [sortedData, setSortedData] = useState<Project[]>(data);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   useEffect(() => {
     if (data) {
@@ -74,28 +78,15 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
               );
             }
           })}
-          {addingCount > 0 && <AddProject />}
+          {isModalOpen && (
+            <AddProject toggleModal={toggleModal} isModalOpen={isModalOpen} />
+          )}
         </TableBody>
       </Table>
 
-      {addingCount === 0 && (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setAddingCount(addingCount + 1)}
-        >
-          <CirclePlus className="h-16 w-16" />
-        </Button>
-      )}
-      {addingCount >= 1 && (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setAddingCount(addingCount - 1)}
-        >
-          <CircleMinus className="h-16 w-16" />
-        </Button>
-      )}
+      <Button variant="outline" size="icon" onClick={() => toggleModal()}>
+        <CirclePlus className="h-16 w-16" />
+      </Button>
     </>
   );
 }

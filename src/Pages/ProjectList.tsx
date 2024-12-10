@@ -72,7 +72,7 @@ function ProjectList() {
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">Project List</h1>
       <>
-        <div className="overflow-y-auto max-h-[650px]">
+        <div className="overflow-y-auto max-h-[80%]">
           <PaginatedTable paginatedTableControl={control}>
             <ProjectSort data={sortedData!} onSortChange={setSortedData} />
 
