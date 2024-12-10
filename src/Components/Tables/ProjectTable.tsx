@@ -45,7 +45,7 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
               return (
                 <TableRow
                   key={project.id}
-                  className="text-slate-600 bg-slate-200 border-l-4 hover:cursor-pointer "
+                  className="text-slate-600 bg-slate-200 border-l-4 hover:cursor-not-allowed"
                 >
                   <TableCell className="border-l-4 border-red-400 pl-2">
                     {project.name}
@@ -62,7 +62,7 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
                 <TableRow
                   key={project.id}
                   onClick={() => setRowClicked(project.id)}
-                  className="hover:bg-slate-200 py-4"
+                  className="hover:bg-slate-200 py-4 hover:cursor-pointer"
                 >
                   <TableCell className="p-2">{project.name}</TableCell>
                   <TableCell className="p-2">{project.location}</TableCell>
