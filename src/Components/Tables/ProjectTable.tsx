@@ -78,11 +78,11 @@ export function ProjectTable({ data, setRowClicked }: TableComponentProps) {
               );
             }
           })}
-          {isModalOpen && (
-            <AddProject toggleModal={toggleModal} isModalOpen={isModalOpen} />
-          )}
         </TableBody>
       </Table>
+      {isModalOpen && (
+        <AddProject toggleModal={toggleModal} isModalOpen={isModalOpen} />
+      )}
 
       <Button variant="outline" size="icon" onClick={() => toggleModal()}>
         <CirclePlus className="h-16 w-16" />
