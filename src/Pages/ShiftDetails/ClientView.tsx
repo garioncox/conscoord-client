@@ -67,7 +67,7 @@ const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
           <button
             onClick={archiveShift}
             disabled={shift?.status === "ARCHIVED"}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+            className="bg-red-500 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
           >
             Cancel Shift
           </button>

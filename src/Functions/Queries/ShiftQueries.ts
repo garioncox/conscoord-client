@@ -74,14 +74,15 @@ export const useAddShiftMutation = (projectId: number) => {
       await createToast(addProjectShift, dto, "Creating shift...");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [queryKeys.shiftsByProject, projectId] });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.shiftsByProject, projectId],
+      });
     },
   });
 };
 
 export const useClaimShiftMutation = () => {
   const { createToast } = useCustomToast();
-
   const { data: employee } = useLoggedInEmployee();
 
   return useMutation({
@@ -96,13 +97,9 @@ export const useClaimShiftMutation = () => {
       await createToast(addEmployeeShift, dto, "Claiming shift...");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.employeeShifts,
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.shifts,
-      });
+      queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts }); // Invalidate shifts for the logged-in employee
+      queryClient.invalidateQueries({ queryKey: queryKeys.shifts }); // Optionally invalidate all shifts
+      queryClient.invalidateQueries({ queryKey: queryKeys.allEmployeeShifts }); // Optionally invalidate all shifts
     },
   });
 };
@@ -110,7 +107,8 @@ export const useClaimShiftMutation = () => {
 export const useEditShiftMutation = (shift: Shift) => {
   const { createToast } = useCustomToast();
   return useMutation({
-    mutationFn: async () => await createToast(editShift, shift, "Editing shift..."),
+    mutationFn: async () =>
+      await createToast(editShift, shift, "Editing shift..."),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.shifts,
@@ -122,7 +120,7 @@ export const useEditShiftMutation = (shift: Shift) => {
 export const useArchiveShiftMutation = () => {
   const { createToast } = useCustomToast();
   return useMutation({
-    mutationFn: async (shiftId:number) => {
+    mutationFn: async (shiftId: number) => {
       await createToast(archiveShift, shiftId, "Archiving shift...");
     },
     onSuccess: () => {

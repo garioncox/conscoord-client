@@ -78,7 +78,7 @@ function ProjectList() {
 
             <div className="flex grow justify-end">
               <label>
-                Show Archived Projects
+                Show Archived Projects{" "}
                 <Checkbox
                   checked={!archived}
                   onChange={() => {
