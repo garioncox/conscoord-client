@@ -23,7 +23,7 @@ export function EmployeeProjectTable({
 
   useEffect(() => {
     if (data) {
-      setSortedData(data); 
+      setSortedData(data);
     }
   }, [data]);
 
@@ -39,40 +39,36 @@ export function EmployeeProjectTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedData.map((project) => {
-            if (project.status === "ARCHIVED") {
-              return (
-                <TableRow
-                  key={project.id}
-                  className="text-slate-600 bg-slate-200 border-l-4 "
-                >
-                  <TableCell className="border-l-4 border-red-400 pl-2">
-                    {project.name}
-                  </TableCell>
-                  <TableCell className="p-2">{project.location}</TableCell>
-                  <TableCell className="p-2">
-                    {combineDates(project.startDate, project.endDate)}
-                  </TableCell>
-                  <TableCell className="p-2">{project.status}</TableCell>
-                </TableRow>
-              );
-            } else {
-              return (
-                <TableRow
-                  key={project.id}
-                  onClick={() => setRowClicked(project.id)}
-                  className="hover:bg-slate-200 py-4"
-                >
-                  <TableCell className="p-2">{project.name}</TableCell>
-                  <TableCell className="p-2">{project.location}</TableCell>
-                  <TableCell className="p-2">
-                    {combineDates(project.startDate, project.endDate)}
-                  </TableCell>
-                  <TableCell className="p-2">{project.status}</TableCell>
-                </TableRow>
-              );
-            }
-          })}
+          {sortedData.map((project) => (
+            <TableRow
+              key={project.id}
+              onClick={
+                project.status !== "ARCHIVED"
+                  ? () => setRowClicked(project.id)
+                  : undefined
+              }
+              className={
+                project.status === "ARCHIVED"
+                  ? "text-slate-600 bg-slate-200 border-l-4"
+                  : "hover:bg-slate-200 py-4"
+              }
+            >
+              <TableCell
+                className={
+                  project.status === "ARCHIVED"
+                    ? "border-l-4 border-red-400 pl-2"
+                    : ""
+                }
+              >
+                {project.name}
+              </TableCell>
+              <TableCell className="p-2">{project.location}</TableCell>
+              <TableCell className="p-2">
+                {combineDates(project.startDate, project.endDate)}
+              </TableCell>
+              <TableCell className="p-2">{project.status}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </>

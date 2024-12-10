@@ -49,7 +49,7 @@ const ProjectSort: FC<ProjectSortProps> = ({ onSortChange, data }) => {
     <>
       <label className="mr-3">Sort By</label>
       <Select
-        className="text-black min-w-52 bg-secondary"
+        className="text-black min-w-52"
         defaultValue=""
         value={sortValue} 
         onChange={(e) => {
