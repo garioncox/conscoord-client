@@ -101,12 +101,24 @@ export function EmployeeShiftTable({
                       className={`rounded-xl bg-tertiary ${
                         shiftFraction(shift) >= 1
                           ? "text-slate-300 border-slate-300 hover:bg-slate-100 cursor-not-allowed"
+                          : shift.status == "ARCHIVED"
+                          ? "text-slate-300 border-slate-300 hover:bg-slate-100 cursor-not-allowed"
                           : "text-slate-500 border-slate-500 hover:text-white hover:bg-blue-500 hover:border-blue-500"
                       } border-2 `}
+                      title={
+                        shift.status === "ARCHIVED"
+                          ? "This shift has been archived"
+                          : shiftFraction(shift) >= 1
+                          ? "Shift is full"
+                          : "Take this shift"
+                      }
                       onClick={(e) => {
                         e.stopPropagation();
 
-                        if (shiftFraction(shift) >= 1) {
+                        if (
+                          shiftFraction(shift) >= 1 ||
+                          shift.status == "ARCHIVED"
+                        ) {
                           return;
                         }
 

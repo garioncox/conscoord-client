@@ -7,12 +7,19 @@ import { ShiftTable } from "@/Components/Tables/ShiftTable";
 import { useProjectShiftsByProjectId } from "@/Functions/Queries/ProjectShiftQueries";
 import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
-import { useAllProjects, useArchiveProjectMutation } from "@/Functions/Queries/ProjectQueries";
+import {
+  useAllProjects,
+  useArchiveProjectMutation,
+} from "@/Functions/Queries/ProjectQueries";
 import { Spinner } from "@/Components/Spinner";
 import Modal from "@/Components/Modal";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
-import { ADMIN_ROLE, CLIENT_ROLE, PSO_ROLE } from "@/Components/Auth/PermissionLock";
+import {
+  ADMIN_ROLE,
+  CLIENT_ROLE,
+  PSO_ROLE,
+} from "@/Components/Auth/PermissionLock";
 import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
 import ShiftSort from "@/Components/Sorting/ShiftSort";
 import { Shift } from "@/Data/Interfaces/Shift";
@@ -58,7 +65,14 @@ const ProjectShifts = () => {
         setContactPerson(contactPerson || null);
       }
     }
-  }, [projectsLoading, employeesLoading, currentProject, projects, employees, id]);
+  }, [
+    projectsLoading,
+    employeesLoading,
+    currentProject,
+    projects,
+    employees,
+    id,
+  ]);
 
   if (projectsLoading || shiftLoading || employeesLoading) {
     <Spinner />;
@@ -105,24 +119,24 @@ const ProjectShifts = () => {
           </div>
         )}
       </div>
-     <div className="overflow-y-auto max-h-[650px]">
-      <PaginatedTable paginatedTableControl={control}>
-        <PermissionComponentLock roles={[PSO_ROLE]}>
-          <EmployeeShiftTable
-            data={control.currentItems}
-            setRowClicked={clickOnAShift}
-          />
-        </PermissionComponentLock>
-        
-        <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
-      <ShiftSort data={sortedData!} onSortChange={setSortedData} />
-        <ShiftTable
-          data={control.currentItems}
-          setRowClicked={clickOnAShift}
-          projectId={Number(id)}
-          />
+      <div className="overflow-y-auto max-h-[650px]">
+        <PaginatedTable paginatedTableControl={control}>
+          <PermissionComponentLock roles={[PSO_ROLE]}>
+            <EmployeeShiftTable
+              data={control.currentItems}
+              setRowClicked={clickOnAShift}
+            />
           </PermissionComponentLock>
-      </PaginatedTable>
+
+          <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
+            <ShiftSort data={sortedData!} onSortChange={setSortedData} />
+            <ShiftTable
+              data={control.currentItems}
+              setRowClicked={clickOnAShift}
+              projectId={Number(id)}
+            />
+          </PermissionComponentLock>
+        </PaginatedTable>
       </div>
       <PermissionComponentLock roles={[ADMIN_ROLE]}>
         <div className="flex justify-end mt-2">
