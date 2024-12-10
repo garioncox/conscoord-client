@@ -1,29 +1,47 @@
-import { Save } from "lucide-react";
+import { Minus, Save } from "lucide-react";
 import GDateInput from "./Generics/gDateInput";
 import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/control/gTextInputController";
-import { TableCell, TableRow } from "./ui/table";
 import { useGDateInput } from "./Generics/control/gDateInputController";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
 import { FormatDate } from "@/Functions/FormatDates";
 import { useAddProjectMutation } from "@/Functions/Queries/ProjectQueries";
 import { useState } from "react";
-import { useLoggedInEmployee } from "@/Functions/Queries/EmployeeQueries";
-import OtherContactInfoModal from "./OtherContactInfoModal";
-import { toast } from "react-toastify";
+import {
+  useAddEmployeeMutation,
+  useLoggedInEmployee,
+} from "@/Functions/Queries/EmployeeQueries";
 import { Checkbox } from "@mui/material";
+import Modal from "./Modal";
+import {
+  useGEmailInput,
+  validateEmail,
+} from "./Generics/control/gEmailInputController";
+import {
+  useGPhoneInput,
+  validatePhone,
+} from "./Generics/control/gPhoneInputController";
+import GEmailInput from "./Generics/gEmailInput";
+import GPhoneInput from "./Generics/gPhoneInput";
+import { useEmployeeRequests } from "@/Functions/EmployeeRequests";
+import { toast } from "react-toastify";
 
-export function AddProject() {
+export const AddProject: React.FC<{
+  toggleModal: () => void;
+  isModalOpen: boolean;
+}> = ({ toggleModal, isModalOpen }) => {
   const [selfAsContact, setSelfAsContact] = useState<boolean>(true);
+  const signedinEmployee = useLoggedInEmployee();
+  const addEmployeeMutation = useAddEmployeeMutation();
+  const employeeRequests = useEmployeeRequests();
   const { data: loggedInEmployee } = useLoggedInEmployee();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
-  const location = useGTextInput("", (v) =>
-    v.length === 0 ? "Pleae add a location" : ""
+  // Main Form Input
+  const locationControl = useGTextInput("", (v) =>
+    v.length === 0 ? "Please add a location" : ""
   );
 
-  const startDate = useGDateInput("", (s: string) => {
+  const startDateControl = useGDateInput("", (s: string) => {
     if (s === "") {
       return "Start date is required";
     }
@@ -37,7 +55,7 @@ export function AddProject() {
     return "";
   });
 
-  const endDate = useGDateInput("", (s: string) => {
+  const endDateControl = useGDateInput("", (s: string) => {
     if (s === "") {
       return "End date is required";
     }
@@ -47,34 +65,99 @@ export function AddProject() {
     if (s < today) {
       return "End date cannot be in the past";
     }
-    if (startDate.value !== "" && s < endDate.value) {
+    if (startDateControl.value !== "" && s < endDateControl.value) {
       return "End date cannot be before start date";
     }
 
     return "";
   });
 
-  const description = useGTextInput("", (v) =>
+  const nameControl = useGTextInput("", (v) =>
     v.length === 0 ? "Please add a name" : ""
   );
 
+  // Contact Form Input
+  const contactNameControl = useGTextInput("", (v) =>
+    v.length === 0 ? "Please add a name" : ""
+  );
+
+  const contactEmailControl = useGEmailInput("", validateEmail);
+  const contactPhoneControl = useGPhoneInput("", validatePhone);
+
   const addProjectMutation = useAddProjectMutation();
 
-  function Validate() {
-    if (startDate.error || endDate.error || description.error) {
-      toast.error("Please fill in all required fields");
-      return false;
-    }
-    return true;
+  const ValidateMainForm = () => {
+    locationControl.setHasBeenTouched(true);
+    startDateControl.setHasBeenTouched(true);
+    endDateControl.setHasBeenTouched(true);
+    nameControl.setHasBeenTouched(true);
+
+    return !(
+      locationControl.error ||
+      startDateControl.error ||
+      endDateControl.error ||
+      nameControl.error
+    );
+  };
+
+  function ValidateContactForm() {
+    contactEmailControl.setHasBeenTouched(true);
+    contactNameControl.setHasBeenTouched(true);
+    contactPhoneControl.setHasBeenTouched(true);
+
+    return !(
+      contactEmailControl.error ||
+      contactNameControl.error ||
+      contactPhoneControl.error
+    );
   }
 
-  function ProjectControl(id: number) {
-    if (!Validate()) return;
+  async function AddEmployee() {
+    try {
+      const existingEmp = await employeeRequests.getEmployeeByEmail(
+        contactEmailControl.value
+      );
+
+      if (existingEmp) {
+        return existingEmp;
+      }
+    } catch {
+      const employeeData = signedinEmployee.data
+        ? {
+            name: contactNameControl.value,
+            email: contactEmailControl.value,
+            phonenumber: contactPhoneControl.value,
+            companyId: signedinEmployee.data.companyid,
+          }
+        : {
+            name: contactNameControl.value,
+            email: contactEmailControl.value,
+            phonenumber: contactPhoneControl.value,
+          };
+      await addEmployeeMutation.mutateAsync(employeeData);
+    }
+
+    return employeeRequests.getEmployeeByEmail(contactEmailControl.value);
+  }
+
+  // Validation
+  async function ValidateAndPost(id: number) {
+    if (!ValidateMainForm()) return;
+
     if (selfAsContact) {
       AddProject(id);
     } else {
-      toggleModal();
-      return;
+      if (!ValidateContactForm()) return;
+      try {
+        const newEmp = await AddEmployee();
+        if (newEmp) {
+          AddProject(newEmp.id);
+        }
+
+        toggleModal();
+      } catch {
+        toast.error("Error adding employee or creating project");
+      }
     }
   }
 
@@ -84,72 +167,86 @@ export function AddProject() {
       return;
     }
     const project: ProjectDTO = {
-      name: description.value,
-      location: location.value,
-      startDate: FormatDate(startDate.value),
-      endDate: FormatDate(endDate.value),
+      name: nameControl.value,
+      location: locationControl.value,
+      startDate: FormatDate(startDateControl.value),
+      endDate: FormatDate(endDateControl.value),
       contactinfo: id,
     };
+    console.log("Contact info...", project.contactinfo);
     addProjectMutation.mutate({ project });
   }
 
   return (
-    <>
-      <TableRow>
-        <TableCell>
-          <div>
-            <GTextInput control={description} />
-          </div>
-        </TableCell>
-        <TableCell>
-          <div className="">
-            <GTextInput control={location} />
-          </div>
-        </TableCell>
-        <TableCell>
-          <div>
-            <GDateInput control={startDate} />
-          </div>
-        </TableCell>
-        <TableCell>
-          <div>
-            <GDateInput control={endDate} />
-          </div>
-        </TableCell>
+    <Modal isOpen={isModalOpen} onClose={toggleModal}>
+      <p className="flex font-semibold text-2xl justify-center border-b pb-3">
+        Add a Project
+      </p>
+      <div className="pb-5">
+        <GTextInput
+          control={nameControl}
+          label={"Project Name"}
+          maxLength={50}
+        />
+        <GTextInput
+          control={locationControl}
+          label={"Location"}
+          maxLength={50}
+        />
+      </div>
 
-        <TableCell className="p-4">
-          <label
-            htmlFor="contact"
-            title="If an officer needs to contact someone, this will be who they contact while on shift"
-          >
-            Use your contact info?
-            <div>
-              <Checkbox
-                onChange={() => setSelfAsContact(!selfAsContact)}
-                checked={selfAsContact}
-                name="YourContact"
-                id="Contact"
+      <div className="flex flex-row items-center space-x-3 justify-center pb-5">
+        <GDateInput control={startDateControl} label={"Start Date"} />
+        <div className="pt-6">
+          <Minus />
+        </div>
+        <GDateInput control={endDateControl} label={"End Date"} />
+      </div>
+
+      {!selfAsContact && (
+        <div className="border-t border-b pb-5 mb-5">
+          <div>
+            <p className="flex font-semibold text-xl justify-center pb-3 pt-5">
+              Add Contact Info
+            </p>
+            <div className="mb-5">
+              <GTextInput
+                control={contactNameControl}
+                maxLength={50}
+                label="Name"
               />
             </div>
-          </label>
-        </TableCell>
-        <TableCell>
-          <div
-            onClick={() =>
-              ProjectControl(loggedInEmployee?.id ? loggedInEmployee?.id : -1)
-            }
-            className="text-primary hover:text-secondary"
-          >
-            <Save />
+            <div className="flex flex-row items-center justify-around">
+              <GEmailInput control={contactEmailControl} />
+              <GPhoneInput control={contactPhoneControl} />
+            </div>
           </div>
-        </TableCell>
-      </TableRow>
+        </div>
+      )}
 
-      <OtherContactInfoModal
-        isModalOpen={isModalOpen}
-        toggleModal={toggleModal}
-        AddProject={AddProject}
-      />
-    </>
+      <div className={`flex flex-row grow items-center ps-auto justify-around`}>
+        <div className="flex flex-row grow items-center">
+          <p title="This is who an officer will contact will on shift, if need be.">
+            Use your contact info?
+          </p>
+          <div>
+            <Checkbox
+              onChange={() => setSelfAsContact(!selfAsContact)}
+              checked={selfAsContact}
+              name="YourContact"
+            />
+          </div>
+        </div>
+
+        <div
+          onClick={() =>
+            ValidateAndPost(loggedInEmployee?.id ? loggedInEmployee?.id : -1)
+          }
+          className="text-primary hover:text-secondary"
+        >
+          <Save />
+        </div>
+      </div>
+    </Modal>
   );
-}
+};

@@ -119,13 +119,22 @@ const ProjectShifts = () => {
           </div>
         )}
       </div>
-      <div className="overflow-y-auto max-h-[650px]">
-        <PaginatedTable paginatedTableControl={control}>
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <EmployeeShiftTable
-              data={control.currentItems}
-              setRowClicked={clickOnAShift}
-            />
+     <div className="overflow-y-auto max-h-[80%]">
+      <PaginatedTable paginatedTableControl={control}>
+        <PermissionComponentLock roles={[PSO_ROLE]}>
+          <EmployeeShiftTable
+            data={control.currentItems}
+            setRowClicked={clickOnAShift}
+          />
+        </PermissionComponentLock>
+        
+        <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
+      <ShiftSort data={sortedData!} onSortChange={setSortedData} />
+        <ShiftTable
+          data={control.currentItems}
+          setRowClicked={clickOnAShift}
+          projectId={Number(id)}
+          />
           </PermissionComponentLock>
 
           <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
