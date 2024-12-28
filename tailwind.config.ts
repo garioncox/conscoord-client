@@ -1,12 +1,11 @@
 import type { Config } from "tailwindcss";
 import colors from "tailwindcss/colors";
+import lineClamp from "@tailwindcss/line-clamp";
 
 const base = colors.slate;
 
 const config: Config = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
@@ -19,6 +18,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [lineClamp],
 };
 export default config;

@@ -6,4 +6,8 @@ export interface Project {
   endDate: string;
   status: string;
   contactinfo: number;
+  description: string;
 }
+
+export const STATUS_ACTIVE = "ACTIVE";
+export const STATUS_ARCHIVED = "ARCHIVED";
