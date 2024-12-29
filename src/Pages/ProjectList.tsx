@@ -173,9 +173,6 @@ function ProjectList() {
       />
     </div>
   );
-
-  // TODO: Need to get the contact info added to each card
-  // TODO: Need to show correct amount of shifts available
 }
 
 export default ProjectList;

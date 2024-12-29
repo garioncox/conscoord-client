@@ -10,9 +10,9 @@ import { AddProject } from "../AddProject";
 import { Project, STATUS_ARCHIVED } from "@/Data/Interfaces/Project";
 import PermissionComponentLock from "../Auth/PermissionComponentLock";
 import { CLIENT_ROLE, ADMIN_ROLE } from "../Auth/PermissionLock";
-import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 import { Spinner } from "../Spinner";
 import Error from "../Error";
+import { useProjectUtils } from "../ProjectUtils";
 
 export function ProjectTable({
   data,
@@ -24,7 +24,7 @@ export function ProjectTable({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [sortedData, setSortedData] = useState<Project[]>(data);
 
-  const { data: employees, isLoading, isError } = useAllEmployees();
+  const projectUtils = useProjectUtils();
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -36,11 +36,11 @@ export function ProjectTable({
     }
   }, [data]);
 
-  if (isLoading) {
+  if (projectUtils.isLoading) {
     return <Spinner />;
   }
 
-  if (isError) {
+  if (projectUtils.isError) {
     return <Error />;
   }
 
@@ -49,9 +49,7 @@ export function ProjectTable({
       <div className="flex-1">
         <div className="grid md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4 gap-5">
           {sortedData.map((project) => {
-            const contact = employees?.find(
-              (e) => e.id === project.contactinfo
-            );
+            const contact = projectUtils.getContactInfo(project);
 
             return (
               <div
@@ -69,12 +67,7 @@ export function ProjectTable({
 
                   <div className="flex flex-row items-center opacity-50 text-xs">
                     <ClockIcon className="me-1 h-4 w-4" />{" "}
-                    {Math.floor(
-                      (new Date(project.endDate as string).getTime() -
-                        new Date(project.startDate as string).getTime()) /
-                        (1000 * 60 * 60 * 24)
-                    )}{" "}
-                    Day(s)
+                    {projectUtils.getTimeLength(project)} Day(s)
                   </div>
                 </div>
 
@@ -91,8 +84,7 @@ export function ProjectTable({
                       Archived
                     </div>
                   )}
-                  {new Date(project.endDate).toISOString() <
-                    new Date().toISOString() && (
+                  {projectUtils.isComplete(project) && (
                     <div className="text-sm border rounded-lg max-w-fit px-2 border-green-300 bg-green-200">
                       Complete
                     </div>
@@ -119,12 +111,11 @@ export function ProjectTable({
 
                 <div className="flex flex-row mt-auto items-start text-xs justify-end">
                   <CalendarDays className="me-1 h-auto min-w-4 max-w-4" />
-                  <div>15 shifts</div>
+                  <div>{projectUtils.getShiftsAvailable(project)} shifts</div>
                 </div>
 
                 <div className="flex mt-2 pt-2 border-t justify-center opacity-50 font-semibold text-xs group-hover:border-slate-300">
-                  {new Date(project.startDate).toLocaleDateString()} -{" "}
-                  {new Date(project.endDate).toLocaleDateString()}
+                  {projectUtils.getDateRangeString(project)}
                 </div>
               </div>
             );
