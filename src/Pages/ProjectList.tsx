@@ -1,6 +1,6 @@
 import { EmployeeProjectTable } from "@/Components/Tables/EmployeeProjectTable";
 import { PaginatedTable } from "@/Components/paginated-table";
-import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { usePagination } from "@/Components/PaginatedTableHook";
 import { ProjectTable } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
@@ -12,14 +12,15 @@ import {
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
-import { Checkbox } from "@mui/material";
+import { Checkbox, FormControl, MenuItem, Select } from "@mui/material";
 import { useRoleQuery } from "@/Functions/RoleProvider";
-import ProjectSort from "@/Components/Sorting/ProjectSort";
+import ProjectSort, { useProjectSort } from "@/Components/Sorting/ProjectSort";
 import {
   useAllProjects,
   useAllProjectByLoggedInCompany,
 } from "@/Functions/Queries/ProjectQueries";
-import { ChevronDown } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/Components/ui/button";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
@@ -29,7 +30,8 @@ function ProjectList() {
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
   const [sortedData, setSortedData] = useState<Project[] | null>([]);
-  const control = usePaginatedTable(sortedData || []);
+  const paginationControl = usePagination(sortedData || []);
+  const sortControl = useProjectSort(sortedData ?? [], setSortedData);
 
   useEffect(() => {
     if (roleQuery && roleQuery.data === CLIENT_ROLE && clientProjects) {
@@ -71,32 +73,112 @@ function ProjectList() {
 
   return (
     <div>
-      <div className="mb-3 flex flex-row items-center text-xs">
-        <div className="hover:bg-slate-200 rounded-xl ps-3 pe-2 cursor-pointer flex items-center">
-          Order
-          <ChevronDown className="ms-1 h-4 w-4" />
-        </div>
-        <div className="ps-3 pe-2 flex items-center">
+      <div className="mb-5 flex flex-row items-center text-xs">
+        <div className="pe-2">Order By</div>
+        <FormControl sx={{ minWidth: 120 }} size="small">
+          <Select
+            value={sortControl.sortValue}
+            displayEmpty
+            onChange={(e) => {
+              sortControl.handleSortChange(e.target.value);
+              sortControl.setSortValue(e.target.value);
+            }}
+            sx={{
+              "& .MuiSelect-select": {
+                padding: "4px 8px",
+                fontSize: "0.75rem",
+              },
+            }}
+          >
+            <MenuItem value="">Select an option</MenuItem>
+            <MenuItem value="Name">Name</MenuItem>
+            <MenuItem value="Location">Location</MenuItem>
+            <MenuItem value="startDateAsc">Soonest First</MenuItem>
+            <MenuItem value="startDateDesc">Latest First</MenuItem>
+            <MenuItem value="endDateAsc">Soonest End Date First</MenuItem>
+            <MenuItem value="endDateDesc">Latest End Date First</MenuItem>
+          </Select>
+        </FormControl>
+        <div className="h-[1px] w-8 bg-gray-300 hidden md:block mx-3"></div>
+        <div className="pe-2 flex items-center">
           <div className="me-2">Archived</div>
           <Checkbox
             checked={!archived}
             onChange={() => {
               setArchived(!archived);
-              control.setCurrentPage(1);
+              paginationControl.setCurrentPage(1);
             }}
             className="ms-1 h-3 w-3"
           />
         </div>
         <div className="h-[1px] bg-gray-300 flex-grow hidden md:block mx-3"></div>{" "}
         <div>Items per page</div>
+        <FormControl sx={{ mx: 1, minWidth: 55 }} size="small">
+          <Select
+            value={paginationControl.itemsPerPage}
+            onChange={(e) =>
+              paginationControl.setItemsPerPage(Number(e.target.value))
+            }
+            autoWidth
+            displayEmpty
+            sx={{
+              "& .MuiSelect-select": {
+                padding: "4px 8px",
+                fontSize: "0.75rem",
+              },
+            }}
+          >
+            <MenuItem value={5}>5</MenuItem>
+            <MenuItem value={10}>10</MenuItem>
+            <MenuItem value={20}>20</MenuItem>
+          </Select>
+        </FormControl>
+        <div className="h-[1px] w-8 bg-gray-300 hidden md:block" />
+        <div className="flex items-center space-x-2 ms-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              paginationControl.handlePageChange(
+                paginationControl.currentPage - 1
+              )
+            }
+            disabled={paginationControl.currentPage === 1}
+            className="w-[33px] h-[33px] text-primary border border-slate-300 hover:border-black"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <p className="text-sm text-muted-foreground">
+            Page {paginationControl.currentPage} of{" "}
+            {paginationControl.totalPages}
+          </p>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              paginationControl.handlePageChange(
+                paginationControl.currentPage + 1
+              )
+            }
+            disabled={
+              paginationControl.currentPage === paginationControl.totalPages
+            }
+            className="w-[33px] h-[33px] text-primary border border-slate-300 hover:border-black"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       <ProjectTable
-        data={control.currentItems}
+        data={paginationControl.currentItems}
         setRowClicked={clickOnAProject}
       />
     </div>
   );
+
+  // TODO: Need to get the contact info added to each card
+  // TODO: Need to show correct amount of shifts available
 
   return (
     <>
@@ -104,7 +186,7 @@ function ProjectList() {
         <h1 className="text-4xl pb-5">Project List</h1>
         <>
           <div className="overflow-y-auto max-h-[80%]">
-            <PaginatedTable paginatedTableControl={control}>
+            <PaginatedTable control={paginationControl}>
               <ProjectSort data={sortedData!} onSortChange={setSortedData} />
 
               <div className="flex grow justify-end">
@@ -114,7 +196,7 @@ function ProjectList() {
                     checked={!archived}
                     onChange={() => {
                       setArchived(!archived);
-                      control.setCurrentPage(1);
+                      paginationControl.setCurrentPage(1);
                     }}
                     className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
                   />
@@ -122,14 +204,14 @@ function ProjectList() {
               </div>
               <PermissionComponentLock roles={[PSO_ROLE]}>
                 <EmployeeProjectTable
-                  data={control.currentItems}
+                  data={paginationControl.currentItems}
                   setRowClicked={clickOnAProject}
                 />
               </PermissionComponentLock>
 
               <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
                 <ProjectTable
-                  data={control.currentItems}
+                  data={paginationControl.currentItems}
                   setRowClicked={clickOnAProject}
                 />
               </PermissionComponentLock>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PaginatedTable } from "@/Components/paginated-table";
 import { Project } from "@/Data/Interfaces/Project";
-import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { usePagination } from "@/Components/PaginatedTableHook";
 import { ShiftTable } from "@/Components/Tables/ShiftTable";
 import { useProjectShiftsByProjectId } from "@/Functions/Queries/ProjectShiftQueries";
 import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
@@ -36,7 +36,9 @@ const ProjectShifts = () => {
   const [currentProject, setCurrentProject] = useState<Project>();
 
   const [sortedData, setSortedData] = useState<Shift[] | null>([]);
-  const control = usePaginatedTable((sortedData?.filter(s => s.status !== "ARCHIVED")) || []);
+  const control = usePagination(
+    sortedData?.filter((s) => s.status !== "ARCHIVED") || []
+  );
 
   useEffect(() => {
     if (shifts) {
@@ -120,7 +122,7 @@ const ProjectShifts = () => {
         )}
       </div>
       <div className="overflow-y-auto max-h-[80%]">
-        <PaginatedTable paginatedTableControl={control}>
+        <PaginatedTable control={control}>
           <PermissionComponentLock roles={[PSO_ROLE]}>
             <EmployeeShiftTable
               data={control.currentItems}

@@ -1,28 +1,26 @@
 import { Pagination } from "./Pagination";
-import { PaginatedTableControl } from "./PaginatedTableHook";
+import { PaginationControl } from "./PaginatedTableHook";
 
 interface PaginatedProjectTableProps<T> {
-  paginatedTableControl: PaginatedTableControl<T>;
+  control: PaginationControl<T>;
   children: React.ReactNode;
 }
 
 export function PaginatedTable<T>({
   children,
-  paginatedTableControl,
+  control,
 }: PaginatedProjectTableProps<T>) {
   return (
     <div className="space-y-4 shadow-xl border p-10 rounded-xl bg-tertiary min-w-full">
       {children}
       <Pagination
-        setCurrentPage={paginatedTableControl.setCurrentPage}
-        setItemsPerPage={paginatedTableControl.setItemsPerPage}
-        itemsPerPage={paginatedTableControl.itemsPerPage}
-        currentPage={paginatedTableControl.currentPage}
-        handleItemsPerPageChange={
-          paginatedTableControl.handleItemsPerPageChange
-        }
-        handlePageChange={paginatedTableControl.handlePageChange}
-        totalPages={paginatedTableControl.totalPages}
+        setCurrentPage={control.setCurrentPage}
+        setItemsPerPage={control.setItemsPerPage}
+        itemsPerPage={control.itemsPerPage}
+        currentPage={control.currentPage}
+        handleItemsPerPageChange={control.handleItemsPerPageChange}
+        handlePageChange={control.handlePageChange}
+        totalPages={control.totalPages}
       />
     </div>
   );

@@ -1,6 +1,5 @@
 import type { Config } from "tailwindcss";
 import colors from "tailwindcss/colors";
-import lineClamp from "@tailwindcss/line-clamp";
 
 const base = colors.slate;
 
@@ -18,6 +17,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [lineClamp],
+  plugins: [],
 };
 export default config;
