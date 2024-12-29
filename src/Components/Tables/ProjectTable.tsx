@@ -10,6 +10,9 @@ import { AddProject } from "../AddProject";
 import { Project, STATUS_ARCHIVED } from "@/Data/Interfaces/Project";
 import PermissionComponentLock from "../Auth/PermissionComponentLock";
 import { CLIENT_ROLE, ADMIN_ROLE } from "../Auth/PermissionLock";
+import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
+import { Spinner } from "../Spinner";
+import Error from "../Error";
 
 export function ProjectTable({
   data,
@@ -21,6 +24,8 @@ export function ProjectTable({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [sortedData, setSortedData] = useState<Project[]>(data);
 
+  const { data: employees, isLoading, isError } = useAllEmployees();
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -31,11 +36,23 @@ export function ProjectTable({
     }
   }, [data]);
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (isError) {
+    return <Error />;
+  }
+
   return (
     <>
       <div className="flex-1">
         <div className="grid md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4 gap-5">
           {sortedData.map((project) => {
+            const contact = employees?.find(
+              (e) => e.id === project.contactinfo
+            );
+
             return (
               <div
                 className={`
@@ -93,9 +110,9 @@ export function ProjectTable({
                   <div className="flex flex-row items-start mt-2 text-sm">
                     <IdCard className="me-1 h-auto min-w-6" />
                     <div>
-                      <div className="font-semibold">Jeff Bezos</div>
-                      <div>richkid@amazon.us</div>
-                      <div>123-456-7890</div>
+                      <div className="font-semibold">{contact?.name}</div>
+                      <div>{contact?.email}</div>
+                      <div>{contact?.phonenumber}</div>
                     </div>
                   </div>
                 )}

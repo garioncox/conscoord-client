@@ -1,20 +1,13 @@
-import { EmployeeProjectTable } from "@/Components/Tables/EmployeeProjectTable";
-import { PaginatedTable } from "@/Components/paginated-table";
 import { usePagination } from "@/Components/PaginatedTableHook";
 import { ProjectTable } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { Project } from "@/Data/Interfaces/Project";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ADMIN_ROLE,
-  CLIENT_ROLE,
-  PSO_ROLE,
-} from "@/Components/Auth/PermissionLock";
-import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
+import { CLIENT_ROLE } from "@/Components/Auth/PermissionLock";
 import { Checkbox, FormControl, MenuItem, Select } from "@mui/material";
 import { useRoleQuery } from "@/Functions/RoleProvider";
-import ProjectSort, { useProjectSort } from "@/Components/Sorting/ProjectSort";
+import { useProjectSort } from "@/Components/Sorting/ProjectSort";
 import {
   useAllProjects,
   useAllProjectByLoggedInCompany,
@@ -24,12 +17,15 @@ import { Button } from "@/Components/ui/button";
 
 function ProjectList() {
   const { data, isLoading } = useAllProjects();
-  const roleQuery = useRoleQuery();
   const { data: clientProjects } = useAllProjectByLoggedInCompany();
+
+  const roleQuery = useRoleQuery();
   const navigate = useNavigate();
+
   const [filteredData, setFilteredData] = React.useState<Project[]>([]);
   const [archived, setArchived] = React.useState(true);
   const [sortedData, setSortedData] = useState<Project[] | null>([]);
+
   const paginationControl = usePagination(sortedData || []);
   const sortControl = useProjectSort(sortedData ?? [], setSortedData);
 
@@ -170,6 +166,7 @@ function ProjectList() {
         </div>
       </div>
 
+      {/* TODO: Rename this. It's not a table anymore */}
       <ProjectTable
         data={paginationControl.currentItems}
         setRowClicked={clickOnAProject}
@@ -179,48 +176,6 @@ function ProjectList() {
 
   // TODO: Need to get the contact info added to each card
   // TODO: Need to show correct amount of shifts available
-
-  return (
-    <>
-      <div className="min-w-full 2xl:px-40">
-        <h1 className="text-4xl pb-5">Project List</h1>
-        <>
-          <div className="overflow-y-auto max-h-[80%]">
-            <PaginatedTable control={paginationControl}>
-              <ProjectSort data={sortedData!} onSortChange={setSortedData} />
-
-              <div className="flex grow justify-end">
-                <label>
-                  Show Archived Projects{" "}
-                  <Checkbox
-                    checked={!archived}
-                    onChange={() => {
-                      setArchived(!archived);
-                      paginationControl.setCurrentPage(1);
-                    }}
-                    className="w-5 h-5 border-2 border-gray-400 rounded-sm checked:border-transparent cursor-pointer ms-5"
-                  />
-                </label>
-              </div>
-              <PermissionComponentLock roles={[PSO_ROLE]}>
-                <EmployeeProjectTable
-                  data={paginationControl.currentItems}
-                  setRowClicked={clickOnAProject}
-                />
-              </PermissionComponentLock>
-
-              <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
-                <ProjectTable
-                  data={paginationControl.currentItems}
-                  setRowClicked={clickOnAProject}
-                />
-              </PermissionComponentLock>
-            </PaginatedTable>
-          </div>
-        </>
-      </div>
-    </>
-  );
 }
 
 export default ProjectList;
