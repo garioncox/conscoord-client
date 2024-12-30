@@ -16,9 +16,26 @@ export const useProjectListControl = () => {
   const [regularShifts, setRegularShifts] = useState<Project[]>([]);
   const [sortedData, setSortedData] = useState<Project[] | null>([]);
 
-  const [archivedSelected, setIsArchivedSelected] = useState<boolean>(false);
-  const [completedSelected, setIsCompletedSelected] = useState<boolean>(false);
+  const [archivedSelected, setIsArchivedSelected] = useState<boolean>(() =>
+    JSON.parse(localStorage.getItem("archivedSelected") || "false")
+  );
+  const [completedSelected, setIsCompletedSelected] = useState<boolean>(() =>
+    JSON.parse(localStorage.getItem("completedSelected") || "false")
+  );
 
+  // Sync variables with local storage
+  useEffect(() => {
+    localStorage.setItem("archivedSelected", JSON.stringify(archivedSelected));
+  }, [archivedSelected]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "completedSelected",
+      JSON.stringify(completedSelected)
+    );
+  }, [completedSelected]);
+
+  // Separate out projects by type on initial load
   useEffect(() => {
     if (data) {
       const cShifts = data.filter(
@@ -43,6 +60,7 @@ export const useProjectListControl = () => {
     }
   }, [data, projectUtils]);
 
+  // Update data when selections change
   useEffect(() => {
     if (data) {
       const newData = [
