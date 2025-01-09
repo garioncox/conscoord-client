@@ -1,5 +1,5 @@
 import { PaginatedTable } from "@/Components/paginated-table";
-import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { usePagination } from "@/Components/PaginatedTableHook";
 import { Spinner } from "@/Components/Spinner";
 import { useClaimedShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ function MyShifts() {
   const { data: employeeShifts } = useEmpShiftsForLoggedInUser();
   const { data: allEmployeeShifts } = useAllEmployeeShifts();
   const navigate = useNavigate();
-  const control = usePaginatedTable(shifts ?? []);
+  const control = usePagination(shifts ?? []);
 
   const getNumEmployeesSignedUpForShift = (s: Shift) => {
     return (
@@ -79,7 +79,7 @@ function MyShifts() {
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">My Shifts</h1>
       <div className="overflow-y-auto max-h-[80%]">
-        <PaginatedTable paginatedTableControl={control}>
+        <PaginatedTable control={control}>
           <div>
             <div className="px-3 font-semibold border-b-2 border-slate-200">
               <div className="grid grid-cols-4 gap-10 pb-3">

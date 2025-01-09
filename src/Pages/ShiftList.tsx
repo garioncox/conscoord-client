@@ -1,5 +1,5 @@
 import { PaginatedTable } from "@/Components/paginated-table";
-import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { usePagination } from "@/Components/PaginatedTableHook";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
 import { Spinner } from "@/Components/Spinner";
@@ -12,12 +12,13 @@ function ShiftList() {
   const { data: shifts, isLoading } = useAllShifts();
   const navigate = useNavigate();
   const [sortedData, setSortedData] = useState<Shift[] | null>([]);
-  const control = usePaginatedTable(sortedData || []);
+  const control = usePagination(sortedData || []);
 
   useEffect(() => {
     if (shifts) {
       const defaultSort = [...shifts].sort(
-        (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+        (a, b) =>
+          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
       );
       setSortedData(defaultSort);
     }
@@ -35,13 +36,13 @@ function ShiftList() {
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">Available Shifts</h1>
       <div className="overflow-y-auto max-h-[80%]">
-      <PaginatedTable paginatedTableControl={control}>
-      <ShiftSort data={sortedData!} onSortChange={setSortedData} />
-        <EmployeeShiftTable
-          data={control.currentItems}
-          setRowClicked={clickOnAShift}
-        />
-      </PaginatedTable>
+        <PaginatedTable control={control}>
+          <ShiftSort data={sortedData!} onSortChange={setSortedData} />
+          <EmployeeShiftTable
+            data={control.currentItems}
+            setRowClicked={clickOnAShift}
+          />
+        </PaginatedTable>
       </div>
     </div>
   );

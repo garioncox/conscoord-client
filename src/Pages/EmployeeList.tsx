@@ -1,6 +1,6 @@
 import "../index.css";
 import { PaginatedTable } from "@/Components/paginated-table";
-import { usePaginatedTable } from "@/Components/PaginatedTableHook";
+import { usePagination } from "@/Components/PaginatedTableHook";
 import { EmployeeTable } from "@/Components/Tables/EmployeeTable";
 import { Spinner } from "@/Components/Spinner";
 import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
@@ -11,7 +11,7 @@ import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 export const EmployeeList = () => {
   const { data: employees } = useAllEmployees();
   const [sortedData, setSortedData] = useState<Employee[] | null>([]);
-  const control = usePaginatedTable(sortedData || []);
+  const control = usePagination(sortedData || []);
 
   useEffect(() => {
     if (employees) {
@@ -27,7 +27,7 @@ export const EmployeeList = () => {
       <Spinner />
     ) : (
       <div className="overflow-y-auto max-h-[80%]">
-        <PaginatedTable paginatedTableControl={control}>
+        <PaginatedTable control={control}>
           <EmployeeSort data={sortedData!} onSortChange={setSortedData} />
           <EmployeeTable data={control.currentItems} />
         </PaginatedTable>
