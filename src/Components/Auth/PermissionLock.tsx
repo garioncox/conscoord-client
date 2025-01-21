@@ -10,20 +10,22 @@ const PermissionLock: FC<{
   roles: string[];
   children: ReactNode;
 }> = ({ roles, children }) => {
-  const roleQuery = useRoleQuery();
+  // const roleQuery = useRoleQuery();
 
-  if (!roleQuery) {
-    return <Spinner />;
-  }
+  return <>{children}</>
 
-  if (
-    (roleQuery.data && roles.includes(roleQuery.data)) ||
-    roleQuery.data == ADMIN_ROLE
-  ) {
-    return <>{children}</>;
-  }
+  // if (!roleQuery) {
+  //   return <Spinner />;
+  // }
 
-  return <p className="text-danger">401 Unauthorised</p>;
+  // if (
+  //   (roleQuery.data && roles.includes(roleQuery.data)) ||
+  //   roleQuery.data == ADMIN_ROLE
+  // ) {
+  //   return <>{children}</>;
+  // }
+
+  // return <p className="text-danger">401 Unauthorised</p>;
 };
 
 export default PermissionLock;

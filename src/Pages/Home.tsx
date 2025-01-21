@@ -1,31 +1,35 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { AxiosError } from "axios";
+import { useAuth } from "react-oidc-context";
 
 export const Home = () => {
-  const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
+  const { getCurrentUser, addEmployee } = useEmployeeRequests();
 
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (user === undefined) {
+      if (user === undefined || !isAuthenticated) {
         return;
       }
 
+      console.log(isAuthenticated);
+
       try {
-        await getEmployeeByEmail(user.email!);
+        await getCurrentUser();
       } catch (error) {
+        // console.log(error)
+        return;
         const axiosError = error as AxiosError;
         if (axiosError.response && axiosError.response.status === 404) {
           console.log("User is not in database...");
           console.log("Adding user");
 
           addEmployee({
-            name: user.name!,
-            email: user.email!,
-            phonenumber: user.phone_number ?? "",
+            name: user?.profile.name ?? "",
+            email: user?.profile.email ?? "",
+            phonenumber: user?.profile.phone_number ?? "",
           });
         }
 
@@ -34,7 +38,7 @@ export const Home = () => {
     };
 
     fetchUser();
-  }, [addEmployee, getEmployeeByEmail, user]);
+  }, [addEmployee, getCurrentUser, user]);
 
   return <p className="text-4xl">Welcome Home!</p>;
 };

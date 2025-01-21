@@ -1,13 +1,10 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "../Auth/Login";
-import LogoutButton from "../Auth/Logout";
+import LoginLogoutButton from "../Auth/LoginLogout";
 import { Link } from "react-router-dom";
 import { ADMIN_ROLE, CLIENT_ROLE, PSO_ROLE } from "../Auth/PermissionLock";
 import NavItem from "./Navitem";
 import { useState } from "react";
 
 const Navbar = () => {
-  const { user } = useAuth0();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -26,9 +23,8 @@ const Navbar = () => {
         </button>
       </div>
       <div
-        className={`w-full block ${
-          isOpen ? "" : "hidden"
-        } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
+        className={`w-full block ${isOpen ? "" : "hidden"
+          } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
       >
         {/* Client Items */}
         <NavItem
@@ -58,7 +54,7 @@ const Navbar = () => {
           roles={[ADMIN_ROLE]}
         />
         <div className="font-semibold text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
-          {user ? <LogoutButton /> : <LoginButton />}
+          <LoginLogoutButton />
         </div>
       </div>
     </nav>
