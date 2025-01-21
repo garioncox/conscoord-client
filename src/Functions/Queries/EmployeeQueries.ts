@@ -10,7 +10,7 @@ export const useLoggedInEmployee = () => {
   const { user, isAuthenticated } = useAuth();
 
   return useQuery({
-    queryKey: queryKeys.loggedInEmployees,
+    queryKey: queryKeys.loggedInEmployee,
     queryFn: () => {
       return getEmployeeByEmail(user?.profile.email ?? "");
     },
@@ -55,3 +55,17 @@ export const useEmployeeById = (id: number) => {
     },
   });
 };
+
+export const useCurrentEmployee = () => {
+  const employeeRequests = useEmployeeRequests();
+  const {user, isAuthenticated} = useAuth();
+
+  return useQuery({
+    queryKey: queryKeys.loggedInEmployee,
+    queryFn: async () => {
+      const emp = await employeeRequests.getCurrentUser(user?.id_token ?? "");
+      return emp;
+    },
+    enabled: !!(isAuthenticated && user),
+  });
+}

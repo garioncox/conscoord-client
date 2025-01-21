@@ -2,11 +2,9 @@ import axios from "axios";
 import { EmployeeDTO } from "../Data/DTOInterfaces/EmployeeDTOInterface";
 import { Employee } from "../Data/Interfaces/EmployeeInterface";
 import { useState } from "react";
-import { useAuth } from "react-oidc-context";
 
 export const useEmployeeRequests = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const { user, isAuthenticated } = useAuth();
 
   const getEmployeeByEmail = async (email: string): Promise<Employee> => {
     const response = await axios.get(`/api/Employee/getByEmail/${email}`);
@@ -30,10 +28,10 @@ export const useEmployeeRequests = () => {
     setEmployees(await getAllEmployees());
   };
 
-  const getCurrentUser = async (): Promise<Employee> => {
+  const getCurrentUser = async (id_token: string): Promise<Employee> => {
     const response = await axios.get("/api/Employee/getCurrentUser", {
       headers: {
-        Authorization: `Bearer ${user?.id_token}`,
+        Authorization: `Bearer ${id_token}`,
       },
     });
 
