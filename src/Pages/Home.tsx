@@ -1,55 +1,31 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
-import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import { AxiosError } from "axios";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import PSOQuickLink from "./QuickLinkPages/PSOQuickLink";
 import { ConstructionManagerQuickLink } from "./QuickLinkPages/ConstructionManagerQuickLink";
 import AdminQuickLinks from "./QuickLinkPages/AdminQuickLinks";
-import { useRoleQuery } from "@/Functions/RoleProvider";
 import {
   ADMIN_ROLE,
   CLIENT_ROLE,
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
 import LandingPage from "./QuickLinkPages/LandingPage";
+import { useRoleQuery } from "@/Functions/RoleProvider";
+import { Spinner } from "@/Components/Spinner";
+import Error from "@/Components/Error";
 
 export const Home = () => {
-  const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
-  const roleQuery = useRoleQuery();
-  const { user } = useAuth0();
+  const {data, isLoading, isError}= useRoleQuery();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (user === undefined) {
-        return;
-      }
+  if (isLoading) {
+    return <Spinner />
+  }
 
-      try {
-        await getEmployeeByEmail(user.email!);
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response && axiosError.response.status === 404) {
-          console.log("User is not in database...");
-          console.log("Adding user");
-
-          addEmployee({
-            name: user.name!,
-            email: user.email!,
-            phonenumber: user.phone_number ?? "",
-          });
-        }
-
-        console.error("Error fetching user by email:", error);
-      }
-    };
-
-    fetchUser();
-  }, [addEmployee, getEmployeeByEmail, user]);
+  if (isError) {
+    return <Error />
+  }
 
   return (
     <>
-      {!roleQuery.data ? (
+      {!data ? (
         <LandingPage />
       ) : (
         <div>

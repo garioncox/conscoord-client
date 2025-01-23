@@ -5,8 +5,8 @@ import { queryKeys } from "./QueryKeyFactory";
 import { addProject, archiveProject, getAllProjects, useProjectRequests } from "../ProjectRequests";
 import { Project } from "@/Data/Interfaces/Project";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useEmployeeRequests } from "../EmployeeRequests";
+import { useAuth } from "react-oidc-context";
 
 export const useArchiveProjectMutation = () => {
   const { createToast } = useCustomToast();
@@ -48,7 +48,7 @@ export const useAllProjects = () => {
 };
 
 export const useAllProjectByLoggedInCompany = () => {
-  const { user } = useAuth0();
+  const { user } = useAuth();
   const { getEmployeeByEmail } = useEmployeeRequests();
   const { getCompanyProjects } = useProjectRequests();
 
@@ -56,7 +56,7 @@ export const useAllProjectByLoggedInCompany = () => {
     queryKey: queryKeys.companyProjects,
     queryFn: async () => {
       if (user) {
-        const currentUser = await getEmployeeByEmail(user.email || "");
+        const currentUser = await getEmployeeByEmail(user?.profile.email ?? "");
         const projects = await getCompanyProjects(currentUser.id);
 
         if (projects) {

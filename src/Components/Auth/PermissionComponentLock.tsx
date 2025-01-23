@@ -5,9 +5,9 @@ const PermissionComponentLock: FC<{
   roles: string[];
   children: ReactNode;
 }> = ({ roles, children }) => {
-  const roleQuery = useRoleQuery();
+  const { data } = useRoleQuery();
 
-  if (roleQuery.data && roles.includes(roleQuery.data)) {
+  if (data && roles.includes(data)) {
     return <>{children}</>;
   }
 };

@@ -1,18 +1,18 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAllEmployees, getEmployeeByEmail, getEmployeesByShiftId, useEmployeeRequests } from "../EmployeeRequests";
-import { useAuth0 } from "@auth0/auth0-react";
 import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { getAllEmployeeShifts } from "../EmpShiftRequests";
+import { useAuth } from "react-oidc-context";
 
 export const useLoggedInEmployee = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth();
 
   return useQuery({
-    queryKey: queryKeys.loggedInEmployees,
+    queryKey: queryKeys.loggedInEmployee,
     queryFn: () => {
-      return getEmployeeByEmail(user!.email!);
+      return getEmployeeByEmail(user?.profile.email ?? "");
     },
     enabled: !!(isAuthenticated && user),
   });
@@ -28,7 +28,7 @@ export const useAddEmployeeMutation = () => {
 export const useEmployeesByShift = (shiftId: number) => {
   return useQuery({
     queryKey: [queryKeys.employeesByShift, shiftId],
-    queryFn: async() => {
+    queryFn: async () => {
       const Employees: Employee[] = await getAllEmployees();
       const EmpShifts: EmployeeShift[] = await getAllEmployeeShifts();
       const filteredEmpShifts = EmpShifts.filter((es) => es.shiftId == shiftId);
@@ -55,3 +55,17 @@ export const useEmployeeById = (id: number) => {
     },
   });
 };
+
+export const useCurrentEmployee = () => {
+  const employeeRequests = useEmployeeRequests();
+  const {user, isAuthenticated} = useAuth();
+
+  return useQuery({
+    queryKey: queryKeys.loggedInEmployee,
+    queryFn: async () => {
+      const emp = await employeeRequests.getCurrentUser(user?.id_token ?? "");
+      return emp;
+    },
+    enabled: !!(isAuthenticated && user),
+  });
+}

@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useCurrentEmployee } from "./Queries/EmployeeQueries";
 import { useRoleRequests } from "./RoleRequests";
 
 export const useRoleQuery = () => {
-  const { isAuthenticated, user } = useAuth0();
-  const { getRoleFromEmail } = useRoleRequests();
+  const { data: currentEmployee, isLoading, isError } = useCurrentEmployee();
+  const roleRequests = useRoleRequests();
 
   return useQuery({
-    queryKey: ["role", user?.email],
+    queryKey: ["role", currentEmployee ? currentEmployee.email : ""],
     queryFn: async () => {
-      if (isAuthenticated && user?.email) {
-        return (await getRoleFromEmail(user.email)).rolename;
+      if (!isLoading && !isError && currentEmployee) {
+        const role = await roleRequests.getRoleFromEmail(currentEmployee.email);
+        return role.rolename;
       }
       return "";
     },
