@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useEmployeeRequests } from "../Functions/EmployeeRequests";
 import { AxiosError } from "axios";
+import { UserInfo } from "@/Components/UserInfo";
 
 export const Home = () => {
   const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
@@ -36,5 +37,11 @@ export const Home = () => {
     fetchUser();
   }, [addEmployee, getEmployeeByEmail, user]);
 
-  return <p className="text-4xl">Welcome Home!</p>;
+  return (
+    <div>
+      <p className="text-4xl">Welcome Home!</p>
+      {<UserInfo />}
+    </div>
+  )
+
 };
