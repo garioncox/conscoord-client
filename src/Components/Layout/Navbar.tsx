@@ -26,9 +26,8 @@ const Navbar = () => {
         </button>
       </div>
       <div
-        className={`w-full block ${
-          isOpen ? "" : "hidden"
-        } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
+        className={`w-full block ${isOpen ? "" : "hidden"
+          } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
       >
         {/* Client Items */}
         <NavItem
@@ -54,6 +53,11 @@ const Navbar = () => {
         {/* Admin Items */}
         <NavItem
           to={"/admin/view/employees"}
+          label={"View Employees"}
+          roles={[ADMIN_ROLE]}
+        />
+        <NavItem
+          to={"/admin/user/view"}
           label={"View Employees"}
           roles={[ADMIN_ROLE]}
         />

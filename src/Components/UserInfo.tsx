@@ -1,13 +1,12 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { useAllEmployees, useEmployeeEditMutation } from "@/Functions/Queries/EmployeeQueries";
 import { Edit } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const UserInfo = () => {
     const editEmployeeMutation = useEmployeeEditMutation();
-    const { data: AllEmployees } = useAllEmployees();
+    const { data: Employees } = useAllEmployees();
 
-    const [Employees, setEmployees] = useState<Employee[]>();
     const [Employee, setEmployee] = useState<Employee>();
     const [Editing, setEditing] = useState(false);
 
@@ -18,14 +17,6 @@ export const UserInfo = () => {
     const [EmployeeCompanyId, setEmployeeCompanyId] = useState(0);
 
     const [EmployeeView, setEmployeeView] = useState(false);
-
-    useEffect(() => {
-        PopulateEmployees();
-    }, [])
-
-    async function PopulateEmployees() {
-        setEmployees(await AllEmployees)
-    }
 
     function EditEmployee() {
         if (Employee === undefined) return;
