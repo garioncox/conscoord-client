@@ -5,6 +5,7 @@ import { Spinner } from "../Spinner";
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";
 export const CLIENT_ROLE = "CLIENT";
+export const NO_ROLE = "NOROLE";
 
 const PermissionLock: FC<{
   roles: string[];
