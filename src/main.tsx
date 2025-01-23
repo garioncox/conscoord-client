@@ -26,7 +26,6 @@ ReactDOM.render(
   <BrowserRouter>
     <StrictMode>
       <AuthProvider {...oidcConfig}>
-
         <MainLayout>
           <ErrorBoundary fallback={<Error />}>
             <App />
@@ -34,6 +33,6 @@ ReactDOM.render(
         </MainLayout>
       </AuthProvider>
     </StrictMode>
-  </BrowserRouter >,
+  </BrowserRouter>,
   document.getElementById("root")
 );

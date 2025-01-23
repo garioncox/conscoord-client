@@ -8,9 +8,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="flex items-center justify-between flex-wrap bg-primary text-secondary p-8">
+    <nav className="flex items-center justify-between flex-wrap bg-primary text-secondary p-4">
       <div className="text-secondary hover:text-white">
-        <Link className="text-4xl font-semibold" to="/">
+        <Link className="text-4xl font-medium" to="/">
           Conscoord
         </Link>
       </div>
@@ -53,7 +53,7 @@ const Navbar = () => {
           label={"View Employees"}
           roles={[ADMIN_ROLE]}
         />
-        <div className="font-semibold text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
+        <div className="font-medium text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
           <LoginLogoutButton />
         </div>
       </div>
