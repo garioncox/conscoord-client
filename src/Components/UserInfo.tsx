@@ -1,10 +1,10 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
-import { useAllEmployees, useEmployeeEditMutation } from "@/Functions/Queries/EmployeeQueries";
+import { useAllEmployees, useEditEmployeeMutation } from "@/Functions/Queries/EmployeeQueries";
 import { Edit } from "lucide-react";
 import { useState } from "react";
 
 export const UserInfo = () => {
-    const editEmployeeMutation = useEmployeeEditMutation();
+    const editEmployeeMutation = useEditEmployeeMutation();
     const { data: Employees } = useAllEmployees();
 
     const [Employee, setEmployee] = useState<Employee>();

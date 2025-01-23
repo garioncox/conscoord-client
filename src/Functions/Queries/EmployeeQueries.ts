@@ -1,12 +1,18 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getAllEmployees, getEmployeeByEmail, getEmployeesByShiftId, useEmployeeRequests } from "../EmployeeRequests";
+import {
+  editEmployee,
+  getAllEmployees,
+  getEmployeeByEmail,
+  getEmployeesByShiftId,
+  useEmployeeRequests,
+} from "../EmployeeRequests";
 import { useAuth0 } from "@auth0/auth0-react";
 import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { getAllEmployeeShifts } from "../EmpShiftRequests";
 import { queryClient } from "./QueryClient";
-import { toast } from "react-toastify";
+import { useCustomToast } from "@/Components/Toast";
 
 export const useLoggedInEmployee = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -23,7 +29,7 @@ export const useLoggedInEmployee = () => {
 export const useAddEmployeeMutation = () => {
   const { addEmployee } = useEmployeeRequests();
   return useMutation({
-    mutationFn: addEmployee
+    mutationFn: addEmployee,
   });
 };
 
@@ -58,18 +64,17 @@ export const useEmployeeById = (id: number) => {
   });
 };
 
-export const useEmployeeEditMutation = () => {
-  const { editEmployee } = useEmployeeRequests();
+export const useEditEmployeeMutation = () => {
+  const { createToast } = useCustomToast();
+
   return useMutation({
     mutationFn: async (e: Employee) => {
-      await editEmployee(e);
+      await createToast(editEmployee, e, "Editing Project");
     },
     onSuccess: () => {
-      toast.success("Employee updated successfully")
       queryClient.invalidateQueries({
-        queryKey: [queryKeys.employees],
+        queryKey: queryKeys.employees,
       });
     },
   });
-
 };
