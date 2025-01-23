@@ -14,7 +14,7 @@ import { Spinner } from "../Spinner";
 import Error from "../Error";
 import { useProjectUtils } from "../ProjectUtils";
 
-export function ProjectTable({
+export function ProjectCards({
   data,
   setRowClicked,
 }: {

@@ -1,5 +1,5 @@
 import { usePagination } from "@/Components/PaginatedTableHook";
-import { ProjectTable } from "@/Components/Tables/ProjectTable";
+import { ProjectCards } from "@/Components/Tables/ProjectTable";
 import { Spinner } from "@/Components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Checkbox, FormControl, MenuItem, Select } from "@mui/material";
@@ -144,8 +144,7 @@ function ProjectList() {
         </div>
       </div>
 
-      {/* TODO: Rename this. It's not a table anymore */}
-      <ProjectTable
+      <ProjectCards
         data={paginationControl.currentItems}
         setRowClicked={clickOnAProject}
       />

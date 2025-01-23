@@ -11,9 +11,9 @@ export const useProjectListControl = () => {
   const { data, isLoading } = useAllProjects();
   const projectUtils = useProjectUtils();
 
-  const [completedProjects, setCompletedShifts] = useState<Project[]>([]);
-  const [archivedProjects, setArchivedShifts] = useState<Project[]>([]);
-  const [regularShifts, setRegularShifts] = useState<Project[]>([]);
+  const [completedProjects, setCompletedProjects] = useState<Project[]>([]);
+  const [archivedProjects, setArchivedProjects] = useState<Project[]>([]);
+  const [regularProjects, setRegularProjects] = useState<Project[]>([]);
   const [sortedData, setSortedData] = useState<Project[] | null>([]);
 
   const [archivedSelected, setIsArchivedSelected] = useState<boolean>(() =>
@@ -38,24 +38,24 @@ export const useProjectListControl = () => {
   // Separate out projects by type on initial load
   useEffect(() => {
     if (data) {
-      const cShifts = data.filter(
+      const cProjects = data.filter(
         (p: Project) => projectUtils.isComplete(p) && p.status === STATUS_ACTIVE
       );
-      const aShifts = data.filter((p: Project) => p.status === STATUS_ARCHIVED);
-      const rShifts = data.filter(
+      const aProjects = data.filter((p: Project) => p.status === STATUS_ARCHIVED);
+      const rProjects = data.filter(
         (p: Project) =>
           !(projectUtils.isComplete(p) || p.status === STATUS_ARCHIVED)
       );
 
       // Preventing updating if we have no changes
-      setCompletedShifts((prev) =>
-        JSON.stringify(prev) === JSON.stringify(cShifts) ? prev : cShifts
+      setCompletedProjects((prev) =>
+        JSON.stringify(prev) === JSON.stringify(cProjects) ? prev : cProjects
       );
-      setArchivedShifts((prev) =>
-        JSON.stringify(prev) === JSON.stringify(aShifts) ? prev : aShifts
+      setArchivedProjects((prev) =>
+        JSON.stringify(prev) === JSON.stringify(aProjects) ? prev : aProjects
       );
-      setRegularShifts((prev) =>
-        JSON.stringify(prev) === JSON.stringify(rShifts) ? prev : rShifts
+      setRegularProjects((prev) =>
+        JSON.stringify(prev) === JSON.stringify(rProjects) ? prev : rProjects
       );
     }
   }, [data, projectUtils]);
@@ -64,7 +64,7 @@ export const useProjectListControl = () => {
   useEffect(() => {
     if (data) {
       const newData = [
-        ...regularShifts,
+        ...regularProjects,
         ...(archivedSelected ? archivedProjects : []),
         ...(completedSelected ? completedProjects : []),
       ];
@@ -77,7 +77,7 @@ export const useProjectListControl = () => {
     completedProjects,
     completedSelected,
     data,
-    regularShifts,
+    regularProjects,
   ]);
 
   return {
