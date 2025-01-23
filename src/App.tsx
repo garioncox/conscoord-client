@@ -17,14 +17,7 @@ import { ShiftDetails } from "./Pages/ShiftDetails";
 function App() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <PermissionLock roles={[PSO_ROLE, CLIENT_ROLE]}>
-            <Home />
-          </PermissionLock>
-        }
-      />
+      <Route path="/" element={<Home />} />
 
       <Route
         path="shift/view/available"
