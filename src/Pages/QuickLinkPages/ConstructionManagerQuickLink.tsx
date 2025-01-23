@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import ConstructionBanner from "../../Pictures/ConstructionBanner.jpeg"
 
 export const ConstructionManagerQuickLink = () => {
   return (
@@ -8,7 +9,7 @@ export const ConstructionManagerQuickLink = () => {
         <div className="w-11/12 h-60 overflow-hidden mb-10">
           <img
             className="w-full h-full object-cover object-center shadow-lg"
-            src="https://construction-today.com/wp-content/uploads/sites/5/2024/01/AdobeStock_95426986-800x445.jpeg"
+            src={ConstructionBanner}
             alt="Construction Image"
           />
         </div>

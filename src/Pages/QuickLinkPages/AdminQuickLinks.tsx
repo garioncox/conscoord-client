@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import AdminBanner from "../../Pictures/AdminBanner.jpg"
 
 const AdminQuickLinks = () => {
   return (
@@ -8,7 +9,7 @@ const AdminQuickLinks = () => {
         <div className="w-full h-60 overflow-hidden mb-10">
           <img
             className="w-full h-full object-cover object-center shadow-lg"
-            src="https://st2.depositphotos.com/1258191/11997/i/450/depositphotos_119974112-stock-photo-business-team-at-work.jpg"
+            src={AdminBanner}
             alt="Admin Image"
           />
         </div>{" "}

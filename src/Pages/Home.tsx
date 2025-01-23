@@ -12,7 +12,7 @@ import {
   CLIENT_ROLE,
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
-import LoggedOutQuickLinks from "./QuickLinkPages/LoggedOutQuickLinks";
+import LandingPage from "./QuickLinkPages/LandingPage";
 
 export const Home = () => {
   const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
@@ -49,9 +49,8 @@ export const Home = () => {
 
   return (
     <>
-      {/* logged out */}
       {!roleQuery.data ? (
-        <LoggedOutQuickLinks />
+        <LandingPage />
       ) : (
         <div>
           <PermissionComponentLock roles={[PSO_ROLE]}>

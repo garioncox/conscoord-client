@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PSOBanner from "../../Pictures/PSOBanner.webp"
 
 const PSOQuickLink = () => {
   return (
@@ -8,7 +9,7 @@ const PSOQuickLink = () => {
         <div className="w-full h-60 overflow-hidden mb-10">
           <img
             className="w-full h-full object-cover object-center shadow-lg"
-            src="https://images.stockcake.com/public/4/4/4/444ba12c-0ee4-44f9-934e-48825b937b60_large/city-highway-patrol-stockcake.jpg"
+            src={PSOBanner}
             alt="PSO Image"
           />
         </div>{" "}
