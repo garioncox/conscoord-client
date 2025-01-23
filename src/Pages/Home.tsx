@@ -1,23 +1,31 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
-import { useEmployeeRequests } from "../Functions/EmployeeRequests";
-import { AxiosError } from "axios";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
 import PSOQuickLink from "./QuickLinkPages/PSOQuickLink";
 import { ConstructionManagerQuickLink } from "./QuickLinkPages/ConstructionManagerQuickLink";
 import AdminQuickLinks from "./QuickLinkPages/AdminQuickLinks";
-import { useRoleQuery } from "@/Functions/RoleProvider";
 import {
   ADMIN_ROLE,
   CLIENT_ROLE,
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
 import LandingPage from "./QuickLinkPages/LandingPage";
+import { useRoleQuery } from "@/Functions/RoleProvider";
+import { Spinner } from "@/Components/Spinner";
+import Error from "@/Components/Error";
 
 export const Home = () => {
+  const {data, isLoading, isError}= useRoleQuery();
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (isError) {
+    return <Error />
+  }
+
   return (
     <>
-      {!roleQuery.data ? (
+      {!data ? (
         <LandingPage />
       ) : (
         <div>
