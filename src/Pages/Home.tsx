@@ -13,8 +13,6 @@ import {
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
 import LandingPage from "./QuickLinkPages/LandingPage";
-import { UserInfo } from "@/Components/UserInfo";
-
 
 export const Home = () => {
   const { addEmployee, getEmployeeByEmail } = useEmployeeRequests();
