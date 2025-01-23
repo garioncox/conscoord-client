@@ -40,7 +40,6 @@ export const Home = () => {
   return (
     <div>
       <p className="text-4xl">Welcome Home!</p>
-      {<UserInfo />}
     </div>
   )
 
