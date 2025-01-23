@@ -5,8 +5,6 @@ import { useState } from "react";
 export const useRoleRequests = () => {
   const [roles, setRoles] = useState<Role[]>([]);
 
-
-
   const getRoleFromEmail = async (email: string): Promise<Role> => {
     const response = await axios.get(`/api/Role/getByEmail/${email}`);
     return response.data;

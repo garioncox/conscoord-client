@@ -1,6 +1,7 @@
 import { FC, ReactNode } from "react";
 import { useRoleQuery } from "../../Functions/RoleProvider";
 import { Spinner } from "../Spinner";
+import Error from "../Error";
 
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";
@@ -10,22 +11,21 @@ const PermissionLock: FC<{
   roles: string[];
   children: ReactNode;
 }> = ({ roles, children }) => {
-  // const roleQuery = useRoleQuery();
+  const {data, isLoading, isError} = useRoleQuery();
 
-  return <>{children}</>
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-  // if (!roleQuery) {
-  //   return <Spinner />;
-  // }
+  if (isError) {
+    return <Error />
+  }
 
-  // if (
-  //   (roleQuery.data && roles.includes(roleQuery.data)) ||
-  //   roleQuery.data == ADMIN_ROLE
-  // ) {
-  //   return <>{children}</>;
-  // }
+  if ((data && roles.includes(data)) || data == ADMIN_ROLE) {
+    return <>{children}</>;
+  }
 
-  // return <p className="text-danger">401 Unauthorised</p>;
+  return <p className="text-danger">401 Unauthorised</p>;
 };
 
 export default PermissionLock;

@@ -4,11 +4,11 @@ const LoginLogoutButton = () => {
   const auth = useAuth();
 
   if (auth.isAuthenticated) {
-    return <button onClick={() => void auth.removeUser()}>Log Out</button>
+    return <button className="text-secondary hover:text-tertiary" onClick={() => void auth.removeUser()}>Log Out</button>
   }
 
   else {
-    return <button onClick={() => {
+    return <button className="text-secondary hover:text-tertiary" onClick={() => {
       auth.signinRedirect();
     }}>Log In</button>
   }
