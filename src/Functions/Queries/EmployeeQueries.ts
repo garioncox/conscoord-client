@@ -5,6 +5,8 @@ import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { getAllEmployeeShifts } from "../EmpShiftRequests";
+import { queryClient } from "./QueryClient";
+import { toast } from "react-toastify";
 
 export const useLoggedInEmployee = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -28,7 +30,7 @@ export const useAddEmployeeMutation = () => {
 export const useEmployeesByShift = (shiftId: number) => {
   return useQuery({
     queryKey: [queryKeys.employeesByShift, shiftId],
-    queryFn: async() => {
+    queryFn: async () => {
       const Employees: Employee[] = await getAllEmployees();
       const EmpShifts: EmployeeShift[] = await getAllEmployeeShifts();
       const filteredEmpShifts = EmpShifts.filter((es) => es.shiftId == shiftId);
@@ -54,4 +56,20 @@ export const useEmployeeById = (id: number) => {
       return await getEmployeesByShiftId(id);
     },
   });
+};
+
+export const useEmployeeEditMutation = () => {
+  const { editEmployee } = useEmployeeRequests();
+  return useMutation({
+    mutationFn: async (e: Employee) => {
+      await editEmployee(e);
+    },
+    onSuccess: () => {
+      toast.success("Employee updated successfully")
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.employees],
+      });
+    },
+  });
+
 };
