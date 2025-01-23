@@ -24,10 +24,6 @@ const PermissionLock: FC<{
     return <>{children}</>;
   }
 
-  if (roles[0] == NO_ROLE) {
-    return <></>;
-  }
-
   return <p className="text-danger">401 Unauthorised</p>;
 };
 
