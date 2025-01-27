@@ -1,15 +1,17 @@
 import { usePagination } from "@/Components/PaginatedTableHook";
 import { ProjectCards } from "@/Components/Tables/ProjectTable";
-import { Spinner } from "@/Components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Checkbox, FormControl, MenuItem, Select } from "@mui/material";
 import { useProjectSort } from "@/Components/Sorting/ProjectSort";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { useProjectListControl } from "@/Pages/Control/ProjectListControl";
+import { useAuth } from "react-oidc-context";
+import { Spinner } from "@/Components/Spinner";
 
 function ProjectList() {
   const navigate = useNavigate();
+  const { isLoading: authLoading } = useAuth();
 
   const control = useProjectListControl();
   const paginationControl = usePagination(control.sortedData || []);
@@ -18,7 +20,7 @@ function ProjectList() {
     control.setSortedData
   );
 
-  if (control.isLoading) {
+  if (control.isLoading || authLoading) {
     return <Spinner />;
   }
 

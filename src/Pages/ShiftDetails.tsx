@@ -12,9 +12,11 @@ import {
 import PSOView from "./ShiftDetails/PSOView";
 import ClientView from "./ShiftDetails/ClientView";
 import { useShiftsFulfilledUtils } from "@/Components/ShiftsFulfilledHook";
+import { useAuth } from "react-oidc-context";
 
 export const ShiftDetails = () => {
   const { id } = useParams();
+  const { isLoading: isAuthLoading } = useAuth();
 
   const { data: loggedInEmployee } = useLoggedInEmployee();
   const { data: claimedShifts, isLoading: isClaimedShiftsLoading } =
@@ -66,7 +68,7 @@ export const ShiftDetails = () => {
     }
   }, [shiftFromParam, isShiftFromParamLoading]);
 
-  if (isClaimedShiftsLoading || isShiftFromParamLoading) {
+  if (isClaimedShiftsLoading || isShiftFromParamLoading || isAuthLoading) {
     return <Spinner />;
   }
 

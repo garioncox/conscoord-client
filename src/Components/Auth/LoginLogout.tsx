@@ -13,6 +13,7 @@ const LoginLogoutButton = () => {
       <button
         className="text-secondary hover:text-tertiary"
         onClick={async () => {
+          navigate("/");
           await signoutSilent();
           await removeUser();
 
@@ -20,8 +21,6 @@ const LoginLogoutButton = () => {
             queryKey: queryKeys.loggedInEmployee,
           });
           await queryClient.resetQueries({ queryKey: ["role"] });
-
-          navigate("/");
         }}
       >
         Log Out

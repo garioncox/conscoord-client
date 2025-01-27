@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import PermissionComponentLock from "../Auth/PermissionComponentLock";
 import { PSO_ROLE } from "../Auth/PermissionLock";
 import { useShiftsFulfilledUtils } from "../ShiftsFulfilledHook";
+import { useAuth } from "react-oidc-context";
 
 export function EmployeeShiftTable({
   data,
@@ -33,6 +34,7 @@ export function EmployeeShiftTable({
   const [sortedData, setSortedData] = useState<Shift[]>(data);
   const { shiftFractionString, shiftFractionStyles, shiftFraction } =
     useShiftsFulfilledUtils();
+  const { isLoading: authLoading } = useAuth();
 
   useEffect(() => {
     if (data) {
@@ -44,7 +46,7 @@ export function EmployeeShiftTable({
     addMutation.mutate(shiftId);
   };
 
-  if (shiftsLoading) {
+  if (shiftsLoading || authLoading) {
     return <Spinner />;
   }
 

@@ -1,8 +1,8 @@
 import { FC, ReactNode } from "react";
 import { useRoleQuery } from "../../Functions/RoleProvider";
-import { Spinner } from "../Spinner";
 import Error from "../Error";
 import { useAuth } from "react-oidc-context";
+import { Spinner } from "../Spinner";
 
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";
@@ -17,10 +17,7 @@ const PermissionLock: FC<{
   const { isLoading: isAuthLoading } = useAuth();
 
   if (isLoading || isAuthLoading) {
-    <div className="flex flex-col space-y-4">
-      <Spinner />
-      <p>This may take a moment...</p>
-    </div>;
+    <Spinner />;
   }
 
   if (isError) {

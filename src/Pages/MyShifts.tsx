@@ -1,6 +1,5 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePagination } from "@/Components/PaginatedTableHook";
-import { Spinner } from "@/Components/Spinner";
 import { useClaimedShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
 import { Link, useNavigate } from "react-router-dom";
 import { Shift } from "@/Data/Interfaces/Shift";
@@ -10,6 +9,8 @@ import {
   useAllEmployeeShifts,
   useEmpShiftsForLoggedInUser,
 } from "@/Functions/Queries/EmployeeShiftQueries";
+import { Spinner } from "@/Components/Spinner";
+import { useAuth } from "react-oidc-context";
 
 function MyShifts() {
   const { data: shifts } = useClaimedShiftsForLoggedInUser();
@@ -17,6 +18,7 @@ function MyShifts() {
   const { data: allEmployeeShifts } = useAllEmployeeShifts();
   const navigate = useNavigate();
   const control = usePagination(shifts ?? []);
+  const { isLoading: authLoading } = useAuth();
 
   const getNumEmployeesSignedUpForShift = (s: Shift) => {
     return (
@@ -50,13 +52,8 @@ function MyShifts() {
       : "text-green-600";
   };
 
-  if (!shifts) {
-    return (
-      <div className="flex flex-col space-y-4">
-        <Spinner />
-        <p>This may take a moment...</p>
-      </div>
-    )
+  if (!shifts || authLoading) {
+    return <Spinner />;
   }
 
   if (shifts.length == 0) {

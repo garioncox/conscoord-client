@@ -20,12 +20,7 @@ export const Home = () => {
   const { isLoading: isEmpLoading } = useCurrentEmployee();
 
   if (isLoading || authLoading || isEmpLoading) {
-    return (
-      <div className="flex flex-col space-y-4">
-        <Spinner />
-        <p>This may take a moment...</p>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (isError) {
