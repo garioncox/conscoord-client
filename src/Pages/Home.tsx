@@ -11,16 +11,23 @@ import LandingPage from "./QuickLinkPages/LandingPage";
 import { useRoleQuery } from "@/Functions/RoleProvider";
 import { Spinner } from "@/Components/Spinner";
 import Error from "@/Components/Error";
+import { useEffect } from "react";
+import { useCurrentEmployee } from "@/Functions/Queries/EmployeeQueries";
 
 export const Home = () => {
-  const {data, isLoading, isError}= useRoleQuery();
+  const { data, isLoading, isError } = useRoleQuery();
+  const { data: user } = useCurrentEmployee();
+  useEffect(() => {
+    console.log("data: ", data);
+    console.log("user: ", user);
+  }, [data, isLoading, user]);
 
   if (isLoading) {
-    return <Spinner />
+    return <Spinner />;
   }
 
   if (isError) {
-    return <Error />
+    return <Error />;
   }
 
   return (

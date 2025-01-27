@@ -1,5 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getAllEmployees, getEmployeeByEmail, getEmployeesByShiftId, useEmployeeRequests } from "../EmployeeRequests";
+import {
+  getAllEmployees,
+  getEmployeeByEmail,
+  getEmployeesByShiftId,
+  useEmployeeRequests,
+} from "../EmployeeRequests";
 import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
@@ -21,7 +26,7 @@ export const useLoggedInEmployee = () => {
 export const useAddEmployeeMutation = () => {
   const { addEmployee } = useEmployeeRequests();
   return useMutation({
-    mutationFn: addEmployee
+    mutationFn: addEmployee,
   });
 };
 
@@ -58,14 +63,15 @@ export const useEmployeeById = (id: number) => {
 
 export const useCurrentEmployee = () => {
   const employeeRequests = useEmployeeRequests();
-  const {user, isAuthenticated} = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   return useQuery({
     queryKey: queryKeys.loggedInEmployee,
     queryFn: async () => {
+      console.log("(tanstack) Fetching user", user?.profile.email);
       const emp = await employeeRequests.getCurrentUser(user?.id_token ?? "");
       return emp;
     },
     enabled: !!(isAuthenticated && user),
   });
-}
+};
