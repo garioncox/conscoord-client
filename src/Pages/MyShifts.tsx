@@ -51,7 +51,12 @@ function MyShifts() {
   };
 
   if (!shifts) {
-    return <Spinner />;
+    return (
+      <div className="flex flex-col space-y-4">
+        <Spinner />
+        <p>This may take a moment...</p>
+      </div>
+    )
   }
 
   if (shifts.length == 0) {

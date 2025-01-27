@@ -2,6 +2,7 @@ import { FC, ReactNode } from "react";
 import { useRoleQuery } from "../../Functions/RoleProvider";
 import { Spinner } from "../Spinner";
 import Error from "../Error";
+import { useAuth } from "react-oidc-context";
 
 export const ADMIN_ROLE = "ADMIN";
 export const PSO_ROLE = "PSO";
@@ -12,14 +13,18 @@ const PermissionLock: FC<{
   roles: string[];
   children: ReactNode;
 }> = ({ roles, children }) => {
-  const {data, isLoading, isError} = useRoleQuery();
+  const { data, isLoading, isError } = useRoleQuery();
+  const { isLoading: isAuthLoading } = useAuth();
 
-  if (isLoading) {
-    return <Spinner />;
+  if (isLoading || isAuthLoading) {
+    <div className="flex flex-col space-y-4">
+      <Spinner />
+      <p>This may take a moment...</p>
+    </div>;
   }
 
   if (isError) {
-    return <Error />
+    return <Error />;
   }
 
   if ((data && roles.includes(data)) || data == ADMIN_ROLE) {

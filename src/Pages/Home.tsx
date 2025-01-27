@@ -11,18 +11,13 @@ import LandingPage from "./QuickLinkPages/LandingPage";
 import { useRoleQuery } from "@/Functions/RoleProvider";
 import { Spinner } from "@/Components/Spinner";
 import Error from "@/Components/Error";
-import { useEffect } from "react";
 import { useCurrentEmployee } from "@/Functions/Queries/EmployeeQueries";
 import { useAuth } from "react-oidc-context";
 
 export const Home = () => {
   const { data, isLoading, isError } = useRoleQuery();
   const { isLoading: authLoading } = useAuth();
-  const { data: user, isLoading: isEmpLoading } = useCurrentEmployee();
-  useEffect(() => {
-    console.log("data: ", data);
-    console.log("user: ", user);
-  }, [data, isLoading, user]);
+  const { isLoading: isEmpLoading } = useCurrentEmployee();
 
   if (isLoading || authLoading || isEmpLoading) {
     return (

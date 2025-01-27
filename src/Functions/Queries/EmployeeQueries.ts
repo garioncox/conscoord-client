@@ -68,7 +68,6 @@ export const useCurrentEmployee = () => {
   return useQuery({
     queryKey: queryKeys.loggedInEmployee,
     queryFn: async () => {
-      console.log("(tanstack) Fetching user", user?.profile.email);
       const emp = await employeeRequests.getCurrentUser(user?.id_token ?? "");
       return emp;
     },

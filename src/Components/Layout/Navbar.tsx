@@ -17,14 +17,15 @@ const Navbar = () => {
       <div className="block lg:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center px-3 py-2 border rounded text-secondary border-secondary hover:border-white"
+          className="flex items-center px-3 py-2 rounded text-secondary bg-slate-700 border-2 border-slate-600 hover:text-white hover:bg-slate-600 hover:border-slate-500"
         >
           <i className="bi bi-list" />
         </button>
       </div>
       <div
-        className={`w-full block ${isOpen ? "" : "hidden"
-          } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
+        className={`w-full block ${
+          isOpen ? "" : "hidden"
+        } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
       >
         {/* Client Items */}
         <NavItem

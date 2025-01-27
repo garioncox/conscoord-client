@@ -4,14 +4,8 @@ import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
 
 const LoginLogoutButton = () => {
-  const {
-    signinRedirect,
-    removeUser,
-    clearStaleState,
-    revokeTokens,
-    signoutSilent,
-    isAuthenticated,
-  } = useAuth();
+  const { signinRedirect, removeUser, signoutSilent, isAuthenticated } =
+    useAuth();
   const navigate = useNavigate();
 
   if (isAuthenticated) {
@@ -19,13 +13,9 @@ const LoginLogoutButton = () => {
       <button
         className="text-secondary hover:text-tertiary"
         onClick={async () => {
-          console.log("removing user");
           await signoutSilent();
           await removeUser();
-          await revokeTokens();
-          console.log("clearing stale state");
-          await clearStaleState();
-          console.log("resetting");
+
           await queryClient.resetQueries({
             queryKey: queryKeys.loggedInEmployee,
           });
