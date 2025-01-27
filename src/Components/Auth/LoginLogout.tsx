@@ -9,6 +9,7 @@ const LoginLogoutButton = () => {
     removeUser,
     clearStaleState,
     revokeTokens,
+    signoutSilent,
     isAuthenticated,
   } = useAuth();
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const LoginLogoutButton = () => {
         className="text-secondary hover:text-tertiary"
         onClick={async () => {
           console.log("removing user");
+          await signoutSilent();
           await removeUser();
           await revokeTokens();
           console.log("clearing stale state");
