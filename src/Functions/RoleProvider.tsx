@@ -13,7 +13,8 @@ export const useRoleQuery = () => {
         const role = await roleRequests.getRoleFromEmail(currentEmployee.email);
         return role.rolename;
       }
-      return "";
+      return null;
     },
+    enabled: !!currentEmployee && !isLoading && !isError,
   });
 };

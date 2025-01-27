@@ -13,6 +13,7 @@ import { CLIENT_ROLE, ADMIN_ROLE } from "../Auth/PermissionLock";
 import { Spinner } from "../Spinner";
 import Error from "../Error";
 import { useProjectUtils } from "../ProjectUtils";
+import { useAuth } from "react-oidc-context";
 
 export function ProjectCards({
   data,
@@ -25,6 +26,7 @@ export function ProjectCards({
   const [sortedData, setSortedData] = useState<Project[]>(data);
 
   const projectUtils = useProjectUtils();
+  const { isLoading: isAuthLoading } = useAuth();
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -36,7 +38,7 @@ export function ProjectCards({
     }
   }, [data]);
 
-  if (projectUtils.isLoading) {
+  if (projectUtils.isLoading || isAuthLoading) {
     return <Spinner />;
   }
 
