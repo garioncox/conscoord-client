@@ -9,7 +9,6 @@ import {
   getShiftById,
 } from "../ShiftRequests";
 import { queryClient } from "./QueryClient";
-import { useAuth0 } from "@auth0/auth0-react";
 import { addEmployeeShift } from "../EmpShiftRequests";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
 import { addProjectShift } from "../ProjectShiftRequests";
@@ -19,6 +18,7 @@ import { useLoggedInEmployee } from "./EmployeeQueries";
 import { queryKeys } from "./QueryKeyFactory";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useCustomToast } from "@/Components/Toast";
+import { useAuth } from "react-oidc-context";
 
 export const useAllShifts = () => {
   return useQuery({
@@ -35,12 +35,12 @@ export const useAllArchivedShifts = () => {
 };
 
 export const useClaimedShiftsForLoggedInUser = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth();
 
   return useQuery({
-    queryKey: queryKeys.shiftsByUser(user!.email!),
+    queryKey: queryKeys.shiftsByUser(user?.profile.email ?? ""),
     queryFn: () => {
-      return getClaimedShifts(user!.email!);
+      return getClaimedShifts(user?.profile.email ?? "");
     },
     enabled: !!(isAuthenticated && user),
   });

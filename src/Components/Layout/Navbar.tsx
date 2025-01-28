@@ -1,26 +1,23 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "../Auth/Login";
-import LogoutButton from "../Auth/Logout";
+import LoginLogoutButton from "../Auth/LoginLogout";
 import { Link } from "react-router-dom";
 import { ADMIN_ROLE, CLIENT_ROLE, PSO_ROLE } from "../Auth/PermissionLock";
 import NavItem from "./Navitem";
 import { useState } from "react";
 
 const Navbar = () => {
-  const { user } = useAuth0();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="flex items-center justify-between flex-wrap bg-primary text-secondary p-8">
+    <nav className="flex items-center justify-between flex-wrap bg-primary text-secondary p-4">
       <div className="text-secondary hover:text-white">
-        <Link className="text-4xl font-semibold" to="/">
+        <Link className="text-4xl font-medium" to="/">
           Conscoord
         </Link>
       </div>
       <div className="block lg:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center px-3 py-2 border rounded text-secondary border-secondary hover:border-white"
+          className="flex items-center px-3 py-2 rounded text-secondary bg-slate-700 border-2 border-slate-600 hover:text-white hover:bg-slate-600 hover:border-slate-500"
         >
           <i className="bi bi-list" />
         </button>
@@ -56,13 +53,8 @@ const Navbar = () => {
           label={"View Employees"}
           roles={[ADMIN_ROLE]}
         />
-        <NavItem
-          to={"/admin/user/view"}
-          label={"View Employees"}
-          roles={[ADMIN_ROLE]}
-        />
-        <div className="font-semibold text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
-          {user ? <LogoutButton /> : <LoginButton />}
+        <div className="font-medium text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
+          <LoginLogoutButton />
         </div>
       </div>
     </nav>

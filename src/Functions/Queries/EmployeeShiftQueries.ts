@@ -8,7 +8,7 @@ import {
 import { useCustomToast } from "@/Components/Toast";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { queryClient } from "./QueryClient";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth } from "react-oidc-context";
 
 export const useAllEmployeeShifts = () => {
   return useQuery({
@@ -18,12 +18,12 @@ export const useAllEmployeeShifts = () => {
 };
 
 export const useEmpShiftsForLoggedInUser = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth();
 
   return useQuery({
     queryKey: queryKeys.employeeShifts,
     queryFn: () => {
-      return getClaimedEmployeeShiftsByEmail(user!.email!);
+      return getClaimedEmployeeShiftsByEmail(user?.profile.email ?? "");
     },
     enabled: !!(isAuthenticated && user),
   });

@@ -23,8 +23,10 @@ import {
 import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
 import ShiftSort from "@/Components/Sorting/ShiftSort";
 import { Shift } from "@/Data/Interfaces/Shift";
+import { useAuth } from "react-oidc-context";
 
 const ProjectShifts = () => {
+  const { isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: shifts, isLoading: shiftLoading } = useProjectShiftsByProjectId(
@@ -76,7 +78,7 @@ const ProjectShifts = () => {
     id,
   ]);
 
-  if (projectsLoading || shiftLoading || employeesLoading) {
+  if (projectsLoading || shiftLoading || employeesLoading || authLoading) {
     <Spinner />;
   }
 

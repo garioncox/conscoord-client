@@ -24,8 +24,19 @@ export const useEmployeeRequests = () => {
     setEmployees(await getAllEmployees());
   };
 
+  const getCurrentUser = async (id_token: string): Promise<Employee> => {
+    const response = await axios.get("/api/Employee/getCurrentUser", {
+      headers: {
+        Authorization: `Bearer ${id_token}`,
+      },
+    });
+
+    return response.data;
+  }
+
   return {
     employees,
+    getCurrentUser,
     getEmployeeByEmail,
     getEmployeeById,
     addEmployee,
