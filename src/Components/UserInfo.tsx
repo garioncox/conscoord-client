@@ -105,12 +105,14 @@ export const UserInfo = () => {
                 {
                   label: "Role ID",
                   value: EmployeeRoleId,
-                  setter: (e) => setEmployeeRoleId(parseInt(e.target.value)),
+                  //eslint-disable-next-line
+                  setter: (e: any) => setEmployeeRoleId(parseInt(e.target.value)),
                 },
                 {
                   label: "Company ID",
                   value: EmployeeCompanyId,
-                  setter: (e) => setEmployeeCompanyId(parseInt(e.target.value)),
+                  //eslint-disable-next-line
+                  setter: (e: any) => setEmployeeCompanyId(parseInt(e.target.value)),
                 },
               ].map((field, index) => (
                 <div key={index}>
