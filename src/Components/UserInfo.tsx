@@ -3,13 +3,18 @@ import {
   useAllEmployees,
   useEditEmployeeMutation,
 } from "@/Functions/Queries/EmployeeQueries";
+import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
+import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { Autocomplete, TextField } from "@mui/material";
-import { Edit } from "lucide-react";
+import { ArrowBigRight, Edit } from "lucide-react";
 import { useState } from "react";
 
 export const UserInfo = () => {
   const editEmployeeMutation = useEditEmployeeMutation();
   const { data: Employees, isLoading: employeesLoading } = useAllEmployees();
+  const { data: empShifts, isLoading: isEmpShiftsLoading } =
+    useAllEmployeeShifts();
+  const { data: shifts, isLoading: isShiftsLoading } = useAllShifts();
 
   const [Employee, setEmployee] = useState<Employee>();
   const [Editing, setEditing] = useState(false);
@@ -56,7 +61,6 @@ export const UserInfo = () => {
     return <div>Loading Users</div>;
   }
 
-
   const list = (
     <div>
       <Autocomplete
@@ -65,7 +69,9 @@ export const UserInfo = () => {
         getOptionLabel={(option) => option.name || String(option.id)}
         sx={{ width: 300 }}
         value={Employee}
-        onChange={(_, selectedEmployee) => handleEmployeeSelect(selectedEmployee)}
+        onChange={(_, selectedEmployee) =>
+          handleEmployeeSelect(selectedEmployee)
+        }
         renderInput={(params) => <TextField {...params} label="Employees" />}
         renderOption={(props, option) => (
           <li
@@ -107,14 +113,16 @@ export const UserInfo = () => {
                   value: EmployeeRoleId,
                   //disable because of e:any
                   //eslint-disable-next-line
-                  setter: (e: any) => setEmployeeRoleId(parseInt(e.target.value)),
+                  setter: (e: any) =>
+                    setEmployeeRoleId(parseInt(e.target.value)),
                 },
                 {
                   label: "Company ID",
                   value: EmployeeCompanyId,
                   //disable because of e:any
-                  //eslint-disable-next-line 
-                  setter: (e: any) => setEmployeeCompanyId(parseInt(e.target.value)),
+                  //eslint-disable-next-line
+                  setter: (e: any) =>
+                    setEmployeeCompanyId(parseInt(e.target.value)),
                 },
               ].map((field, index) => (
                 <div key={index}>
@@ -189,6 +197,54 @@ export const UserInfo = () => {
         </div>
       </div>
     ) : null;
+
+  return (
+    <div className="flex flex-row grow justify-center align-middle p-12">
+      {/* Filter Emp */}
+      <div className="flex flex-col w-full max-w-96 rounded border-2">
+        <div className="p-4 flex flex-row items-center sticky top-0 bg-slate-200 z-10">
+          <TextField label="Filter" variant="standard" fullWidth />
+        </div>
+
+        <div className="flex flex-col grow p-4 overflow-x-scroll">
+          {Employees?.sort((a, b) => a.id - b.id).map((e) => {
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-1">{e.id}</p>
+                <p className="col-span-3 truncate">{e.name}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="flex items-center px-8">
+        <ArrowBigRight size={32} />
+      </div>
+
+      {/* View History or Edit */}
+      <div className="flex flex-col w-full max-w-[500px] rounded">
+        <div className="p-4 bg-slate-300 font-semibold text-xl">ADMIN</div>
+
+        <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-x-2">
+          {empShifts?.map((e) => {
+            const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-3">{shift!.location}</p>
+                <p className="col-span-1 truncate">8.5 hr</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-2 text-center">
+          <div className="bg-slate-300 p-2">View History</div>
+          <div className="bg-slate-400 p-2">Edit Employee</div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="grid grid-cols-2 gap-4">
