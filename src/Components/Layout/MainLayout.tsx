@@ -14,7 +14,7 @@ const MainLayout: FC<{
         <div className="shadow shadow-primary z-0">
           <Navbar />
         </div>
-        <div className="flex flex-row w-full h-full z-1 bg-faint">
+        <div className="flex flex-row w-full h-full z-1 bg-faint overflow-x-scroll">
           <main className="w-full text-primary flex grow justify-center my-5 px-5">
             {children}
           </main>
