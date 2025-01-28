@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  editEmployee,
   getAllEmployees,
   getEmployeeByEmail,
   getEmployeesByShiftId,
@@ -9,6 +10,8 @@ import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { getAllEmployeeShifts } from "../EmpShiftRequests";
+import { queryClient } from "./QueryClient";
+import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
 
 export const useLoggedInEmployee = () => {
@@ -59,6 +62,21 @@ export const useEmployeeById = (id: number) => {
       return await getEmployeesByShiftId(id);
     },
   });
+};
+
+export const useEditEmployeeMutation = () => {
+  const { createToast } = useCustomToast();
+
+  return useMutation({
+    mutationFn: async (e: Employee) => {
+      await createToast(editEmployee, e, "Editing Project");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.employees,
+      });
+    },
+  }); 
 };
 
 export const useCurrentEmployee = () => {

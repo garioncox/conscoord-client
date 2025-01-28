@@ -23,9 +23,8 @@ const Navbar = () => {
         </button>
       </div>
       <div
-        className={`w-full block ${
-          isOpen ? "" : "hidden"
-        } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
+        className={`w-full block ${isOpen ? "" : "hidden"
+          } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
       >
         {/* Client Items */}
         <NavItem

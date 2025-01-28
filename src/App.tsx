@@ -13,6 +13,7 @@ import PermissionLock, {
 } from "./Components/Auth/PermissionLock";
 import ProjectShifts from "./Pages/ProjectShifts";
 import { ShiftDetails } from "./Pages/ShiftDetails";
+import { UserInfo } from "./Components/UserInfo";
 
 function App() {
   return (
@@ -56,6 +57,14 @@ function App() {
         element={
           <PermissionLock roles={[ADMIN_ROLE]}>
             <EmployeeList />
+          </PermissionLock>
+        }
+      />
+      <Route
+        path="admin/user/view"
+        element={
+          <PermissionLock roles={[ADMIN_ROLE]}>
+            <UserInfo />
           </PermissionLock>
         }
       />

@@ -20,10 +20,6 @@ export const useEmployeeRequests = () => {
     await axios.post(`/api/Employee/add`, employee);
   };
 
-  const editEmployee = async (employee: Employee) => {
-    await axios.put(`/api/Employee/edit`, employee);
-  };
-
   const setEmployeesList = async () => {
     setEmployees(await getAllEmployees());
   };
@@ -44,7 +40,6 @@ export const useEmployeeRequests = () => {
     getEmployeeByEmail,
     getEmployeeById,
     addEmployee,
-    editEmployee,
     setEmployeesList,
   };
 };
@@ -59,7 +54,13 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
   return response.data;
 };
 
-export const getEmployeesByShiftId = async (shiftId: number): Promise<Employee[]> => {
+export const getEmployeesByShiftId = async (
+  shiftId: number
+): Promise<Employee[]> => {
   const response = await axios.get(`/api/Employee/getByShift/${shiftId}`);
   return response.data;
+};
+
+export const editEmployee = async (employee: Employee) => {
+  await axios.put(`/api/Employee/edit`, employee);
 };
