@@ -5,7 +5,7 @@ import {
 } from "@/Functions/Queries/EmployeeQueries";
 import { Autocomplete, TextField } from "@mui/material";
 import { Edit } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const UserInfo = () => {
   const editEmployeeMutation = useEditEmployeeMutation();
@@ -105,13 +105,15 @@ export const UserInfo = () => {
                 {
                   label: "Role ID",
                   value: EmployeeRoleId,
+                  //disable because of e:any
                   //eslint-disable-next-line
                   setter: (e: any) => setEmployeeRoleId(parseInt(e.target.value)),
                 },
                 {
                   label: "Company ID",
                   value: EmployeeCompanyId,
-                  //eslint-disable-next-line
+                  //disable because of e:any
+                  //eslint-disable-next-line 
                   setter: (e: any) => setEmployeeCompanyId(parseInt(e.target.value)),
                 },
               ].map((field, index) => (

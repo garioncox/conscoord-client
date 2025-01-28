@@ -75,7 +75,10 @@ export const useEditEmployeeMutation = () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.employees,
       });
-    }
+    },
+  }); 
+};
+
 export const useCurrentEmployee = () => {
   const employeeRequests = useEmployeeRequests();
   const { user, isAuthenticated } = useAuth();
