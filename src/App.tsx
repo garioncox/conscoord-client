@@ -14,6 +14,7 @@ import PermissionLock, {
 import ProjectShifts from "./Pages/ProjectShifts";
 import { ShiftDetails } from "./Pages/ShiftDetails";
 import { UserInfo } from "./Components/UserInfo";
+import InvoiceCreation from "./Pages/InvoiceCreation";
 
 function App() {
   return (
@@ -81,6 +82,14 @@ function App() {
         element={
           <PermissionLock roles={[PSO_ROLE, CLIENT_ROLE]}>
             <ShiftDetails />
+          </PermissionLock>
+        }
+      />
+      <Route
+        path="invoiceCreation"
+        element={
+          <PermissionLock roles={[CLIENT_ROLE]}>
+            <InvoiceCreation />
           </PermissionLock>
         }
       />

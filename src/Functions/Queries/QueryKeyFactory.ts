@@ -24,8 +24,9 @@ export const queryKeys = {
   },
   archivedProjects: ["archivedProjects"],
   projects: ["allProjects"],
+  companies: ["allCompanies"]
 
-  testInvalidateEverything:["all","employeeByEmail","allEmployeeShifts",
-    "loggedInEmployees:","employees","roles","employeeId"]
+  // testInvalidateEverything:["all","employeeByEmail","allEmployeeShifts",
+  //   "loggedInEmployees:","employees","roles","employeeId"]
 
 };
