@@ -223,10 +223,22 @@ export const UserInfo = () => {
       </div>
 
       {/* View History or Edit */}
-      <div className="flex flex-col w-full max-w-[500px] rounded">
-        <div className="p-4 bg-slate-300 font-semibold text-xl">ADMIN</div>
+      <div className="flex flex-col w-full max-w-[500px]">
+        <div className="p-4 bg-slate-300 font-semibold text-xl rounded-t">
+          ADMIN
+        </div>
 
         <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-x-2">
+          {empShifts?.map((e) => {
+            const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-3">{shift!.location}</p>
+                <p className="col-span-1 truncate">8.5 hr</p>
+              </div>
+            );
+          })}
+          {/* TODO: Duplicate to show scroll- remove  */}
           {empShifts?.map((e) => {
             const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
             return (
@@ -239,8 +251,12 @@ export const UserInfo = () => {
         </div>
 
         <div className="grid grid-cols-2 text-center">
-          <div className="bg-slate-300 p-2">View History</div>
-          <div className="bg-slate-400 p-2">Edit Employee</div>
+          <div className="rounded-bl rounded-tr border-2 bg-slate-100 border-r-0 border-t-0 border-slate-300 p-2">
+            View History
+          </div>
+          <div className="rounded-br rounded-tl border-2 bg-slate-200 border-slate-300 p-2 text-gray-400 hover:cursor-pointer">
+            Edit Employee
+          </div>
         </div>
       </div>
     </div>
