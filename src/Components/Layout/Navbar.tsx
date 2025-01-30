@@ -33,6 +33,11 @@ const Navbar = () => {
           label={"Projects"}
           roles={[CLIENT_ROLE, PSO_ROLE]}
         />
+        <NavItem
+          to={"/invoiceCreation"}
+          label={"Invoicing"}
+          roles={[CLIENT_ROLE]}
+        />
 
         {/* PSO + Client Items  */}
         <NavItem
@@ -52,6 +57,11 @@ const Navbar = () => {
         <NavItem
           to={"/admin/user/view"}
           label={"View Employees"}
+          roles={[ADMIN_ROLE]}
+        />
+        <NavItem
+          to={"/admin/user/view"}
+          label={"Edit Employees"}
           roles={[ADMIN_ROLE]}
         />
         <div className="font-medium text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
