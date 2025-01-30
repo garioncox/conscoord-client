@@ -9,6 +9,7 @@ import { TextField } from "@mui/material";
 import { ArrowBigRight, Save } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
+import { useAllRoles } from "@/Functions/Queries/RoleQueries";
 
 export const UserInfo = () => {
   const editEmployeeMutation = useEditEmployeeMutation();
@@ -16,6 +17,7 @@ export const UserInfo = () => {
   const { data: empShifts, isLoading: isEmpShiftsLoading } =
     useAllEmployeeShifts();
   const { data: shifts, isLoading: isShiftsLoading } = useAllShifts();
+  const { data: roles, isLoading: rolesLoading } = useAllRoles();
 
   const [Employee, setEmployee] = useState<Employee>();
   const [EmployeeName, setEmployeeName] = useState("");
@@ -196,14 +198,6 @@ export const UserInfo = () => {
                     setter: setEmployeePhoneNumber,
                   },
                   {
-                    label: "Role ID",
-                    value: EmployeeRoleId,
-                    //disable because of e:any
-                    //eslint-disable-next-line
-                    setter: (e: any) =>
-                      setEmployeeRoleId(parseInt(e.target.value)),
-                  },
-                  {
                     label: "Company ID",
                     value: EmployeeCompanyId,
                     //disable because of e:any
@@ -225,6 +219,15 @@ export const UserInfo = () => {
                   </div>
                 ))}
               </div>
+              <select defaultValue={Employee?.roleid || ""} onChange={(e) => setEmployeeRoleId(Number(e.target.value))}>
+                <option value="">No Role Selected</option>
+                {roles?.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.rolename}
+                  </option>
+                ))}
+              </select>
+              <p>EmployeeRoleId: {EmployeeRoleId}</p>
             </div>
           )}
         </div>
