@@ -25,7 +25,9 @@ export const UserInfo = () => {
   const [EmployeeCompanyId, setEmployeeCompanyId] = useState(0);
   const [EmployeeView, setEmployeeView] = useState(false);
 
-  const [selection, setSelection] = useState<"info" | "history" | "none">();
+  const [selection, setSelection] = useState<"info" | "history" | "none">(
+    "none"
+  );
 
   function EditEmployee() {
     if (Employee === undefined) return;
@@ -200,22 +202,38 @@ export const UserInfo = () => {
       </div>
     ) : null;
 
+  // return (
+  //   <div className="grid grid-cols-2 gap-4">
+  //     <div className="flex">{list}</div>
+  //     <div className="flex">{content}</div>
+  //   </div>
+  // );
+
+  //////////////////////////////////////////////////////////////////////
   return (
     <div className="flex flex-row grow justify-center align-middle p-12">
       {/* Filter Emp */}
-      <div className="flex flex-col w-full max-w-96 rounded border-2 border-slate-300">
+      <div className="flex flex-col w-full max-w-96 rounded border-2 border-slate-300 shadow-md shadow-slate-400">
         <div className="p-4 flex flex-row items-center sticky top-0 bg-slate-200 z-10">
           <TextField label="Filter" variant="standard" fullWidth />
         </div>
 
-        <div className="flex flex-col grow pb-4 overflow-x-scroll">
-          <div className="grid grid-cols-4 gap-0 p-5 border-b shadow-inner shadow-slate-400 bg-slate-100">
-            <p className="col-span-1">{Employees![0].id}</p>
-            <p className="col-span-3 truncate">{Employees![0].name}</p>
-          </div>
+        <div className="flex flex-col grow pb-4 overflow-x-scroll ">
           {Employees?.sort((a, b) => a.id - b.id).map((e) => {
             return (
-              <div className={`grid grid-cols-4 gap-0 p-5 border-b`}>
+              <div
+                className={`grid grid-cols-4 gap-0 p-5 border-b ${
+                  Employee != null && Employee.id == e.id
+                    ? "shadow-inner shadow-slate-500 bg-slate-200"
+                    : "cursor-pointer"
+                }`}
+                onClick={() => {
+                  setEmployee(e);
+                  if (selection == "none") {
+                    setSelection("info");
+                  }
+                }}
+              >
                 <p className="col-span-1">{e.id}</p>
                 <p className="col-span-3 truncate">{e.name}</p>
               </div>
@@ -229,49 +247,95 @@ export const UserInfo = () => {
       </div>
 
       {/* View History or Edit */}
-      <div className="flex flex-col w-full max-w-[500px]">
+      <div className="flex flex-col w-full max-w-[800px] shadow-md shadow-slate-400">
         <div className="grid grid-cols-2 text-center">
           <div
             className={`rounded-tl border-2 border-r-0 border-slate-300 p-4 ${
-              selection == "info"
+              selection != "info"
                 ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
                 : "border-b font-semibold text-gray-700 underline"
             }`}
-            onClick={() => setSelection("history")}
-          >
-            View History
-          </div>
-          <div
-            className={`rounded-tr border-2 border-slate-300 p-4 ${
-              selection == "history"
-                ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
-                : "border-b font-semibold text-gray-700 underline"
-            }`}
-            onClick={() => setSelection("info")}
+            onClick={() => {
+              if (Employee != null) {
+                setSelection("info");
+              }
+            }}
           >
             Employee Info
           </div>
+          <div
+            className={`rounded-tr border-2 border-slate-300 p-4 ${
+              selection != "history"
+                ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
+                : "border-b font-semibold text-gray-700 underline"
+            }`}
+            onClick={() => {
+              if (Employee != null) {
+                setSelection("history");
+              }
+            }}
+          >
+            View History
+          </div>
         </div>
 
-        <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b">
+        <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b shadow-md shadow-slate-400">
           {selection == "history" &&
             empShifts?.map((e) => {
               const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
               return (
-                <div className="grid grid-cols-4 gap-0 p-5 border-b">
-                  <p className="col-span-3">{shift!.location}</p>
+                <div className="grid grid-cols-12 gap-0 p-5 border-b">
+                  <p className="col-span-1">12-24</p>
+                  <p className="col-span-3">Project name</p>
+                  <p className="col-span-7">{shift!.location}</p>
                   <p className="col-span-1 truncate">8.5 hr</p>
                 </div>
               );
             })}
 
           {selection == "info" && (
-            <div>
-              <p>Name</p>
-              <p>Email</p>
-              <p>Phone</p>
-              <p>Company</p>
-              <p>Role</p>
+            <div className="mx-52">
+              {[
+                { label: "Name", value: EmployeeName, setter: setEmployeeName },
+                {
+                  label: "Email",
+                  value: EmployeeEmail,
+                  setter: setEmployeeEmail,
+                },
+                {
+                  label: "Phone Number",
+                  value: EmployeePhoneNumber,
+                  setter: setEmployeePhoneNumber,
+                },
+                {
+                  label: "Role ID",
+                  value: EmployeeRoleId,
+                  //disable because of e:any
+                  //eslint-disable-next-line
+                  setter: (e: any) =>
+                    setEmployeeRoleId(parseInt(e.target.value)),
+                },
+                {
+                  label: "Company ID",
+                  value: EmployeeCompanyId,
+                  //disable because of e:any
+                  //eslint-disable-next-line
+                  setter: (e: any) =>
+                    setEmployeeCompanyId(parseInt(e.target.value)),
+                },
+              ].map((field, index) => (
+                <div key={index} className="my-10">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    {field.label}
+                  </label>
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={field.value}
+                    onChange={(e) => field.setter(e.target.value)}
+                    type={field.label.includes("ID") ? "number" : "text"}
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>
