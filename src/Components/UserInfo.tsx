@@ -206,7 +206,19 @@ export const UserInfo = () => {
           <TextField label="Filter" variant="standard" fullWidth />
         </div>
 
-        <div className="flex flex-col grow p-4 overflow-x-scroll">
+        <div className="flex flex-col grow pb-4 overflow-x-scroll">
+          <div className="grid grid-cols-4 gap-0 p-5 border-b shadow-inner shadow-slate-300 bg-slate-100">
+            <p className="col-span-1">{Employees![0].id}</p>
+            <p className="col-span-3 truncate">{Employees![0].name}</p>
+          </div>
+          {Employees?.sort((a, b) => a.id - b.id).map((e) => {
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-1">{e.id}</p>
+                <p className="col-span-3 truncate">{e.name}</p>
+              </div>
+            );
+          })}
           {Employees?.sort((a, b) => a.id - b.id).map((e) => {
             return (
               <div className="grid grid-cols-4 gap-0 p-5 border-b">
@@ -223,12 +235,62 @@ export const UserInfo = () => {
       </div>
 
       {/* View History or Edit */}
-      <div className="flex flex-col w-full max-w-[500px]">
+      {/* <div className="flex flex-col w-full max-w-[500px]">
         <div className="p-4 bg-slate-300 font-semibold text-xl rounded-t">
           ADMIN
         </div>
 
-        <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-x-2">
+        <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0">
+          {empShifts?.map((e) => {
+            const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-3">{shift!.location}</p>
+                <p className="col-span-1 truncate">8.5 hr</p>
+              </div>
+            );
+          })}
+          {empShifts?.map((e) => {
+            const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-3">{shift!.location}</p>
+                <p className="col-span-1 truncate">8.5 hr</p>
+              </div>
+            );
+          })}
+          {empShifts?.map((e) => {
+            const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-3">{shift!.location}</p>
+                <p className="col-span-1 truncate">8.5 hr</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-2 text-center">
+          <div className="rounded-bl border-2 border-r-0 border-slate-300 p-4 font-semibold text-gray-700 bg-slate-200 underline">
+            View History
+          </div>
+          <div className="rounded-br border-2 text-slate-400 border-slate-300 p-4 cursor-pointer">
+            Employee Info
+          </div>
+        </div>
+      </div> */}
+
+      <div className="flex flex-col w-full max-w-[500px] ps-10">
+        <div className="grid grid-cols-2 text-center">
+          <div className="rounded-tl border-2 border-r-0 border-b border-slate-300 p-4 font-semibold text-gray-700 underline">
+            View History
+          </div>
+          <div className="rounded-tr border-2 text-slate-400 border-slate-300 p-4 cursor-pointer bg-slate-200 shadow-inner">
+            Employee Info
+          </div>
+        </div>
+
+        <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b">
           {empShifts?.map((e) => {
             const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
             return (
@@ -248,15 +310,15 @@ export const UserInfo = () => {
               </div>
             );
           })}
-        </div>
-
-        <div className="grid grid-cols-2 text-center">
-          <div className="rounded-bl rounded-tr border-2 bg-slate-100 border-r-0 border-t-0 border-slate-300 p-2">
-            View History
-          </div>
-          <div className="rounded-br rounded-tl border-2 bg-slate-200 border-slate-300 p-2 text-gray-400 hover:cursor-pointer">
-            Edit Employee
-          </div>
+          {empShifts?.map((e) => {
+            const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            return (
+              <div className="grid grid-cols-4 gap-0 p-5 border-b">
+                <p className="col-span-3">{shift!.location}</p>
+                <p className="col-span-1 truncate">8.5 hr</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
