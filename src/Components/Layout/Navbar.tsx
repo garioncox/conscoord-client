@@ -56,12 +56,7 @@ const Navbar = () => {
         {/* Admin Items */}
         <NavItem
           to={"/admin/user/view"}
-          label={"View Employees"}
-          roles={[ADMIN_ROLE]}
-        />
-        <NavItem
-          to={"/admin/user/view"}
-          label={"Edit Employees"}
+          label={"Employees"}
           roles={[ADMIN_ROLE]}
         />
         <div className="font-medium text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">
