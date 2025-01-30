@@ -18,7 +18,6 @@ export const UserInfo = () => {
   const { data: shifts, isLoading: isShiftsLoading } = useAllShifts();
 
   const [Employee, setEmployee] = useState<Employee>();
-  const [Editing, setEditing] = useState(false);
   const [EmployeeName, setEmployeeName] = useState("");
   const [EmployeeEmail, setEmployeeEmail] = useState("");
   const [EmployeePhoneNumber, setEmployeePhoneNumber] = useState("");
@@ -43,7 +42,6 @@ export const UserInfo = () => {
       companyid: EmployeeCompanyId,
     };
     editEmployeeMutation.mutate(employee);
-    setEditing(false);
   }
 
   function EditedEmployee() {
