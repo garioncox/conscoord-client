@@ -49,3 +49,7 @@ export const getClaimedEmployeeShiftsByEmail = async (
 export const updateEmpShift = async (empShift: EmployeeShiftDTO) => {
   await axios.put(`/api/EmployeeShift/edit`, empShift);
 };
+
+export const getEmpShiftHistory = async (email: string) => {
+  await axios.get(`/api/EmployeeShift/get/history/${email}`)
+}

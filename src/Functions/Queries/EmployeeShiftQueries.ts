@@ -3,12 +3,28 @@ import { queryKeys } from "./QueryKeyFactory";
 import {
   getAllEmployeeShifts,
   getClaimedEmployeeShiftsByEmail,
+  getEmpShiftHistory,
   updateEmpShift,
 } from "../EmpShiftRequests";
 import { useCustomToast } from "@/Components/Toast";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { queryClient } from "./QueryClient";
 import { useAuth } from "react-oidc-context";
+
+export const useEmpShiftQueries = () => {
+  const useEmpShiftHistoryForEmail = (email: string) => {
+    return useQuery({
+      queryKey: [queryKeys.employeeHistory, email],
+      queryFn: () => {
+        return getEmpShiftHistory(email);
+      }
+    })
+  }
+
+  return {
+    useEmpShiftHistoryForEmail
+  };
+}
 
 export const useAllEmployeeShifts = () => {
   return useQuery({
@@ -40,3 +56,5 @@ export const useEmpShiftMutation = () => {
     },
   });
 };
+
+

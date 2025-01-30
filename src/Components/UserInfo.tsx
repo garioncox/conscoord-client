@@ -3,7 +3,10 @@ import {
   useAllEmployees,
   useEditEmployeeMutation,
 } from "@/Functions/Queries/EmployeeQueries";
-import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
+import {
+  useAllEmployeeShifts,
+  useEmpShiftQueries,
+} from "@/Functions/Queries/EmployeeShiftQueries";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { TextField } from "@mui/material";
 import { ArrowBigRight, Save } from "lucide-react";
@@ -16,6 +19,8 @@ export const UserInfo = () => {
   const { data: empShifts, isLoading: isEmpShiftsLoading } =
     useAllEmployeeShifts();
   const { data: shifts, isLoading: isShiftsLoading } = useAllShifts();
+
+  const empShiftQueries = useEmpShiftQueries();
 
   const [Employee, setEmployee] = useState<Employee>();
   const [EmployeeName, setEmployeeName] = useState("");
