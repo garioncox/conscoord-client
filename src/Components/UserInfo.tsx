@@ -160,17 +160,18 @@ export const UserInfo = () => {
         <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b shadow-md shadow-slate-400">
           {selection == "history" &&
             empHistory &&
-            empHistory?.map((e: EmployeeHistoryDTO) => { // Not a function?
+            empHistory.map((e: EmployeeHistoryDTO) => {
+              // Not a function?
               if (isEmpHistoryLoading) {
                 return <Spinner />;
               }
 
               return (
-                <div className="grid grid-cols-12 gap-0 p-5 border-b">
-                  <p className="col-span-1">{e.date}</p>
-                  <p className="col-span-3">{e.projectName}</p>
-                  <p className="col-span-7">{e.location}</p>
-                  <p className="col-span-1 truncate">{e.hours}</p>
+                <div className="grid grid-cols-12 gap-x-4 p-5 border-b">
+                  <p className="col-span-1 truncate">{e.date}</p>
+                  <p className="col-span-4 truncate">{e.projectName}</p>
+                  <p className="col-span-5 truncate">{e.location}</p>
+                  <p className="col-span-1 truncate">{e.hours} hr</p>
                 </div>
               );
             })}

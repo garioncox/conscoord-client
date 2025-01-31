@@ -51,6 +51,9 @@ export const updateEmpShift = async (empShift: EmployeeShiftDTO) => {
   await axios.put(`/api/EmployeeShift/edit`, empShift);
 };
 
-export const getEmpShiftHistory = async (email: string): Promise<EmployeeHistoryDTO[]> => {
-  return await axios.get(`/api/EmployeeShift/get/history/${email}`)
-}
+export const getEmpShiftHistory = async (
+  email: string
+): Promise<EmployeeHistoryDTO[]> => {
+  const response = await axios.get(`/api/EmployeeShift/get/history/${email}`);
+  return response.data;
+};
