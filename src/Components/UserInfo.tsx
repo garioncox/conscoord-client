@@ -3,24 +3,16 @@ import {
   useAllEmployees,
   useEditEmployeeMutation,
 } from "@/Functions/Queries/EmployeeQueries";
-import {
-  useAllEmployeeShifts,
-  useEmpShiftQueries,
-} from "@/Functions/Queries/EmployeeShiftQueries";
-import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { TextField } from "@mui/material";
 import { ArrowBigRight, Save } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
+import { useEmpShiftHistoryForEmail } from "@/Functions/Queries/EmployeeShiftQueries";
+import { EmployeeHistoryDTO } from "@/Data/DTOInterfaces/EmployeeHistoryDTO";
 
 export const UserInfo = () => {
   const editEmployeeMutation = useEditEmployeeMutation();
   const { data: Employees, isLoading: employeesLoading } = useAllEmployees();
-  const { data: empShifts, isLoading: isEmpShiftsLoading } =
-    useAllEmployeeShifts();
-  const { data: shifts, isLoading: isShiftsLoading } = useAllShifts();
-
-  const empShiftQueries = useEmpShiftQueries();
 
   const [Employee, setEmployee] = useState<Employee>();
   const [EmployeeName, setEmployeeName] = useState("");
@@ -33,6 +25,9 @@ export const UserInfo = () => {
   const [selection, setSelection] = useState<"info" | "history" | "none">(
     "none"
   );
+
+  const { data: empHistory, isLoading: isEmpHistoryLoading } =
+    useEmpShiftHistoryForEmail(EmployeeEmail);
 
   function EditEmployee() {
     if (!Employee) return;
@@ -78,7 +73,7 @@ export const UserInfo = () => {
     }
   };
 
-  if (employeesLoading || isEmpShiftsLoading || isShiftsLoading) {
+  if (employeesLoading) {
     return <Spinner />;
   }
 
@@ -164,14 +159,18 @@ export const UserInfo = () => {
 
         <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b shadow-md shadow-slate-400">
           {selection == "history" &&
-            empShifts?.map((e) => {
-              const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            empHistory &&
+            empHistory?.map((e: EmployeeHistoryDTO) => { // Not a function?
+              if (isEmpHistoryLoading) {
+                return <Spinner />;
+              }
+
               return (
                 <div className="grid grid-cols-12 gap-0 p-5 border-b">
-                  <p className="col-span-1">12-24</p>
-                  <p className="col-span-3">Project name</p>
-                  <p className="col-span-7">{shift!.location}</p>
-                  <p className="col-span-1 truncate">8.5 hr</p>
+                  <p className="col-span-1">{e.date}</p>
+                  <p className="col-span-3">{e.projectName}</p>
+                  <p className="col-span-7">{e.location}</p>
+                  <p className="col-span-1 truncate">{e.hours}</p>
                 </div>
               );
             })}

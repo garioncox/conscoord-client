@@ -2,6 +2,7 @@ import axios from "axios";
 import { Shift } from "../Data/Interfaces/Shift";
 import { EmployeeShift } from "../Data/Interfaces/EmployeeShift";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
+import { EmployeeHistoryDTO } from "@/Data/DTOInterfaces/EmployeeHistoryDTO";
 
 export const useEmpShiftRequests = () => {
   const addEmployeeShift = async (dto: EmployeeShiftDTO) => {
@@ -50,6 +51,6 @@ export const updateEmpShift = async (empShift: EmployeeShiftDTO) => {
   await axios.put(`/api/EmployeeShift/edit`, empShift);
 };
 
-export const getEmpShiftHistory = async (email: string) => {
-  await axios.get(`/api/EmployeeShift/get/history/${email}`)
+export const getEmpShiftHistory = async (email: string): Promise<EmployeeHistoryDTO[]> => {
+  return await axios.get(`/api/EmployeeShift/get/history/${email}`)
 }
