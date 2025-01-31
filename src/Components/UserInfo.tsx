@@ -10,6 +10,7 @@ import { ArrowBigRight, Save } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
+import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 
 export const UserInfo = () => {
   const editEmployeeMutation = useEditEmployeeMutation();
@@ -18,7 +19,7 @@ export const UserInfo = () => {
     useAllEmployeeShifts();
   const { data: shifts, isLoading: isShiftsLoading } = useAllShifts();
   const { data: roles, isLoading: rolesLoading } = useAllRoles();
-
+  const { data: companies, isLoading: companiesLoading } = useAllCompanies();
   const [Employee, setEmployee] = useState<Employee>();
   const [EmployeeName, setEmployeeName] = useState("");
   const [EmployeeEmail, setEmployeeEmail] = useState("");
@@ -197,14 +198,6 @@ export const UserInfo = () => {
                     value: EmployeePhoneNumber,
                     setter: setEmployeePhoneNumber,
                   },
-                  {
-                    label: "Company ID",
-                    value: EmployeeCompanyId,
-                    //disable because of e:any
-                    //eslint-disable-next-line
-                    setter: (e: any) =>
-                      setEmployeeCompanyId(parseInt(e.target.value)),
-                  },
                 ].map((field, index) => (
                   <div key={index} className="my-10">
                     <label className="block text-sm font-medium text-gray-900 mb-2">
@@ -218,16 +211,45 @@ export const UserInfo = () => {
                     />
                   </div>
                 ))}
-              </div>
-              <select defaultValue={Employee?.roleid || ""} onChange={(e) => setEmployeeRoleId(Number(e.target.value))}>
-                <option value="">No Role Selected</option>
-                {roles?.map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.rolename}
+
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Company
+                </label>
+                <select
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  value={EmployeeCompanyId || ""}
+                  onChange={(e) => setEmployeeCompanyId(Number(e.target.value))}
+                >
+                  <option value="" disabled>
+                    No Company Selected
                   </option>
-                ))}
-              </select>
-              <p>EmployeeRoleId: {EmployeeRoleId}</p>
+                  {companies?.map((company) => (
+                    <option key={company.id} value={company.id}>
+                      {company.name}
+                    </option>
+                  ))}
+                  
+                </select>
+                <div className="my-10">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Role
+                  </label>
+                  <select
+                    className=" w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={EmployeeRoleId || ""}
+                    onChange={(e) => setEmployeeRoleId(Number(e.target.value))}
+                  >
+                    <option value="" disabled>
+                      No Role Selected
+                    </option>
+                    {roles?.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.rolename}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
           )}
         </div>
