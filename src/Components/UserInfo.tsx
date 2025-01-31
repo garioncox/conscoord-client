@@ -161,7 +161,6 @@ export const UserInfo = () => {
           {selection == "history" &&
             empHistory &&
             empHistory.map((e: EmployeeHistoryDTO) => {
-              // Not a function?
               if (isEmpHistoryLoading) {
                 return <Spinner />;
               }
