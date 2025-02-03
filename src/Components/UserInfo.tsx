@@ -76,7 +76,13 @@ export const UserInfo = () => {
     }
   };
 
-  if (employeesLoading || isEmpShiftsLoading || isShiftsLoading) {
+  if (
+    employeesLoading ||
+    isEmpShiftsLoading ||
+    isShiftsLoading ||
+    rolesLoading ||
+    companiesLoading
+  ) {
     return <Spinner />;
   }
 
@@ -228,7 +234,6 @@ export const UserInfo = () => {
                       {company.name}
                     </option>
                   ))}
-                  
                 </select>
                 <div className="my-10">
                   <label className="block text-sm font-medium text-gray-900 mb-2">
