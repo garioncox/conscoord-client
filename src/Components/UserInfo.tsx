@@ -3,21 +3,18 @@ import {
   useAllEmployees,
   useEditEmployeeMutation,
 } from "@/Functions/Queries/EmployeeQueries";
-import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
-import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { TextField } from "@mui/material";
 import { ArrowBigRight, Save } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
+import { EmployeeHistoryDTO } from "@/Data/DTOInterfaces/EmployeeHistoryDTO";
+import { useEmpShiftHistoryForEmail } from "@/Functions/Queries/EmployeeShiftQueries";
 
 export const UserInfo = () => {
   const editEmployeeMutation = useEditEmployeeMutation();
   const { data: Employees, isLoading: employeesLoading } = useAllEmployees();
-  const { data: empShifts, isLoading: isEmpShiftsLoading } =
-    useAllEmployeeShifts();
-  const { data: shifts, isLoading: isShiftsLoading } = useAllShifts();
   const { data: roles, isLoading: rolesLoading } = useAllRoles();
   const { data: companies, isLoading: companiesLoading } = useAllCompanies();
   const [Employee, setEmployee] = useState<Employee>();
@@ -31,6 +28,9 @@ export const UserInfo = () => {
   const [selection, setSelection] = useState<"info" | "history" | "none">(
     "none"
   );
+
+  const { data: empHistory, isLoading: isEmpHistoryLoading } =
+    useEmpShiftHistoryForEmail(EmployeeEmail);
 
   function EditEmployee() {
     if (!Employee) return;
@@ -76,13 +76,7 @@ export const UserInfo = () => {
     }
   };
 
-  if (
-    employeesLoading ||
-    isEmpShiftsLoading ||
-    isShiftsLoading ||
-    rolesLoading ||
-    companiesLoading
-  ) {
+  if (employeesLoading || rolesLoading || companiesLoading) {
     return <Spinner />;
   }
 
@@ -168,14 +162,18 @@ export const UserInfo = () => {
 
         <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b shadow-md shadow-slate-400">
           {selection == "history" &&
-            empShifts?.map((e) => {
-              const shift = shifts?.filter((s) => s.id == e.shiftId)[0];
+            empHistory &&
+            empHistory.map((e: EmployeeHistoryDTO) => {
+              if (isEmpHistoryLoading) {
+                return <Spinner />;
+              }
+
               return (
-                <div className="grid grid-cols-12 gap-0 p-5 border-b">
-                  <p className="col-span-1">12-24</p>
-                  <p className="col-span-3">Project name</p>
-                  <p className="col-span-7">{shift!.location}</p>
-                  <p className="col-span-1 truncate">8.5 hr</p>
+                <div className="grid grid-cols-12 gap-x-4 p-5 border-b">
+                  <p className="col-span-1 truncate">{e.date}</p>
+                  <p className="col-span-4 truncate">{e.projectName}</p>
+                  <p className="col-span-5 truncate">{e.location}</p>
+                  <p className="col-span-1 truncate">{e.hours} hr</p>
                 </div>
               );
             })}

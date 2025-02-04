@@ -3,12 +3,21 @@ import { queryKeys } from "./QueryKeyFactory";
 import {
   getAllEmployeeShifts,
   getClaimedEmployeeShiftsByEmail,
+  getEmpShiftHistory,
   updateEmpShift,
 } from "../EmpShiftRequests";
 import { useCustomToast } from "@/Components/Toast";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { queryClient } from "./QueryClient";
 import { useAuth } from "react-oidc-context";
+
+export const useEmpShiftHistoryForEmail = (email: string) => {
+  return useQuery({
+    queryKey: [queryKeys.employeeHistory, email],
+    queryFn: () => getEmpShiftHistory(email),
+    enabled: !!email,
+  });
+};
 
 export const useAllEmployeeShifts = () => {
   return useQuery({

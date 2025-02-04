@@ -1,5 +1,23 @@
 export const queryKeys = {
-  all: ["shifts", "archivedShifts", "employeeShifts", "loggedInEmployee"],
+  all: [
+    "shifts",
+    "employeeByEmail",
+    "archivedShifts",
+    "employeeShifts",
+    "allEmployeeShifts",
+    "numProjectShifts",
+    "shiftsByProject",
+    "loggedInEmployee",
+    "employees",
+    "roles",
+    "employeeId",
+    "companyProjects",
+    "employeesByShift",
+    "archivedProjects",
+    "allProjects",
+    "allCompanies",
+    "employeeHistory"
+  ],
   shifts: ["shifts"],
   shiftsByUser: (email: string) => {
     return ["shifts", "email", email];
@@ -24,9 +42,6 @@ export const queryKeys = {
   },
   archivedProjects: ["archivedProjects"],
   projects: ["allProjects"],
-  companies: ["allCompanies"]
-
-  // testInvalidateEverything:["all","employeeByEmail","allEmployeeShifts",
-  //   "loggedInEmployees:","employees","roles","employeeId"]
-
+  companies: ["allCompanies"],
+  employeeHistory: ["employeeHistory"]
 };
