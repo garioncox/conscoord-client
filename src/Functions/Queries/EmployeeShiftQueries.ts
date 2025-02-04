@@ -11,19 +11,6 @@ import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { queryClient } from "./QueryClient";
 import { useAuth } from "react-oidc-context";
 
-// export const useEmpShiftQueries = () => {
-//   const useEmpShiftHistoryForEmail = (email: string) => {
-//     return useQuery({
-//       queryKey: [queryKeys.employeeHistory, email],
-//       queryFn: () => getEmpShiftHistory(email),
-//     });
-//   };
-
-//   return {
-//     useEmpShiftHistoryForEmail,
-//   };
-// };
-
 export const useEmpShiftHistoryForEmail = (email: string) => {
   return useQuery({
     queryKey: [queryKeys.employeeHistory, email],
