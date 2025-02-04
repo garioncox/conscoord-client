@@ -15,36 +15,41 @@ import { useCurrentEmployee } from "@/Functions/Queries/EmployeeQueries";
 import { useAuth } from "react-oidc-context";
 
 export const Home = () => {
-  const { data, isLoading, isError } = useRoleQuery();
-  const { isLoading: authLoading } = useAuth();
-  const { isLoading: isEmpLoading } = useCurrentEmployee();
+  const { data: role, isLoading: isRoleLoading, isError } = useRoleQuery();
+  const { isLoading: isEmpLoading, data: emp } = useCurrentEmployee();
+  const { isLoading: isAuthLoading } = useAuth();
 
-  if (isLoading || authLoading || isEmpLoading) {
-    return <Spinner />;
+  if (isRoleLoading || isEmpLoading || isAuthLoading) {
+    return (
+      <div>
+        {emp == undefined ? "no emp" : "yes emp"}
+        {role == undefined ? "no role" : role}
+        {isRoleLoading ? "isLoading" : ""}
+        {isEmpLoading ? "isEmpLoading" : ""}
+      </div>
+    );
+    // return <Spinner />;
   }
 
   if (isError) {
     return <Error />;
   }
 
-  return (
+  if (!role) {
+    return <LandingPage />;
+  }
 
-    <>
-      {!data ? (
-        <LandingPage />
-      ) : (
-        <div>
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <PSOQuickLink />
-          </PermissionComponentLock>
-          <PermissionComponentLock roles={[CLIENT_ROLE]}>
-            <ConstructionManagerQuickLink />
-          </PermissionComponentLock>
-          <PermissionComponentLock roles={[ADMIN_ROLE]}>
-            <AdminQuickLinks />
-          </PermissionComponentLock>
-        </div>
-      )}
-    </>
+  return (
+    <div>
+      <PermissionComponentLock roles={[PSO_ROLE]}>
+        <PSOQuickLink />
+      </PermissionComponentLock>
+      <PermissionComponentLock roles={[CLIENT_ROLE]}>
+        <ConstructionManagerQuickLink />
+      </PermissionComponentLock>
+      <PermissionComponentLock roles={[ADMIN_ROLE]}>
+        <AdminQuickLinks />
+      </PermissionComponentLock>
+    </div>
   );
 };
