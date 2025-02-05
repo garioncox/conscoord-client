@@ -23,9 +23,11 @@ const Navbar = () => {
         </button>
       </div>
       <div
-        className={`w-full block ${
-          isOpen ? "" : "hidden"
-        } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
+        className={`w-full block lg:ms-20 lg:flex lg:items-center lg:w-auto transition-all duration-300 ease-in-out ${
+          isOpen
+            ? "opacity-100 max-h-screen"
+            : "opacity-0 max-h-0 overflow-hidden"
+        }`}
       >
         {/* Client Items */}
         <NavItem
@@ -39,7 +41,7 @@ const Navbar = () => {
           roles={[CLIENT_ROLE]}
         />
 
-        {/* PSO + Client Items  */}
+        {/* PSO + Client Items */}
         <NavItem
           to={"/shift/view/available"}
           label={"Available Shifts"}
