@@ -28,7 +28,6 @@ export const Home = () => {
   }
 
   return (
-
     <>
       {!data ? (
         <LandingPage />
