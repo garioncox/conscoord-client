@@ -2,7 +2,6 @@ import { Spinner } from "@/Components/Spinner";
 import { Company } from "@/Data/Interfaces/Company";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import {
-  Badge,
   FormControl,
   FormControlLabel,
   Radio,
@@ -12,51 +11,23 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import {
-  PickersDayProps,
-  PickersDay,
-} from "@mui/x-date-pickers/PickersDay/PickersDay";
-import dayjs, { Dayjs } from "dayjs";
+import { MonthCalendar } from "@mui/x-date-pickers/MonthCalendar";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5"; // For the arrow icons
+import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
 
 const InvoiceCreation = () => {
   /////////////////////////////////
-  function ServerDay(
-    props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }
-  ) {
-    const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+  const control = useInvoiceCreationControl();
 
-    const isSelected =
-      !props.outsideCurrentMonth &&
-      highlightedDays.indexOf(props.day.date()) >= 0;
-
-    const datesWithError = [3, 4, 6, 20];
-    const status = datesWithError.includes(props.day.date())
-      ? "warning"
-      : "success";
-
-    return (
-      <Badge
-        key={props.day.toString()}
-        color={status}
-        overlap="circular"
-        variant="dot"
-        invisible={!isSelected}
-      >
-        <PickersDay
-          {...other}
-          outsideCurrentMonth={outsideCurrentMonth}
-          day={day}
-        />
-      </Badge>
-    );
-  }
-  const [highlightedDays, setHighlightedDays] = useState([
-    1, 2, 3, 4, 6, 10, 20, 28,
-  ]);
+  const daysWithData = [1, 2, 3, 4, 6, 10, 20, 28];
+  const datesWithError = [3, 4, 6, 20];
+  const monthsCompleted = ["Jan", "Feb", "Mar"];
+  const monthsWithError = ["Jun", "Nov", "Dec"];
 
   /////////////////////////////////
+
   const { data: Companies, isLoading: companiesLoading } = useAllCompanies();
   const [filterString, setFilterString] = useState("");
   const [selectedCompany, setSelectedCompany] = useState<Company | null>();
@@ -170,14 +141,21 @@ const InvoiceCreation = () => {
                     </button>
                   </div>
                   <div style={{ transition: "all 0.3s ease" }}>
-                    <DateCalendar
-                      showDaysOutsideCurrentMonth
-                      fixedWeekNumber={6}
+                    <MonthCalendar
                       defaultValue={dayjs().year(currentYear)}
                       value={selectedMonth!.year(currentYear)}
-                      onChange={(value) => setSelectedMonth(value)}
-                      views={["month"]}
-                      openTo="month"
+                      onChange={(value) => {
+                        setSelectedMonth(value);
+                      }}
+                      slots={{
+                        monthButton: (props) =>
+                          control.MonthCalendarBadgeSlots(
+                            props,
+                            selectedMonth ? selectedMonth.month() : 0,
+                            monthsCompleted,
+                            monthsWithError
+                          ),
+                      }}
                     />
                   </div>
                 </div>
@@ -193,11 +171,16 @@ const InvoiceCreation = () => {
                       onChange={(value) => setSelectedFromDate(value)}
                       views={["day"]}
                       slots={{
-                        day: ServerDay,
+                        day: (props) =>
+                          control.DateCalendarBadgeSlots(
+                            props,
+                            daysWithData,
+                            datesWithError
+                          ),
                       }}
                       slotProps={{
                         day: {
-                          highlightedDays,
+                          highlightedDays: daysWithData,
                         } as any,
                       }}
                     />
@@ -211,11 +194,16 @@ const InvoiceCreation = () => {
                       onChange={(value) => setSelectedToDate(value)}
                       views={["day"]}
                       slots={{
-                        day: ServerDay,
+                        day: (props) =>
+                          control.DateCalendarBadgeSlots(
+                            props,
+                            daysWithData,
+                            datesWithError
+                          ),
                       }}
                       slotProps={{
                         day: {
-                          highlightedDays,
+                          highlightedDays: daysWithData,
                         } as any,
                       }}
                     />
