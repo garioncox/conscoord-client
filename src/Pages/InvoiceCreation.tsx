@@ -1,4 +1,5 @@
 import { Company } from "@/Data/Interfaces/Company";
+import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { Autocomplete, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -37,6 +38,7 @@ const InvoiceCreation = () => {
 
   return (
     <div className="flex">
+    <button onClick={() => createInvoice()} className="bg-slate-200">Create and View Invoice</button>
       <div className="p-5 mr-10">
         <Autocomplete
           disablePortal
