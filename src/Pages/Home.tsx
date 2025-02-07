@@ -16,19 +16,11 @@ import { useAuth } from "react-oidc-context";
 
 export const Home = () => {
   const { data: role, isLoading: isRoleLoading, isError } = useRoleQuery();
-  const { isLoading: isEmpLoading, data: emp } = useCurrentEmployee();
+  const { isLoading: isEmpLoading } = useCurrentEmployee();
   const { isLoading: isAuthLoading } = useAuth();
 
   if (isRoleLoading || isEmpLoading || isAuthLoading) {
-    return (
-      <div>
-        {emp == undefined ? "no emp" : "yes emp"}
-        {role == undefined ? "no role" : role}
-        {isRoleLoading ? "isLoading" : ""}
-        {isEmpLoading ? "isEmpLoading" : ""}
-      </div>
-    );
-    // return <Spinner />;
+    return <Spinner />;
   }
 
   if (isError) {
