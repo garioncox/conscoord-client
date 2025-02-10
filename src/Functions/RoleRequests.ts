@@ -38,3 +38,12 @@ export const getAllRoles = async (): Promise<Role[]> => {
   const response = await axios.get(`/api/Role/getAll`);
   return response.data;
 };
+
+export const getRoleForLoggedInUser = async (id_token: string): Promise<Role> => {
+  const response = await axios.get(`/api/Role/get/currentUser`, {
+    headers: {
+      Authorization: `Bearer ${id_token}`,
+    },
+  });
+  return response.data;
+};

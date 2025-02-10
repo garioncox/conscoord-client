@@ -8,14 +8,14 @@ import {
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
 import LandingPage from "./QuickLinkPages/LandingPage";
-import { useRoleQuery } from "@/Functions/RoleProvider";
+import { useRoleForLoggedInUser } from "@/Functions/RoleProvider";
 import { Spinner } from "@/Components/Spinner";
 import Error from "@/Components/Error";
 import { useCurrentEmployee } from "@/Functions/Queries/EmployeeQueries";
 import { useAuth } from "react-oidc-context";
 
 export const Home = () => {
-  const { data, isLoading, isError } = useRoleQuery();
+  const { data: role, isLoading, isError } = useRoleForLoggedInUser();
   const { isLoading: authLoading } = useAuth();
   const { isLoading: isEmpLoading } = useCurrentEmployee();
 
@@ -28,9 +28,8 @@ export const Home = () => {
   }
 
   return (
-
     <>
-      {!data ? (
+      {!role ? (
         <LandingPage />
       ) : (
         <div>
