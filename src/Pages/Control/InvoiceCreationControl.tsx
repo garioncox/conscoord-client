@@ -2,7 +2,10 @@ import { useDateUtils } from "@/Components/DateUtils";
 import { Company } from "@/Data/Interfaces/Company";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { Badge } from "@mui/material";
-import { PickersMonth } from "@mui/x-date-pickers/MonthCalendar/PickersMonth";
+import {
+  PickersMonth,
+  PickersMonthProps,
+} from "@mui/x-date-pickers/MonthCalendar/PickersMonth";
 import {
   PickersDayProps,
   PickersDay,
@@ -61,25 +64,25 @@ export const useInvoiceCreationControl = () => {
   };
 
   const MonthCalendarBadgeSlots = (
-    props,
+    props: PickersMonthProps,
     selectedMonth: number,
     monthsCompleted: string[],
     monthsWithError: string[]
   ) => {
+    const monthLabel = typeof props.children === "string" ? props.children : "";
+
     const isSelected =
       dateUtils.monthsTruncated[selectedMonth] == props.children;
 
-    const status = monthsCompleted.includes(props.children)
-      ? "success"
-      : "warning";
+    const status = monthsCompleted.includes(monthLabel) ? "success" : "warning";
 
     const visible =
-      monthsCompleted.includes(props.children) ||
-      monthsWithError.includes(props.children);
+      monthsCompleted.includes(monthLabel) ||
+      monthsWithError.includes(monthLabel);
 
     return (
       <Badge
-        key={props.children}
+        key={monthLabel}
         color={status}
         overlap="circular"
         variant="dot"
