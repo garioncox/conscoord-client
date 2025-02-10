@@ -39,7 +39,7 @@ const Navbar = () => {
           roles={[CLIENT_ROLE]}
         />
 
-        {/* PSO + Client Items  */}
+        {/* PSO + Client Items */}
         <NavItem
           to={"/shift/view/available"}
           label={"Available Shifts"}

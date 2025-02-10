@@ -93,7 +93,7 @@ export const UserInfo = () => {
           />
         </div>
 
-        <div className="flex flex-col grow pb-4 overflow-x-scroll ">
+        <div className="flex flex-col grow pb-4 overflow-x-scroll">
           {Employees?.sort((a, b) => a.id - b.id).map((e) => {
             if (
               String(e.id).includes(filterString) ||
