@@ -31,7 +31,6 @@ export const AddProject: React.FC<{
   isModalOpen: boolean;
 }> = ({ toggleModal, isModalOpen }) => {
   const [selfAsContact, setSelfAsContact] = useState<boolean>(true);
-  const signedinEmployee = useLoggedInEmployee();
   const addEmployeeMutation = useAddEmployeeMutation();
   const employeeRequests = useEmployeeRequests();
   const { data: loggedInEmployee } = useLoggedInEmployee();
@@ -122,12 +121,12 @@ export const AddProject: React.FC<{
         return existingEmp;
       }
     } catch {
-      const employeeData = signedinEmployee.data
+      const employeeData = loggedInEmployee
         ? {
             name: contactNameControl.value,
             email: contactEmailControl.value,
             phonenumber: contactPhoneControl.value,
-            companyId: signedinEmployee.data.companyid,
+            companyId: loggedInEmployee.companyid,
           }
         : {
             name: contactNameControl.value,
