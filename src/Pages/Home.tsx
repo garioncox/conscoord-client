@@ -15,10 +15,13 @@ import { useCurrentEmployee } from "@/Functions/Queries/EmployeeQueries";
 import { useAuth } from "react-oidc-context";
 
 export const Home = () => {
-  const { data: role, isLoading, isError } = useRoleForLoggedInUser();
-  const { isLoading: authLoading } = useAuth();
-  const { isLoading: isEmpLoading } = useCurrentEmployee();
+  const {
+    data: role,
+    isLoading: isRoleLoading,
+    isError,
+  } = useRoleForLoggedInUser();
   const { isLoading: isAuthLoading } = useAuth();
+  const { isLoading: isEmpLoading } = useCurrentEmployee();
 
   if (isRoleLoading || isEmpLoading || isAuthLoading) {
     return <Spinner />;
