@@ -1,18 +1,18 @@
 export interface InvoiceInfoDTO {
-  projectId: number;
-  projectName: string;
-  shiftsByProject: shiftInfo[];
-}
-
-export interface shiftInfo {
-  shiftId: number;
-  shiftLocation: string;
-  employeesByShift: employeeInfo[];
-}
-
-export interface employeeInfo {
-  employeeId: number;
-  employeeName: string;
-  employeePayRate: number;
-  hoursWorked: number;
-}
+    projectId: number;
+    projectName: string;
+    shiftsByProject: ShiftInfo[];
+  }
+  
+  export interface ShiftInfo {
+    shiftId: number;
+    shiftLocation: string;
+    employeesByShift: EmployeeInfo[];
+  }
+  
+  export interface EmployeeInfo {
+    employeeId: number;
+    employeeName: string;
+    employeePayRate: number;
+    hoursWorked: number;
+  }
