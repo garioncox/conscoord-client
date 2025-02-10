@@ -5,8 +5,15 @@ import { useState } from "react";
 export const useRoleRequests = () => {
   const [roles, setRoles] = useState<Role[]>([]);
 
-  const getRoleFromEmail = async (email: string): Promise<Role> => {
-    const response = await axios.get(`/api/Role/getByEmail/${email}`);
+  const getRoleFromEmail = async (
+    email: string,
+    id_token: string
+  ): Promise<Role> => {
+    const response = await axios.get(`/api/Role/getByEmail/${email}`, {
+      headers: {
+        Authorization: `Bearer ${id_token}`,
+      },
+    });
     return response.data;
   };
 
@@ -26,7 +33,6 @@ export const useRoleRequests = () => {
     setRolesList,
   };
 };
-
 
 export const getAllRoles = async (): Promise<Role[]> => {
   const response = await axios.get(`/api/Role/getAll`);
