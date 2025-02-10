@@ -1,21 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { useCurrentEmployee } from "./Queries/EmployeeQueries";
-import { useRoleRequests } from "./RoleRequests";
+import { getRoleForLoggedInUser } from "./RoleRequests";
+import { useAuth } from "react-oidc-context";
 import { queryKeys } from "./Queries/QueryKeyFactory";
 
-export const useRoleQuery = () => {
-  const { data: currentEmployee, isLoading, isError } = useCurrentEmployee();
-  const roleRequests = useRoleRequests();
+export const useRoleForLoggedInUser = () => {
+  const { user, isLoading } = useAuth();
 
   return useQuery({
-    queryKey: [queryKeys.roles, currentEmployee ? currentEmployee.email : ""],
+    queryKey: [queryKeys.roles, user?.profile.email ?? ""],
     queryFn: async () => {
-      if (!isLoading && !isError && currentEmployee) {
-        const role = await roleRequests.getRoleFromEmail(currentEmployee.email);
-        return role.rolename;
-      }
-      return null;
+      const role = await getRoleForLoggedInUser(user?.id_token ?? "");
+      return role.rolename;
     },
-    enabled: !!currentEmployee && !isLoading && !isError,
+    enabled: !!user && !isLoading,
   });
 };
