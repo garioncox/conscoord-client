@@ -1,5 +1,6 @@
 import { Spinner } from "@/Components/Spinner";
 import {
+  Badge,
   FormControl,
   FormControlLabel,
   Radio,
@@ -31,9 +32,9 @@ const InvoiceCreation = () => {
   }
 
   return (
-    <div className="space-y-10 flex grow flex-col lg:max-w-[1300px] lg:flex-row lg:space-x-10 lg:justify-around">
+    <div className="space-y-10 flex grow flex-col xl:max-w-[1300px] xl:flex-row xl:space-x-10 xl:justify-around">
       {/* Filter company */}
-      <div className="flex flex-col grow lg:max-w-[25%] rounded-xl border border-slate-300 shadow-md shadow-slate-400">
+      <div className="flex flex-col grow xl:max-w-[25%] rounded-xl border border-slate-300 shadow-md shadow-slate-400">
         <div className="p-4 flex flex-row items-center rounded-t-xl top-0 bg-slate-200 z-10">
           <TextField
             label="Filter"
@@ -73,7 +74,7 @@ const InvoiceCreation = () => {
         </div>
       </div>
 
-      <div className="space-y-10 flex flex-col grow lg:max-w-[60%]">
+      <div className="space-y-10 flex flex-col grow xl:max-w-[60%]">
         <div className="shadow-md rounded-xl shadow-slate-400 border">
           <div>
             {/* Month / Date Select */}
@@ -144,7 +145,7 @@ const InvoiceCreation = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col lg:flex-row">
+                  <div className="flex flex-col md:flex-row">
                     <div className="flex flex-col">
                       <label className="font-bold underline text-xl">
                         Start
@@ -205,31 +206,29 @@ const InvoiceCreation = () => {
           </div>
         </div>
 
-        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl">
+        {/* Invoice Preview */}
+        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden">
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
-            {control.Companies?.sort((a, b) => a.id - b.id).map((e) => {
-              if (
-                String(e.id).includes(control.filterString) ||
-                e.name.toLowerCase().includes(control.filterString)
-              ) {
+            {control.Companies?.map((e1) => {
+              return control.Companies?.map((e) => {
                 return (
                   <div
                     key={e.id}
-                    className={`grid grid-cols-4 gap-0 p-5 border-b ${
-                      control.selectedCompany != null &&
-                      control.selectedCompany.id == e.id
-                        ? "shadow-inner shadow-slate-500 bg-slate-200"
-                        : "cursor-pointer"
-                    }`}
-                    onClick={() => {
-                      control.setSelectedCompany(e);
-                    }}
+                    className={`grid grid-cols-11 gap-0 p-5 border-b border-l-8 
+                      ${
+                        e.id % 2 == 0
+                          ? "border-l-red-300"
+                          : e.id === 1
+                          ? "border-l-yellow-300"
+                          : "border-l-slate-50"
+                      }`}
                   >
-                    <p className="col-span-1">{e.id}</p>
-                    <p className="col-span-3 truncate">{e.name}</p>
+                    <p className="col-span-5">Surname Firstname</p>
+                    <p className="col-span-5">Intersection at Main & Vine</p>
+                    <p className="col-span-1">23 hr</p>
                   </div>
                 );
-              }
+              });
             })}
           </div>
         </div>
