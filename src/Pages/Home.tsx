@@ -8,18 +8,22 @@ import {
   PSO_ROLE,
 } from "@/Components/Auth/PermissionLock";
 import LandingPage from "./QuickLinkPages/LandingPage";
-import { useRoleQuery } from "@/Functions/RoleProvider";
+import { useRoleForLoggedInUser } from "@/Functions/RoleProvider";
 import { Spinner } from "@/Components/Spinner";
 import Error from "@/Components/Error";
 import { useCurrentEmployee } from "@/Functions/Queries/EmployeeQueries";
 import { useAuth } from "react-oidc-context";
 
 export const Home = () => {
-  const { data, isLoading, isError } = useRoleQuery();
-  const { isLoading: authLoading } = useAuth();
+  const {
+    data: role,
+    isLoading: isRoleLoading,
+    isError,
+  } = useRoleForLoggedInUser();
+  const { isLoading: isAuthLoading } = useAuth();
   const { isLoading: isEmpLoading } = useCurrentEmployee();
 
-  if (isLoading || authLoading || isEmpLoading) {
+  if (isRoleLoading || isEmpLoading || isAuthLoading) {
     return <Spinner />;
   }
 
@@ -27,24 +31,21 @@ export const Home = () => {
     return <Error />;
   }
 
-  return (
+  if (!role) {
+    return <LandingPage />;
+  }
 
-    <>
-      {!data ? (
-        <LandingPage />
-      ) : (
-        <div>
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <PSOQuickLink />
-          </PermissionComponentLock>
-          <PermissionComponentLock roles={[CLIENT_ROLE]}>
-            <ConstructionManagerQuickLink />
-          </PermissionComponentLock>
-          <PermissionComponentLock roles={[ADMIN_ROLE]}>
-            <AdminQuickLinks />
-          </PermissionComponentLock>
-        </div>
-      )}
-    </>
+  return (
+    <div>
+      <PermissionComponentLock roles={[PSO_ROLE]}>
+        <PSOQuickLink />
+      </PermissionComponentLock>
+      <PermissionComponentLock roles={[CLIENT_ROLE]}>
+        <ConstructionManagerQuickLink />
+      </PermissionComponentLock>
+      <PermissionComponentLock roles={[ADMIN_ROLE]}>
+        <AdminQuickLinks />
+      </PermissionComponentLock>
+    </div>
   );
 };
