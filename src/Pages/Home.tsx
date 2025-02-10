@@ -18,8 +18,9 @@ export const Home = () => {
   const { data: role, isLoading, isError } = useRoleForLoggedInUser();
   const { isLoading: authLoading } = useAuth();
   const { isLoading: isEmpLoading } = useCurrentEmployee();
+  const { isLoading: isAuthLoading } = useAuth();
 
-  if (isLoading || authLoading || isEmpLoading) {
+  if (isRoleLoading || isEmpLoading || isAuthLoading) {
     return <Spinner />;
   }
 
@@ -27,23 +28,21 @@ export const Home = () => {
     return <Error />;
   }
 
+  if (!role) {
+    return <LandingPage />;
+  }
+
   return (
-    <>
-      {!role ? (
-        <LandingPage />
-      ) : (
-        <div>
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <PSOQuickLink />
-          </PermissionComponentLock>
-          <PermissionComponentLock roles={[CLIENT_ROLE]}>
-            <ConstructionManagerQuickLink />
-          </PermissionComponentLock>
-          <PermissionComponentLock roles={[ADMIN_ROLE]}>
-            <AdminQuickLinks />
-          </PermissionComponentLock>
-        </div>
-      )}
-    </>
+    <div>
+      <PermissionComponentLock roles={[PSO_ROLE]}>
+        <PSOQuickLink />
+      </PermissionComponentLock>
+      <PermissionComponentLock roles={[CLIENT_ROLE]}>
+        <ConstructionManagerQuickLink />
+      </PermissionComponentLock>
+      <PermissionComponentLock roles={[ADMIN_ROLE]}>
+        <AdminQuickLinks />
+      </PermissionComponentLock>
+    </div>
   );
 };
