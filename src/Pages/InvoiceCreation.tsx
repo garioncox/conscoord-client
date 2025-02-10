@@ -1,22 +1,17 @@
 import { Spinner } from "@/Components/Spinner";
 import {
-  Badge,
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { Company } from "@/Data/Interfaces/Company";
-import { createInvoice } from "@/Functions/InvoiceRequest";
-import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
-import { Autocomplete, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MonthCalendar } from "@mui/x-date-pickers/MonthCalendar";
 import dayjs from "dayjs";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5"; // For the arrow icons
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
 
 const InvoiceCreation = () => {
@@ -213,7 +208,7 @@ const InvoiceCreation = () => {
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden">
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
-            {control.Companies?.map((e1) => {
+            {control.Companies?.map(() => {
               return control.Companies?.map((e) => {
                 return (
                   <div
