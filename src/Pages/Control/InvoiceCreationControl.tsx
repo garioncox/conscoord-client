@@ -13,11 +13,13 @@ import {
 } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
+import { useAuth } from "react-oidc-context";
 import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
   const dateUtils = useDateUtils();
+  const { user, isLoading: isUserLoading } = useAuth();
 
   const [currentYear, setCurrentYear] = useState<number>(dayjs().year());
   const [filterString, setFilterString] = useState("");
@@ -31,7 +33,7 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
-  const isLoading = isCompaniesLoading;
+  const isLoading = isCompaniesLoading || isUserLoading;
 
   const DateCalendarBadgeSlots = (
     props: PickersDayProps<Dayjs>,
@@ -109,17 +111,33 @@ export const useInvoiceCreationControl = () => {
 
   const handleMonthSelect = (month: dayjs.Dayjs) => {
     setSelectedMonth(month);
-    setSelectedStartDate(month.startOf('month'));
-    setSelectedEndDate(month.endOf('month').subtract(1, 'day'));
-  }
+    setSelectedStartDate(month.startOf("month"));
+    setSelectedEndDate(month.endOf("month").subtract(1, "day"));
+  };
 
   const generateInvoice = () => {
-    if (!selectedStartDate) {toast.error("No Start Date Selected"); return}
-    if (!selectedEndDate) {toast.error("No End Date Selected"); return}
-    if (!selectedCompany?.id) {toast.error("No Company Selected"); return}
+    if (isLoading) {
+      return;
+    }
+    if (!selectedStartDate) {
+      toast.error("No Start Date Selected");
+      return;
+    }
+    if (!selectedEndDate) {
+      toast.error("No End Date Selected");
+      return;
+    }
+    if (!selectedCompany?.id) {
+      toast.error("No Company Selected");
+      return;
+    }
 
-    createInvoice({companyId: selectedCompany.id, startDate: selectedStartDate.format('YYYY/MM/DD'), endDate: selectedEndDate.format('YYYY/MM/DD')})
-  }
+    createInvoice(user?.id_token ?? "", {
+      companyId: selectedCompany.id,
+      startDate: selectedStartDate.format("YYYY/MM/DD"),
+      endDate: selectedEndDate.format("YYYY/MM/DD"),
+    });
+  };
 
   return {
     isLoading,
@@ -142,6 +160,6 @@ export const useInvoiceCreationControl = () => {
     monthView,
     toggleMonthView,
     handleMonthSelect,
-    generateInvoice
+    generateInvoice,
   };
 };
