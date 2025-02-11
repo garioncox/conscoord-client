@@ -98,6 +98,7 @@ const InvoiceCreation = () => {
                   />
                 </RadioGroup>
               </FormControl>
+              <button className="p3 rounded bg-blue-200" onClick={() => control.generateInvoice()}>Generate Invoice</button>
             </div>
 
             {/* Calendar View */}
@@ -127,7 +128,7 @@ const InvoiceCreation = () => {
                         defaultValue={dayjs().year(control.currentYear)}
                         value={control.selectedMonth!.year(control.currentYear)}
                         onChange={(value) => {
-                          control.setSelectedMonth(value);
+                          control.handleMonthSelect(value);
                         }}
                         slots={{
                           monthButton: (props) =>

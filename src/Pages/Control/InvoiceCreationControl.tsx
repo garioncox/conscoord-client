@@ -1,5 +1,6 @@
 import { useDateUtils } from "@/Components/DateUtils";
 import { Company } from "@/Data/Interfaces/Company";
+import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { Badge } from "@mui/material";
 import {
@@ -12,10 +13,13 @@ import {
 } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
+import { useAuth } from "react-oidc-context";
+import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
   const dateUtils = useDateUtils();
+  const { user, isLoading: isUserLoading } = useAuth();
 
   const [currentYear, setCurrentYear] = useState<number>(dayjs().year());
   const [filterString, setFilterString] = useState("");
@@ -29,7 +33,7 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
-  const isLoading = isCompaniesLoading;
+  const isLoading = isCompaniesLoading || isUserLoading;
 
   const DateCalendarBadgeSlots = (
     props: PickersDayProps<Dayjs>,
@@ -105,6 +109,36 @@ export const useInvoiceCreationControl = () => {
     setMonthView(!monthView);
   };
 
+  const handleMonthSelect = (month: dayjs.Dayjs) => {
+    setSelectedMonth(month);
+    setSelectedStartDate(month.startOf("month"));
+    setSelectedEndDate(month.endOf("month").subtract(1, "day"));
+  };
+
+  const generateInvoice = () => {
+    if (isLoading) {
+      return;
+    }
+    if (!selectedStartDate) {
+      toast.error("No Start Date Selected");
+      return;
+    }
+    if (!selectedEndDate) {
+      toast.error("No End Date Selected");
+      return;
+    }
+    if (!selectedCompany?.id) {
+      toast.error("No Company Selected");
+      return;
+    }
+
+    createInvoice(user?.id_token ?? "", {
+      companyId: selectedCompany.id,
+      startDate: selectedStartDate.format("YYYY/MM/DD"),
+      endDate: selectedEndDate.format("YYYY/MM/DD"),
+    });
+  };
+
   return {
     isLoading,
     Companies,
@@ -125,5 +159,7 @@ export const useInvoiceCreationControl = () => {
     selectNextYear,
     monthView,
     toggleMonthView,
+    handleMonthSelect,
+    generateInvoice,
   };
 };
