@@ -172,7 +172,6 @@ export const AddProject: React.FC<{
       endDate: FormatDate(endDateControl.value),
       contactinfo: id,
     };
-    console.log("Contact info...", project.contactinfo);
     addProjectMutation.mutate({ project });
   }
 
