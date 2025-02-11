@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import ProjectList from "./Pages/ProjectList";
 import ShiftList from "./Pages/ShiftList";
 import EmployeeDetails from "./Pages/EmployeeDetails";
-import EmployeeList from "./Pages/EmployeeList";
 import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import { Home } from "./Pages/Home";
 import MyShifts from "./Pages/MyShifts";
@@ -14,6 +13,7 @@ import PermissionLock, {
 import ProjectShifts from "./Pages/ProjectShifts";
 import { ShiftDetails } from "./Pages/ShiftDetails";
 import { UserInfo } from "./Components/UserInfo";
+import InvoiceCreation from "./Pages/InvoiceCreation";
 
 function App() {
   return (
@@ -53,14 +53,6 @@ function App() {
         }
       />
       <Route
-        path="admin/view/employees"
-        element={
-          <PermissionLock roles={[ADMIN_ROLE]}>
-            <EmployeeList />
-          </PermissionLock>
-        }
-      />
-      <Route
         path="admin/user/view"
         element={
           <PermissionLock roles={[ADMIN_ROLE]}>
@@ -81,6 +73,14 @@ function App() {
         element={
           <PermissionLock roles={[PSO_ROLE, CLIENT_ROLE]}>
             <ShiftDetails />
+          </PermissionLock>
+        }
+      />
+      <Route
+        path="invoiceCreation"
+        element={
+          <PermissionLock roles={[CLIENT_ROLE]}>
+            <InvoiceCreation />
           </PermissionLock>
         }
       />

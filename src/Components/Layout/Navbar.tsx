@@ -23,8 +23,9 @@ const Navbar = () => {
         </button>
       </div>
       <div
-        className={`w-full block ${isOpen ? "" : "hidden"
-          } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
+        className={`w-full block ${
+          isOpen ? "" : "hidden"
+        } flex-grow lg:ms-20 lg:flex lg:items-center lg:w-auto`}
       >
         {/* Client Items */}
         <NavItem
@@ -32,8 +33,13 @@ const Navbar = () => {
           label={"Projects"}
           roles={[CLIENT_ROLE, PSO_ROLE]}
         />
+        <NavItem
+          to={"/invoiceCreation"}
+          label={"Invoicing"}
+          roles={[CLIENT_ROLE]}
+        />
 
-        {/* PSO + Client Items  */}
+        {/* PSO + Client Items */}
         <NavItem
           to={"/shift/view/available"}
           label={"Available Shifts"}
@@ -49,8 +55,8 @@ const Navbar = () => {
 
         {/* Admin Items */}
         <NavItem
-          to={"/admin/view/employees"}
-          label={"View Employees"}
+          to={"/admin/user/view"}
+          label={"Employees"}
           roles={[ADMIN_ROLE]}
         />
         <div className="font-medium text-xl p-3 ms-2 me-auto lg:ms-auto lg:me-0 mt-4 lg:mt-0 hover:text-white hover:border-white">

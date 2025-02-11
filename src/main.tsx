@@ -12,15 +12,20 @@ import Error from "./Components/Error.tsx";
 const oidcConfig: AuthProviderProps = {
   authority: "https://dev-zas6rizyxopiwv2b.us.auth0.com/",
   client_id: "BOZHiKTbFJOrquI2E4QMI2qARqMW9OgC",
-  redirect_uri: process.env.NODE_ENV === "production"
-    ? "https://conscoord.duckdns.org/"
-    : "http://localhost:5173",
+  redirect_uri:
+    process.env.NODE_ENV === "production"
+      ? "https://conscoord.duckdns.org/"
+      : "http://localhost:5173/",
   scope: "openid profile email",
   onSigninCallback: () => {
     window.history.replaceState({}, document.title, window.location.pathname);
   },
+  post_logout_redirect_uri:
+    process.env.NODE_ENV === "production"
+      ? "https://conscoord.duckdns.org/"
+      : "http://localhost:5173/",
   automaticSilentRenew: true,
-}
+};
 
 ReactDOM.render(
   <BrowserRouter>

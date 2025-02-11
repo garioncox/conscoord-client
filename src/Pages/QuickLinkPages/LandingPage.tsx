@@ -1,4 +1,4 @@
-import LandingPageBanner from "../../Pictures/LandingPageBanner.jpg"
+import LandingPageBanner from "../../Pictures/LandingPageBanner.jpg";
 
 const LandingPage = () => {
   return (
@@ -18,7 +18,7 @@ const LandingPage = () => {
           Sign up to work construction traffic control shifts during your time
           off. Help keep our streets safe while earning extra income.
         </p>
-      </div>{" "}
+      </div>
     </div>
   );
 };
