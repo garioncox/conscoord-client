@@ -1,6 +1,6 @@
 import { useDateUtils } from "@/Components/DateUtils";
 import { Company } from "@/Data/Interfaces/Company";
-import { createInvoice } from "@/Functions/InvoiceRequest";
+import { createInvoice, getInvoiceInfo } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { Badge } from "@mui/material";
 import {
@@ -113,9 +113,32 @@ export const useInvoiceCreationControl = () => {
     setSelectedMonth(month);
     setSelectedStartDate(month.startOf("month"));
     setSelectedEndDate(month.endOf("month").subtract(1, "day"));
+
+    if (selectedCompany?.id) {
+      toast.success("start date now " + month.startOf("month"))
+      // getInvoicePreviewData();
+    }
   };
 
   const generateInvoice = () => {
+    checkValidFormData();
+
+    createInvoice(user?.id_token ?? "", {
+      companyId: selectedCompany!.id,
+      startDate: selectedStartDate!.format("YYYY/MM/DD"),
+      endDate: selectedEndDate!.format("YYYY/MM/DD"),
+    });
+  };
+
+  const getInvoicePreviewData = () => {
+    getInvoiceInfo(user?.id_token ?? "", {
+      companyId: selectedCompany!.id,
+      startDate: selectedStartDate!.format("YYYY/MM/DD"),
+      endDate: selectedEndDate!.format("YYYY/MM/DD"),
+    });
+  };
+
+  const checkValidFormData = () => {
     if (isLoading) {
       return;
     }
@@ -131,12 +154,6 @@ export const useInvoiceCreationControl = () => {
       toast.error("No Company Selected");
       return;
     }
-
-    createInvoice(user?.id_token ?? "", {
-      companyId: selectedCompany.id,
-      startDate: selectedStartDate.format("YYYY/MM/DD"),
-      endDate: selectedEndDate.format("YYYY/MM/DD"),
-    });
   };
 
   return {
@@ -161,5 +178,6 @@ export const useInvoiceCreationControl = () => {
     toggleMonthView,
     handleMonthSelect,
     generateInvoice,
+    getInvoicePreviewData,
   };
 };
