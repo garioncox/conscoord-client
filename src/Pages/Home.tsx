@@ -31,6 +31,7 @@ export const Home = () => {
     return <Error />;
   }
 
+
   if (!role) {
     return <LandingPage />;
   }
