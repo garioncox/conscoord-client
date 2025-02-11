@@ -1,5 +1,6 @@
 import { useDateUtils } from "@/Components/DateUtils";
 import { Company } from "@/Data/Interfaces/Company";
+import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { Badge } from "@mui/material";
 import {
@@ -12,6 +13,7 @@ import {
 } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
@@ -105,6 +107,20 @@ export const useInvoiceCreationControl = () => {
     setMonthView(!monthView);
   };
 
+  const handleMonthSelect = (month: dayjs.Dayjs) => {
+    setSelectedMonth(month);
+    setSelectedStartDate(month.startOf('month'));
+    setSelectedEndDate(month.endOf('month').subtract(1, 'day'));
+  }
+
+  const generateInvoice = () => {
+    if (!selectedStartDate) {toast.error("No Start Date Selected"); return}
+    if (!selectedEndDate) {toast.error("No End Date Selected"); return}
+    if (!selectedCompany?.id) {toast.error("No Company Selected"); return}
+
+    createInvoice({companyId: selectedCompany.id, startDate: selectedStartDate.format('YYYY/MM/DD'), endDate: selectedEndDate.format('YYYY/MM/DD')})
+  }
+
   return {
     isLoading,
     Companies,
@@ -125,5 +141,7 @@ export const useInvoiceCreationControl = () => {
     selectNextYear,
     monthView,
     toggleMonthView,
+    handleMonthSelect,
+    generateInvoice
   };
 };

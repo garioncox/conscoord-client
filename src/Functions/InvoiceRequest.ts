@@ -1,3 +1,4 @@
+import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -8,9 +9,10 @@ export const getInvoiceInfo = async (): Promise<InvoiceInfoDTO[]> => {
     return response.data;
   };
 
-export const createInvoice = async () => {
+export const createInvoice = async (dto: invoiceCreationDTO) => {
     try {
-        const response = await axios.get(`/api/Invoice/generateInvoice`, {
+        console.log(dto.companyId, dto.startDate, dto.endDate)
+        const response = await axios.post(`/api/Invoice/generateInvoice`, dto, {
             responseType: 'blob', 
         });
         const blob = response.data;
