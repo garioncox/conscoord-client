@@ -41,7 +41,6 @@ const InvoiceCreation = () => {
             fullWidth
             onChange={(e) => {
               control.setFilterString(e.target.value.toLowerCase());
-              control.getInvoicePreviewData();
             }}
           />
         </div>
@@ -62,8 +61,7 @@ const InvoiceCreation = () => {
                       : "cursor-pointer"
                   }`}
                   onClick={() => {
-                    control.setSelectedCompany(e);
-                    control.getInvoicePreviewData();
+                    control.setCompanyFilter(e);
                   }}
                 >
                   <p className="col-span-1">{e.id}</p>
@@ -111,7 +109,6 @@ const InvoiceCreation = () => {
                       <button
                         onClick={() => {
                           control.selectPreviousYear();
-                          control.getInvoicePreviewData();
                         }}
                         className="text-2xl"
                       >
@@ -123,7 +120,6 @@ const InvoiceCreation = () => {
                       <button
                         onClick={() => {
                           control.selectNextYear();
-                          control.getInvoicePreviewData();
                         }}
                         className="text-2xl"
                       >
@@ -136,7 +132,6 @@ const InvoiceCreation = () => {
                         value={control.selectedMonth!.year(control.currentYear)}
                         onChange={(value) => {
                           control.handleMonthSelect(value);
-                          control.getInvoicePreviewData();
                         }}
                         slots={{
                           monthButton: (props) =>
@@ -164,8 +159,7 @@ const InvoiceCreation = () => {
                         defaultValue={dayjs()}
                         value={control.selectedStartDate}
                         onChange={(value) => {
-                          control.setSelectedStartDate(value);
-                          control.getInvoicePreviewData();
+                          control.setStartDate(value);
                         }}
                         views={["day"]}
                         slots={{
@@ -191,8 +185,7 @@ const InvoiceCreation = () => {
                         defaultValue={dayjs()}
                         value={control.selectedEndDate}
                         onChange={(value) => {
-                          control.setSelectedEndDate(value);
-                          control.getInvoicePreviewData();
+                          control.setEndDate(value);
                         }}
                         views={["day"]}
                         slots={{
@@ -217,15 +210,17 @@ const InvoiceCreation = () => {
             </LocalizationProvider>
           </div>
         </div>
-
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden">
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
-            {control.invoicePreviewData == null || control.invoicePreviewData.length == 0 ? (
+            {control.invoicePreviewData == null ||
+            control.invoicePreviewData.length == 0 ? (
               <>
-              <div>No Data Here</div>
-              <div>Start Date {control.selectedStartDate?.toString()}</div>
-              <div>End Date {control.selectedEndDate?.toString()}</div>
+                {control.isInvoiceDataLoading ? (
+                  <Spinner/>
+                ) : (
+                  <div className="w-full justify-center">No Data</div>
+                )}
               </>
             ) : (
               control.invoicePreviewData?.map((ipd) =>
@@ -234,11 +229,11 @@ const InvoiceCreation = () => {
                     <div
                       key={ebs.employeeId}
                       className={`grid grid-cols-11 gap-0 p-5 border-b border-l-8 
-            ${ebs.hoursWorked! > 0 ? "border-l-red-300" : "border-l-slate-50"}`}
+            ${ebs.hoursWorked! > 0 ? "border-l-slate-50" : "border-l-red-300"}`}
                     >
                       <p className="col-span-5">{ebs.employeeName}</p>
                       <p className="col-span-5">{sbp.shiftLocation}</p>
-                      <p className="col-span-1">{ebs.hoursWorked}</p>
+                      <p className="col-span-1">{ebs.hoursWorked.toPrecision(3)} hr</p>
                     </div>
                   ))
                 )
