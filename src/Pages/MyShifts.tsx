@@ -58,17 +58,17 @@ function MyShifts() {
 
   if (shifts.length == 0) {
     return (
-      <div className="bg-tertiary w-2/3 h-1/2 shadow-xl border p-10 my-10 rounded-xl">
-        <p className="text-6xl text-center text-slate-600 p-20">
+      <div className="bg-tertiary max-h-[50%] shadow-xl border p-5 md:p-10 my-10 rounded-xl flex flex-col justify-center items-center">
+        <p className="font-semibold text-2xl text-center text-slate-600">
           Looks like you haven't signed up for any shifts...
         </p>
-        <div className="flex p-20 content-center align-middle justify-center grow">
-          <p className="text-2xl flex self-center">
+        <div className="flex flex-col md:flex-row items-center justify-center mt-20">
+          <p className="flex self-center md:text-xl">
             Try signing up for some now.
           </p>
           <Link
             to={"/shift/view/available"}
-            className="ms-10 border p-3 px-5 rounded-xl bg-slate-600 text-white hover:bg-primary"
+            className="mt-3 p-3 px-5 md:ms-5 rounded-xl bg-slate-600 text-white max-w-48 self-center"
           >
             View Available Shifts
           </Link>
