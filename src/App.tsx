@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import ProjectList from "./Pages/ProjectList";
 import ShiftList from "./Pages/ShiftList";
-import EmployeeDetails from "./Pages/EmployeeDetails";
 import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import { Home } from "./Pages/Home";
 import MyShifts from "./Pages/MyShifts";
@@ -57,14 +56,6 @@ function App() {
         element={
           <PermissionLock roles={[ADMIN_ROLE]}>
             <UserInfo />
-          </PermissionLock>
-        }
-      />
-      <Route
-        path="admin/view/employees/:id"
-        element={
-          <PermissionLock roles={[ADMIN_ROLE]}>
-            <EmployeeDetails />
           </PermissionLock>
         }
       />
