@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import AdminBanner from "../../Pictures/AdminBanner.jpg"
+import AdminBanner from "../../Pictures/AdminBanner.jpg";
 
 const AdminQuickLinks = () => {
   return (
@@ -17,7 +17,7 @@ const AdminQuickLinks = () => {
         <hr className="w-1/2 mb-6 border-t-2 border-gray-300" />
         <Link
           className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
-          to="/admin/view/employees"
+          to="/admin/user/view"
         >
           Employees
         </Link>
