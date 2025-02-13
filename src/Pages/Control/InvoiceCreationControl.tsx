@@ -1,6 +1,7 @@
 import { useDateUtils } from "@/Components/DateUtils";
+import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
 import { Company } from "@/Data/Interfaces/Company";
-import { createInvoice } from "@/Functions/InvoiceRequest";
+import { createInvoice, getInvoiceInfo } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { Badge } from "@mui/material";
 import {
@@ -14,7 +15,6 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
@@ -33,6 +33,7 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
+  const [invoicePreviewData, setInvoicePreviewData] = useState<InvoiceInfoDTO[]>();
   const isLoading = isCompaniesLoading || isUserLoading;
 
   const DateCalendarBadgeSlots = (
@@ -116,28 +117,35 @@ export const useInvoiceCreationControl = () => {
   };
 
   const generateInvoice = () => {
-    if (isLoading) {
-      return;
-    }
-    if (!selectedStartDate) {
-      toast.error("No Start Date Selected");
-      return;
-    }
-    if (!selectedEndDate) {
-      toast.error("No End Date Selected");
-      return;
-    }
-    if (!selectedCompany?.id) {
-      toast.error("No Company Selected");
-      return;
-    }
+    if(!checkValuesExist()){return};
 
     createInvoice(user?.id_token ?? "", {
-      companyId: selectedCompany.id,
-      startDate: selectedStartDate.format("YYYY/MM/DD"),
-      endDate: selectedEndDate.format("YYYY/MM/DD"),
+      companyId: selectedCompany!.id,
+      startDate: selectedStartDate!.format("YYYY/MM/DD"),
+      endDate: selectedEndDate!.format("YYYY/MM/DD"),
     });
   };
+
+  const getInvoicePreviewData = async() => {
+    if(!checkValuesExist()){return};
+
+    const data = await getInvoiceInfo(user?.id_token ?? "", {
+      companyId: selectedCompany!.id,
+      startDate: selectedStartDate!.format("YYYY/MM/DD"),
+      endDate: selectedEndDate!.format("YYYY/MM/DD"),
+    })
+    setInvoicePreviewData(data)
+  }
+
+  const checkValuesExist = () => {
+    if (isLoading) {
+      return false;
+    }
+    if (!selectedStartDate || !selectedEndDate || !selectedCompany?.id) {
+      return false;
+    }
+    return true;
+  }
 
   return {
     isLoading,
@@ -161,5 +169,7 @@ export const useInvoiceCreationControl = () => {
     toggleMonthView,
     handleMonthSelect,
     generateInvoice,
+    getInvoicePreviewData,
+    invoicePreviewData
   };
 };

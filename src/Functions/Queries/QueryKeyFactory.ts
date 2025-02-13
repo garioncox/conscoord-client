@@ -43,5 +43,6 @@ export const queryKeys = {
   archivedProjects: ["archivedProjects"],
   projects: ["allProjects"],
   companies: ["allCompanies"],
-  employeeHistory: ["employeeHistory"]
+  employeeHistory: ["employeeHistory"],
+  invoicePreviewData: ["invoicePreview"]
 };

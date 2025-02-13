@@ -3,8 +3,17 @@ import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export const getInvoiceInfo = async (): Promise<InvoiceInfoDTO[]> => {
-  const response = await axios.get(`/api/Invoice`);
+export const getInvoiceInfo = async (
+  id_token: string,
+  dto: invoiceCreationDTO
+): Promise<InvoiceInfoDTO[]> => {
+
+  const response = await axios.post(`/api/Invoice/getInvoicePreview`, dto, {
+    headers: {
+      Authorization: `Bearer ${id_token}`,
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };
 
