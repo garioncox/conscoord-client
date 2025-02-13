@@ -9,10 +9,10 @@ import {
 import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
-import { getAllEmployeeShifts } from "../EmpShiftRequests";
 import { queryClient } from "./QueryClient";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
+import { getAllEmployeeShiftsByShiftId } from "../EmpShiftRequests";
 
 export const useLoggedInEmployee = () => {
   const { user, isAuthenticated } = useAuth();
@@ -34,16 +34,12 @@ export const useAddEmployeeMutation = () => {
 };
 
 export const useEmployeesByShift = (shiftId: number) => {
+  const { user } = useAuth();
+
   return useQuery({
     queryKey: [queryKeys.employeesByShift, shiftId],
     queryFn: async () => {
-      const Employees: Employee[] = await getAllEmployees();
-      const EmpShifts: EmployeeShift[] = await getAllEmployeeShifts();
-      const filteredEmpShifts = EmpShifts.filter((es) => es.shiftId == shiftId);
-      const signedUpEmployees = Employees.filter((employee) =>
-        filteredEmpShifts.some((fes) => fes.empId == employee.id)
-      );
-      return signedUpEmployees;
+      return await getAllEmployeeShiftsByShiftId(user?.id_token ?? "", shiftId);
     },
   });
 };
@@ -76,7 +72,7 @@ export const useEditEmployeeMutation = () => {
         queryKey: queryKeys.employees,
       });
     },
-  }); 
+  });
 };
 
 export const useCurrentEmployee = () => {

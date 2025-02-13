@@ -39,13 +39,20 @@ export const useEmpShiftRequests = () => {
     addEmployeeShift,
     getSignedUpShifts,
     deleteEmployeeShift,
-    getAllEmployeeShifts,
     updateEmpShift,
   };
 };
 
 export const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
   const response = await axios.get(`/api/EmployeeShift/getall`);
+  return response.data;
+};
+
+export const getAllEmployeeShiftsByShiftId = async (id_token: string, shiftId: number): Promise<EmployeeShift[]> => {
+  const response = await axios.post(`/api/EmployeeShift/getByShiftId`, shiftId,    { headers: {
+    Authorization: `Bearer ${id_token}`,
+    'Content-Type': 'application/json'
+  }});
   return response.data;
 };
 
