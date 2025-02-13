@@ -47,15 +47,9 @@ const PSOView: React.FC<PSOViewProps> = ({
     if (!currentEmpShift) {
       return;
     }
-    if (
-      currentEmpShift.clockInTime //////////////////////////////////////////////////
-    ) {
-      setConfirmedNotWorked(true);
-    }
 
-    if (currentEmpShift.notes === "Shift was reported as canceled") {
-      setConfirmShiftCanceled(true);
-    }
+    setConfirmedNotWorked(currentEmpShift.didnotwork);
+    setConfirmShiftCanceled(currentEmpShift.reportedcanceled);
   }, [currentEmpShift]);
 
   function SaveShiftTimes(): void {
@@ -98,6 +92,27 @@ const PSOView: React.FC<PSOViewProps> = ({
       hasbeeninvoiced: currentEmpShift.hasbeeninvoiced,
       notes: noteControl.value ?? "",
       reportedcanceled: currentEmpShift.reportedcanceled,
+      shiftId: currentEmpShift.shiftId,
+    };
+
+    empShiftMutation.mutate(newEmpShift);
+  }
+
+  function ReportShiftCanceled(): void {
+    if (!(currentEmpShift && startTime && endTime)) {
+      console.log("conditions were not met");
+      return;
+    }
+
+    const newEmpShift: EmployeeShiftDTO = {
+      id: currentEmpShift.id,
+      didnotwork: true,
+      clockInTime: "",
+      clockOutTime: "",
+      empId: currentEmpShift.empId,
+      hasbeeninvoiced: currentEmpShift.hasbeeninvoiced,
+      notes: noteControl.value ?? "",
+      reportedcanceled: true,
       shiftId: currentEmpShift.shiftId,
     };
 
@@ -149,7 +164,6 @@ const PSOView: React.FC<PSOViewProps> = ({
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
               }`}
-              onChange={() => {}}
               checked={confirmedNotWorked}
               disabled={confirmedNotWorked || isFormDisabled}
             />
@@ -264,6 +278,7 @@ const PSOView: React.FC<PSOViewProps> = ({
               onClick={() => {
                 toggleShiftCanceledModal();
                 setConfirmShiftCanceled(true);
+                ReportShiftCanceled();
               }}
               className="p-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded"
             >

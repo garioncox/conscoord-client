@@ -45,6 +45,7 @@ export const useEmpShiftMutation = () => {
       requests.updateEmpShift(empShift);
     },
     onSuccess: () => {
+      toast.success("Success!");
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
     },
     onError: () => {

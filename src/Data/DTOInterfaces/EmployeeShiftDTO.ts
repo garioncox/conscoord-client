@@ -5,7 +5,7 @@ export interface EmployeeShiftDTO {
   didnotwork: boolean;
   empId: number;
   hasbeeninvoiced: boolean;
+  notes?: string;
   reportedcanceled: boolean;
   shiftId: number;
-  notes?: string;
 }
