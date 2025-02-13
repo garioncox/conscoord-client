@@ -8,11 +8,9 @@ import {
 } from "../EmployeeRequests";
 import { queryKeys } from "./QueryKeyFactory";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
-import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { queryClient } from "./QueryClient";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
-import { getAllEmployeeShiftsByShiftId } from "../EmpShiftRequests";
 
 export const useLoggedInEmployee = () => {
   const { user, isAuthenticated } = useAuth();
@@ -33,17 +31,6 @@ export const useAddEmployeeMutation = () => {
   });
 };
 
-export const useEmployeesByShift = (shiftId: number) => {
-  const { user } = useAuth();
-
-  return useQuery({
-    queryKey: [queryKeys.employeesByShift, shiftId],
-    queryFn: async () => {
-      return await getAllEmployeeShiftsByShiftId(user?.id_token ?? "", shiftId);
-    },
-  });
-};
-
 export const useAllEmployees = () => {
   return useQuery({
     queryKey: queryKeys.employees,
@@ -51,11 +38,13 @@ export const useAllEmployees = () => {
   });
 };
 
-export const useEmployeeById = (id: number) => {
+export const useEmployeesByShiftId = (shiftId: number) => {
+  const { user } = useAuth();
+
   return useQuery({
-    queryKey: [queryKeys.employeeId, id],
+    queryKey: [queryKeys.employeeId, shiftId],
     queryFn: async () => {
-      return await getEmployeesByShiftId(id);
+      return await getEmployeesByShiftId(user?.id_token ?? "", shiftId);
     },
   });
 };

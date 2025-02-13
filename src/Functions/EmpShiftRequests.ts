@@ -48,14 +48,6 @@ export const getAllEmployeeShifts = async (): Promise<EmployeeShift[]> => {
   return response.data;
 };
 
-export const getAllEmployeeShiftsByShiftId = async (id_token: string, shiftId: number): Promise<EmployeeShift[]> => {
-  const response = await axios.post(`/api/EmployeeShift/getByShiftId`, shiftId,    { headers: {
-    Authorization: `Bearer ${id_token}`,
-    'Content-Type': 'application/json'
-  }});
-  return response.data;
-};
-
 export const getClaimedEmployeeShiftsByEmail = async (
   email: string
 ): Promise<EmployeeShift[]> => {
