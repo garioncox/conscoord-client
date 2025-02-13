@@ -1,3 +1,5 @@
+import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
+
 export const queryKeys = {
   all: [
     "shifts",
@@ -43,5 +45,6 @@ export const queryKeys = {
   archivedProjects: ["archivedProjects"],
   projects: ["allProjects"],
   companies: ["allCompanies"],
-  employeeHistory: ["employeeHistory"]
+  employeeHistory: ["employeeHistory"],
+  invoicePreviewData: (dto: invoiceCreationDTO) => {return ["invoicePreview", dto]}
 };

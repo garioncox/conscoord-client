@@ -39,9 +39,9 @@ const InvoiceCreation = () => {
             label="Filter"
             variant="standard"
             fullWidth
-            onChange={(e) =>
-              control.setFilterString(e.target.value.toLowerCase())
-            }
+            onChange={(e) => {
+              control.setFilterString(e.target.value.toLowerCase());
+            }}
           />
         </div>
 
@@ -61,7 +61,7 @@ const InvoiceCreation = () => {
                       : "cursor-pointer"
                   }`}
                   onClick={() => {
-                    control.setSelectedCompany(e);
+                    control.setCompanyFilter(e);
                   }}
                 >
                   <p className="col-span-1">{e.id}</p>
@@ -98,7 +98,6 @@ const InvoiceCreation = () => {
                   />
                 </RadioGroup>
               </FormControl>
-              <button className="p3 rounded bg-blue-200" onClick={() => control.generateInvoice()}>Generate Invoice</button>
             </div>
 
             {/* Calendar View */}
@@ -108,7 +107,9 @@ const InvoiceCreation = () => {
                   <div>
                     <div className="flex justify-center font-bold mb-5">
                       <button
-                        onClick={control.selectPreviousYear}
+                        onClick={() => {
+                          control.selectPreviousYear();
+                        }}
                         className="text-2xl"
                       >
                         <IoChevronBack />
@@ -117,7 +118,9 @@ const InvoiceCreation = () => {
                         {control.currentYear}
                       </span>
                       <button
-                        onClick={control.selectNextYear}
+                        onClick={() => {
+                          control.selectNextYear();
+                        }}
                         className="text-2xl"
                       >
                         <IoChevronForward />
@@ -155,9 +158,9 @@ const InvoiceCreation = () => {
                         fixedWeekNumber={6}
                         defaultValue={dayjs()}
                         value={control.selectedStartDate}
-                        onChange={(value) =>
-                          control.setSelectedStartDate(value)
-                        }
+                        onChange={(value) => {
+                          control.setStartDate(value);
+                        }}
                         views={["day"]}
                         slots={{
                           day: (props) =>
@@ -181,7 +184,9 @@ const InvoiceCreation = () => {
                       <DateCalendar
                         defaultValue={dayjs()}
                         value={control.selectedEndDate}
-                        onChange={(value) => control.setSelectedEndDate(value)}
+                        onChange={(value) => {
+                          control.setEndDate(value);
+                        }}
                         views={["day"]}
                         slots={{
                           day: (props) =>
@@ -205,31 +210,35 @@ const InvoiceCreation = () => {
             </LocalizationProvider>
           </div>
         </div>
-
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden">
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
-            {control.Companies?.map(() => {
-              return control.Companies?.map((e) => {
-                return (
-                  <div
-                    key={e.id}
-                    className={`grid grid-cols-11 gap-0 p-5 border-b border-l-8 
-                      ${
-                        e.id % 2 == 0
-                          ? "border-l-red-300"
-                          : e.id === 1
-                          ? "border-l-yellow-300"
-                          : "border-l-slate-50"
-                      }`}
-                  >
-                    <p className="col-span-5">Surname Firstname</p>
-                    <p className="col-span-5">Intersection at Main & Vine</p>
-                    <p className="col-span-1">23 hr</p>
-                  </div>
-                );
-              });
-            })}
+            {control.invoicePreviewData == null ||
+            control.invoicePreviewData.length == 0 ? (
+              <>
+                {control.isInvoiceDataLoading ? (
+                  <Spinner/>
+                ) : (
+                  <div className="flex flex-col items-center p-3">No Data</div>
+                )}
+              </>
+            ) : (
+              control.invoicePreviewData?.map((ipd) =>
+                ipd.shiftsByProject.map((sbp) =>
+                  sbp.employeesByShift.map((ebs) => (
+                    <div
+                      key={ebs.employeeId}
+                      className={`grid grid-cols-11 gap-0 p-5 border-b border-l-8 
+            ${ebs.hoursWorked! > 0 ? "border-l-slate-50" : "border-l-red-300"}`}
+                    >
+                      <p className="col-span-5">{ebs.employeeName}</p>
+                      <p className="col-span-5">{sbp.shiftLocation}</p>
+                      <p className="col-span-1">{ebs.hoursWorked.toPrecision(3)} hr</p>
+                    </div>
+                  ))
+                )
+              )
+            )}
           </div>
         </div>
       </div>

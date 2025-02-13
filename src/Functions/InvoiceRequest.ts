@@ -1,11 +1,27 @@
 import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
 import axios from "axios";
+import { useAuth } from "react-oidc-context";
 import { toast } from "react-toastify";
 
-export const getInvoiceInfo = async (): Promise<InvoiceInfoDTO[]> => {
-  const response = await axios.get(`/api/Invoice`);
-  return response.data;
+export const useInvoiceRequests = () => {
+  const { user } = useAuth();
+
+  const getInvoiceInfo = async (
+    dto: invoiceCreationDTO
+  ): Promise<InvoiceInfoDTO[]> => {
+    const response = await axios.post(`/api/Invoice/getInvoicePreview`, dto, {
+      headers: {
+        Authorization: `Bearer ${user?.id_token ?? ""}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  };
+
+  return {
+    getInvoiceInfo,
+  };
 };
 
 export const createInvoice = async (

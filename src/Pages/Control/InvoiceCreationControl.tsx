@@ -1,7 +1,9 @@
 import { useDateUtils } from "@/Components/DateUtils";
+import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { Company } from "@/Data/Interfaces/Company";
 import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
+import { useInvoicePreviewData } from "@/Functions/Queries/InvoicePreviewQueries";
 import { Badge } from "@mui/material";
 import {
   PickersMonth,
@@ -14,7 +16,6 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
-import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
@@ -33,6 +34,12 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
+
+  const [invoicePreviewDTO, setInvoicePreviewDTO] =
+    useState<invoiceCreationDTO | null>(null);
+  const { data: invoicePreviewData, isLoading: isInvoiceDataLoading } =
+    useInvoicePreviewData(invoicePreviewDTO);
+
   const isLoading = isCompaniesLoading || isUserLoading;
 
   const DateCalendarBadgeSlots = (
@@ -97,12 +104,37 @@ export const useInvoiceCreationControl = () => {
     );
   };
 
+  const setCompanyFilter = (value: Company) => {
+    setSelectedCompany(value);
+    getInvoicePreviewData(value.id, null, null);
+  };
+
+  const setStartDate = (value: dayjs.Dayjs) => {
+    setSelectedStartDate(value);
+    getInvoicePreviewData(null, value, null);
+  };
+
+  const setEndDate = (value: dayjs.Dayjs) => {
+    setSelectedEndDate(value);
+    getInvoicePreviewData(null, null, value);
+  };
+
   const selectPreviousYear = () => {
     setCurrentYear(currentYear - 1);
+    getInvoicePreviewData(
+      null,
+      selectedStartDate!.subtract(1, "year"),
+      selectedEndDate!.subtract(1, "year")
+    );
   };
 
   const selectNextYear = () => {
     setCurrentYear(currentYear + 1);
+    getInvoicePreviewData(
+      null,
+      selectedStartDate!.add(1, "year"),
+      selectedEndDate!.add(1, "year")
+    );
   };
 
   const toggleMonthView = () => {
@@ -113,30 +145,54 @@ export const useInvoiceCreationControl = () => {
     setSelectedMonth(month);
     setSelectedStartDate(month.startOf("month"));
     setSelectedEndDate(month.endOf("month").subtract(1, "day"));
+    getInvoicePreviewData(
+      null,
+      month.startOf("month"),
+      month.endOf("month").subtract(1, "day")
+    );
   };
 
   const generateInvoice = () => {
-    if (isLoading) {
-      return;
-    }
-    if (!selectedStartDate) {
-      toast.error("No Start Date Selected");
-      return;
-    }
-    if (!selectedEndDate) {
-      toast.error("No End Date Selected");
-      return;
-    }
-    if (!selectedCompany?.id) {
-      toast.error("No Company Selected");
+    if (!checkValuesExist()) {
       return;
     }
 
     createInvoice(user?.id_token ?? "", {
-      companyId: selectedCompany.id,
-      startDate: selectedStartDate.format("YYYY/MM/DD"),
-      endDate: selectedEndDate.format("YYYY/MM/DD"),
+      companyId: selectedCompany!.id,
+      startDate: selectedStartDate!.format("YYYY/MM/DD"),
+      endDate: selectedEndDate!.format("YYYY/MM/DD"),
     });
+  };
+
+  const getInvoicePreviewData = (
+    freshCompany: number | null,
+    freshStartDate: dayjs.Dayjs | null,
+    freshendDate: dayjs.Dayjs | null
+  ) => {
+    if (!checkValuesExist()) {
+      return;
+    }
+
+    const data: invoiceCreationDTO = {
+      companyId: Number(freshCompany) || selectedCompany!.id,
+      startDate:
+        freshStartDate?.format("YYYY/MM/DD") ??
+        selectedStartDate!.format("YYYY/MM/DD"),
+      endDate:
+        freshendDate?.format("YYYY/MM/DD") ??
+        selectedEndDate!.format("YYYY/MM/DD"),
+    };
+    setInvoicePreviewDTO(data);
+  };
+
+  const checkValuesExist = () => {
+    if (isLoading) {
+      return false;
+    }
+    if (!selectedStartDate || !selectedEndDate || !selectedCompany?.id) {
+      return false;
+    }
+    return true;
   };
 
   return {
@@ -146,20 +202,23 @@ export const useInvoiceCreationControl = () => {
     DateCalendarBadgeSlots,
     MonthCalendarBadgeSlots,
     filterString,
+    setCompanyFilter,
     setFilterString,
     selectedCompany,
-    setSelectedCompany,
     selectedMonth,
     setSelectedMonth,
     selectedStartDate,
-    setSelectedStartDate,
+    setStartDate,
     selectedEndDate,
-    setSelectedEndDate,
+    setEndDate,
     selectPreviousYear,
     selectNextYear,
     monthView,
     toggleMonthView,
     handleMonthSelect,
     generateInvoice,
+    getInvoicePreviewData,
+    invoicePreviewData,
+    isInvoiceDataLoading,
   };
 };
