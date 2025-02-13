@@ -219,7 +219,7 @@ const InvoiceCreation = () => {
                 {control.isInvoiceDataLoading ? (
                   <Spinner/>
                 ) : (
-                  <div className="w-full justify-center">No Data</div>
+                  <div className="flex flex-col items-center p-3">No Data</div>
                 )}
               </>
             ) : (
