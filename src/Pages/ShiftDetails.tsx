@@ -46,7 +46,9 @@ export const ShiftDetails = () => {
       if (
         !shift ||
         (shift.clockInTime && shift.clockOutTime) ||
-        new Date(shiftFromParam!.startTime) > new Date()
+        new Date(shiftFromParam!.startTime) > new Date() ||
+        shift.reportedcanceled ||
+        shift.didnotwork
       ) {
         setIsFormDisabled(true);
       }
