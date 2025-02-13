@@ -134,13 +134,21 @@ const PSOView: React.FC<PSOViewProps> = ({
             label="Start Time"
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
-            disabled={isFormDisabled}
+            disabled={
+              isFormDisabled ||
+              currentEmpShift?.reportedcanceled ||
+              currentEmpShift?.didnotwork
+            }
           />
           <TimePicker
             label="End Time"
             value={endTime}
             onChange={(newValue) => setEndTime(newValue)}
-            disabled={isFormDisabled}
+            disabled={
+              isFormDisabled ||
+              currentEmpShift?.reportedcanceled ||
+              currentEmpShift?.didnotwork
+            }
           />
         </LocalizationProvider>
 
@@ -201,12 +209,18 @@ const PSOView: React.FC<PSOViewProps> = ({
       </div>
       <button
         className={`text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 ${
-          isFormDisabled
+          isFormDisabled ||
+          currentEmpShift?.reportedcanceled ||
+          currentEmpShift?.didnotwork
             ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
             : "bg-blue-500 hover:bg-blue-600"
         }`}
         onClick={() => SaveShiftTimes()}
-        disabled={isFormDisabled}
+        disabled={
+          isFormDisabled ||
+          currentEmpShift?.reportedcanceled ||
+          currentEmpShift?.didnotwork
+        }
       >
         Submit Time
       </button>

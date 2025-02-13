@@ -9,7 +9,7 @@ import {
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { queryClient } from "./QueryClient";
 import { useAuth } from "react-oidc-context";
-import { toast } from "react-toastify";
+import { useCustomToast } from "@/Components/Toast";
 
 export const useEmpShiftHistoryForEmail = (email: string) => {
   return useQuery({
@@ -39,17 +39,14 @@ export const useEmpShiftsForLoggedInUser = () => {
 };
 
 export const useEmpShiftMutation = () => {
+  const { createToast } = useCustomToast();
   const requests = useEmpShiftRequests();
   return useMutation({
     mutationFn: async (empShift: EmployeeShiftDTO) => {
-      requests.updateEmpShift(empShift);
+      await createToast(requests.updateEmpShift, empShift, "Updating shift...");
     },
     onSuccess: () => {
-      toast.success("Success!");
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
-    },
-    onError: () => {
-      toast.error("An unexpected error occured.");
     },
   });
 };

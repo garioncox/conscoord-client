@@ -18,7 +18,6 @@ import { queryKeys } from "./QueryKeyFactory";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
-import { toast } from "react-toastify";
 import { useEmpShiftRequests } from "../EmpShiftRequests";
 
 export const useAllShifts = () => {
@@ -85,6 +84,7 @@ export const useAddShiftMutation = (projectId: number) => {
 export const useClaimShiftMutation = () => {
   const { data: employee } = useLoggedInEmployee();
   const requests = useEmpShiftRequests();
+  const { createToast } = useCustomToast();
 
   return useMutation({
     mutationFn: async (shiftId: number) => {
@@ -98,16 +98,12 @@ export const useClaimShiftMutation = () => {
         reportedcanceled: false,
         shiftId: shiftId,
       };
-      await requests.addEmployeeShift(dto);
+      await createToast(requests.addEmployeeShift, dto, "Claiming shift...");
     },
     onSuccess: () => {
-      toast.success("Shift Claimed!");
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
       queryClient.invalidateQueries({ queryKey: queryKeys.shifts });
       queryClient.invalidateQueries({ queryKey: queryKeys.allEmployeeShifts });
-    },
-    onError: () => {
-      toast.error("Error adding shift");
     },
   });
 };
