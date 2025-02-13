@@ -8,7 +8,7 @@ import { ArrowBigRight, Save } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
-import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
+import { useAddProjectMutation, useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { EmployeeHistoryDTO } from "@/Data/DTOInterfaces/EmployeeHistoryDTO";
 import { useEmpShiftHistoryForEmail } from "@/Functions/Queries/EmployeeShiftQueries";
 
@@ -24,6 +24,8 @@ export const UserInfo = () => {
   const [EmployeeRoleId, setEmployeeRoleId] = useState(0);
   const [EmployeeCompanyId, setEmployeeCompanyId] = useState(0);
   const [filterString, setFilterString] = useState("");
+
+  const addCompanyMutation = useAddProjectMutation();
 
   const [selection, setSelection] = useState<"info" | "history" | "none">(
     "none"
@@ -45,6 +47,10 @@ export const UserInfo = () => {
       companyid: EmployeeCompanyId,
     };
     editEmployeeMutation.mutate(employee);
+  }
+
+  function AddCompany() {
+    addCompanyMutation.mutate({ companyName: "New Company" });
   }
 
   function EditedEmployee() {
@@ -102,11 +108,10 @@ export const UserInfo = () => {
               return (
                 <div
                   key={e.id}
-                  className={`grid grid-cols-4 gap-0 p-5 border-b ${
-                    Employee != null && Employee.id == e.id
-                      ? "shadow-inner shadow-slate-500 bg-slate-200"
-                      : "cursor-pointer"
-                  }`}
+                  className={`grid grid-cols-4 gap-0 p-5 border-b ${Employee != null && Employee.id == e.id
+                    ? "shadow-inner shadow-slate-500 bg-slate-200"
+                    : "cursor-pointer"
+                    }`}
                   onClick={() => {
                     handleEmployeeSelect(e);
                     if (selection == "none") {
@@ -123,19 +128,14 @@ export const UserInfo = () => {
         </div>
       </div>
 
-      <div className="flex items-center px-16">
-        <ArrowBigRight size={32} />
-      </div>
-
       {/* View History or Edit */}
       <div className="flex flex-col w-full max-w-[800px] shadow-md shadow-slate-400">
         <div className="grid grid-cols-2 text-center">
           <div
-            className={`rounded-tl border-2 border-r-0 border-slate-300 p-4 ${
-              selection != "info"
-                ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
-                : "border-b font-semibold text-gray-700 underline"
-            }`}
+            className={`rounded-tl border-2 border-r-0 border-slate-300 p-4 ${selection != "info"
+              ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
+              : "border-b font-semibold text-gray-700 underline"
+              }`}
             onClick={() => {
               if (Employee != null) {
                 setSelection("info");
@@ -145,11 +145,10 @@ export const UserInfo = () => {
             Employee Info
           </div>
           <div
-            className={`rounded-tr border-2 border-slate-300 p-4 ${
-              selection != "history"
-                ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
-                : "border-b font-semibold text-gray-700 underline"
-            }`}
+            className={`rounded-tr border-2 border-slate-300 p-4 ${selection != "history"
+              ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
+              : "border-b font-semibold text-gray-700 underline"
+              }`}
             onClick={() => {
               if (Employee != null) {
                 setSelection("history");
@@ -252,6 +251,7 @@ export const UserInfo = () => {
                     ))}
                   </select>
                 </div>
+                <button onClick={AddCompany}>Add Company</button>
               </div>
             </div>
           )}
