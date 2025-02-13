@@ -12,15 +12,15 @@ export const useAllCompanies = () => {
   });
 };
 
-export const useAddProjectMutation = () => {
+export const useAddCompanyMutation = () => {
   const { user } = useAuth();
   return useMutation({
     mutationFn: async ({ companyName }: { companyName: string }) => {
-      AddCompany(user?.id_token ?? "", companyName);
+      return await AddCompany(user?.id_token ?? "", companyName);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Company created successfully");
-      queryClient.invalidateQueries({ queryKey: queryKeys.companies });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.companies });
     },
   });
 };

@@ -4,11 +4,11 @@ import {
   useEditEmployeeMutation,
 } from "@/Functions/Queries/EmployeeQueries";
 import { TextField } from "@mui/material";
-import { ArrowBigRight, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
-import { useAddProjectMutation, useAllCompanies } from "@/Functions/Queries/CompanyQueries";
+import { useAddCompanyMutation, useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { EmployeeHistoryDTO } from "@/Data/DTOInterfaces/EmployeeHistoryDTO";
 import { useEmpShiftHistoryForEmail } from "@/Functions/Queries/EmployeeShiftQueries";
 
@@ -24,8 +24,9 @@ export const UserInfo = () => {
   const [EmployeeRoleId, setEmployeeRoleId] = useState(0);
   const [EmployeeCompanyId, setEmployeeCompanyId] = useState(0);
   const [filterString, setFilterString] = useState("");
+  const [CompanyName, setCompanyName] = useState("");
 
-  const addCompanyMutation = useAddProjectMutation();
+  const addCompanyMutation = useAddCompanyMutation();
 
   const [selection, setSelection] = useState<"info" | "history" | "none">(
     "none"
@@ -34,10 +35,10 @@ export const UserInfo = () => {
   const { data: empHistory, isLoading: isEmpHistoryLoading } =
     useEmpShiftHistoryForEmail(EmployeeEmail);
 
-  function EditEmployee() {
+  async function EditEmployee() {
     if (!Employee) return;
+    await AddCompany();
     if (!EditedEmployee()) return;
-
     const employee = {
       id: Employee.id,
       name: EmployeeName,
@@ -49,8 +50,13 @@ export const UserInfo = () => {
     editEmployeeMutation.mutate(employee);
   }
 
-  function AddCompany() {
-    addCompanyMutation.mutate({ companyName: "New Company" });
+  async function AddCompany() {
+    if (!CompanyName) return;
+    await addCompanyMutation.mutateAsync({ companyName: CompanyName });
+    const newCompany = companies?.find((e) => e.name === CompanyName);
+    if (newCompany) {
+      setEmployeeCompanyId(newCompany.id);
+    }
   }
 
   function EditedEmployee() {
@@ -232,6 +238,15 @@ export const UserInfo = () => {
                     </option>
                   ))}
                 </select>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Add New Company (if not listed above)
+                  </label>
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={CompanyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    type="text"
+                  />
                 <div className="my-10">
                   <label className="block text-sm font-medium text-gray-900 mb-2">
                     Role
@@ -251,7 +266,6 @@ export const UserInfo = () => {
                     ))}
                   </select>
                 </div>
-                <button onClick={AddCompany}>Add Company</button>
               </div>
             </div>
           )}
