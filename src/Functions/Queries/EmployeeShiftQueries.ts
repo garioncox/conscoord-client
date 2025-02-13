@@ -4,12 +4,12 @@ import {
   getAllEmployeeShifts,
   getClaimedEmployeeShiftsByEmail,
   getEmpShiftHistory,
-  updateEmpShift,
+  useEmpShiftRequests,
 } from "../EmpShiftRequests";
-import { useCustomToast } from "@/Components/Toast";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { queryClient } from "./QueryClient";
 import { useAuth } from "react-oidc-context";
+import { useCustomToast } from "@/Components/Toast";
 
 export const useEmpShiftHistoryForEmail = (email: string) => {
   return useQuery({
@@ -40,9 +40,10 @@ export const useEmpShiftsForLoggedInUser = () => {
 
 export const useEmpShiftMutation = () => {
   const { createToast } = useCustomToast();
+  const requests = useEmpShiftRequests();
   return useMutation({
     mutationFn: async (empShift: EmployeeShiftDTO) => {
-      await createToast(updateEmpShift, empShift, "Updating shift...");
+      await createToast(requests.updateEmpShift, empShift, "Updating shift...");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });

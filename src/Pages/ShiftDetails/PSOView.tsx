@@ -47,16 +47,9 @@ const PSOView: React.FC<PSOViewProps> = ({
     if (!currentEmpShift) {
       return;
     }
-    if (
-      currentEmpShift.clockInTime === currentEmpShift.clockOutTime &&
-      currentEmpShift.clockInTime === "00:00"
-    ) {
-      setConfirmedNotWorked(true);
-    }
 
-    if (currentEmpShift.notes === "Shift was reported as canceled") {
-      setConfirmShiftCanceled(true);
-    }
+    setConfirmedNotWorked(currentEmpShift.didnotwork);
+    setConfirmShiftCanceled(currentEmpShift.reportedcanceled);
   }, [currentEmpShift]);
 
   function SaveShiftTimes(): void {
@@ -74,7 +67,10 @@ const PSOView: React.FC<PSOViewProps> = ({
         "minute"
       )}`,
       clockOutTime: `${endTime.get("hour")}:${endPad}${endTime.get("minute")}`,
-      employeeId: currentEmpShift.empId,
+      didnotwork: currentEmpShift.didnotwork,
+      empId: currentEmpShift.empId,
+      hasbeeninvoiced: currentEmpShift.hasbeeninvoiced,
+      reportedcanceled: currentEmpShift.reportedcanceled,
       shiftId: currentEmpShift.shiftId,
     };
 
@@ -89,17 +85,20 @@ const PSOView: React.FC<PSOViewProps> = ({
 
     const newEmpShift: EmployeeShiftDTO = {
       id: currentEmpShift.id,
-      clockInTime: "00:00",
-      clockOutTime: "00:00",
-      employeeId: currentEmpShift.empId,
-      shiftId: currentEmpShift.shiftId,
+      didnotwork: true,
+      clockInTime: "",
+      clockOutTime: "",
+      empId: currentEmpShift.empId,
+      hasbeeninvoiced: currentEmpShift.hasbeeninvoiced,
       notes: noteControl.value ?? "",
+      reportedcanceled: currentEmpShift.reportedcanceled,
+      shiftId: currentEmpShift.shiftId,
     };
 
     empShiftMutation.mutate(newEmpShift);
   }
 
-  function SetShiftDescription(s: string): void {
+  function ReportShiftCanceled(): void {
     if (!(currentEmpShift && startTime && endTime)) {
       console.log("conditions were not met");
       return;
@@ -107,11 +106,14 @@ const PSOView: React.FC<PSOViewProps> = ({
 
     const newEmpShift: EmployeeShiftDTO = {
       id: currentEmpShift.id,
-      clockInTime: currentEmpShift.clockInTime,
-      clockOutTime: currentEmpShift.clockOutTime,
-      employeeId: currentEmpShift.empId,
+      didnotwork: true,
+      clockInTime: "",
+      clockOutTime: "",
+      empId: currentEmpShift.empId,
+      hasbeeninvoiced: currentEmpShift.hasbeeninvoiced,
+      notes: noteControl.value ?? "",
+      reportedcanceled: true,
       shiftId: currentEmpShift.shiftId,
-      notes: s,
     };
 
     empShiftMutation.mutate(newEmpShift);
@@ -132,13 +134,21 @@ const PSOView: React.FC<PSOViewProps> = ({
             label="Start Time"
             value={startTime}
             onChange={(newValue) => setStartTime(newValue)}
-            disabled={isFormDisabled}
+            disabled={
+              isFormDisabled ||
+              currentEmpShift?.reportedcanceled ||
+              currentEmpShift?.didnotwork
+            }
           />
           <TimePicker
             label="End Time"
             value={endTime}
             onChange={(newValue) => setEndTime(newValue)}
-            disabled={isFormDisabled}
+            disabled={
+              isFormDisabled ||
+              currentEmpShift?.reportedcanceled ||
+              currentEmpShift?.didnotwork
+            }
           />
         </LocalizationProvider>
 
@@ -162,7 +172,6 @@ const PSOView: React.FC<PSOViewProps> = ({
                   ? "cursor-not-allowed"
                   : "cursor-pointer"
               }`}
-              onChange={() => {}}
               checked={confirmedNotWorked}
               disabled={confirmedNotWorked || isFormDisabled}
             />
@@ -200,12 +209,18 @@ const PSOView: React.FC<PSOViewProps> = ({
       </div>
       <button
         className={`text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 ${
-          isFormDisabled
+          isFormDisabled ||
+          currentEmpShift?.reportedcanceled ||
+          currentEmpShift?.didnotwork
             ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
             : "bg-blue-500 hover:bg-blue-600"
         }`}
         onClick={() => SaveShiftTimes()}
-        disabled={isFormDisabled}
+        disabled={
+          isFormDisabled ||
+          currentEmpShift?.reportedcanceled ||
+          currentEmpShift?.didnotwork
+        }
       >
         Submit Time
       </button>
@@ -276,8 +291,8 @@ const PSOView: React.FC<PSOViewProps> = ({
             <button
               onClick={() => {
                 toggleShiftCanceledModal();
-                SetShiftDescription("Shift was reported as canceled");
                 setConfirmShiftCanceled(true);
+                ReportShiftCanceled();
               }}
               className="p-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded"
             >
