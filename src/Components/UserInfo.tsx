@@ -4,7 +4,7 @@ import {
   useEditEmployeeMutation,
 } from "@/Functions/Queries/EmployeeQueries";
 import { TextField } from "@mui/material";
-import { ArrowBigRight, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "./Spinner";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
@@ -123,9 +123,7 @@ export const UserInfo = () => {
         </div>
       </div>
 
-      <div className="flex items-center px-16">
-        <ArrowBigRight size={32} />
-      </div>
+      <span className="flex items-center px-16" />
 
       {/* View History or Edit */}
       <div className="flex flex-col w-full max-w-[800px] shadow-md shadow-slate-400">
@@ -161,6 +159,9 @@ export const UserInfo = () => {
         </div>
 
         <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b shadow-md shadow-slate-400">
+          {selection == "history" && empHistory && empHistory.length <= 0 && (
+            <div className="text-center">No Data</div>
+          )}
           {selection == "history" &&
             empHistory &&
             empHistory.map((e: EmployeeHistoryDTO) => {
