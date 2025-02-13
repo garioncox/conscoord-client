@@ -61,14 +61,6 @@ function App() {
         }
       />
       <Route
-        path="admin/view/employees/:id"
-        element={
-          <PermissionLock roles={[ADMIN_ROLE]}>
-            <EmployeeDetails />
-          </PermissionLock>
-        }
-      />
-      <Route
         path="shift/view/details/:id"
         element={
           <PermissionLock roles={[PSO_ROLE, CLIENT_ROLE]}>
