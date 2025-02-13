@@ -9,7 +9,6 @@ import {
   getShiftById,
 } from "../ShiftRequests";
 import { queryClient } from "./QueryClient";
-import { addEmployeeShift } from "../EmpShiftRequests";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
 import { addProjectShift } from "../ProjectShiftRequests";
 import { ProjectShiftDTO } from "@/Data/DTOInterfaces/ProjectShiftDTO";
@@ -19,6 +18,8 @@ import { queryKeys } from "./QueryKeyFactory";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
+import { toast } from "react-toastify";
+import { useEmpShiftRequests } from "../EmpShiftRequests";
 
 export const useAllShifts = () => {
   return useQuery({
@@ -82,8 +83,8 @@ export const useAddShiftMutation = (projectId: number) => {
 };
 
 export const useClaimShiftMutation = () => {
-  const { createToast } = useCustomToast();
   const { data: employee } = useLoggedInEmployee();
+  const requests = useEmpShiftRequests();
 
   return useMutation({
     mutationFn: async (shiftId: number) => {
@@ -91,15 +92,22 @@ export const useClaimShiftMutation = () => {
         id: null,
         clockInTime: "",
         clockOutTime: "",
-        employeeId: employee!.id,
+        didnotwork: false,
+        empId: employee!.id,
+        hasbeeninvoiced: false,
+        reportedcanceled: false,
         shiftId: shiftId,
       };
-      await createToast(addEmployeeShift, dto, "Claiming shift...");
+      await requests.addEmployeeShift(dto);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts }); // Invalidate shifts for the logged-in employee
-      queryClient.invalidateQueries({ queryKey: queryKeys.shifts }); // Optionally invalidate all shifts
-      queryClient.invalidateQueries({ queryKey: queryKeys.allEmployeeShifts }); // Optionally invalidate all shifts
+      toast.success("Shift Claimed!");
+      queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
+      queryClient.invalidateQueries({ queryKey: queryKeys.shifts });
+      queryClient.invalidateQueries({ queryKey: queryKeys.allEmployeeShifts });
+    },
+    onError: () => {
+      toast.error("Error adding shift");
     },
   });
 };

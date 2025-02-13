@@ -48,8 +48,7 @@ const PSOView: React.FC<PSOViewProps> = ({
       return;
     }
     if (
-      currentEmpShift.clockInTime === currentEmpShift.clockOutTime &&
-      currentEmpShift.clockInTime === "00:00"
+      currentEmpShift.clockInTime //////////////////////////////////////////////////
     ) {
       setConfirmedNotWorked(true);
     }
@@ -74,7 +73,10 @@ const PSOView: React.FC<PSOViewProps> = ({
         "minute"
       )}`,
       clockOutTime: `${endTime.get("hour")}:${endPad}${endTime.get("minute")}`,
-      employeeId: currentEmpShift.empId,
+      didnotwork: currentEmpShift.didnotwork,
+      empId: currentEmpShift.empId,
+      hasbeeninvoiced: currentEmpShift.hasbeeninvoiced,
+      reportedcanceled: currentEmpShift.reportedcanceled,
       shiftId: currentEmpShift.shiftId,
     };
 
@@ -89,29 +91,14 @@ const PSOView: React.FC<PSOViewProps> = ({
 
     const newEmpShift: EmployeeShiftDTO = {
       id: currentEmpShift.id,
-      clockInTime: "00:00",
-      clockOutTime: "00:00",
-      employeeId: currentEmpShift.empId,
-      shiftId: currentEmpShift.shiftId,
+      didnotwork: true,
+      clockInTime: "",
+      clockOutTime: "",
+      empId: currentEmpShift.empId,
+      hasbeeninvoiced: currentEmpShift.hasbeeninvoiced,
       notes: noteControl.value ?? "",
-    };
-
-    empShiftMutation.mutate(newEmpShift);
-  }
-
-  function SetShiftDescription(s: string): void {
-    if (!(currentEmpShift && startTime && endTime)) {
-      console.log("conditions were not met");
-      return;
-    }
-
-    const newEmpShift: EmployeeShiftDTO = {
-      id: currentEmpShift.id,
-      clockInTime: currentEmpShift.clockInTime,
-      clockOutTime: currentEmpShift.clockOutTime,
-      employeeId: currentEmpShift.empId,
+      reportedcanceled: currentEmpShift.reportedcanceled,
       shiftId: currentEmpShift.shiftId,
-      notes: s,
     };
 
     empShiftMutation.mutate(newEmpShift);
@@ -276,7 +263,6 @@ const PSOView: React.FC<PSOViewProps> = ({
             <button
               onClick={() => {
                 toggleShiftCanceledModal();
-                SetShiftDescription("Shift was reported as canceled");
                 setConfirmShiftCanceled(true);
               }}
               className="p-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded"
