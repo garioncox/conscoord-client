@@ -32,7 +32,7 @@ export const useEmployeeRequests = () => {
     });
 
     return response.data;
-  }
+  };
 
   return {
     employees,

@@ -11,6 +11,7 @@ import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { queryClient } from "./QueryClient";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
+import { EmployeeDTO } from "@/Data/DTOInterfaces/EmployeeDTOInterface";
 
 export const useLoggedInEmployee = () => {
   const { user, isAuthenticated } = useAuth();
@@ -26,8 +27,12 @@ export const useLoggedInEmployee = () => {
 
 export const useAddEmployeeMutation = () => {
   const { addEmployee } = useEmployeeRequests();
+  const { createToast } = useCustomToast();
+
   return useMutation({
-    mutationFn: addEmployee,
+    mutationFn: async (emp: EmployeeDTO) => {
+      await createToast(addEmployee, emp, "Adding Employee...");
+    },
   });
 };
 
