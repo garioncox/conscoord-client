@@ -1,5 +1,6 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import {
+  useAddEmployeeMutation,
   useAllEmployees,
   useEditEmployeeMutation,
 } from "@/Functions/Queries/EmployeeQueries";
@@ -14,6 +15,7 @@ import { useEmpShiftHistoryForEmail } from "@/Functions/Queries/EmployeeShiftQue
 
 export const UserInfo = () => {
   const editEmployeeMutation = useEditEmployeeMutation();
+  const addEmployeeMutation = useAddEmployeeMutation();
   const { data: Employees, isLoading: employeesLoading } = useAllEmployees();
   const { data: roles, isLoading: rolesLoading } = useAllRoles();
   const { data: companies, isLoading: companiesLoading } = useAllCompanies();
@@ -24,6 +26,7 @@ export const UserInfo = () => {
   const [EmployeeRoleId, setEmployeeRoleId] = useState(0);
   const [EmployeeCompanyId, setEmployeeCompanyId] = useState(0);
   const [filterString, setFilterString] = useState("");
+  const [isAddingEmployee, setIsAddingEmployee] = useState<boolean>(false);
 
   const [selection, setSelection] = useState<"info" | "history" | "none">(
     "none"
@@ -31,6 +34,14 @@ export const UserInfo = () => {
 
   const { data: empHistory, isLoading: isEmpHistoryLoading } =
     useEmpShiftHistoryForEmail(EmployeeEmail);
+
+  function HandleSaveEmployee() {
+    if (isAddingEmployee) {
+      AddEmployee();
+    } else {
+      EditEmployee();
+    }
+  }
 
   function EditEmployee() {
     if (!Employee) return;
@@ -45,6 +56,20 @@ export const UserInfo = () => {
       companyid: EmployeeCompanyId,
     };
     editEmployeeMutation.mutate(employee);
+  }
+
+  function AddEmployee() {
+    const employee = {
+      id: null,
+      name: EmployeeName,
+      email: EmployeeEmail,
+      phonenumber: EmployeePhoneNumber,
+      roleid: EmployeeRoleId,
+      companyid: EmployeeCompanyId,
+    };
+
+    addEmployeeMutation.mutate(employee);
+    handleEmployeeSelect(null);
   }
 
   function EditedEmployee() {
@@ -66,6 +91,8 @@ export const UserInfo = () => {
   }
 
   const handleEmployeeSelect = (selectedEmployee: Employee | null) => {
+    setIsAddingEmployee(false);
+
     if (selectedEmployee) {
       setEmployee(selectedEmployee);
       setEmployeeName(selectedEmployee.name);
@@ -73,6 +100,13 @@ export const UserInfo = () => {
       setEmployeePhoneNumber(selectedEmployee.phonenumber);
       setEmployeeRoleId(selectedEmployee.roleid);
       setEmployeeCompanyId(selectedEmployee.companyid);
+    } else {
+      setEmployee(undefined);
+      setEmployeeName("");
+      setEmployeeEmail("");
+      setEmployeePhoneNumber("");
+      setEmployeeRoleId(0);
+      setEmployeeCompanyId(0);
     }
   };
 
@@ -93,7 +127,7 @@ export const UserInfo = () => {
           />
         </div>
 
-        <div className="flex flex-col grow pb-4 overflow-x-scroll">
+        <div className="flex flex-col grow overflow-x-scroll">
           {Employees?.sort((a, b) => a.id - b.id).map((e) => {
             if (
               String(e.id).includes(filterString) ||
@@ -120,6 +154,24 @@ export const UserInfo = () => {
               );
             }
           })}
+          <div
+            key={"add"}
+            className={`grid grid-cols-4 gap-0 p-5 border-t-2 border-slate-300 bg-slate-100 ${
+              isAddingEmployee
+                ? "shadow-inner shadow-slate-500 bg-slate-300"
+                : "cursor-pointer"
+            }`}
+            onClick={() => {
+              handleEmployeeSelect(null);
+              setIsAddingEmployee(true);
+              if (selection == "none") {
+                setSelection("info");
+              }
+            }}
+          >
+            <p className="col-span-1 font-bold">(+)</p>
+            <p className="col-span-3 truncate"> Create New Employee</p>
+          </div>
         </div>
       </div>
 
@@ -183,7 +235,7 @@ export const UserInfo = () => {
             <div>
               <Save
                 className="text-slate-500 hover:text-slate-700 ms-auto me-8 mt-8"
-                onClick={() => EditEmployee()}
+                onClick={() => HandleSaveEmployee()}
                 size={32}
               />
               <div className="mx-52">
