@@ -39,7 +39,6 @@ export const useEmpShiftRequests = () => {
     addEmployeeShift,
     getSignedUpShifts,
     deleteEmployeeShift,
-    getAllEmployeeShifts,
     updateEmpShift,
   };
 };

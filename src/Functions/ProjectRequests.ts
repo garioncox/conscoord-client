@@ -31,11 +31,11 @@ export const useProjectRequests = () => {
   };
 };
 
-export const addProject = async (id_token: string,project: ProjectDTO) => {
-  await axios.post(`/api/Project/add`,project, {
+export const addProject = async (id_token: string, project: ProjectDTO) => {
+  await axios.post(`/api/Project/add`, project, {
     headers: {
       Authorization: `Bearer ${id_token}`,
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
   });
 };
