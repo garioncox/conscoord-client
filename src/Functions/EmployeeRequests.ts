@@ -54,10 +54,11 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
   return response.data;
 };
 
-export const getEmployeesByShiftId = async (
-  shiftId: number
-): Promise<Employee[]> => {
-  const response = await axios.get(`/api/Employee/getByShift/${shiftId}`);
+export const getEmployeesByShiftId = async (id_token: string, shiftId: number): Promise<Employee[]> => {
+  const response = await axios.get(`/api/Employee/getAll/${shiftId}`, { headers: {
+    Authorization: `Bearer ${id_token}`,
+    'Content-Type': 'application/json'
+  }});
   return response.data;
 };
 
