@@ -6,10 +6,11 @@ export const getCompanies = async (): Promise<Company[]> => {
   return response.data;
 };
 
-export const AddCompany = async (token: string, companyName: string) => {
-  await axios.post(`/api/Company/add`, { companyName }, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-};
+export const AddCompany = async (token: string, companyName: string): Promise<number> => {
+    const response = await axios.post(`/api/Company/add`, { companyName }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data
+}

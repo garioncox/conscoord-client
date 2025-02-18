@@ -5,7 +5,7 @@ import {
 } from "@/Functions/Queries/EmployeeQueries";
 import { TextField } from "@mui/material";
 import { Save } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Spinner } from "./Spinner";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
 import { useAddCompanyMutation, useAllCompanies } from "@/Functions/Queries/CompanyQueries";
@@ -22,9 +22,9 @@ export const UserInfo = () => {
   const [EmployeeEmail, setEmployeeEmail] = useState("");
   const [EmployeePhoneNumber, setEmployeePhoneNumber] = useState("");
   const [EmployeeRoleId, setEmployeeRoleId] = useState(0);
-  const [EmployeeCompanyId, setEmployeeCompanyId] = useState(0);
   const [filterString, setFilterString] = useState("");
   const [CompanyName, setCompanyName] = useState("");
+  const EmployeeCompanyId = useRef<number>(0);
 
   const addCompanyMutation = useAddCompanyMutation();
 
@@ -45,18 +45,15 @@ export const UserInfo = () => {
       email: EmployeeEmail,
       phonenumber: EmployeePhoneNumber,
       roleid: EmployeeRoleId,
-      companyid: EmployeeCompanyId,
+      companyid: EmployeeCompanyId.current,
     };
     editEmployeeMutation.mutate(employee);
   }
 
   async function AddCompany() {
     if (!CompanyName) return;
-    await addCompanyMutation.mutateAsync({ companyName: CompanyName });
-    const newCompany = companies?.find((e) => e.name === CompanyName);
-    if (newCompany) {
-      setEmployeeCompanyId(newCompany.id);
-    }
+    const companyId = await addCompanyMutation.mutateAsync({ companyName: CompanyName });
+    EmployeeCompanyId.current = companyId
   }
 
   function EditedEmployee() {
@@ -69,7 +66,7 @@ export const UserInfo = () => {
       EmployeeEmail == Employee.email &&
       EmployeePhoneNumber == Employee.phonenumber &&
       EmployeeRoleId == Employee.roleid &&
-      EmployeeCompanyId == Employee.companyid
+      EmployeeCompanyId.current == Employee.companyid
     ) {
       return false;
     }
@@ -84,7 +81,7 @@ export const UserInfo = () => {
       setEmployeeEmail(selectedEmployee.email);
       setEmployeePhoneNumber(selectedEmployee.phonenumber);
       setEmployeeRoleId(selectedEmployee.roleid);
-      setEmployeeCompanyId(selectedEmployee.companyid);
+      EmployeeCompanyId.current = selectedEmployee.companyid;
     }
   };
 
@@ -226,8 +223,8 @@ export const UserInfo = () => {
                 </label>
                 <select
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  value={EmployeeCompanyId || ""}
-                  onChange={(e) => setEmployeeCompanyId(Number(e.target.value))}
+                  value={EmployeeCompanyId.current || ""}
+                  onChange={(e) => EmployeeCompanyId.current = Number(e.target.value)}
                 >
                   <option value="" disabled>
                     No Company Selected

@@ -16,7 +16,7 @@ export const useAddCompanyMutation = () => {
   const { user } = useAuth();
   return useMutation({
     mutationFn: async ({ companyName }: { companyName: string }) => {
-      return await AddCompany(user?.id_token ?? "", companyName);
+      return await AddCompany(user?.id_token ?? "", companyName)
     },
     onSuccess: async () => {
       toast.success("Company created successfully");
