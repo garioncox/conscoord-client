@@ -182,6 +182,8 @@ const InvoiceCreation = () => {
                     <div className="flex flex-col">
                       <label className="font-bold underline text-xl">End</label>
                       <DateCalendar
+                        showDaysOutsideCurrentMonth
+                        fixedWeekNumber={6}
                         defaultValue={dayjs()}
                         value={control.selectedEndDate}
                         onChange={(value) => {
@@ -217,7 +219,7 @@ const InvoiceCreation = () => {
             control.invoicePreviewData.length == 0 ? (
               <>
                 {control.isInvoiceDataLoading ? (
-                  <Spinner/>
+                  <Spinner />
                 ) : (
                   <div className="flex flex-col items-center p-3">No Data</div>
                 )}
@@ -233,7 +235,9 @@ const InvoiceCreation = () => {
                     >
                       <p className="col-span-5">{ebs.employeeName}</p>
                       <p className="col-span-5">{sbp.shiftLocation}</p>
-                      <p className="col-span-1">{ebs.hoursWorked.toPrecision(3)} hr</p>
+                      <p className="col-span-1">
+                        {ebs.hoursWorked.toPrecision(3)} hr
+                      </p>
                     </div>
                   ))
                 )
