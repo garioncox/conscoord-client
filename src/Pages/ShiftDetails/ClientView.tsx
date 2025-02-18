@@ -1,7 +1,7 @@
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useEmailRequests } from "@/Functions/EmailRequests";
-import { useEmployeesByShift } from "@/Functions/Queries/EmployeeQueries";
+import { useEmployeesByShiftId } from "@/Functions/Queries/EmployeeQueries";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
 
 interface ClientViewProps {
@@ -11,7 +11,7 @@ interface ClientViewProps {
 
 const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
   const archiveShiftMutation = useArchiveShiftMutation();
-  const getEmployeesByShiftId = useEmployeesByShift(Number(shift?.id));
+  const getEmployeesByShiftId = useEmployeesByShiftId(Number(shift?.id));
   const { sendEmail } = useEmailRequests();
 
   const archiveShift = async() => {

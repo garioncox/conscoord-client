@@ -6,7 +6,7 @@ import { useShiftById } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "@/Components/Spinner";
 import { useEmpShiftsForLoggedInUser } from "@/Functions/Queries/EmployeeShiftQueries";
 import {
-  useEmployeesByShift,
+  useEmployeesByShiftId as useEmployeesByShiftId,
   useLoggedInEmployee,
 } from "@/Functions/Queries/EmployeeQueries";
 import PSOView from "./ShiftDetails/PSOView";
@@ -23,7 +23,7 @@ export const ShiftDetails = () => {
     useEmpShiftsForLoggedInUser();
   const { data: shiftFromParam, isLoading: isShiftFromParamLoading } =
     useShiftById(Number(id));
-  const { data: signedUpEmployees } = useEmployeesByShift(Number(id));
+  const { data: signedUpEmployees } = useEmployeesByShiftId(Number(id));
   const {
     shiftFractionString,
     shiftFractionStyles,
