@@ -19,7 +19,6 @@ const InvoiceCreation = () => {
 
   const daysWithData = [1, 2, 3, 4, 6, 10, 20, 28];
   const datesWithError = [3, 4, 6, 20];
-  const monthsCompleted = ["Jan", "Feb", "Mar"];
   const monthsWithError = ["Jun", "Nov", "Dec"];
 
   /////////////////////////////////
@@ -140,7 +139,7 @@ const InvoiceCreation = () => {
                               control.selectedMonth
                                 ? control.selectedMonth.month()
                                 : 0,
-                              monthsCompleted,
+                              [], // Months that have been completed. Wait to hook up until we have the invoice table in db
                               monthsWithError
                             ),
                         }}
