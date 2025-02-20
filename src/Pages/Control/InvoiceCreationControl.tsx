@@ -76,19 +76,22 @@ export const useInvoiceCreationControl = () => {
   const MonthCalendarBadgeSlots = (
     props: PickersMonthProps,
   ) => {
-    const monthLabel = typeof props.children === "string" ? props.children : "";
+    const propMonthLabel = typeof props.children === "string" ? props.children : "";
+
+    const monthsWithErrors = datesWithErrors?.filter(d => dayjs(d).year() == currentYear)
+      .map(d => {
+      return dateUtils.monthsTruncated[dayjs(d).month()]
+    }) ?? [];
 
     const isSelected =
       dateUtils.monthsTruncated[selectedMonth ? selectedMonth.month() : 0] == props.children;
 
-    const monthsWithErrors = datesWithErrors?.map(d => dateUtils.monthsTruncated[dayjs(d).month()]) ?? [];
-
     const visible =
-      monthsWithErrors.includes(monthLabel);
+      monthsWithErrors.includes(propMonthLabel);
 
     return (
       <Badge
-        key={monthLabel}
+        key={propMonthLabel}
         color="warning"
         overlap="circular"
         variant="dot"
