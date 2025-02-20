@@ -42,7 +42,6 @@ export const createInvoice = async (
     toast.success("Success Creating Invoice");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-      // Convert Blob to text to extract error message
       const text = await error.response.data.text();
       toast.error(text);
   }
