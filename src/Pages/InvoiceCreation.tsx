@@ -153,11 +153,6 @@ const InvoiceCreation = () => {
                             day: (props) =>
                               control.DateCalendarBadgeSlots(props),
                           }}
-                          slotProps={{
-                            day: {
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            } as any,
-                          }}
                         />
                       </div>
 
