@@ -16,15 +16,6 @@ import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
 import InvoiceErrorBanner from "@/Components/InvoiceErrorBanner";
 
 const InvoiceCreation = () => {
-  /////////////////////////////////
-
-  const daysWithData = [1, 2, 3, 4, 6, 10, 20, 28];
-  const datesWithError = [3, 4, 6, 20];
-  const monthsCompleted = ["Jan", "Feb", "Mar"];
-  const monthsWithError = ["Jun", "Nov", "Dec"];
-
-  /////////////////////////////////
-
   const control = useInvoiceCreationControl();
 
   if (control.isLoading) {
@@ -108,115 +99,95 @@ const InvoiceCreation = () => {
             </div>
 
             {/* Calendar View */}
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <div className="flex flex-col items-center p-5">
-                {control.monthView ? (
-                  <div>
-                    <div className="flex justify-center font-bold mb-5">
-                      <button
-                        onClick={() => {
-                          control.selectPreviousYear();
-                        }}
-                        className="text-2xl"
-                      >
-                        <IoChevronBack />
-                      </button>
-                      <span className="mx-6 text-xl">
-                        {control.currentYear}
-                      </span>
-                      <button
-                        onClick={() => {
-                          control.selectNextYear();
-                        }}
-                        className="text-2xl"
-                      >
-                        <IoChevronForward />
-                      </button>
+            {control.selectedCompany && (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="flex flex-col items-center p-5">
+                  {control.monthView ? (
+                    <div>
+                      <div className="flex justify-center font-bold mb-5">
+                        <button
+                          onClick={() => {
+                            control.selectPreviousYear();
+                          }}
+                          className="text-2xl"
+                        >
+                          <IoChevronBack />
+                        </button>
+                        <span className="mx-6 text-xl">
+                          {control.currentYear}
+                        </span>
+                        <button
+                          onClick={() => {
+                            control.selectNextYear();
+                          }}
+                          className="text-2xl"
+                        >
+                          <IoChevronForward />
+                        </button>
+                      </div>
+                      <div style={{ transition: "all 0.3s ease" }}>
+                        <MonthCalendar
+                          defaultValue={dayjs().year(control.currentYear)}
+                          value={control.selectedMonth!.year(
+                            control.currentYear
+                          )}
+                          onChange={(value) => {
+                            control.handleMonthSelect(value);
+                          }}
+                          slots={{
+                            monthButton: (props) =>
+                              control.MonthCalendarBadgeSlots(props),
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div style={{ transition: "all 0.3s ease" }}>
-                      <MonthCalendar
-                        defaultValue={dayjs().year(control.currentYear)}
-                        value={control.selectedMonth!.year(control.currentYear)}
-                        onChange={(value) => {
-                          control.handleMonthSelect(value);
-                        }}
-                        slots={{
-                          monthButton: (props) =>
-                            control.MonthCalendarBadgeSlots(
-                              props,
-                              control.selectedMonth
-                                ? control.selectedMonth.month()
-                                : 0,
-                              monthsCompleted,
-                              monthsWithError
-                            ),
-                        }}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col md:flex-row">
-                    <div className="flex flex-col">
-                      <label className="font-bold underline text-xl">
-                        Start
-                      </label>
-                      <DateCalendar
-                        showDaysOutsideCurrentMonth
-                        fixedWeekNumber={6}
-                        defaultValue={dayjs()}
-                        value={control.selectedStartDate}
-                        onChange={(value) => {
-                          control.setStartDate(value);
-                        }}
-                        views={["day"]}
-                        slots={{
-                          day: (props) =>
-                            control.DateCalendarBadgeSlots(
-                              props,
-                              daysWithData,
-                              datesWithError
-                            ),
-                        }}
-                        slotProps={{
-                          day: {
-                            highlightedDays: daysWithData,
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          } as any,
-                        }}
-                      />
-                    </div>
+                  ) : (
+                    <div className="flex flex-col md:flex-row">
+                      <div className="flex flex-col">
+                        <label className="font-bold underline text-xl">
+                          Start
+                        </label>
+                        <DateCalendar
+                          showDaysOutsideCurrentMonth
+                          fixedWeekNumber={6}
+                          defaultValue={dayjs()}
+                          value={control.selectedStartDate}
+                          onChange={(value) => {
+                            control.setStartDate(value);
+                          }}
+                          views={["day"]}
+                          slots={{
+                            day: (props) =>
+                              control.DateCalendarBadgeSlots(props),
+                          }}
+                        />
+                      </div>
 
-                    <div className="flex flex-col">
-                      <label className="font-bold underline text-xl">End</label>
-                      <DateCalendar
-                        showDaysOutsideCurrentMonth
-                        fixedWeekNumber={6}
-                        defaultValue={dayjs()}
-                        value={control.selectedEndDate}
-                        onChange={(value) => {
-                          control.setEndDate(value);
-                        }}
-                        views={["day"]}
-                        slots={{
-                          day: (props) =>
-                            control.DateCalendarBadgeSlots(
-                              props,
-                              daysWithData,
-                              datesWithError
-                            ),
-                        }}
-                        slotProps={{
-                          day: {
-                            highlightedDays: daysWithData,
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          } as any,
-                        }}
-                      />
+                      <div className="flex flex-col">
+                        <label className="font-bold underline text-xl">
+                          End
+                        </label>
+                        <DateCalendar
+                          showDaysOutsideCurrentMonth
+                          fixedWeekNumber={6}
+                          defaultValue={dayjs()}
+                          value={control.selectedEndDate}
+                          onChange={(value) => {
+                            control.setEndDate(value);
+                          }}
+                          views={["day"]}
+                          slots={{
+                            day: (props) => {
+                              return control.DateCalendarBadgeSlots(props);
+                            },
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            </LocalizationProvider>
+                  )}
+                </div>
+              </LocalizationProvider>
+            )}
           </div>
         </div>
 
