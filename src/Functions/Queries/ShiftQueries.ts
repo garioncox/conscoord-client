@@ -34,7 +34,6 @@ export const useShiftDatesWithError = (companyId: number | undefined) => {
         user?.id_token ?? "",
         companyId
       );
-      console.log(data);
       return data;
     },
     enabled: !!(isAuthenticated && user && companyId),

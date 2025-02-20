@@ -188,13 +188,18 @@ const InvoiceCreation = () => {
                           }}
                           views={["day"]}
                           slots={{
-                            day: (props) =>
-                              control.DateCalendarBadgeSlots(props),
-                          }}
-                          slotProps={{
-                            day: {
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            } as any,
+                            day: (props) => {
+                              const { day } = props; // This is a Dayjs object representing the selected day
+                              const selectedDate = dayjs(day);
+
+                              const dayOfMonth = selectedDate.date(); // Day of the month
+                              const month = selectedDate.month() + 1; // Month (1-based)
+                              const year = selectedDate.year(); // Year
+
+                              console.log(dayOfMonth, month, year);
+
+                              return control.DateCalendarBadgeSlots(props);
+                            },
                           }}
                         />
                       </div>

@@ -55,15 +55,15 @@ export const useInvoiceCreationControl = () => {
     const isSelected =
       !props.outsideCurrentMonth && errorDays.includes(props.day.date());
 
-    if (errorDays.includes(props.day.date())) {
-      console.log(
-        errorDays.includes(props.day.date()),
-        props.day.date(),
-        errorDays,
-        datesWithErrors?.map((d) => Number(dayjs(d))),
-        datesWithErrors
-      );
-    }
+    // if (errorDays.includes(props.day.date())) {
+    //   console.log(
+    //     errorDays.includes(props.day.date()),
+    //     props.day.date(),
+    //     errorDays,
+    //     datesWithErrors?.map((d) => Number(dayjs(d))),
+    //     datesWithErrors
+    //   );
+    // }
 
     return (
       <Badge
