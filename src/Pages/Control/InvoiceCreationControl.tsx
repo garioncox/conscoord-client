@@ -208,7 +208,7 @@ export const useInvoiceCreationControl = () => {
   };
 
   const checkForRowsThatHaveBeenInvoiced = () => {
-    if (InvoiceHasAlreadyInvoicedEmpShifts(invoicePreviewData))
+    if (InvoiceHasAlreadyInvoicedEmpShifts())
     {
       setInvoicingAlreadyInvoicedData(true);
     }
