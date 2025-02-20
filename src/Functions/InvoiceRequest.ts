@@ -1,6 +1,6 @@
 import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useAuth } from "react-oidc-context";
 import { toast } from "react-toastify";
 
@@ -40,8 +40,10 @@ export const createInvoice = async (
     const url = window.URL.createObjectURL(blob);
     window.open(url);
     toast.success("Success Creating Invoice");
-  } catch {
-    console.error("Failed to generate Invoice");
-    toast.error("Error Creating Invoice");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+      // Convert Blob to text to extract error message
+      const text = await error.response.data.text();
+      toast.error(text);
   }
 };
