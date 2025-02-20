@@ -189,6 +189,8 @@ const InvoiceCreation = () => {
                     <div className="flex flex-col">
                       <label className="font-bold underline text-xl">End</label>
                       <DateCalendar
+                        showDaysOutsideCurrentMonth
+                        fixedWeekNumber={6}
                         defaultValue={dayjs()}
                         value={control.selectedEndDate}
                         onChange={(value) => {

@@ -1,4 +1,4 @@
-import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
+import { useAddCompanyMutation, useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import {
   useEditEmployeeMutation,
   useAddEmployeeMutation,
@@ -6,10 +6,12 @@ import {
 } from "@/Functions/Queries/EmployeeQueries";
 import { useEmpShiftHistoryForEmail } from "@/Functions/Queries/EmployeeShiftQueries";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 
 export const useUserInfoControl = () => {
+  const { mutateAsync:addCompanyMutation, isPending:isAddingCompany } = useAddCompanyMutation();
+
   const editEmployeeMutation = useEditEmployeeMutation();
   const addEmployeeMutation = useAddEmployeeMutation();
 
@@ -17,8 +19,9 @@ export const useUserInfoControl = () => {
   const { data: roles, isLoading: isRolesLoading } = useAllRoles();
   const { data: companies, isLoading: isCompaniesLoading } = useAllCompanies();
 
+  const [companyName, setCompanyName] = useState<string>();
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
-  const [employeeCompanyId, setEmployeeCompanyId] = useState(0);
+  const employeeCompanyId = useRef<number>(0)
   const [employeeEmail, setEmployeeEmail] = useState("");
   const [employeeName, setEmployeeName] = useState("");
   const [employeePhoneNumber, setEmployeePhoneNumber] = useState("");
@@ -39,7 +42,7 @@ export const useUserInfoControl = () => {
       email: employeeEmail,
       phonenumber: employeePhoneNumber,
       roleid: employeeRoleId,
-      companyid: employeeCompanyId,
+      companyid: employeeCompanyId.current,
     };
 
     addEmployeeMutation.mutate(employee);
@@ -56,12 +59,13 @@ export const useUserInfoControl = () => {
       email: employeeEmail,
       phonenumber: employeePhoneNumber,
       roleid: employeeRoleId,
-      companyid: employeeCompanyId,
+      companyid: employeeCompanyId.current,
     };
     editEmployeeMutation.mutate(employee);
   }
 
-  const HandleSaveEmployee = () => {
+  const HandleSaveEmployee = async () => {
+    await AddCompany();
     if (isAddingEmployee) {
       AddEmployee();
     } else {
@@ -78,14 +82,14 @@ export const useUserInfoControl = () => {
       setEmployeeEmail(selectedEmployee.email);
       setEmployeePhoneNumber(selectedEmployee.phonenumber);
       setEmployeeRoleId(selectedEmployee.roleid);
-      setEmployeeCompanyId(selectedEmployee.companyid);
+      employeeCompanyId.current = selectedEmployee.companyid;
     } else {
       setSelectedEmployee(undefined);
       setEmployeeName("");
       setEmployeeEmail("");
       setEmployeePhoneNumber("");
       setEmployeeRoleId(0);
-      setEmployeeCompanyId(0);
+      employeeCompanyId.current = 0;
     }
   };
 
@@ -99,7 +103,7 @@ export const useUserInfoControl = () => {
       employeeEmail == selectedEmployee.email &&
       employeePhoneNumber == selectedEmployee.phonenumber &&
       employeeRoleId == selectedEmployee.roleid &&
-      employeeCompanyId == selectedEmployee.companyid
+      employeeCompanyId.current == selectedEmployee.companyid
     ) {
       return false;
     }
@@ -107,9 +111,17 @@ export const useUserInfoControl = () => {
     return true;
   };
 
+  async function AddCompany() {
+    if (!companyName) return;
+    const companyId = await addCompanyMutation({ companyName: companyName });
+    employeeCompanyId.current = companyId
+  }
+
   return {
+    AddCompany,
     cardView,
     companies,
+    companyName,
     Employees,
     empHistory,
     employeeCompanyId,
@@ -120,13 +132,14 @@ export const useUserInfoControl = () => {
     filterString,
     HandleSaveEmployee,
     HandleSelectEmployee,
+    isAddingCompany,
     isAddingEmployee,
     isEmpHistoryLoading,
     isLoading,
     roles,
     selectedEmployee,
     setCardView,
-    setEmployeeCompanyId,
+    setCompanyName,
     setEmployeeEmail,
     setEmployeeName,
     setEmployeePhoneNumber,

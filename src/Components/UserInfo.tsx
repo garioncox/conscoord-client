@@ -181,9 +181,9 @@ export const UserInfo = () => {
                 </label>
                 <select
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  value={control.employeeCompanyId || ""}
+                  value={control.employeeCompanyId.current || ""}
                   onChange={(e) =>
-                    control.setEmployeeCompanyId(Number(e.target.value))
+                    control.employeeCompanyId.current = (Number(e.target.value))
                   }
                 >
                   <option value="" disabled>
@@ -195,6 +195,15 @@ export const UserInfo = () => {
                     </option>
                   ))}
                 </select>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Add New Company (if not listed above)
+                  </label>
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={control.companyName}
+                    onChange={(e) => control.setCompanyName(e.target.value)}
+                    type="text"
+                  />
                 <div className="my-10">
                   <label className="block text-sm font-medium text-gray-900 mb-2">
                     Role
