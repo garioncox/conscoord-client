@@ -110,11 +110,19 @@ export const useInvoiceCreationControl = () => {
   };
 
   const setStartDate = (value: dayjs.Dayjs) => {
+    if (selectedEndDate && value > selectedEndDate) {
+      return;
+    }
+
     setSelectedStartDate(value);
     getInvoicePreviewData(null, value, null);
   };
 
   const setEndDate = (value: dayjs.Dayjs) => {
+    if (selectedStartDate && value < selectedStartDate) {
+      return;
+    }
+
     setSelectedEndDate(value);
     getInvoicePreviewData(null, null, value);
   };
