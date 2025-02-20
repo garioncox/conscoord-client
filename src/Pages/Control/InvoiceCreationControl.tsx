@@ -41,29 +41,34 @@ export const useInvoiceCreationControl = () => {
   const { data: invoicePreviewData, isLoading: isInvoiceDataLoading } =
     useInvoicePreviewData(invoicePreviewDTO);
 
-  const { data: datesWithErrors, isLoading: isDatesWithErrorsLoading } = useShiftDatesWithError();
+  const { data: datesWithErrors, isLoading: isDatesWithErrorsLoading } =
+    useShiftDatesWithError(selectedCompany?.id);
 
-  const isLoading = isCompaniesLoading || isUserLoading || isDatesWithErrorsLoading;
+  const isLoading =
+    isCompaniesLoading || isUserLoading || isDatesWithErrorsLoading;
 
-  const DateCalendarBadgeSlots = (
-    props: PickersDayProps<Dayjs>,
-    highlighteddays: number[],
-  ) => {
+  const DateCalendarBadgeSlots = (props: PickersDayProps<Dayjs>) => {
     const { day, outsideCurrentMonth, ...other } = props;
-    const errorDays = datesWithErrors?.map(d => Number((dayjs(d)).day())) ?? [];
+    const errorDays =
+      datesWithErrors?.map((d) => Number(dayjs(d).date())) ?? [];
 
     const isSelected =
-      !props.outsideCurrentMonth &&
-      highlighteddays.indexOf(props.day.date()) >= 0;
+      !props.outsideCurrentMonth && errorDays.includes(props.day.date());
 
-    const status = errorDays.includes(props.day.date())
-      ? "warning"
-      : "success";
+    if (errorDays.includes(props.day.date())) {
+      console.log(
+        errorDays.includes(props.day.date()),
+        props.day.date(),
+        errorDays,
+        datesWithErrors?.map((d) => Number(dayjs(d))),
+        datesWithErrors
+      );
+    }
 
     return (
       <Badge
         key={props.day.toString()}
-        color={status}
+        color="warning"
         overlap="circular"
         variant="dot"
         invisible={!isSelected}

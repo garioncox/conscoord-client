@@ -40,11 +40,16 @@ export const getShiftsByProject = async (id: number): Promise<Shift[]> => {
   return response.data;
 };
 
-export const getShiftDatesWithError = async (id_token: string): Promise<string[]> => {
-  const response = await axios.get(`/api/Shift/getAll/datesWithErrors`, { headers: {
-    Authorization: `Bearer ${id_token}`,
-    'Content-Type': 'application/json'
-  }});
+export const getShiftDatesWithError = async (
+  id_token: string,
+  companyId: number
+): Promise<string[]> => {
+  const response = await axios.get(`/api/Shift/getAll/errored/${companyId}`, {
+    headers: {
+      Authorization: `Bearer ${id_token}`,
+      "Content-Type": "application/json",
+    },
+  });
 
-  return response.data
+  return response.data;
 };

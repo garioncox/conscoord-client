@@ -21,17 +21,25 @@ import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
 import { useEmpShiftRequests } from "../EmpShiftRequests";
 
-export const useShiftDatesWithError = () => {
+export const useShiftDatesWithError = (companyId: number | undefined) => {
   const { user, isAuthenticated } = useAuth();
 
   return useQuery({
     queryKey: queryKeys.shiftErrorDates,
-    queryFn: () => {
-      return getShiftDatesWithError(user?.id_token ?? "");
+    queryFn: async () => {
+      if (!companyId) {
+        return;
+      }
+      const data = await getShiftDatesWithError(
+        user?.id_token ?? "",
+        companyId
+      );
+      console.log(data);
+      return data;
     },
-    enabled: !!(isAuthenticated && user),
+    enabled: !!(isAuthenticated && user && companyId),
   });
-} 
+};
 
 export const useAllShifts = () => {
   return useQuery({

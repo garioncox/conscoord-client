@@ -17,7 +17,6 @@ import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
 const InvoiceCreation = () => {
   /////////////////////////////////
 
-  const daysWithData = [1, 2, 3, 4, 6, 10, 20, 28];
   const monthsWithError = ["Jun", "Nov", "Dec"];
 
   /////////////////////////////////
@@ -165,14 +164,10 @@ const InvoiceCreation = () => {
                           views={["day"]}
                           slots={{
                             day: (props) =>
-                              control.DateCalendarBadgeSlots(
-                                props,
-                                daysWithData
-                              ),
+                              control.DateCalendarBadgeSlots(props),
                           }}
                           slotProps={{
                             day: {
-                              highlighteddays: daysWithData,
                               // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             } as any,
                           }}
@@ -194,14 +189,10 @@ const InvoiceCreation = () => {
                           views={["day"]}
                           slots={{
                             day: (props) =>
-                              control.DateCalendarBadgeSlots(
-                                props,
-                                daysWithData
-                              ),
+                              control.DateCalendarBadgeSlots(props),
                           }}
                           slotProps={{
                             day: {
-                              highlighteddays: daysWithData,
                               // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             } as any,
                           }}
