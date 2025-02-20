@@ -22,5 +22,8 @@ export const useAddCompanyMutation = () => {
       toast.success("Company created successfully");
       await queryClient.invalidateQueries({ queryKey: queryKeys.companies });
     },
+    onError: async (error) => {
+      toast.error("Error creating company: " + error.message);
+    }
   });
 };

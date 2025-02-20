@@ -10,7 +10,7 @@ import { useRef, useState } from "react";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 
 export const useUserInfoControl = () => {
-  const addCompanyMutation = useAddCompanyMutation();
+  const { mutateAsync:addCompanyMutation, isPending:isAddingCompany } = useAddCompanyMutation();
 
   const editEmployeeMutation = useEditEmployeeMutation();
   const addEmployeeMutation = useAddEmployeeMutation();
@@ -51,7 +51,6 @@ export const useUserInfoControl = () => {
 
   function EditEmployee() {
     if (!selectedEmployee) return;
-    AddCompany();
     if (!IsEmployeeEdited()) return;
 
     const employee = {
@@ -65,7 +64,8 @@ export const useUserInfoControl = () => {
     editEmployeeMutation.mutate(employee);
   }
 
-  const HandleSaveEmployee = () => {
+  const HandleSaveEmployee = async () => {
+    await AddCompany();
     if (isAddingEmployee) {
       AddEmployee();
     } else {
@@ -113,7 +113,7 @@ export const useUserInfoControl = () => {
 
   async function AddCompany() {
     if (!companyName) return;
-    const companyId = await addCompanyMutation.mutateAsync({ companyName: companyName });
+    const companyId = await addCompanyMutation({ companyName: companyName });
     employeeCompanyId.current = companyId
   }
 
@@ -132,6 +132,7 @@ export const useUserInfoControl = () => {
     filterString,
     HandleSaveEmployee,
     HandleSelectEmployee,
+    isAddingCompany,
     isAddingEmployee,
     isEmpHistoryLoading,
     isLoading,
