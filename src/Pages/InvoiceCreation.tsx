@@ -13,6 +13,7 @@ import { MonthCalendar } from "@mui/x-date-pickers/MonthCalendar";
 import dayjs from "dayjs";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
+import InvoiceErrorBanner from "@/Components/InvoiceErrorBanner";
 
 const InvoiceCreation = () => {
   /////////////////////////////////
@@ -98,6 +99,12 @@ const InvoiceCreation = () => {
                   />
                 </RadioGroup>
               </FormControl>
+              <button
+                className="bg-slate-300 button p-3 rounded-md"
+                onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
+              >
+                Generate Invoice
+              </button>
             </div>
 
             {/* Calendar View */}
@@ -212,6 +219,13 @@ const InvoiceCreation = () => {
             </LocalizationProvider>
           </div>
         </div>
+
+        {control.invoicingAlreadyInvoicedData ? (
+          <InvoiceErrorBanner generateInvoice={control.generateInvoice} />
+        ) : (
+          "No Issues"
+        )}
+
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden">
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
@@ -238,6 +252,7 @@ const InvoiceCreation = () => {
                       <p className="col-span-1">
                         {ebs.hoursWorked.toPrecision(3)} hr
                       </p>
+                      <p className="col-span-5">{ebs.has_been_invoiced ? "has been invoiced" : "has not been invoiced"}</p>
                     </div>
                   ))
                 )
