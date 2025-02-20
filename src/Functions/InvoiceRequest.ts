@@ -1,6 +1,6 @@
 import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useAuth } from "react-oidc-context";
 import { toast } from "react-toastify";
 
@@ -42,7 +42,7 @@ export const createInvoice = async (
     toast.success("Success Creating Invoice");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-      const text = await error.response.data.text();
-      toast.error(text);
+    const text = await error.response.data.text();
+    toast.error(text);
   }
 };
