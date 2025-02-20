@@ -15,12 +15,6 @@ import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
 
 const InvoiceCreation = () => {
-  /////////////////////////////////
-
-  const monthsWithError = ["Jun", "Nov", "Dec"];
-
-  /////////////////////////////////
-
   const control = useInvoiceCreationControl();
 
   if (control.isLoading) {
@@ -135,14 +129,7 @@ const InvoiceCreation = () => {
                           }}
                           slots={{
                             monthButton: (props) =>
-                              control.MonthCalendarBadgeSlots(
-                                props,
-                                control.selectedMonth
-                                  ? control.selectedMonth.month()
-                                  : 0,
-                                [], // Months that have been completed. Wait to hook up until we have the invoice table in db
-                                monthsWithError
-                              ),
+                              control.MonthCalendarBadgeSlots(props),
                           }}
                         />
                       </div>
@@ -189,15 +176,6 @@ const InvoiceCreation = () => {
                           views={["day"]}
                           slots={{
                             day: (props) => {
-                              const { day } = props; // This is a Dayjs object representing the selected day
-                              const selectedDate = dayjs(day);
-
-                              const dayOfMonth = selectedDate.date(); // Day of the month
-                              const month = selectedDate.month() + 1; // Month (1-based)
-                              const year = selectedDate.year(); // Year
-
-                              console.log(dayOfMonth, month, year);
-
                               return control.DateCalendarBadgeSlots(props);
                             },
                           }}

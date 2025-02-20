@@ -41,29 +41,17 @@ export const useInvoiceCreationControl = () => {
   const { data: invoicePreviewData, isLoading: isInvoiceDataLoading } =
     useInvoicePreviewData(invoicePreviewDTO);
 
-  const { data: datesWithErrors, isLoading: isDatesWithErrorsLoading } =
+  const { data: datesWithErrors } =
     useShiftDatesWithError(selectedCompany?.id);
 
   const isLoading =
-    isCompaniesLoading || isUserLoading || isDatesWithErrorsLoading;
+    isCompaniesLoading || isUserLoading;
 
   const DateCalendarBadgeSlots = (props: PickersDayProps<Dayjs>) => {
     const { day, outsideCurrentMonth, ...other } = props;
-    const errorDays =
-      datesWithErrors?.map((d) => Number(dayjs(d).date())) ?? [];
 
     const isSelected =
-      !props.outsideCurrentMonth && errorDays.includes(props.day.date());
-
-    // if (errorDays.includes(props.day.date())) {
-    //   console.log(
-    //     errorDays.includes(props.day.date()),
-    //     props.day.date(),
-    //     errorDays,
-    //     datesWithErrors?.map((d) => Number(dayjs(d))),
-    //     datesWithErrors
-    //   );
-    // }
+      !props.outsideCurrentMonth && datesWithErrors?.includes(dayjs(day).format('YYYY/MM/DD'));
 
     return (
       <Badge
@@ -84,25 +72,21 @@ export const useInvoiceCreationControl = () => {
 
   const MonthCalendarBadgeSlots = (
     props: PickersMonthProps,
-    selectedMonth: number,
-    monthsCompleted: string[],
-    monthsWithError: string[]
   ) => {
     const monthLabel = typeof props.children === "string" ? props.children : "";
 
     const isSelected =
-      dateUtils.monthsTruncated[selectedMonth] == props.children;
+      dateUtils.monthsTruncated[selectedMonth ? selectedMonth.month() : 0] == props.children;
 
-    const status = monthsCompleted.includes(monthLabel) ? "success" : "warning";
+    const monthsWithErrors = datesWithErrors?.map(d => dateUtils.monthsTruncated[dayjs(d).month()]) ?? [];
 
     const visible =
-      monthsCompleted.includes(monthLabel) ||
-      monthsWithError.includes(monthLabel);
+      monthsWithErrors.includes(monthLabel);
 
     return (
       <Badge
         key={monthLabel}
-        color={status}
+        color="warning"
         overlap="circular"
         variant="dot"
         invisible={!visible}
