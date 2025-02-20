@@ -15,5 +15,5 @@ export interface InvoiceInfoDTO {
     employeeName: string;
     employeePayRate: number;
     hoursWorked: number;
-    hasbeeninvoiced: boolean;
+    has_been_invoiced: boolean;
   }

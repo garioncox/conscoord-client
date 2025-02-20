@@ -252,7 +252,7 @@ const InvoiceCreation = () => {
                       <p className="col-span-1">
                         {ebs.hoursWorked.toPrecision(3)} hr
                       </p>
-                      <p className="col-span-5">{ebs.hasbeeninvoiced ? "has been invoiced" : "has not been invoiced"}</p>
+                      <p className="col-span-5">{ebs.has_been_invoiced ? "has been invoiced" : "has not been invoiced"}</p>
                     </div>
                   ))
                 )

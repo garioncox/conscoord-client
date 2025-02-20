@@ -229,7 +229,7 @@ export const useInvoiceCreationControl = () => {
     return invoicePreviewData?.some((project) =>
       project.shiftsByProject?.some((shift) =>
         shift.employeesByShift?.some(
-          (employee) => employee.hasbeeninvoiced == true
+          (employee) => employee.has_been_invoiced == true
         )
       )
     );

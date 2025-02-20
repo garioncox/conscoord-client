@@ -1,5 +1,4 @@
 type InvoiceErrorBannerProps = {
-
   generateInvoice: (value: boolean) => void;
 };
 
