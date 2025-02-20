@@ -140,12 +140,11 @@ export const UserInfo = () => {
 
           {control.cardView == "info" && (
             <div>
-              {!control.isAddingCompany || !control.isAddingEmployee ?
               <Save
                 className="text-slate-500 hover:text-slate-700 ms-auto me-8 mt-8"
                 onClick={() => control.HandleSaveEmployee()}
                 size={32}
-              /> : <Spinner />}
+              />
               <div className="mx-52">
                 {[
                   {
