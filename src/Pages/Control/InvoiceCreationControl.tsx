@@ -4,6 +4,7 @@ import { Company } from "@/Data/Interfaces/Company";
 import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { useInvoicePreviewData } from "@/Functions/Queries/InvoicePreviewQueries";
+import { useShiftDatesWithError } from "@/Functions/Queries/ShiftQueries";
 import { Badge } from "@mui/material";
 import {
   PickersMonth,
@@ -40,20 +41,22 @@ export const useInvoiceCreationControl = () => {
   const { data: invoicePreviewData, isLoading: isInvoiceDataLoading } =
     useInvoicePreviewData(invoicePreviewDTO);
 
-  const isLoading = isCompaniesLoading || isUserLoading;
+  const { data: datesWithErrors, isLoading: isDatesWithErrorsLoading } = useShiftDatesWithError();
+
+  const isLoading = isCompaniesLoading || isUserLoading || isDatesWithErrorsLoading;
 
   const DateCalendarBadgeSlots = (
     props: PickersDayProps<Dayjs>,
-    highlightedDays: number[],
-    datesWithError: number[]
+    highlighteddays: number[],
   ) => {
     const { day, outsideCurrentMonth, ...other } = props;
+    const errorDays = datesWithErrors?.map(d => Number((dayjs(d)).day())) ?? [];
 
     const isSelected =
       !props.outsideCurrentMonth &&
-      highlightedDays.indexOf(props.day.date()) >= 0;
+      highlighteddays.indexOf(props.day.date()) >= 0;
 
-    const status = datesWithError.includes(props.day.date())
+    const status = errorDays.includes(props.day.date())
       ? "warning"
       : "success";
 
