@@ -215,8 +215,17 @@ export const useInvoiceCreationControl = () => {
     else {
       generateInvoice(false)
     }
-    
   };
+
+  function InvoiceHasAlreadyInvoicedEmpShifts() {
+    return invoicePreviewData?.some((project) =>
+      project.shiftsByProject?.some((shift) =>
+        shift.employeesByShift?.some(
+          (employee) => employee.hasbeeninvoiced == true
+        )
+      )
+    );
+  }
 
   return {
     isLoading,
@@ -247,16 +256,3 @@ export const useInvoiceCreationControl = () => {
     checkForRowsThatHaveBeenInvoiced,
   };
 };
-function InvoiceHasAlreadyInvoicedEmpShifts(
-  invoicePreviewData:
-    | import("c:/Users/bryce/source/repos/conscoord-client/src/Data/DTOInterfaces/InvoiceInfoDTO").InvoiceInfoDTO[]
-    | undefined
-) {
-  return invoicePreviewData?.some((project) =>
-    project.shiftsByProject?.some((shift) =>
-      shift.employeesByShift?.some(
-        (employee) => employee.hasbeeninvoiced == true
-      )
-    )
-  );
-}
