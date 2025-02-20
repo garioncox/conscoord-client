@@ -26,7 +26,7 @@ export const useInvoiceRequests = () => {
 
 export const createInvoice = async (
   id_token: string,
-  dto: invoiceCreationDTO
+  dto: invoiceCreationDTO,
 ) => {
   try {
     const response = await axios.post(`/api/Invoice/generateInvoice`, dto, {
