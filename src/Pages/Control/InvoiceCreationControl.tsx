@@ -17,6 +17,7 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
@@ -35,6 +36,8 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
+  const [invoicingAlreadyInvoicedData, setInvoicingAlreadyInvoicedData] =
+    useState<boolean>(false);
 
   const [invoicePreviewDTO, setInvoicePreviewDTO] =
     useState<invoiceCreationDTO | null>(null);
@@ -152,8 +155,13 @@ export const useInvoiceCreationControl = () => {
     );
   };
 
-  const generateInvoice = () => {
+  const generateInvoice = (includeInvoicedShifts: boolean) => {
     if (!checkValuesExist()) {
+      toast.error("Company or Dates Not Set");
+      return;
+    }
+    if (invoicePreviewData == null || invoicePreviewData.length == 0) {
+      toast.error("Cannot Generate Invoice With No Data");
       return;
     }
 
@@ -161,7 +169,10 @@ export const useInvoiceCreationControl = () => {
       companyId: selectedCompany!.id,
       startDate: selectedStartDate!.format("YYYY/MM/DD"),
       endDate: selectedEndDate!.format("YYYY/MM/DD"),
+      includeInvoicedShifts
     });
+
+    setInvoicingAlreadyInvoicedData(false);
   };
 
   const getInvoicePreviewData = (
@@ -181,6 +192,7 @@ export const useInvoiceCreationControl = () => {
       endDate:
         freshendDate?.format("YYYY/MM/DD") ??
         selectedEndDate!.format("YYYY/MM/DD"),
+        includeInvoicedShifts: true
     };
     setInvoicePreviewDTO(data);
   };
@@ -194,6 +206,26 @@ export const useInvoiceCreationControl = () => {
     }
     return true;
   };
+
+  const checkForRowsThatHaveBeenInvoiced = () => {
+    if (InvoiceHasAlreadyInvoicedEmpShifts())
+    {
+      setInvoicingAlreadyInvoicedData(true);
+    }
+    else {
+      generateInvoice(false)
+    }
+  };
+
+  function InvoiceHasAlreadyInvoicedEmpShifts() {
+    return invoicePreviewData?.some((project) =>
+      project.shiftsByProject?.some((shift) =>
+        shift.employeesByShift?.some(
+          (employee) => employee.has_been_invoiced == true
+        )
+      )
+    );
+  }
 
   return {
     isLoading,
@@ -220,5 +252,7 @@ export const useInvoiceCreationControl = () => {
     getInvoicePreviewData,
     invoicePreviewData,
     isInvoiceDataLoading,
+    invoicingAlreadyInvoicedData,
+    checkForRowsThatHaveBeenInvoiced,
   };
 };
