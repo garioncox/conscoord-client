@@ -65,8 +65,8 @@ const InvoiceCreation = () => {
         </div>
       </div>
 
-      <div className="space-y-10 flex flex-col grow xl:max-w-[60%]">
-        <div className="shadow-md rounded-xl shadow-slate-400 border">
+      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] overflow-y-scroll">
+        <div className="shadow-md rounded-xl shadow-slate-400 border min-h-[530px]">
           <div>
             {/* Month / Date Select */}
             <div className="flex flex-row mb-5 py-5 justify-around border-b">
@@ -91,7 +91,7 @@ const InvoiceCreation = () => {
                 </RadioGroup>
               </FormControl>
               <button
-                className="bg-slate-300 button p-3 rounded-md"
+                className="bg-[#1976d2] hover:bg-[#1565c0] text-white font-semibold p-3 rounded-2xl"
                 onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
               >
                 Generate Invoice
@@ -198,7 +198,7 @@ const InvoiceCreation = () => {
         )}
 
         {/* Invoice Preview */}
-        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden">
+        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow min-h-[250px]">
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
             {control.invoicePreviewData == null ||
             control.invoicePreviewData.length == 0 ? (
@@ -223,7 +223,11 @@ const InvoiceCreation = () => {
                       <p className="col-span-1">
                         {ebs.hoursWorked.toPrecision(3)} hr
                       </p>
-                      <p className="col-span-5">{ebs.has_been_invoiced ? "has been invoiced" : "has not been invoiced"}</p>
+                      <p className="col-span-5">
+                        {ebs.has_been_invoiced
+                          ? "has been invoiced"
+                          : "has not been invoiced"}
+                      </p>
                     </div>
                   ))
                 )
