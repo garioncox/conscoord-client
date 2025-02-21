@@ -133,7 +133,9 @@ export const UserInfo = () => {
                   <p className="col-span-1 truncate">{e.date}</p>
                   <p className="col-span-4 truncate">{e.projectName}</p>
                   <p className="col-span-5 truncate">{e.location}</p>
-                  <p className="col-span-1 truncate">{e.hours} hr</p>
+                  <p className="col-span-1 truncate text-center">
+                    {e.hours.slice(0, 3)} {e.hours == "--" ? "" : " hr"}
+                  </p>
                 </div>
               );
             })}
@@ -183,7 +185,7 @@ export const UserInfo = () => {
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                   value={control.employeeCompanyId.current || ""}
                   onChange={(e) =>
-                    control.employeeCompanyId.current = (Number(e.target.value))
+                    (control.employeeCompanyId.current = Number(e.target.value))
                   }
                 >
                   <option value="" disabled>
@@ -195,15 +197,15 @@ export const UserInfo = () => {
                     </option>
                   ))}
                 </select>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Add New Company (if not listed above)
-                  </label>
-                  <input
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                    value={control.companyName}
-                    onChange={(e) => control.setCompanyName(e.target.value)}
-                    type="text"
-                  />
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Add New Company (if not listed above)
+                </label>
+                <input
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  value={control.companyName}
+                  onChange={(e) => control.setCompanyName(e.target.value)}
+                  type="text"
+                />
                 <div className="my-10">
                   <label className="block text-sm font-medium text-gray-900 mb-2">
                     Role
