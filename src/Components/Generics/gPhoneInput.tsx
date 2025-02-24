@@ -1,4 +1,3 @@
-import { TextField } from "@mui/material";
 import { GTextInputController } from "./control/gTextInputController";
 
 const GPhoneInput: React.FC<{
@@ -24,29 +23,28 @@ const GPhoneInput: React.FC<{
 
   return (
     <>
-      <label className="form-label d-flex flex-column flex-grow-1">
+      <label className="block text-sm font-medium text-gray-900 mb-2">
         {label}
-
-        <TextField
-          type="text"
-          placeholder={"555-555-5555"}
-          className={`form-control rounded shadow-inner p-2 text-black ${
-            control.hasBeenTouched
-              ? control.error
-                ? "is-invalid"
-                : "is-valid"
-              : ""
-          }`}
-          value={control.value}
-          onChange={(e) => {
-            const formattedPhone = formatPhoneNumber(e.target.value);
-            control.setValue(formattedPhone);
-            control.setHasBeenTouched(true);
-          }}
-          onBlur={() => control.setHasBeenTouched(true)}
-        />
-        <p className="invalid-feedback text-red-500">{control.error}</p>
       </label>
+
+      <input
+        type="text"
+        placeholder={"555-555-5555"}
+        className={`w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 ${
+          control.hasBeenTouched
+            ? control.error
+              ? "is-invalid"
+              : "is-valid"
+            : ""
+        }`}
+        value={control.value}
+        onChange={(e) => {
+          const formattedPhone = formatPhoneNumber(e.target.value);
+          control.setValue(formattedPhone);
+          control.setHasBeenTouched(true);
+        }}
+        onBlur={() => control.setHasBeenTouched(true)}
+      />
     </>
   );
 };

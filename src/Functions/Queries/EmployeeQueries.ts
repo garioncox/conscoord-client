@@ -32,6 +32,9 @@ export const useAddEmployeeMutation = () => {
   return useMutation({
     mutationFn: async (emp: EmployeeDTO) => {
       await createToast(addEmployee, emp, "Adding Employee...");
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.employees,
+      });
     },
   });
 };

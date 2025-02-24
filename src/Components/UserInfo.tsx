@@ -3,6 +3,7 @@ import { Save } from "lucide-react";
 import { Spinner } from "./Spinner";
 import { EmployeeHistoryDTO } from "@/Data/DTOInterfaces/EmployeeHistoryDTO";
 import { useUserInfoControl } from "@/Pages/Control/UserInfoControl";
+import GPhoneInput from "./Generics/gPhoneInput";
 
 export const UserInfo = () => {
   const control = useUserInfoControl();
@@ -56,7 +57,7 @@ export const UserInfo = () => {
           })}
           <div
             key={"add"}
-            className={`grid grid-cols-4 gap-0 p-5 border-t-2 border-slate-300 bg-slate-100 ${
+            className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
               control.isAddingEmployee
                 ? "shadow-inner shadow-slate-500 bg-slate-300"
                 : "cursor-pointer"
@@ -148,44 +149,45 @@ export const UserInfo = () => {
                 size={32}
               />
               <div className="mx-52">
-                {[
-                  {
-                    label: "Name",
-                    value: control.employeeName,
-                    setter: control.setEmployeeName,
-                  },
-                  {
-                    label: "Email",
-                    value: control.employeeEmail,
-                    setter: control.setEmployeeEmail,
-                  },
-                  {
-                    label: "Phone Number",
-                    value: control.employeePhoneNumber,
-                    setter: control.setEmployeePhoneNumber,
-                  },
-                ].map((field, index) => (
-                  <div key={index} className="my-10">
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      {field.label}
-                    </label>
-                    <input
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                      value={field.value ?? ""}
-                      onChange={(e) => field.setter(e.target.value)}
-                      type={field.label.includes("ID") ? "number" : "text"}
-                    />
-                  </div>
-                ))}
+                <div key="Name" className="my-10">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Name
+                  </label>
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={control.employeeName}
+                    onChange={(e) => control.setEmployeeName(e.target.value)}
+                    type={"text"}
+                    maxLength={50}
+                  />
+                </div>
+                <div key="Email" className="my-10">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Email
+                  </label>
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={control.employeeEmail}
+                    onChange={(e) => control.setEmployeeEmail(e.target.value)}
+                    type={"text"}
+                    maxLength={30}
+                  />
+                </div>
+                <div key="PhoneNumber" className="my-10">
+                  <GPhoneInput
+                    label={"Phone Number"}
+                    control={control.phoneControl}
+                  />
+                </div>
 
                 <label className="block text-sm font-medium text-gray-900 mb-2">
                   Company
                 </label>
                 <select
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  value={control.employeeCompanyId.current || ""}
+                  value={control.employeeCompanyId || ""}
                   onChange={(e) =>
-                    (control.employeeCompanyId.current = Number(e.target.value))
+                    control.setEmployeeComanyId(Number(e.target.value))
                   }
                 >
                   <option value="" disabled>
@@ -205,6 +207,7 @@ export const UserInfo = () => {
                   value={control.companyName}
                   onChange={(e) => control.setCompanyName(e.target.value)}
                   type="text"
+                  maxLength={50}
                 />
                 <div className="my-10">
                   <label className="block text-sm font-medium text-gray-900 mb-2">
