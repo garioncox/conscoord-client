@@ -163,7 +163,7 @@ export const useInvoiceCreationControl = () => {
     );
   };
 
-  const generateInvoice = (includeInvoicedShifts: boolean) => {
+  const generateInvoice = (includeErroredShifts: boolean) => {
     if (!checkValuesExist()) {
       toast.error("Company or Dates Not Set");
       return;
@@ -177,7 +177,7 @@ export const useInvoiceCreationControl = () => {
       companyId: selectedCompany!.id,
       startDate: selectedStartDate!.format("YYYY/MM/DD"),
       endDate: selectedEndDate!.format("YYYY/MM/DD"),
-      includeInvoicedShifts
+      includeErroredShifts
     });
 
     setInvoicingAlreadyInvoicedData(false);
@@ -200,7 +200,7 @@ export const useInvoiceCreationControl = () => {
       endDate:
         freshendDate?.format("YYYY/MM/DD") ??
         selectedEndDate!.format("YYYY/MM/DD"),
-        includeInvoicedShifts: true
+        includeErroredShifts: true
     };
     setInvoicePreviewDTO(data);
   };

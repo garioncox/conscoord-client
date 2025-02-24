@@ -250,9 +250,8 @@ const InvoiceCreation = () => {
                       <p className="col-span-5">{ebs.employeeName}</p>
                       <p className="col-span-5">{sbp.shiftLocation}</p>
                       <p className="col-span-1">
-                        {ebs.hoursWorked.toPrecision(3)} hr
+                        {ebs.hoursWorked == 0 ? "--" : `${ebs.hoursWorked.toPrecision(3)} hr`}
                       </p>
-                      <p className="col-span-5">{ebs.has_been_invoiced ? "has been invoiced" : "has not been invoiced"}</p>
                     </div>
                   ))
                 )
