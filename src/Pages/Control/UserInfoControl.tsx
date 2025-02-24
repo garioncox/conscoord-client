@@ -21,7 +21,7 @@ export const useUserInfoControl = () => {
 
   const [companyName, setCompanyName] = useState<string>();
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
-  const employeeCompanyId = useRef<number>(0)
+  const [employeeCompanyId, setEmployeeComanyId] = useState<number>(0)
   const [employeeEmail, setEmployeeEmail] = useState("");
   const [employeeName, setEmployeeName] = useState("");
   const [employeePhoneNumber, setEmployeePhoneNumber] = useState("");
@@ -42,7 +42,7 @@ export const useUserInfoControl = () => {
       email: employeeEmail,
       phonenumber: employeePhoneNumber,
       roleid: employeeRoleId,
-      companyid: employeeCompanyId.current,
+      companyid: employeeCompanyId,
     };
 
     addEmployeeMutation.mutate(employee);
@@ -59,7 +59,7 @@ export const useUserInfoControl = () => {
       email: employeeEmail,
       phonenumber: employeePhoneNumber,
       roleid: employeeRoleId,
-      companyid: employeeCompanyId.current,
+      companyid: employeeCompanyId,
     };
     editEmployeeMutation.mutate(employee);
   }
@@ -82,14 +82,14 @@ export const useUserInfoControl = () => {
       setEmployeeEmail(selectedEmployee.email);
       setEmployeePhoneNumber(selectedEmployee.phonenumber);
       setEmployeeRoleId(selectedEmployee.roleid);
-      employeeCompanyId.current = selectedEmployee.companyid;
+      setEmployeeComanyId(selectedEmployee.companyid);
     } else {
       setSelectedEmployee(undefined);
       setEmployeeName("");
       setEmployeeEmail("");
       setEmployeePhoneNumber("");
       setEmployeeRoleId(0);
-      employeeCompanyId.current = 0;
+      setEmployeeComanyId(0);
     }
   };
 
@@ -103,7 +103,7 @@ export const useUserInfoControl = () => {
       employeeEmail == selectedEmployee.email &&
       employeePhoneNumber == selectedEmployee.phonenumber &&
       employeeRoleId == selectedEmployee.roleid &&
-      employeeCompanyId.current == selectedEmployee.companyid
+      employeeCompanyId == selectedEmployee.companyid
     ) {
       return false;
     }
@@ -114,7 +114,7 @@ export const useUserInfoControl = () => {
   async function AddCompany() {
     if (!companyName) return;
     const companyId = await addCompanyMutation({ companyName: companyName });
-    employeeCompanyId.current = companyId
+    setEmployeeComanyId(companyId)
   }
 
   return {
@@ -140,6 +140,7 @@ export const useUserInfoControl = () => {
     selectedEmployee,
     setCardView,
     setCompanyName,
+    setEmployeeComanyId,
     setEmployeeEmail,
     setEmployeeName,
     setEmployeePhoneNumber,

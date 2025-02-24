@@ -183,9 +183,9 @@ export const UserInfo = () => {
                 </label>
                 <select
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  value={control.employeeCompanyId.current || ""}
+                  value={control.employeeCompanyId || ""}
                   onChange={(e) =>
-                    (control.employeeCompanyId.current = Number(e.target.value))
+                    control.setEmployeeComanyId(Number(e.target.value))
                   }
                 >
                   <option value="" disabled>
