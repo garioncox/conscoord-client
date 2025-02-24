@@ -6,7 +6,7 @@ import {
 } from "@/Functions/Queries/EmployeeQueries";
 import { useEmpShiftHistoryForEmail } from "@/Functions/Queries/EmployeeShiftQueries";
 import { useAllRoles } from "@/Functions/Queries/RoleQueries";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 
 export const useUserInfoControl = () => {
