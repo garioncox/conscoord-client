@@ -4,6 +4,7 @@ import { Company } from "@/Data/Interfaces/Company";
 import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
 import { useInvoicePreviewData } from "@/Functions/Queries/InvoicePreviewQueries";
+import { useShiftDatesWithError } from "@/Functions/Queries/ShiftQueries";
 import { Badge } from "@mui/material";
 import {
   PickersMonth,
@@ -43,27 +44,22 @@ export const useInvoiceCreationControl = () => {
   const { data: invoicePreviewData, isLoading: isInvoiceDataLoading } =
     useInvoicePreviewData(invoicePreviewDTO);
 
-  const isLoading = isCompaniesLoading || isUserLoading;
+  const { data: datesWithErrors } =
+    useShiftDatesWithError(selectedCompany?.id);
 
-  const DateCalendarBadgeSlots = (
-    props: PickersDayProps<Dayjs>,
-    highlightedDays: number[],
-    datesWithError: number[]
-  ) => {
+  const isLoading =
+    isCompaniesLoading || isUserLoading;
+
+  const DateCalendarBadgeSlots = (props: PickersDayProps<Dayjs>) => {
     const { day, outsideCurrentMonth, ...other } = props;
 
     const isSelected =
-      !props.outsideCurrentMonth &&
-      highlightedDays.indexOf(props.day.date()) >= 0;
-
-    const status = datesWithError.includes(props.day.date())
-      ? "warning"
-      : "success";
+      !props.outsideCurrentMonth && datesWithErrors?.includes(dayjs(day).format('YYYY/MM/DD'));
 
     return (
       <Badge
         key={props.day.toString()}
-        color={status}
+        color="warning"
         overlap="circular"
         variant="dot"
         invisible={!isSelected}
@@ -79,25 +75,24 @@ export const useInvoiceCreationControl = () => {
 
   const MonthCalendarBadgeSlots = (
     props: PickersMonthProps,
-    selectedMonth: number,
-    monthsCompleted: string[],
-    monthsWithError: string[]
   ) => {
-    const monthLabel = typeof props.children === "string" ? props.children : "";
+    const propMonthLabel = typeof props.children === "string" ? props.children : "";
+
+    const monthsWithErrors = datesWithErrors?.filter(d => dayjs(d).year() == currentYear)
+      .map(d => {
+      return dateUtils.monthsTruncated[dayjs(d).month()]
+    }) ?? [];
 
     const isSelected =
-      dateUtils.monthsTruncated[selectedMonth] == props.children;
-
-    const status = monthsCompleted.includes(monthLabel) ? "success" : "warning";
+      dateUtils.monthsTruncated[selectedMonth ? selectedMonth.month() : 0] == props.children;
 
     const visible =
-      monthsCompleted.includes(monthLabel) ||
-      monthsWithError.includes(monthLabel);
+      monthsWithErrors.includes(propMonthLabel);
 
     return (
       <Badge
-        key={monthLabel}
-        color={status}
+        key={propMonthLabel}
+        color="warning"
         overlap="circular"
         variant="dot"
         invisible={!visible}

@@ -7,6 +7,7 @@ import {
   getAllShifts,
   getClaimedShifts,
   getShiftById,
+  getShiftDatesWithError,
 } from "../ShiftRequests";
 import { queryClient } from "./QueryClient";
 import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
@@ -19,6 +20,25 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
 import { useEmpShiftRequests } from "../EmpShiftRequests";
+
+export const useShiftDatesWithError = (companyId: number | undefined) => {
+  const { user, isAuthenticated } = useAuth();
+
+  return useQuery({
+    queryKey: queryKeys.shiftErrorDates,
+    queryFn: async () => {
+      if (!companyId) {
+        return;
+      }
+      const data = await getShiftDatesWithError(
+        user?.id_token ?? "",
+        companyId
+      );
+      return data;
+    },
+    enabled: !!(isAuthenticated && user && companyId),
+  });
+};
 
 export const useAllShifts = () => {
   return useQuery({

@@ -46,5 +46,6 @@ export const queryKeys = {
   projects: ["allProjects"],
   companies: ["allCompanies"],
   employeeHistory: ["employeeHistory"],
-  invoicePreviewData: (dto: invoiceCreationDTO) => {return ["invoicePreview", dto]}
+  invoicePreviewData: (dto: invoiceCreationDTO) => {return ["invoicePreview", dto]},
+  shiftErrorDates: ["shiftErrorDates"]
 };
