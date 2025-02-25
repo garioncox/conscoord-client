@@ -31,7 +31,7 @@ export const useAddEmployeeMutation = () => {
 
   return useMutation({
     mutationFn: async (emp: EmployeeDTO) => {
-      await createToast(addEmployee, emp, "Adding Employee...");
+      await createToast(addEmployee, "Adding Employee...", emp);
       queryClient.invalidateQueries({
         queryKey: queryKeys.employees,
       });
@@ -62,7 +62,7 @@ export const useEditEmployeeMutation = () => {
 
   return useMutation({
     mutationFn: async (e: Employee) => {
-      await createToast(editEmployee, e, "Editing Project");
+      await createToast(editEmployee,"Editing Project", e);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

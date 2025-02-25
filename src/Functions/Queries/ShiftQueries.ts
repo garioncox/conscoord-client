@@ -19,7 +19,6 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
 import { useEmpShiftRequests } from "../EmpShiftRequests";
-import { toast } from "react-toastify";
 
 export const useShiftDatesWithError = (companyId: number | undefined) => {
   const { user, isAuthenticated } = useAuth();
@@ -77,6 +76,7 @@ export const useShiftById = (shiftId: number) => {
 
 export const useAddShiftMutation = (projectId: number) => {
   const { user } = useAuth();
+  const { createToast } = useCustomToast();
 
   return useMutation({
     mutationFn: async ({
@@ -90,16 +90,17 @@ export const useAddShiftMutation = (projectId: number) => {
         projectId: projectId,
         shift: shiftDTO,
       };
-      await addProjectShift(user?.id_token ?? "", dto);
+      await createToast(
+        addProjectShift,
+        "Adding Shift",
+        user?.id_token ?? "",
+        dto
+      );
     },
     onSuccess: () => {
-      toast.success("Added shift!");
       queryClient.invalidateQueries({
         queryKey: [queryKeys.shiftsByProject, projectId],
       });
-    },
-    onError: () => {
-      toast.error("Error adding shift");
     },
   });
 };
@@ -121,7 +122,7 @@ export const useClaimShiftMutation = () => {
         reportedcanceled: false,
         shiftId: shiftId,
       };
-      await createToast(requests.addEmployeeShift, dto, "Claiming shift...");
+      await createToast(requests.addEmployeeShift, "Claiming shift...", dto);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
@@ -135,7 +136,7 @@ export const useEditShiftMutation = (shift: Shift) => {
   const { createToast } = useCustomToast();
   return useMutation({
     mutationFn: async () =>
-      await createToast(editShift, shift, "Editing shift..."),
+      await createToast(editShift, "Editing shift...", shift),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.shifts,
@@ -148,7 +149,7 @@ export const useArchiveShiftMutation = () => {
   const { createToast } = useCustomToast();
   return useMutation({
     mutationFn: async (shiftId: number) => {
-      await createToast(archiveShift, shiftId, "Archiving shift...");
+      await createToast(archiveShift, "Archiving shift...", shiftId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

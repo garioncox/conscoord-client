@@ -43,7 +43,7 @@ export const useEmpShiftMutation = () => {
   const requests = useEmpShiftRequests();
   return useMutation({
     mutationFn: async (empShift: EmployeeShiftDTO) => {
-      await createToast(requests.updateEmpShift, empShift, "Updating shift...");
+      await createToast(requests.updateEmpShift, "Updating shift...", empShift);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });

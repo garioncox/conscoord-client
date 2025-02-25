@@ -12,13 +12,12 @@ import { Project } from "@/Data/Interfaces/Project";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
 import { useEmployeeRequests } from "../EmployeeRequests";
 import { useAuth } from "react-oidc-context";
-import { toast } from "react-toastify";
 
 export const useArchiveProjectMutation = () => {
   const { createToast } = useCustomToast();
   return useMutation({
     mutationFn: async (project: Project) => {
-      await createToast(archiveProject, project, "Archiving Project...");
+      await createToast(archiveProject, "Archiving Project...", project);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -30,12 +29,13 @@ export const useArchiveProjectMutation = () => {
 
 export const useAddProjectMutation = () => {
   const { user } = useAuth();
+  const {createToast } = useCustomToast();
+
   return useMutation({
     mutationFn: async ({ project }: { project: ProjectDTO }) => {
-      addProject(user?.id_token ?? "", project);
+      await createToast(addProject, "Adding Project", user?.id_token ?? "", project) 
     },
     onSuccess: () => {
-      toast.success("Project created successfully");
       queryClient.invalidateQueries({ queryKey: queryKeys.projects });
     },
   });
