@@ -68,8 +68,12 @@ export const AddShift: React.FC<{
 
     if (validateShift()) {
       const shift: ShiftDTO = {
-        StartTime: startTimeControl.value!.format("YYYY/MM/DD HH:mm:ss"),
-        EndTime: endTimeControl.value!.format("YYYY/MM/DD HH:mm:ss"),
+        StartTime:
+          dateControl.value!.format("YYYY/MM/DD ") +
+          startTimeControl.value!.format("HH:mm:ss"),
+        EndTime:
+          dateControl.value!.format("YYYY/MM/DD ") +
+          endTimeControl.value!.format("HH:mm:ss"),
         Description: descriptionControl.value,
         Location: locationControl.value,
         RequestedEmployees: reqEmpControl.value,
