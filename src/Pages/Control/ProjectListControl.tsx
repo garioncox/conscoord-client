@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useProjectUtils } from "../../Components/ProjectUtils";
 
 export const useProjectListControl = () => {
-  const { data, isLoading } = useAllProjects();
+  const { data, isLoading, dataUpdatedAt } = useAllProjects();
   const projectUtils = useProjectUtils();
 
   const [completedProjects, setCompletedProjects] = useState<Project[]>([]);
@@ -77,6 +77,7 @@ export const useProjectListControl = () => {
     completedProjects,
     completedSelected,
     data,
+    dataUpdatedAt,
     regularProjects,
   ]);
 
