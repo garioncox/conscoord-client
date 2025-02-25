@@ -12,7 +12,6 @@ import { Project } from "@/Data/Interfaces/Project";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
 import { useEmployeeRequests } from "../EmployeeRequests";
 import { useAuth } from "react-oidc-context";
-import { toast } from "react-toastify";
 
 export const useArchiveProjectMutation = () => {
   const { createToast } = useCustomToast();
