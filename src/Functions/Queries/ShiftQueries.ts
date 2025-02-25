@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  addShift,
   archiveShift,
   editShift,
   getAllArchivedShifts,
@@ -80,16 +79,15 @@ export const useAddShiftMutation = (projectId: number) => {
 
   return useMutation({
     mutationFn: async ({
-      shift,
+      shiftDTO,
       projectId,
     }: {
-      shift: ShiftDTO;
+      shiftDTO: ShiftDTO;
       projectId: number;
     }) => {
-      const addedShiftId = await addShift(shift);
       const dto: ProjectShiftDTO = {
-        shiftId: addedShiftId,
         projectId: projectId,
+        shift: shiftDTO
       };
       await createToast(addProjectShift, dto, "Creating shift...");
     },

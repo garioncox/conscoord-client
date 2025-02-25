@@ -75,7 +75,7 @@ export const AddShift: React.FC<{
         RequestedEmployees: reqEmpControl.value,
         Status: "ACTIVE",
       };
-      addShiftMutation.mutate({ shift, projectId: projectId });
+      addShiftMutation.mutate({ shiftDTO: shift, projectId: projectId });
       toggleModal();
     }
   }
