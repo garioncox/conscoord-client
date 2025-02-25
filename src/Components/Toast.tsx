@@ -21,6 +21,10 @@ export const useCustomToast = () => {
         },
         error: {
           render({ data }: { data: any }) {
+            if (data?.response) {
+              // If the error comes from an HTTP response (e.g., Fetch/Axios)
+              return data.response.data || `Error ${defaultMessage}`;
+            }
             return data?.message || `Error ${defaultMessage}`;
           },
         },
