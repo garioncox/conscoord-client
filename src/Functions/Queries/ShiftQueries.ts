@@ -76,7 +76,6 @@ export const useShiftById = (shiftId: number) => {
 };
 
 export const useAddShiftMutation = (projectId: number) => {
-  const { createToast } = useCustomToast();
   const { user } = useAuth();
 
   return useMutation({
@@ -91,7 +90,7 @@ export const useAddShiftMutation = (projectId: number) => {
         projectId: projectId,
         shift: shiftDTO,
       };
-      await addProjectShift(user?.id_token ?? "", dto)
+      await addProjectShift(user?.id_token ?? "", dto);
     },
     onSuccess: () => {
       toast.success("Added shift!");
@@ -101,7 +100,7 @@ export const useAddShiftMutation = (projectId: number) => {
     },
     onError: () => {
       toast.error("Error adding shift");
-    }
+    },
   });
 };
 
