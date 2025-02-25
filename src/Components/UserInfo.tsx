@@ -13,11 +13,12 @@ export const UserInfo = () => {
   }
 
   return (
-    <div className="flex flex-row grow justify-center align-middle p-12">
-      {/* Filter Emp */}
-      <div className="flex flex-col w-full max-w-96 rounded border-2 border-slate-300 shadow-md shadow-slate-400">
-        <div className="p-4 flex flex-row items-center sticky top-0 bg-slate-200 z-10">
+    <div className="block lg:flex grow justify-center items-start p-6 md:p-12 gap-6 min-h-screen">
+      {/* Employee List */}
+      <div className="flex flex-col rounded border-2 border-slate-300 shadow-md shadow-slate-400 mb-10 max-h-96 lg:max-h-[75vh] lg:mb-0 max-w-[800px]">
+        <div className="p-2 md:p-4 flex flex-row items-center sticky top-0 bg-slate-200 z-10">
           <TextField
+            className="w-full sm:w-3/4"
             label="Filter"
             variant="standard"
             fullWidth
@@ -27,7 +28,7 @@ export const UserInfo = () => {
           />
         </div>
 
-        <div className="flex flex-col grow overflow-x-scroll">
+        <div className="flex flex-col grow overflow-y-auto max-h-screen min-w-80">
           {control.Employees?.sort((a, b) => a.id - b.id).map((e) => {
             if (
               String(e.id).includes(control.filterString) ||
@@ -36,9 +37,8 @@ export const UserInfo = () => {
               return (
                 <div
                   key={e.id}
-                  className={`grid grid-cols-4 gap-0 p-5 border-b ${
-                    control.selectedEmployee != null &&
-                    control.selectedEmployee.id == e.id
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-y-2 px-3 py-4 border-b ${
+                    control.selectedEmployee?.id === e.id
                       ? "shadow-inner shadow-slate-500 bg-slate-200"
                       : "cursor-pointer"
                   }`}
@@ -49,35 +49,16 @@ export const UserInfo = () => {
                     }
                   }}
                 >
-                  <p className="col-span-1">{e.id}</p>
-                  <p className="col-span-3 truncate">{e.name}</p>
+                  <p className="md:col-span-3 truncate">{e.name}</p>
                 </div>
               );
             }
           })}
-          <div
-            key={"add"}
-            className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
-              control.isAddingEmployee
-                ? "shadow-inner shadow-slate-500 bg-slate-300"
-                : "cursor-pointer"
-            }`}
-            onClick={() => {
-              control.HandleSelectEmployee(null);
-              control.setIsAddingEmployee(true);
-              control.setCardView("info");
-            }}
-          >
-            <p className="col-span-1 font-bold">(+)</p>
-            <p className="col-span-3 truncate"> Create New Employee</p>
-          </div>
         </div>
       </div>
 
-      <span className="flex items-center px-16" />
-
-      {/* View History or Edit */}
-      <div className="flex flex-col w-full max-w-[800px] shadow-md shadow-slate-400">
+      {/* Employee Info / History */}
+      <div className="flex flex-col grow max-w-[800px] shadow-md shadow-slate-400 lg:min-h-[75vh] max-h-[75vh]">
         <div className="grid grid-cols-2 text-center">
           <div
             className={`rounded-tl border-2 border-r-0 border-slate-300 p-4 ${
@@ -85,11 +66,9 @@ export const UserInfo = () => {
                 ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
                 : "border-b font-semibold text-gray-700 underline"
             }`}
-            onClick={() => {
-              if (control.selectedEmployee != null) {
-                control.setCardView("info");
-              }
-            }}
+            onClick={() =>
+              control.selectedEmployee && control.setCardView("info")
+            }
           >
             Employee Info
           </div>
@@ -99,122 +78,112 @@ export const UserInfo = () => {
                 ? "text-slate-500 cursor-pointer bg-slate-200 shadow-inner"
                 : "border-b font-semibold text-gray-700 underline"
             }`}
-            onClick={() => {
-              if (control.selectedEmployee != null) {
-                control.setCardView("history");
-              }
-            }}
+            onClick={() =>
+              control.selectedEmployee && control.setCardView("history")
+            }
           >
             View History
           </div>
         </div>
 
-        <div className="flex flex-col grow p-4 overflow-x-scroll border-slate-300 border-2 border-t-0 rounded-b shadow-md shadow-slate-400">
-          {control.cardView == "history" &&
-            control.empHistory &&
-            control.empHistory.length <= 0 && (
-              <div className="text-center">No Data</div>
-            )}
-
-          {control.cardView == "history" && control.isEmpHistoryLoading && (
-            <div className="text-center">
-              <Spinner />
-            </div>
+        <div className="flex flex-col grow lg:p-4 overflow-x-auto border-slate-300 border-2 border-t-0 rounded-b shadow-md shadow-slate-400">
+          {/* History View */}
+          {control.cardView == "history" && (
+            <>
+              {control.isEmpHistoryLoading ? (
+                <div className="text-center">
+                  <Spinner />
+                </div>
+              ) : control.empHistory?.length ? (
+                control.empHistory.map((e: EmployeeHistoryDTO) => (
+                  <div
+                    key={e.date}
+                    className="grid grid-cols-1 sm:grid-cols-12 gap-y-2 p-5 border-b"
+                  >
+                    <p className="sm:col-span-2">{e.date.slice(0, 10)}</p>
+                    <p className="sm:col-span-4">{e.projectName}</p>
+                    <p className="sm:col-span-5">{e.location}</p>
+                    <p className="sm:col-span-1 text-center">
+                      {e.hours.slice(0, 3)} {e.hours == "--" ? "" : " hr"}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center">No Data</div>
+              )}
+            </>
           )}
 
-          {control.cardView == "history" &&
-            control.empHistory &&
-            control.empHistory.map((e: EmployeeHistoryDTO) => {
-              if (control.isEmpHistoryLoading) {
-                return <Spinner />;
-              }
-
-              return (
-                <div className="grid grid-cols-12 gap-x-4 p-5 border-b">
-                  <p className="col-span-1 truncate">{e.date}</p>
-                  <p className="col-span-4 truncate">{e.projectName}</p>
-                  <p className="col-span-5 truncate">{e.location}</p>
-                  <p className="col-span-1 truncate text-center">
-                    {e.hours.slice(0, 3)} {e.hours == "--" ? "" : " hr"}
-                  </p>
-                </div>
-              );
-            })}
-
+          {/* Employee Info View */}
           {control.cardView == "info" && (
-            <div>
+            <div className="p-4">
               <Save
-                className="text-slate-500 hover:text-slate-700 ms-auto me-8 mt-8"
+                className="text-slate-500 hover:text-slate-700 ms-auto me-8 mt-4"
                 onClick={() => control.HandleSaveEmployee()}
                 size={32}
               />
-              <div className="mx-52">
-                <div key="Name" className="my-10">
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
+              <div className="max-w-md mx-auto">
+                <div className="my-4">
+                  <label className="block text-sm font-medium text-gray-900 mb-1">
                     Name
                   </label>
                   <input
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                     value={control.employeeName}
                     onChange={(e) => control.setEmployeeName(e.target.value)}
-                    type={"text"}
+                    type="text"
                     maxLength={50}
                   />
                 </div>
-                <div key="Email" className="my-10">
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
+
+                <div className="my-4">
+                  <label className="block text-sm font-medium text-gray-900 mb-1">
                     Email
                   </label>
                   <input
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                     value={control.employeeEmail}
                     onChange={(e) => control.setEmployeeEmail(e.target.value)}
-                    type={"text"}
+                    type="text"
                     maxLength={30}
                   />
                 </div>
-                <div key="PhoneNumber" className="my-10">
+
+                <div className="my-4">
                   <GPhoneInput
-                    label={"Phone Number"}
+                    label="Phone Number"
                     control={control.phoneControl}
                   />
                 </div>
 
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Company
-                </label>
-                <select
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  value={control.employeeCompanyId || ""}
-                  onChange={(e) =>
-                    control.setEmployeeComanyId(Number(e.target.value))
-                  }
-                >
-                  <option value="" disabled>
-                    No Company Selected
-                  </option>
-                  {control.companies?.map((company) => (
-                    <option key={company.id} value={company.id}>
-                      {company.name}
+                <div className="my-4">
+                  <label className="block text-sm font-medium text-gray-900 mb-1">
+                    Company
+                  </label>
+                  <select
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={control.employeeCompanyId || ""}
+                    onChange={(e) =>
+                      control.setEmployeeComanyId(Number(e.target.value))
+                    }
+                  >
+                    <option value="" disabled>
+                      No Company Selected
                     </option>
-                  ))}
-                </select>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Add New Company (if not listed above)
-                </label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  value={control.companyName}
-                  onChange={(e) => control.setCompanyName(e.target.value)}
-                  type="text"
-                  maxLength={50}
-                />
-                <div className="my-10">
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    {control.companies?.map((company) => (
+                      <option key={company.id} value={company.id}>
+                        {company.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="my-4">
+                  <label className="block text-sm font-medium text-gray-900 mb-1">
                     Role
                   </label>
                   <select
-                    className=" w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
                     value={control.employeeRoleId || ""}
                     onChange={(e) =>
                       control.setEmployeeRoleId(Number(e.target.value))
