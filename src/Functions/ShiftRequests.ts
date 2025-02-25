@@ -1,11 +1,5 @@
 import axios from "axios";
 import { Shift } from "../Data/Interfaces/Shift";
-import { ShiftDTO } from "../Data/DTOInterfaces/ShiftDTO";
-
-export const addShift = async (shift: ShiftDTO): Promise<number> => {
-  const response = await axios.post(`/api/Shift/add`, shift);
-  return response.data;
-};
 
 export const editShift = async (shift: Shift) => {
   await axios.put(`/api/Shift/edit/`, shift);
