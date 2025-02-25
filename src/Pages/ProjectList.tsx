@@ -29,7 +29,7 @@ function ProjectList() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="mb-5 flex flex-row items-center text-xs">
         <div className="pe-2">Order By</div>
         <FormControl sx={{ minWidth: 120 }} size="small">
