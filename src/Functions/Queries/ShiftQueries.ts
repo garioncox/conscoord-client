@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  addShift,
   archiveShift,
   editShift,
   getAllArchivedShifts,
@@ -20,6 +19,7 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import { useCustomToast } from "@/Components/Toast";
 import { useAuth } from "react-oidc-context";
 import { useEmpShiftRequests } from "../EmpShiftRequests";
+import { toast } from "react-toastify";
 
 export const useShiftDatesWithError = (companyId: number | undefined) => {
   const { user, isAuthenticated } = useAuth();
@@ -76,27 +76,30 @@ export const useShiftById = (shiftId: number) => {
 };
 
 export const useAddShiftMutation = (projectId: number) => {
-  const { createToast } = useCustomToast();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async ({
-      shift,
+      shiftDTO,
       projectId,
     }: {
-      shift: ShiftDTO;
+      shiftDTO: ShiftDTO;
       projectId: number;
     }) => {
-      const addedShiftId = await addShift(shift);
       const dto: ProjectShiftDTO = {
-        shiftId: addedShiftId,
         projectId: projectId,
+        shift: shiftDTO,
       };
-      await createToast(addProjectShift, dto, "Creating shift...");
+      await addProjectShift(user?.id_token ?? "", dto);
     },
     onSuccess: () => {
+      toast.success("Added shift!");
       queryClient.invalidateQueries({
         queryKey: [queryKeys.shiftsByProject, projectId],
       });
+    },
+    onError: () => {
+      toast.error("Error adding shift");
     },
   });
 };
