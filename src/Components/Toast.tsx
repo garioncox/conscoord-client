@@ -4,13 +4,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const useCustomToast = () => {
   const createToast = async (
-    asyncFunction: any,
-    params: any,
-    defaultMessage: string
+    asyncFunction: (...args: any[]) => Promise<any>,
+    defaultMessage: string,
+    ...params: any[]
   ) => {
     const response: any = await toast.promise(
       async () => {
-        await asyncFunction(params);
+        await asyncFunction(...params);
       },
       {
         pending: `${defaultMessage}`,
@@ -21,7 +21,7 @@ export const useCustomToast = () => {
         },
         error: {
           render({ data }: { data: any }) {
-            return data.message || `Error ${defaultMessage}`;
+            return data?.message || `Error ${defaultMessage}`;
           },
         },
       }

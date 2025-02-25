@@ -54,6 +54,22 @@ export const UserInfo = () => {
               );
             }
           })}
+            <div
+            key={"add"}
+            className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
+              control.isAddingEmployee
+                ? "shadow-inner shadow-slate-500 bg-slate-300"
+                : "cursor-pointer"
+            }`}
+            onClick={() => {
+              control.HandleSelectEmployee(null);
+              control.setIsAddingEmployee(true);
+              control.setCardView("info");
+            }}
+          >
+            <p className="col-span-1 font-bold">(+)</p>
+            <p className="col-span-3 truncate"> Create New Employee</p>
+          </div>
         </div>
       </div>
 
@@ -176,6 +192,16 @@ export const UserInfo = () => {
                       </option>
                     ))}
                   </select>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Add New Company (if not listed above)
+                </label>
+                <input
+                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  value={control.companyName}
+                  onChange={(e) => control.setCompanyName(e.target.value)}
+                  type="text"
+                  maxLength={50}
+                />
                 </div>
 
                 <div className="my-4">
