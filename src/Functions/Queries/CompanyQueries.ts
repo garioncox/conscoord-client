@@ -18,7 +18,7 @@ export const useAddCompanyMutation = () => {
 
   return useMutation({
     mutationFn: async ({ companyName }: { companyName: string }) => {
-      await createToast(AddCompany, "Adding Company", user?.id_token ?? "", companyName)
+      return await createToast(AddCompany, "Adding Company", user?.id_token ?? "", companyName)
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: queryKeys.companies });
