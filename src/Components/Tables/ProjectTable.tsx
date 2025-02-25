@@ -49,7 +49,7 @@ export function ProjectCards({
   return (
     <>
       <div className="flex-1">
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-5">
           {sortedData.map((project) => {
             const contact = projectUtils.getContactInfo(project);
 
