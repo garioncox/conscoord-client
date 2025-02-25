@@ -58,7 +58,7 @@ export const UserInfo = () => {
       </div>
 
       {/* Employee Info / History */}
-      <div className="flex flex-col grow max-w-[800px] shadow-md shadow-slate-400 lg:min-h-[75vh]">
+      <div className="flex flex-col grow max-w-[800px] shadow-md shadow-slate-400 lg:min-h-[75vh] max-h-[75vh]">
         <div className="grid grid-cols-2 text-center">
           <div
             className={`rounded-tl border-2 border-r-0 border-slate-300 p-4 ${
