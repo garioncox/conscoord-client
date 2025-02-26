@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  addShift,
   archiveShift,
   editShift,
   getAllArchivedShifts,
@@ -10,9 +9,6 @@ import {
   getShiftDatesWithError,
 } from "../ShiftRequests";
 import { queryClient } from "./QueryClient";
-import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
-import { addProjectShift } from "../ProjectShiftRequests";
-import { ProjectShiftDTO } from "@/Data/DTOInterfaces/ProjectShiftDTO";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { useLoggedInEmployee } from "./EmployeeQueries";
 import { queryKeys } from "./QueryKeyFactory";
@@ -75,31 +71,6 @@ export const useShiftById = (shiftId: number) => {
   });
 };
 
-export const useAddShiftMutation = (projectId: number) => {
-  const { createToast } = useCustomToast();
-
-  return useMutation({
-    mutationFn: async ({
-      shift,
-      projectId,
-    }: {
-      shift: ShiftDTO;
-      projectId: number;
-    }) => {
-      const addedShiftId = await addShift(shift);
-      const dto: ProjectShiftDTO = {
-        shiftId: addedShiftId,
-        projectId: projectId,
-      };
-      await createToast(addProjectShift, dto, "Creating shift...");
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.shiftsByProject, projectId],
-      });
-    },
-  });
-};
 
 export const useClaimShiftMutation = () => {
   const { data: employee } = useLoggedInEmployee();
@@ -110,8 +81,8 @@ export const useClaimShiftMutation = () => {
     mutationFn: async (shiftId: number) => {
       const dto: EmployeeShiftDTO = {
         id: null,
-        clockInTime: "",
-        clockOutTime: "",
+        clockInTime: null,
+        clockOutTime: null,
         didnotwork: false,
         empId: employee!.id,
         hasbeeninvoiced: false,

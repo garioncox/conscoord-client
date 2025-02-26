@@ -3,8 +3,6 @@ import GNumberInput from "./Generics/gNumberInput";
 import { useGNumberInput } from "./Generics/control/gNumberInputController";
 import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/control/gTextInputController";
-import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
-import { useAddShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 import { Dayjs } from "dayjs";
@@ -13,13 +11,15 @@ import { useCustomTimePickerControl } from "./Generics/control/CustomTimePickerC
 import { useCustomDatePickerControl } from "./Generics/control/CustomDatePickerControl";
 import CustomDatePicker from "./Generics/CustomDatePicker";
 import Modal from "./Modal";
+import { useAddProjectShift } from "@/Functions/Queries/ProjectShiftQueries";
+import { ProjectShiftDTO } from "@/Data/DTOInterfaces/ProjectShiftDTO";
 
 export const AddShift: React.FC<{
   projectId: number;
   toggleModal: () => void;
   isModalOpen: boolean;
 }> = ({ projectId, toggleModal, isModalOpen }) => {
-  const addShiftMutation = useAddShiftMutation(projectId);
+  const addShiftMutation = useAddProjectShift();
 
   const locationControl = useGTextInput("", (v) =>
     v.length === 0 ? "*Required" : ""
@@ -67,20 +67,25 @@ export const AddShift: React.FC<{
     setControlsTouched();
 
     if (validateShift()) {
-      const shift: ShiftDTO = {
-        StartTime: startTimeControl.value?.format("YYYY-MM-DDTHH:mm:ss.SSS") ?? "",
-        EndTime: endTimeControl.value?.format("YYYY-MM-DDTHH:mm:ss.SSS") ?? "",
-        Description: descriptionControl.value,
-        Location: locationControl.value,
-        RequestedEmployees: reqEmpControl.value,
-        Status: "ACTIVE",
+      const project: ProjectShiftDTO = {
+        projectId: projectId,
+        shift: {
+          StartTime:
+            startTimeControl.value?.format("YYYY-MM-DDTHH:mm:ss.SSS") ?? "",
+          EndTime:
+            endTimeControl.value?.format("YYYY-MM-DDTHH:mm:ss.SSS") ?? "",
+          Description: descriptionControl.value,
+          Location: locationControl.value,
+          RequestedEmployees: reqEmpControl.value,
+          Status: "ACTIVE",
+        },
       };
 
-      if (shift.StartTime === "" || shift.EndTime === "") {
+      if (project.shift.StartTime === "" || project.shift.EndTime === "") {
         return;
       }
 
-      addShiftMutation.mutate({ shift, projectId: projectId });
+      addShiftMutation.mutate({ project });
       toggleModal();
     }
   }

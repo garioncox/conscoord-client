@@ -27,8 +27,13 @@ export const getAllProjectShifts = async (): Promise<ProjectShift[]> => {
   return response.data;
 };
 
-export const addProjectShift = async (dto: ProjectShiftDTO) => {
-  await axios.post(`/api/ProjectShift/add`, dto);
+export const addProjectShift = async (id_token: string, dto: ProjectShiftDTO) => {
+  await axios.post(`/api/ProjectShift/add`, dto, {
+    headers: {
+      Authorization: `Bearer ${id_token}`,
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const getNumProjectShiftsForProject = async (projectId: number) => {
