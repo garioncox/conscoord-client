@@ -170,8 +170,8 @@ export const useInvoiceCreationControl = () => {
 
     createInvoice(user?.id_token ?? "", {
       companyId: selectedCompany!.id,
-      startDate: selectedStartDate!.format("YYYY/MM/DD"),
-      endDate: selectedEndDate!.format("YYYY/MM/DD"),
+      startDate: selectedStartDate!.format('YYYY-MM-DDTHH:mm:ss.SSS'),
+      endDate: selectedEndDate!.format('YYYY-MM-DDTHH:mm:ss.SSS'),
       includeErroredShifts
     });
 
@@ -190,11 +190,11 @@ export const useInvoiceCreationControl = () => {
     const data: invoiceCreationDTO = {
       companyId: Number(freshCompany) || selectedCompany!.id,
       startDate:
-        freshStartDate?.format("YYYY/MM/DD") ??
-        selectedStartDate!.format("YYYY/MM/DD"),
+        freshStartDate?.format('YYYY-MM-DDTHH:mm:ss.SSS') ??
+        selectedStartDate!.format('YYYY-MM-DDTHH:mm:ss.SSS'),
       endDate:
-        freshendDate?.format("YYYY/MM/DD") ??
-        selectedEndDate!.format("YYYY/MM/DD"),
+        freshendDate?.format('YYYY-MM-DDTHH:mm:ss.SSS') ??
+        selectedEndDate!.format('YYYY-MM-DDTHH:mm:ss.SSS'),
         includeErroredShifts: true
     };
     setInvoicePreviewDTO(data);
