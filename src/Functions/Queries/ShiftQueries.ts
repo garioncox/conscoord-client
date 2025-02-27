@@ -71,7 +71,6 @@ export const useShiftById = (shiftId: number) => {
   });
 };
 
-
 export const useClaimShiftMutation = () => {
   const { data: employee } = useLoggedInEmployee();
   const requests = useEmpShiftRequests();
@@ -83,10 +82,10 @@ export const useClaimShiftMutation = () => {
         id: null,
         clockInTime: null,
         clockOutTime: null,
-        didnotwork: false,
+        didNotWork: false,
         empId: employee!.id,
         hasbeeninvoiced: false,
-        reportedcanceled: false,
+        reportedCanceled: false,
         shiftId: shiftId,
       };
       await createToast(requests.addEmployeeShift, "Claiming shift...", dto);

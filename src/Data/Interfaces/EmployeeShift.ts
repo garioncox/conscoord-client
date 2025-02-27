@@ -2,10 +2,10 @@ export interface EmployeeShift {
   id: number;
   clockInTime: string;
   clockOutTime: string;
-  didnotwork: boolean;
+  didNotWork: boolean;
   empId: number;
   hasbeeninvoiced: boolean;
-  reportedcanceled: boolean;
+  reportedCanceled: boolean;
   shiftId: number;
   notes: string;
 }

@@ -71,13 +71,11 @@ export const AddShift: React.FC<{
         projectId: projectId,
         shift: {
           StartTime:
-            dateControl.value?.format("YYYY-MM-DD") ??
-            "" + startTimeControl.value?.format("THH:mm:ss.SSS") ??
-            "",
+            dateControl.value!.format("YYYY-MM-DD") +
+            startTimeControl.value?.format("THH:mm:ss.SSS"),
           EndTime:
-            dateControl.value?.format("YYYY-MM-DD") ??
-            "" + endTimeControl.value?.format("THH:mm:ss.SSS") ??
-            "",
+            dateControl.value!.format("YYYY-MM-DD") +
+            endTimeControl.value?.format("THH:mm:ss.SSS"),
           Description: descriptionControl.value,
           Location: locationControl.value,
           RequestedEmployees: reqEmpControl.value,
