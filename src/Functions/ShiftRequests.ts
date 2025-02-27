@@ -38,12 +38,15 @@ export const getShiftDatesWithError = async (
   id_token: string,
   companyId: number
 ): Promise<string[]> => {
-  const response = await axios.get(`/api/Shift/getAll/errored/${companyId}`, {
-    headers: {
-      Authorization: `Bearer ${id_token}`,
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await axios.get(
+    `/api/Shift/getAll/errored/dates/${companyId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${id_token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   return response.data;
 };
