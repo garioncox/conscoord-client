@@ -9,9 +9,6 @@ import {
   getShiftDatesWithError,
 } from "../ShiftRequests";
 import { queryClient } from "./QueryClient";
-import { ShiftDTO } from "@/Data/DTOInterfaces/ShiftDTO";
-import { addProjectShift } from "../ProjectShiftRequests";
-import { ProjectShiftDTO } from "@/Data/DTOInterfaces/ProjectShiftDTO";
 import { EmployeeShiftDTO } from "@/Data/DTOInterfaces/EmployeeShiftDTO";
 import { useLoggedInEmployee } from "./EmployeeQueries";
 import { queryKeys } from "./QueryKeyFactory";
@@ -74,37 +71,6 @@ export const useShiftById = (shiftId: number) => {
   });
 };
 
-export const useAddShiftMutation = (projectId: number) => {
-  const { user } = useAuth();
-  const { createToast } = useCustomToast();
-
-  return useMutation({
-    mutationFn: async ({
-      shiftDTO,
-      projectId,
-    }: {
-      shiftDTO: ShiftDTO;
-      projectId: number;
-    }) => {
-      const dto: ProjectShiftDTO = {
-        projectId: projectId,
-        shift: shiftDTO,
-      };
-      await createToast(
-        addProjectShift,
-        "Adding Shift",
-        user?.id_token ?? "",
-        dto
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [queryKeys.shiftsByProject, projectId],
-      });
-    },
-  });
-};
-
 export const useClaimShiftMutation = () => {
   const { data: employee } = useLoggedInEmployee();
   const requests = useEmpShiftRequests();
@@ -114,12 +80,12 @@ export const useClaimShiftMutation = () => {
     mutationFn: async (shiftId: number) => {
       const dto: EmployeeShiftDTO = {
         id: null,
-        clockInTime: "",
-        clockOutTime: "",
-        didnotwork: false,
+        clockInTime: null,
+        clockOutTime: null,
+        didNotWork: false,
         empId: employee!.id,
         hasbeeninvoiced: false,
-        reportedcanceled: false,
+        reportedCanceled: false,
         shiftId: shiftId,
       };
       await createToast(requests.addEmployeeShift, "Claiming shift...", dto);

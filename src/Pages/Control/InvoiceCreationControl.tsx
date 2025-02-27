@@ -44,17 +44,18 @@ export const useInvoiceCreationControl = () => {
   const { data: invoicePreviewData, isLoading: isInvoiceDataLoading } =
     useInvoicePreviewData(invoicePreviewDTO);
 
-  const { data: datesWithErrors } =
-    useShiftDatesWithError(selectedCompany?.id);
+  const { data: datesWithErrors } = useShiftDatesWithError(selectedCompany?.id);
 
-  const isLoading =
-    isCompaniesLoading || isUserLoading;
+  const isLoading = isCompaniesLoading || isUserLoading;
 
   const DateCalendarBadgeSlots = (props: PickersDayProps<Dayjs>) => {
     const { day, outsideCurrentMonth, ...other } = props;
 
     const isSelected =
-      !props.outsideCurrentMonth && datesWithErrors?.includes(dayjs(day).format('YYYY/MM/DD'));
+      !props.outsideCurrentMonth &&
+      datesWithErrors?.some(
+        (d) => dayjs(d).format("YYYY/MM/DD") === dayjs(day).format("YYYY/MM/DD")
+      );
 
     return (
       <Badge
@@ -73,21 +74,22 @@ export const useInvoiceCreationControl = () => {
     );
   };
 
-  const MonthCalendarBadgeSlots = (
-    props: PickersMonthProps,
-  ) => {
-    const propMonthLabel = typeof props.children === "string" ? props.children : "";
+  const MonthCalendarBadgeSlots = (props: PickersMonthProps) => {
+    const propMonthLabel =
+      typeof props.children === "string" ? props.children : "";
 
-    const monthsWithErrors = datesWithErrors?.filter(d => dayjs(d).year() == currentYear)
-      .map(d => {
-      return dateUtils.monthsTruncated[dayjs(d).month()]
-    }) ?? [];
+    const monthsWithErrors =
+      datesWithErrors
+        ?.filter((d) => dayjs(d).year() == currentYear)
+        .map((d) => {
+          return dateUtils.monthsTruncated[dayjs(d).month()];
+        }) ?? [];
 
     const isSelected =
-      dateUtils.monthsTruncated[selectedMonth ? selectedMonth.month() : 0] == props.children;
+      dateUtils.monthsTruncated[selectedMonth ? selectedMonth.month() : 0] ==
+      props.children;
 
-    const visible =
-      monthsWithErrors.includes(propMonthLabel);
+    const visible = monthsWithErrors.includes(propMonthLabel);
 
     return (
       <Badge
@@ -170,9 +172,9 @@ export const useInvoiceCreationControl = () => {
 
     createInvoice(user?.id_token ?? "", {
       companyId: selectedCompany!.id,
-      startDate: selectedStartDate!.format("YYYY/MM/DD"),
-      endDate: selectedEndDate!.format("YYYY/MM/DD"),
-      includeErroredShifts
+      startDate: selectedStartDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
+      endDate: selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
+      includeErroredShifts,
     });
 
     setInvoicingAlreadyInvoicedData(false);
@@ -190,12 +192,12 @@ export const useInvoiceCreationControl = () => {
     const data: invoiceCreationDTO = {
       companyId: Number(freshCompany) || selectedCompany!.id,
       startDate:
-        freshStartDate?.format("YYYY/MM/DD") ??
-        selectedStartDate!.format("YYYY/MM/DD"),
+        freshStartDate?.format("YYYY-MM-DDTHH:mm:ss.SSS") ??
+        selectedStartDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       endDate:
-        freshendDate?.format("YYYY/MM/DD") ??
-        selectedEndDate!.format("YYYY/MM/DD"),
-        includeErroredShifts: true
+        freshendDate?.format("YYYY-MM-DDTHH:mm:ss.SSS") ??
+        selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
+      includeErroredShifts: true,
     };
     setInvoicePreviewDTO(data);
   };
@@ -211,12 +213,10 @@ export const useInvoiceCreationControl = () => {
   };
 
   const checkForRowsThatHaveBeenInvoiced = () => {
-    if (InvoiceHasAlreadyInvoicedEmpShifts())
-    {
+    if (InvoiceHasAlreadyInvoicedEmpShifts()) {
       setInvoicingAlreadyInvoicedData(true);
-    }
-    else {
-      generateInvoice(false)
+    } else {
+      generateInvoice(false);
     }
   };
 

@@ -4,7 +4,6 @@ import GTextInput from "./Generics/gTextInput";
 import { useGTextInput } from "./Generics/control/gTextInputController";
 import { useGDateInput } from "./Generics/control/gDateInputController";
 import { ProjectDTO } from "@/Data/DTOInterfaces/ProjectDTO";
-import { FormatDate } from "@/Functions/FormatDates";
 import { useAddProjectMutation } from "@/Functions/Queries/ProjectQueries";
 import { useState } from "react";
 import {
@@ -168,8 +167,8 @@ export const AddProject: React.FC<{
     const project: ProjectDTO = {
       name: nameControl.value,
       location: locationControl.value,
-      startDate: FormatDate(startDateControl.value),
-      endDate: FormatDate(endDateControl.value),
+      startDate: startDateControl.value.split("Z")[0],
+      endDate: endDateControl.value.split("Z")[0],
       contactinfo: id,
     };
     addProjectMutation.mutate({ project });

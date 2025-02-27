@@ -1,11 +1,11 @@
 export interface EmployeeShiftDTO {
   id: number | null;
-  clockInTime?: string;
-  clockOutTime?: string;
-  didnotwork: boolean;
+  clockInTime?: string | null;
+  clockOutTime?: string | null;
+  didNotWork: boolean;
   empId: number;
   hasbeeninvoiced: boolean;
   notes?: string;
-  reportedcanceled: boolean;
+  reportedCanceled: boolean;
   shiftId: number;
 }

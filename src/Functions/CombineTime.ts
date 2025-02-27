@@ -1,7 +1,7 @@
 export function CombineTime(startTime: string, endTime: string) {
-    const _startDate = startTime.split(" ")[0];
-    const _startTime = startTime.split(" ")[1];
-    const _endTime = endTime.split(" ")[1];
+    const _startDate = startTime.split("T")[0];
+    const _startTime = startTime.split("T")[1];
+    const _endTime = endTime.split("T")[1];
 
     const _startTimeNoSeconds = _startTime.slice(0, -3);
     const _endTimeNoSeconds = _endTime.slice(0, -3);
@@ -11,15 +11,15 @@ export function CombineTime(startTime: string, endTime: string) {
 }
 
 export function combineDates(startDate: string, endDate: string) {
-    const _startDate = startDate.split(" ")[0];
-    const _endDate = endDate.split(" ")[0];
+    const _startDate = startDate.split("T")[0];
+    const _endDate = endDate.split("T")[0];
 
     return `${_startDate} - ${_endDate}`;
 }
 
 export function combineTimes(startDate: string, endDate: string) {
-    const _startDate = startDate.split(" ")[1];
-    const _endDate = endDate.split(" ")[1];
+    const _startDate = startDate.split("T")[1];
+    const _endDate = endDate.split("T")[1];
 
     return `${_startDate} - ${_endDate}`;
 }
