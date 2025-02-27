@@ -89,7 +89,7 @@ export const useClaimShiftMutation = () => {
         reportedcanceled: false,
         shiftId: shiftId,
       };
-      await createToast(requests.addEmployeeShift, dto, "Claiming shift...");
+      await createToast(requests.addEmployeeShift, "Claiming shift...", dto);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
@@ -103,7 +103,7 @@ export const useEditShiftMutation = (shift: Shift) => {
   const { createToast } = useCustomToast();
   return useMutation({
     mutationFn: async () =>
-      await createToast(editShift, shift, "Editing shift..."),
+      await createToast(editShift, "Editing shift...", shift),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.shifts,
@@ -116,7 +116,7 @@ export const useArchiveShiftMutation = () => {
   const { createToast } = useCustomToast();
   return useMutation({
     mutationFn: async (shiftId: number) => {
-      await createToast(archiveShift, shiftId, "Archiving shift...");
+      await createToast(archiveShift, "Archiving shift...", shiftId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

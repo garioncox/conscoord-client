@@ -12,6 +12,7 @@ import { useAllRoles } from "@/Functions/Queries/RoleQueries";
 import { useState } from "react";
 import { Employee } from "@/Data/Interfaces/EmployeeInterface";
 import { useGPhoneInput } from "@/Components/Generics/control/gPhoneInputController";
+import { useDebounce } from "use-debounce";
 
 export const useUserInfoControl = () => {
   const { mutateAsync: addCompanyMutation, isPending: isAddingCompany } =
@@ -33,10 +34,11 @@ export const useUserInfoControl = () => {
   const [filterString, setFilterString] = useState("");
   const [isAddingEmployee, setIsAddingEmployee] = useState<boolean>(false);
   const [cardView, setCardView] = useState<"info" | "history" | "none">("none");
+  const [debouncedEmail] = useDebounce(employeeEmail, 500); // 500ms delay
 
   const phoneControl = useGPhoneInput("", () => "");
   const { data: empHistory, isLoading: isEmpHistoryLoading } =
-    useEmpShiftHistoryForEmail(employeeEmail);
+    useEmpShiftHistoryForEmail(debouncedEmail);
 
   const isLoading = isEmployeesLoading || isRolesLoading || isCompaniesLoading;
 

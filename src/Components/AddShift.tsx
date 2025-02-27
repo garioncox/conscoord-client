@@ -86,6 +86,7 @@ export const AddShift: React.FC<{
       }
 
       addShiftMutation.mutate({ project });
+      addShiftMutation.mutate({ shiftDTO: shift, projectId: projectId });
       toggleModal();
     }
   }

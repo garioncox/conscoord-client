@@ -29,7 +29,7 @@ function ProjectList() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="mb-5 flex flex-row items-center text-xs">
         <div className="pe-2">Order By</div>
         <FormControl sx={{ minWidth: 120 }} size="small">
@@ -102,9 +102,9 @@ function ProjectList() {
               },
             }}
           >
-            <MenuItem value={5}>5</MenuItem>
-            <MenuItem value={10}>10</MenuItem>
             <MenuItem value={20}>20</MenuItem>
+            <MenuItem value={50}>50</MenuItem>
+            <MenuItem value={100}>100</MenuItem>
           </Select>
         </FormControl>
 
