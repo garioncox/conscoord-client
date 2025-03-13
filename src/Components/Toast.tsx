@@ -10,7 +10,7 @@ export const useCustomToast = () => {
   ) => {
     const response: any = await toast.promise(
       async () => {
-        await asyncFunction(...params);
+        return await asyncFunction(...params);
       },
       {
         pending: `${defaultMessage}`,

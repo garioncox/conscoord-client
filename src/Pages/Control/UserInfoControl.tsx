@@ -27,7 +27,7 @@ export const useUserInfoControl = () => {
 
   const [companyName, setCompanyName] = useState<string>();
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
-  const [employeeCompanyId, setEmployeeComanyId] = useState<number>(0);
+  const [employeeCompanyId, setEmployeeCompanyId] = useState<number>(0);
   const [employeeEmail, setEmployeeEmail] = useState("");
   const [employeeName, setEmployeeName] = useState("");
   const [employeeRoleId, setEmployeeRoleId] = useState(0);
@@ -56,9 +56,19 @@ export const useUserInfoControl = () => {
     HandleSelectEmployee(null);
   }
 
-  function EditEmployee() {
+  async function EditEmployee() {
+    const newCompanyId = companyName
+      ? await addCompanyMutation({ companyName })
+      : employeeCompanyId;
+    console.log("new company id" + newCompanyId);
+    setEmployeeCompanyId(newCompanyId);
     if (!selectedEmployee) return;
-    if (!IsEmployeeEdited()) return;
+
+    console.log("1 Should be 39: " + employeeCompanyId);
+
+    if (!IsEmployeeEdited(newCompanyId)) return;
+
+    console.log("2 Should be 39: " + employeeCompanyId);
 
     const employee = {
       id: selectedEmployee.id,
@@ -66,13 +76,13 @@ export const useUserInfoControl = () => {
       email: employeeEmail,
       phonenumber: phoneControl.value,
       roleid: employeeRoleId,
-      companyid: employeeCompanyId,
+      companyid: newCompanyId,
     };
+
     editEmployeeMutation.mutate(employee);
   }
 
   const HandleSaveEmployee = async () => {
-    await AddCompany();
     if (isAddingEmployee) {
       AddEmployee();
     } else {
@@ -89,18 +99,18 @@ export const useUserInfoControl = () => {
       setEmployeeEmail(selectedEmployee.email);
       phoneControl.setValue(selectedEmployee.phonenumber);
       setEmployeeRoleId(selectedEmployee.roleid);
-      setEmployeeComanyId(selectedEmployee.companyid);
+      setEmployeeCompanyId(selectedEmployee.companyid);
     } else {
       setSelectedEmployee(undefined);
       setEmployeeName("");
       setEmployeeEmail("");
       phoneControl.setValue("");
       setEmployeeRoleId(0);
-      setEmployeeComanyId(0);
+      setEmployeeCompanyId(0);
     }
   };
 
-  const IsEmployeeEdited = () => {
+  const IsEmployeeEdited = (newCompanyId: number) => {
     if (!selectedEmployee) {
       return false;
     }
@@ -110,7 +120,7 @@ export const useUserInfoControl = () => {
       employeeEmail == selectedEmployee.email &&
       phoneControl.value == selectedEmployee.phonenumber &&
       employeeRoleId == selectedEmployee.roleid &&
-      employeeCompanyId == selectedEmployee.companyid
+      newCompanyId == selectedEmployee.companyid
     ) {
       return false;
     }
@@ -118,15 +128,7 @@ export const useUserInfoControl = () => {
     return true;
   };
 
-  async function AddCompany() {
-    if (!companyName) return;
-    const companyId = await addCompanyMutation({ companyName: companyName });
-    setEmployeeComanyId(companyId);
-    setCompanyName("");
-  }
-
   return {
-    AddCompany,
     cardView,
     companies,
     companyName,
@@ -148,7 +150,7 @@ export const useUserInfoControl = () => {
     selectedEmployee,
     setCardView,
     setCompanyName,
-    setEmployeeComanyId,
+    setEmployeeComanyId: setEmployeeCompanyId,
     setEmployeeEmail,
     setEmployeeName,
     setEmployeeRoleId,
