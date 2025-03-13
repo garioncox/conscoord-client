@@ -60,15 +60,10 @@ export const useUserInfoControl = () => {
     const newCompanyId = companyName
       ? await addCompanyMutation({ companyName })
       : employeeCompanyId;
-    console.log("new company id" + newCompanyId);
     setEmployeeCompanyId(newCompanyId);
+    
     if (!selectedEmployee) return;
-
-    console.log("1 Should be 39: " + employeeCompanyId);
-
     if (!IsEmployeeEdited(newCompanyId)) return;
-
-    console.log("2 Should be 39: " + employeeCompanyId);
 
     const employee = {
       id: selectedEmployee.id,
