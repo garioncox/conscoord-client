@@ -61,7 +61,7 @@ export const useUserInfoControl = () => {
       ? await addCompanyMutation({ companyName })
       : employeeCompanyId;
     setEmployeeCompanyId(newCompanyId);
-    
+
     if (!selectedEmployee) return;
     if (!IsEmployeeEdited(newCompanyId)) return;
 
@@ -145,7 +145,7 @@ export const useUserInfoControl = () => {
     selectedEmployee,
     setCardView,
     setCompanyName,
-    setEmployeeComanyId: setEmployeeCompanyId,
+    setEmployeeCompanyId,
     setEmployeeEmail,
     setEmployeeName,
     setEmployeeRoleId,
