@@ -53,6 +53,10 @@ export const useProjectUtils = () => {
     return employees?.find((e) => e.id === p.contactinfo);
   };
 
+  const getCompanyInfo = (p: Project) => {
+    
+  }
+
   const getTimeLength = (p: Project) => {
     return Math.floor(
       (new Date(p.endDate as string).getTime() -
