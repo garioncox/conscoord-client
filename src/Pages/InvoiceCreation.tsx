@@ -213,7 +213,11 @@ const InvoiceCreation = () => {
         )}
 
         {/* Invoice Preview */}
-        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow min-h-[250px]">
+        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px]">
+          <div className="bg-slate-200 min-h-12 flex items-center justify-center">
+            <p className="font-semibold text-xl">Invoice Preview</p>
+          </div>
+
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
             {control.invoicePreviewData == null ||
             control.invoicePreviewData.length == 0 ? (
