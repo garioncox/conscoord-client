@@ -23,7 +23,7 @@ const InvoiceCreation = () => {
   }
 
   return (
-    <div className="space-y-10 flex grow flex-col xl:max-w-[1300px] xl:flex-row xl:space-x-10 xl:justify-around">
+    <div className="flex grow flex-col xl:max-w-[1300px] xl:flex-row xl:space-x-10 xl:justify-around">
       {/* Filter company */}
       <div className="flex flex-col grow xl:max-w-[25%] rounded-xl border border-slate-300 shadow-md shadow-slate-400">
         <div className="p-4 flex flex-row items-center rounded-t-xl top-0 bg-slate-200 z-10">
@@ -65,37 +65,52 @@ const InvoiceCreation = () => {
         </div>
       </div>
 
-      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] overflow-y-scroll">
+      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] overflow-y-scroll pt-10 xl:pt-0">
         <div className="shadow-md rounded-xl shadow-slate-400 border min-h-[530px]">
           <div>
             {/* Month / Date Select */}
             <div className="flex flex-row mb-5 py-5 justify-around border-b">
-              <FormControl>
-                <RadioGroup
-                  row
-                  aria-labelledby="controlled-radio-buttons-group"
-                  name="controlled-radio-buttons-group"
-                  value={control.monthView}
-                  onChange={() => control.toggleMonthView()}
+              <div className="ms-10">
+                <FormControl>
+                  <RadioGroup
+                    row
+                    aria-labelledby="controlled-radio-buttons-group"
+                    name="controlled-radio-buttons-group"
+                    value={control.monthView}
+                    onChange={() => control.toggleMonthView()}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      label="Month View"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      label="Specific Dates"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+
+              <div className="ms-auto me-3 flex flex-row items-center">
+                {control.isGeneratingInvoice && (
+                  <div className="me-5">
+                    <Spinner useText={false} />
+                  </div>
+                )}
+                <button
+                  className={`text-white font-semibold p-3 rounded-xl transition-colors duration-150 ${
+                    control.isGeneratingInvoice
+                      ? "bg-slate-500 opacity-75"
+                      : "bg-[#1976d2] hover:bg-[#1565c0]"
+                  }`}
+                  onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
+                  disabled={control.isGeneratingInvoice}
                 >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio />}
-                    label="Month View"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="Specific Dates"
-                  />
-                </RadioGroup>
-              </FormControl>
-              <button
-                className="bg-[#1976d2] hover:bg-[#1565c0] text-white font-semibold p-3 rounded-2xl"
-                onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
-              >
-                Generate Invoice
-              </button>
+                  Generate Invoice
+                </button>
+              </div>
             </div>
 
             {/* Calendar View */}
@@ -194,7 +209,7 @@ const InvoiceCreation = () => {
         {control.invoicingAlreadyInvoicedData ? (
           <InvoiceErrorBanner generateInvoice={control.generateInvoice} />
         ) : (
-          "No Issues"
+          ""
         )}
 
         {/* Invoice Preview */}
@@ -221,7 +236,9 @@ const InvoiceCreation = () => {
                       <p className="col-span-5">{ebs.employeeName}</p>
                       <p className="col-span-5">{sbp.shiftLocation}</p>
                       <p className="col-span-1">
-                        {ebs.hoursWorked == 0 ? "--" : `${ebs.hoursWorked.toPrecision(3)} hr`}
+                        {ebs.hoursWorked == 0
+                          ? "--"
+                          : `${ebs.hoursWorked.toPrecision(3)} hr`}
                       </p>
                     </div>
                   ))
