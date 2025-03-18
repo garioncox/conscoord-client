@@ -38,6 +38,8 @@ export const useInvoiceCreationControl = () => {
   );
   const [invoicingAlreadyInvoicedData, setInvoicingAlreadyInvoicedData] =
     useState<boolean>(false);
+  const [isGeneratingInvoice, setIsGeneratingInvoice] =
+    useState<boolean>(false);
 
   const [invoicePreviewDTO, setInvoicePreviewDTO] =
     useState<invoiceCreationDTO | null>(null);
@@ -160,7 +162,7 @@ export const useInvoiceCreationControl = () => {
     );
   };
 
-  const generateInvoice = (includeErroredShifts: boolean) => {
+  const generateInvoice = async (includeErroredShifts: boolean) => {
     if (!checkValuesExist()) {
       toast.error("Company or Dates Not Set");
       return;
@@ -170,7 +172,7 @@ export const useInvoiceCreationControl = () => {
       return;
     }
 
-    createInvoice(user?.id_token ?? "", {
+    await createInvoice(user?.id_token ?? "", {
       companyId: selectedCompany!.id,
       startDate: selectedStartDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       endDate: selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
@@ -212,12 +214,21 @@ export const useInvoiceCreationControl = () => {
     return true;
   };
 
-  const checkForRowsThatHaveBeenInvoiced = () => {
+  const checkForRowsThatHaveBeenInvoiced = async () => {
+    if (isGeneratingInvoice) {
+      return;
+    }
+
+    const toggleInvoice = () => setIsGeneratingInvoice(true);
+    toggleInvoice();
+
     if (InvoiceHasAlreadyInvoicedEmpShifts()) {
       setInvoicingAlreadyInvoicedData(true);
     } else {
-      generateInvoice(false);
+      await generateInvoice(false);
     }
+
+    setIsGeneratingInvoice(false);
   };
 
   function InvoiceHasAlreadyInvoicedEmpShifts() {
@@ -257,5 +268,6 @@ export const useInvoiceCreationControl = () => {
     isInvoiceDataLoading,
     invoicingAlreadyInvoicedData,
     checkForRowsThatHaveBeenInvoiced,
+    isGeneratingInvoice,
   };
 };
