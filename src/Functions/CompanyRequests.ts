@@ -6,11 +6,23 @@ export const getCompanies = async (): Promise<Company[]> => {
   return response.data;
 };
 
-export const AddCompany = async (token: string, companyName: string): Promise<number> => {
-    const response = await axios.post(`/api/Company/add`, { companyName }, {
+export const AddCompany = async (
+  token: string,
+  companyName: string
+): Promise<number> => {
+  const response = await axios.post(
+    `/api/Company/add`,
+    { companyName },
+    {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
-    return response.data
-}
+    }
+  );
+  return response.data;
+};
+
+export const getCompanyNameByProjectId = async (projectId: number) => {
+  const response = await axios.get(`/api/Company/get/name/${projectId}`);
+  return response.data;
+};

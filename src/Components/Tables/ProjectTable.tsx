@@ -14,6 +14,7 @@ import { Spinner } from "../Spinner";
 import Error from "../Error";
 import { useProjectUtils } from "../ProjectUtils";
 import { useAuth } from "react-oidc-context";
+import { useCompanyNameByProjectId } from "@/Functions/Queries/CompanyQueries";
 
 export function ProjectCards({
   data,
@@ -52,6 +53,15 @@ export function ProjectCards({
         <div className="grid md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-5">
           {sortedData.map((project) => {
             const contact = projectUtils.getContactInfo(project);
+            const {
+              data: companyName,
+              isLoading,
+              isError,
+            } = useCompanyNameByProjectId(project.id);
+
+            if (isLoading || isError) {
+              return <></>;
+            }
 
             return (
               <div
@@ -78,7 +88,7 @@ export function ProjectCards({
                 </div>
 
                 <div className="text-sm border rounded-lg max-w-fit px-2 line-clamp-1 bg-slate-200 group-hover:bg-slate-300">
-                  Company Name
+                  {companyName}
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {project.status == STATUS_ARCHIVED && (

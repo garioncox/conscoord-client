@@ -3,6 +3,7 @@ import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 import { useAllProjectShifts } from "@/Functions/Queries/ProjectShiftQueries";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { useShiftsFulfilledUtils } from "./ShiftsFulfilledHook";
+import axios from "axios";
 
 export const useProjectUtils = () => {
   const {
@@ -52,10 +53,6 @@ export const useProjectUtils = () => {
   const getContactInfo = (p: Project) => {
     return employees?.find((e) => e.id === p.contactinfo);
   };
-
-  const getCompanyInfo = (p: Project) => {
-    
-  }
 
   const getTimeLength = (p: Project) => {
     return Math.floor(
