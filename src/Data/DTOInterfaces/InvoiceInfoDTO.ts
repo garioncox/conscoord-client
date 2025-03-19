@@ -16,4 +16,5 @@ export interface InvoiceInfoDTO {
     employeePayRate: number;
     hoursWorked: number;
     has_been_invoiced: boolean;
+    is_residual: boolean;
   }

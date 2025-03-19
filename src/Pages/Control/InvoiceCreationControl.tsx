@@ -36,8 +36,7 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
-  const [invoicingAlreadyInvoicedData, setInvoicingAlreadyInvoicedData] =
-    useState<boolean>(false);
+  const [includeResidualShifts, setIncludeResidualShifts] = useState(false);
 
   const [invoicePreviewDTO, setInvoicePreviewDTO] =
     useState<invoiceCreationDTO | null>(null);
@@ -47,6 +46,11 @@ export const useInvoiceCreationControl = () => {
   const { data: datesWithErrors } = useShiftDatesWithError(selectedCompany?.id);
 
   const isLoading = isCompaniesLoading || isUserLoading;
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIncludeResidualShifts(event.target.checked);
+    getInvoicePreviewData(null, null, null, event.target.checked);
+  };
 
   const DateCalendarBadgeSlots = (props: PickersDayProps<Dayjs>) => {
     const { day, outsideCurrentMonth, ...other } = props;
@@ -106,7 +110,7 @@ export const useInvoiceCreationControl = () => {
 
   const setCompanyFilter = (value: Company) => {
     setSelectedCompany(value);
-    getInvoicePreviewData(value.id, null, null);
+    getInvoicePreviewData(value.id, null, null, includeResidualShifts);
   };
 
   const setStartDate = (value: dayjs.Dayjs) => {
@@ -115,7 +119,7 @@ export const useInvoiceCreationControl = () => {
     }
 
     setSelectedStartDate(value);
-    getInvoicePreviewData(null, value, null);
+    getInvoicePreviewData(null, value, null, includeResidualShifts);
   };
 
   const setEndDate = (value: dayjs.Dayjs) => {
@@ -124,7 +128,7 @@ export const useInvoiceCreationControl = () => {
     }
 
     setSelectedEndDate(value);
-    getInvoicePreviewData(null, null, value);
+    getInvoicePreviewData(null, null, value, includeResidualShifts);
   };
 
   const selectPreviousYear = () => {
@@ -132,7 +136,8 @@ export const useInvoiceCreationControl = () => {
     getInvoicePreviewData(
       null,
       selectedStartDate!.subtract(1, "year"),
-      selectedEndDate!.subtract(1, "year")
+      selectedEndDate!.subtract(1, "year"),
+      includeResidualShifts
     );
   };
 
@@ -141,7 +146,8 @@ export const useInvoiceCreationControl = () => {
     getInvoicePreviewData(
       null,
       selectedStartDate!.add(1, "year"),
-      selectedEndDate!.add(1, "year")
+      selectedEndDate!.add(1, "year"),
+      includeResidualShifts
     );
   };
 
@@ -156,11 +162,12 @@ export const useInvoiceCreationControl = () => {
     getInvoicePreviewData(
       null,
       month.startOf("month"),
-      month.endOf("month").subtract(1, "day")
+      month.endOf("month").subtract(1, "day"),
+      includeResidualShifts
     );
   };
 
-  const generateInvoice = (includeErroredShifts: boolean) => {
+  const generateInvoice = () => {
     if (!checkValuesExist()) {
       toast.error("Company or Dates Not Set");
       return;
@@ -174,21 +181,21 @@ export const useInvoiceCreationControl = () => {
       companyId: selectedCompany!.id,
       startDate: selectedStartDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       endDate: selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
-      includeErroredShifts,
+      includeResidualShifts,
     });
-
-    setInvoicingAlreadyInvoicedData(false);
   };
 
   const getInvoicePreviewData = (
     freshCompany: number | null,
     freshStartDate: dayjs.Dayjs | null,
-    freshendDate: dayjs.Dayjs | null
+    freshendDate: dayjs.Dayjs | null,
+    includeAllResidualShifts: boolean | null
   ) => {
     if (!checkValuesExist()) {
       return;
     }
 
+    //changing data triggers the http call
     const data: invoiceCreationDTO = {
       companyId: Number(freshCompany) || selectedCompany!.id,
       startDate:
@@ -197,7 +204,7 @@ export const useInvoiceCreationControl = () => {
       endDate:
         freshendDate?.format("YYYY-MM-DDTHH:mm:ss.SSS") ??
         selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
-      includeErroredShifts: true,
+      includeResidualShifts: includeAllResidualShifts
     };
     setInvoicePreviewDTO(data);
   };
@@ -212,23 +219,23 @@ export const useInvoiceCreationControl = () => {
     return true;
   };
 
-  const checkForRowsThatHaveBeenInvoiced = () => {
-    if (InvoiceHasAlreadyInvoicedEmpShifts()) {
-      setInvoicingAlreadyInvoicedData(true);
-    } else {
-      generateInvoice(false);
-    }
-  };
+  // const checkForRowsThatHaveBeenInvoiced = () => {
+  //   if (InvoiceHasAlreadyInvoicedEmpShifts()) {
+  //     setInvoicingAlreadyInvoicedData(true);
+  //   } else {
+  //     generateInvoice(false);
+  //   }
+  // };
 
-  function InvoiceHasAlreadyInvoicedEmpShifts() {
-    return invoicePreviewData?.some((project) =>
-      project.shiftsByProject?.some((shift) =>
-        shift.employeesByShift?.some(
-          (employee) => employee.has_been_invoiced == true
-        )
-      )
-    );
-  }
+  // function InvoiceHasAlreadyInvoicedEmpShifts() {
+  //   return invoicePreviewData?.some((project) =>
+  //     project.shiftsByProject?.some((shift) =>
+  //       shift.employeesByShift?.some(
+  //         (employee) => employee.has_been_invoiced == true
+  //       )
+  //     )
+  //   );
+  // }
 
   return {
     isLoading,
@@ -255,7 +262,9 @@ export const useInvoiceCreationControl = () => {
     getInvoicePreviewData,
     invoicePreviewData,
     isInvoiceDataLoading,
-    invoicingAlreadyInvoicedData,
-    checkForRowsThatHaveBeenInvoiced,
+    // invoicingAlreadyInvoicedData,
+    // checkForRowsThatHaveBeenInvoiced,
+    includeResidualShifts,
+    handleCheckboxChange,
   };
 };

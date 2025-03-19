@@ -1,5 +1,6 @@
 import { Spinner } from "@/Components/Spinner";
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
   Radio,
@@ -13,7 +14,6 @@ import { MonthCalendar } from "@mui/x-date-pickers/MonthCalendar";
 import dayjs from "dayjs";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
-import InvoiceErrorBanner from "@/Components/InvoiceErrorBanner";
 
 const InvoiceCreation = () => {
   const control = useInvoiceCreationControl();
@@ -89,10 +89,19 @@ const InvoiceCreation = () => {
                     label="Specific Dates"
                   />
                 </RadioGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={control.includeResidualShifts}
+                      onChange={control.handleCheckboxChange}
+                    />
+                  }
+                  label="Include Residuals"
+                />
               </FormControl>
               <button
                 className="bg-[#1976d2] hover:bg-[#1565c0] text-white font-semibold p-3 rounded-2xl"
-                onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
+                onClick={() => control.generateInvoice()}
               >
                 Generate Invoice
               </button>
@@ -191,12 +200,6 @@ const InvoiceCreation = () => {
           </div>
         </div>
 
-        {control.invoicingAlreadyInvoicedData ? (
-          <InvoiceErrorBanner generateInvoice={control.generateInvoice} />
-        ) : (
-          "No Issues"
-        )}
-
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow min-h-[250px]">
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
@@ -216,12 +219,19 @@ const InvoiceCreation = () => {
                     <div
                       key={ebs.employeeId}
                       className={`grid grid-cols-11 gap-0 p-5 border-b border-l-8 
-            ${ebs.hoursWorked! > 0 ? "border-l-slate-50" : "border-l-red-300"}`}
-                    >
+                        ${
+                          ebs.hoursWorked > 0 
+                            ? ebs.is_residual 
+                              ? "border-l-[#FFC107]"
+                              : "border-l-gray-200"  
+                            : "bg-red-100 border-l-red-400"     
+                        }`}                    >
                       <p className="col-span-5">{ebs.employeeName}</p>
                       <p className="col-span-5">{sbp.shiftLocation}</p>
                       <p className="col-span-1">
-                        {ebs.hoursWorked == 0 ? "--" : `${ebs.hoursWorked.toPrecision(3)} hr`}
+                        {ebs.hoursWorked == 0
+                          ? "--"
+                          : `${ebs.hoursWorked.toPrecision(3)} hr`}
                       </p>
                     </div>
                   ))
