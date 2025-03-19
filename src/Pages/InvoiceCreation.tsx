@@ -82,11 +82,19 @@ const InvoiceCreation = () => {
                     <FormControlLabel
                       value={true}
                       control={<Radio />}
+                      disabled={
+                        control.isGeneratingInvoice ||
+                        control.selectedCompany === null
+                      }
                       label="Month View"
                     />
                     <FormControlLabel
                       value={false}
                       control={<Radio />}
+                      disabled={
+                        control.isGeneratingInvoice ||
+                        control.selectedCompany === null
+                      }
                       label="Specific Dates"
                     />
                   </RadioGroup>
@@ -101,17 +109,29 @@ const InvoiceCreation = () => {
                 )}
                 <button
                   className={`text-white font-semibold p-3 rounded-xl transition-colors duration-150 ${
-                    control.isGeneratingInvoice
-                      ? "bg-slate-500 opacity-75"
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                      ? "bg-slate-500 opacity-25"
                       : "bg-[#1976d2] hover:bg-[#1565c0]"
                   }`}
                   onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
-                  disabled={control.isGeneratingInvoice}
+                  disabled={
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                  }
                 >
                   Generate Invoice
                 </button>
               </div>
             </div>
+
+            {control.selectedCompany === null && (
+              <div className="flex flex-grow items-center justify-center p-5">
+                <p className="text-2xl font-semibold">
+                  Please Select a Company
+                </p>
+              </div>
+            )}
 
             {/* Calendar View */}
             {control.selectedCompany && (
