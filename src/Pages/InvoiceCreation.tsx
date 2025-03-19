@@ -23,7 +23,7 @@ const InvoiceCreation = () => {
   }
 
   return (
-    <div className="space-y-10 flex grow flex-col xl:max-w-[1300px] xl:flex-row xl:space-x-10 xl:justify-around">
+    <div className="flex grow flex-col xl:max-w-[1300px] xl:flex-row xl:space-x-10 xl:justify-around">
       {/* Filter company */}
       <div className="flex flex-col grow xl:max-w-[25%] rounded-xl border border-slate-300 shadow-md shadow-slate-400">
         <div className="p-4 flex flex-row items-center rounded-t-xl top-0 bg-slate-200 z-10">
@@ -65,18 +65,60 @@ const InvoiceCreation = () => {
         </div>
       </div>
 
-      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] overflow-y-scroll">
+      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] overflow-y-scroll pt-10 xl:pt-0">
         <div className="shadow-md rounded-xl shadow-slate-400 border min-h-[530px]">
           <div>
             {/* Month / Date Select */}
             <div className="flex flex-row mb-5 py-5 justify-around border-b">
-              <FormControl>
-                <RadioGroup
-                  row
-                  aria-labelledby="controlled-radio-buttons-group"
-                  name="controlled-radio-buttons-group"
-                  value={control.monthView}
-                  onChange={() => control.toggleMonthView()}
+              <div className="ms-10">
+                <FormControl>
+                  <RadioGroup
+                    row
+                    aria-labelledby="controlled-radio-buttons-group"
+                    name="controlled-radio-buttons-group"
+                    value={control.monthView}
+                    onChange={() => control.toggleMonthView()}
+                  >
+                    <FormControlLabel
+                      value={true}
+                      control={<Radio />}
+                      disabled={
+                        control.isGeneratingInvoice ||
+                        control.selectedCompany === null
+                      }
+                      label="Month View"
+                    />
+                    <FormControlLabel
+                      value={false}
+                      control={<Radio />}
+                      disabled={
+                        control.isGeneratingInvoice ||
+                        control.selectedCompany === null
+                      }
+                      label="Specific Dates"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+
+              <div className="ms-auto me-3 flex flex-row items-center">
+                {control.isGeneratingInvoice && (
+                  <div className="me-5">
+                    <Spinner useText={false} />
+                  </div>
+                )}
+                <button
+                  className={`text-white font-semibold p-3 rounded-xl transition-colors duration-150 ${
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                      ? "bg-slate-500 opacity-25"
+                      : "bg-[#1976d2] hover:bg-[#1565c0]"
+                  }`}
+                  onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
+                  disabled={
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                  }
                 >
                   <FormControlLabel
                     value={true}
@@ -106,6 +148,14 @@ const InvoiceCreation = () => {
                 Generate Invoice
               </button>
             </div>
+
+            {control.selectedCompany === null && (
+              <div className="flex flex-grow items-center justify-center p-5">
+                <p className="text-2xl font-semibold">
+                  Please Select a Company
+                </p>
+              </div>
+            )}
 
             {/* Calendar View */}
             {control.selectedCompany && (
@@ -200,8 +250,19 @@ const InvoiceCreation = () => {
           </div>
         </div>
 
+
+        {control.invoicingAlreadyInvoicedData ? (
+          <InvoiceErrorBanner generateInvoice={control.generateInvoice} />
+        ) : (
+          ""
+        )}
+
         {/* Invoice Preview */}
-        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow min-h-[250px]">
+        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px]">
+          <div className="bg-slate-200 min-h-12 flex items-center justify-center">
+            <p className="font-semibold text-xl">Invoice Preview</p>
+          </div>
+
           <div className="flex flex-col grow pb-4 overflow-x-scroll">
             {control.invoicePreviewData == null ||
             control.invoicePreviewData.length == 0 ? (

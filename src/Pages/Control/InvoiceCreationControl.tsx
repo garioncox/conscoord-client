@@ -27,7 +27,7 @@ export const useInvoiceCreationControl = () => {
   const [currentYear, setCurrentYear] = useState<number>(dayjs().year());
   const [filterString, setFilterString] = useState("");
   const [monthView, setMonthView] = useState<boolean>(true);
-  const [selectedCompany, setSelectedCompany] = useState<Company | null>();
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
@@ -36,7 +36,10 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
+
   const [includeResidualShifts, setIncludeResidualShifts] = useState(false);
+  const [isGeneratingInvoice, setIsGeneratingInvoice] =
+    useState<boolean>(false);
 
   const [invoicePreviewDTO, setInvoicePreviewDTO] =
     useState<invoiceCreationDTO | null>(null);
@@ -167,7 +170,7 @@ export const useInvoiceCreationControl = () => {
     );
   };
 
-  const generateInvoice = () => {
+  const generateInvoice = async (includeErroredShifts: boolean) => {
     if (!checkValuesExist()) {
       toast.error("Company or Dates Not Set");
       return;
@@ -177,7 +180,7 @@ export const useInvoiceCreationControl = () => {
       return;
     }
 
-    createInvoice(user?.id_token ?? "", {
+    await createInvoice(user?.id_token ?? "", {
       companyId: selectedCompany!.id,
       startDate: selectedStartDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       endDate: selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
@@ -219,23 +222,6 @@ export const useInvoiceCreationControl = () => {
     return true;
   };
 
-  // const checkForRowsThatHaveBeenInvoiced = () => {
-  //   if (InvoiceHasAlreadyInvoicedEmpShifts()) {
-  //     setInvoicingAlreadyInvoicedData(true);
-  //   } else {
-  //     generateInvoice(false);
-  //   }
-  // };
-
-  // function InvoiceHasAlreadyInvoicedEmpShifts() {
-  //   return invoicePreviewData?.some((project) =>
-  //     project.shiftsByProject?.some((shift) =>
-  //       shift.employeesByShift?.some(
-  //         (employee) => employee.has_been_invoiced == true
-  //       )
-  //     )
-  //   );
-  // }
 
   return {
     isLoading,
@@ -262,9 +248,8 @@ export const useInvoiceCreationControl = () => {
     getInvoicePreviewData,
     invoicePreviewData,
     isInvoiceDataLoading,
-    // invoicingAlreadyInvoicedData,
-    // checkForRowsThatHaveBeenInvoiced,
     includeResidualShifts,
     handleCheckboxChange,
+    isGeneratingInvoice,
   };
 };
