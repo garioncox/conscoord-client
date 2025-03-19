@@ -27,7 +27,7 @@ export const useInvoiceCreationControl = () => {
   const [currentYear, setCurrentYear] = useState<number>(dayjs().year());
   const [filterString, setFilterString] = useState("");
   const [monthView, setMonthView] = useState<boolean>(true);
-  const [selectedCompany, setSelectedCompany] = useState<Company | null>();
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
