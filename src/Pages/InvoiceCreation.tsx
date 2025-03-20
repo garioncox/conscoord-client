@@ -14,6 +14,7 @@ import { MonthCalendar } from "@mui/x-date-pickers/MonthCalendar";
 import dayjs from "dayjs";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
+import { DateField } from "@mui/x-date-pickers/DateField";
 
 const InvoiceCreation = () => {
   const control = useInvoiceCreationControl();
@@ -66,7 +67,7 @@ const InvoiceCreation = () => {
       </div>
 
       <div className="space-y-10 flex flex-col grow xl:max-w-[60%] overflow-y-scroll pt-10 xl:pt-0">
-        <div className="shadow-md rounded-xl shadow-slate-400 border min-h-[530px]">
+        <div className="shadow-md rounded-xl shadow-slate-400 border md:min-h-[560px]">
           <div>
             {/* Month / Date Select */}
             <div className="flex flex-row mb-5 py-5 justify-around border-b">
@@ -192,9 +193,17 @@ const InvoiceCreation = () => {
                   ) : (
                     <div className="flex flex-col md:flex-row">
                       <div className="flex flex-col">
-                        <label className="font-bold underline text-xl">
-                          Start
-                        </label>
+                        <div>
+                          <DateField
+                            label="Start Date"
+                            value={control.selectedStartDate}
+                            onChange={(newValue) => {
+                              if (newValue != null) {
+                                control.setStartDate(newValue);
+                              }
+                            }}
+                          />
+                        </div>
                         <DateCalendar
                           showDaysOutsideCurrentMonth
                           fixedWeekNumber={6}
@@ -212,9 +221,17 @@ const InvoiceCreation = () => {
                       </div>
 
                       <div className="flex flex-col">
-                        <label className="font-bold underline text-xl">
-                          End
-                        </label>
+                        <div>
+                          <DateField
+                            label="End Date"
+                            value={control.selectedEndDate}
+                            onChange={(newValue) => {
+                              if (newValue != null) {
+                                control.setEndDate(newValue);
+                              }
+                            }}
+                          />
+                        </div>
                         <DateCalendar
                           showDaysOutsideCurrentMonth
                           fixedWeekNumber={6}
@@ -241,18 +258,22 @@ const InvoiceCreation = () => {
 
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px]">
-          <div className="bg-slate-200 min-h-12 flex items-center justify-center">
+          <div className="bg-slate-100 min-h-12 flex items-center justify-center">
             <p className="font-semibold text-xl">Invoice Preview</p>
           </div>
 
-          <div className="flex flex-col grow pb-4 overflow-x-scroll">
+          <div className="flex flex-col grow overflow-x-scroll">
             {control.invoicePreviewData == null ||
             control.invoicePreviewData.length == 0 ? (
               <>
                 {control.isInvoiceDataLoading ? (
-                  <Spinner />
+                  <div className="flex grow justify-center items-center">
+                    <Spinner />
+                  </div>
                 ) : (
-                  <div className="flex flex-col items-center p-3">No Data</div>
+                  <div className="flex grow justify-center items-center">
+                    No Data
+                  </div>
                 )}
               </>
             ) : (
