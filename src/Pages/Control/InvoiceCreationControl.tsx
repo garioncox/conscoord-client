@@ -170,7 +170,7 @@ export const useInvoiceCreationControl = () => {
     );
   };
 
-  const generateInvoice = async (includeErroredShifts: boolean) => {
+  const generateInvoice = async () => {
     if (!checkValuesExist()) {
       toast.error("Company or Dates Not Set");
       return;
@@ -180,12 +180,16 @@ export const useInvoiceCreationControl = () => {
       return;
     }
 
+    setIsGeneratingInvoice(true);
+
     await createInvoice(user?.id_token ?? "", {
       companyId: selectedCompany!.id,
       startDate: selectedStartDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       endDate: selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       includeResidualShifts,
     });
+
+    setIsGeneratingInvoice(false);
   };
 
   const getInvoicePreviewData = (

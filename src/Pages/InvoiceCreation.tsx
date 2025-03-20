@@ -98,6 +98,19 @@ const InvoiceCreation = () => {
                       label="Specific Dates"
                     />
                   </RadioGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={control.includeResidualShifts}
+                        onChange={control.handleCheckboxChange}
+                      />
+                    }
+                    disabled={
+                      control.isGeneratingInvoice ||
+                      control.selectedCompany === null
+                    }
+                    label="Include Residuals"
+                  />
                 </FormControl>
               </div>
 
@@ -114,39 +127,15 @@ const InvoiceCreation = () => {
                       ? "bg-slate-500 opacity-25"
                       : "bg-[#1976d2] hover:bg-[#1565c0]"
                   }`}
-                  onClick={() => control.checkForRowsThatHaveBeenInvoiced()}
+                  onClick={() => control.generateInvoice()}
                   disabled={
                     control.isGeneratingInvoice ||
                     control.selectedCompany === null
                   }
                 >
-                  <FormControlLabel
-                    value={true}
-                    control={<Radio />}
-                    label="Month View"
-                  />
-                  <FormControlLabel
-                    value={false}
-                    control={<Radio />}
-                    label="Specific Dates"
-                  />
-                </RadioGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={control.includeResidualShifts}
-                      onChange={control.handleCheckboxChange}
-                    />
-                  }
-                  label="Include Residuals"
-                />
-              </FormControl>
-              <button
-                className="bg-[#1976d2] hover:bg-[#1565c0] text-white font-semibold p-3 rounded-2xl"
-                onClick={() => control.generateInvoice()}
-              >
-                Generate Invoice
-              </button>
+                  Generate Invoice
+                </button>
+              </div>
             </div>
 
             {control.selectedCompany === null && (
@@ -250,13 +239,6 @@ const InvoiceCreation = () => {
           </div>
         </div>
 
-
-        {control.invoicingAlreadyInvoicedData ? (
-          <InvoiceErrorBanner generateInvoice={control.generateInvoice} />
-        ) : (
-          ""
-        )}
-
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px]">
           <div className="bg-slate-200 min-h-12 flex items-center justify-center">
@@ -281,12 +263,13 @@ const InvoiceCreation = () => {
                       key={ebs.employeeId}
                       className={`grid grid-cols-11 gap-0 p-5 border-b border-l-8 
                         ${
-                          ebs.hoursWorked > 0 
-                            ? ebs.is_residual 
+                          ebs.hoursWorked > 0
+                            ? ebs.is_residual
                               ? "border-l-[#FFC107]"
-                              : "border-l-gray-200"  
-                            : "bg-red-100 border-l-red-400"     
-                        }`}                    >
+                              : "border-l-gray-200"
+                            : "bg-red-100 border-l-red-400"
+                        }`}
+                    >
                       <p className="col-span-5">{ebs.employeeName}</p>
                       <p className="col-span-5">{sbp.shiftLocation}</p>
                       <p className="col-span-1">
