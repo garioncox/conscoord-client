@@ -17,9 +17,12 @@ export const useAllCompanies = () => {
 };
 
 export const useCompanyNameByProjectId = (id: number) => {
+  const { user } = useAuth();
+
   return useQuery({
     queryKey: [queryKeys.companies, id],
-    queryFn: async () => await getCompanyNameByProjectId(id),
+    queryFn: async () =>
+      await getCompanyNameByProjectId(user?.id_token ?? "", id),
   });
 };
 

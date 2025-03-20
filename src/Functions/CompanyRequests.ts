@@ -22,7 +22,15 @@ export const AddCompany = async (
   return response.data;
 };
 
-export const getCompanyNameByProjectId = async (projectId: number) => {
-  const response = await axios.get(`/api/Company/get/name/${projectId}`);
+export const getCompanyNameByProjectId = async (
+  id_token: string,
+  projectId: number
+) => {
+  const response = await axios.get(`/api/Company/get/name/${projectId}`, {
+    headers: {
+      Authorization: `Bearer ${id_token ?? ""}`,
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };
