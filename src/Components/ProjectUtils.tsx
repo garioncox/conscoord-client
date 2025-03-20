@@ -3,7 +3,6 @@ import { useAllEmployees } from "@/Functions/Queries/EmployeeQueries";
 import { useAllProjectShifts } from "@/Functions/Queries/ProjectShiftQueries";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
 import { useShiftsFulfilledUtils } from "./ShiftsFulfilledHook";
-import axios from "axios";
 
 export const useProjectUtils = () => {
   const {
