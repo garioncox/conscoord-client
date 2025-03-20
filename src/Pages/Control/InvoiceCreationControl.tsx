@@ -195,7 +195,7 @@ export const useInvoiceCreationControl = () => {
   const getInvoicePreviewData = (
     freshCompany: number | null,
     freshStartDate: dayjs.Dayjs | null,
-    freshendDate: dayjs.Dayjs | null,
+    freshEndDate: dayjs.Dayjs | null,
     includeAllResidualShifts: boolean | null
   ) => {
     if (!checkValuesExist()) {
@@ -209,7 +209,7 @@ export const useInvoiceCreationControl = () => {
         freshStartDate?.format("YYYY-MM-DDTHH:mm:ss.SSS") ??
         selectedStartDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       endDate:
-        freshendDate?.format("YYYY-MM-DDTHH:mm:ss.SSS") ??
+        freshEndDate?.format("YYYY-MM-DDTHH:mm:ss.SSS") ??
         selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
       includeResidualShifts: includeAllResidualShifts
     };
