@@ -4,6 +4,7 @@ import { Spinner } from "./Spinner";
 import { EmployeeHistoryDTO } from "@/Data/DTOInterfaces/EmployeeHistoryDTO";
 import { useUserInfoControl } from "@/Pages/Control/UserInfoControl";
 import GPhoneInput from "./Generics/gPhoneInput";
+import { ShiftRow } from "./EmployeeShiftRow";
 
 export const UserInfo = () => {
   const control = useUserInfoControl();
@@ -54,7 +55,7 @@ export const UserInfo = () => {
               );
             }
           })}
-            <div
+          <div
             key={"add"}
             className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
               control.isAddingEmployee
@@ -111,19 +112,65 @@ export const UserInfo = () => {
                   <Spinner />
                 </div>
               ) : control.empHistory?.length ? (
-                control.empHistory.map((e: EmployeeHistoryDTO) => (
-                  <div
-                    key={e.date}
-                    className="grid grid-cols-1 sm:grid-cols-12 gap-y-2 p-5 border-b"
-                  >
-                    <p className="sm:col-span-2">{e.date.slice(0, 10)}</p>
-                    <p className="sm:col-span-4">{e.projectName}</p>
-                    <p className="sm:col-span-5">{e.location}</p>
-                    <p className="sm:col-span-1 text-center">
-                      {e.hours.slice(0, 3)} {e.hours == "--" ? "" : " hr"}
-                    </p>
-                  </div>
-                ))
+                (() => {
+                  const today = new Date().toISOString().slice(0, 10);
+
+                  //sort emp shifts first
+                  const sortedEmpHistory = [...control.empHistory].sort(
+                    (a, b) => a.date.localeCompare(b.date)
+                  );
+
+                  // Separate shifts into categories
+                  const shiftsWithErrors = sortedEmpHistory.filter(
+                    (e) => e.hours == "--"
+                  );
+                  const pastShifts = sortedEmpHistory.filter(
+                    (e) => e.date.slice(0, 10) < today && e.hours !== "--"
+                  );
+                  const futureShifts = sortedEmpHistory.filter(
+                    (e) => e.date.slice(0, 10) > today && e.hours !== "--"
+                  );
+
+                  return (
+                    <div>
+                      {/* Shifts Without Errors */}
+                      {shiftsWithErrors.length > 0 && (
+                        <>
+                          <h1 className="text-3xl mt-4 p-6 bg-rose-700 text-white">
+                            Needs Time Entered
+                          </h1>
+                          {shiftsWithErrors.map((e) => (
+                            <ShiftRow key={e.date} shift={e} />
+                          ))}
+                        </>
+                      )}
+
+                      {/* Past Shifts */}
+                      {pastShifts.length > 0 && (
+                        <>
+                          <h1 className="text-3xl mt-6 p-6 bg-emerald-600 text-white">
+                            Past Shifts
+                          </h1>
+                          {pastShifts.map((e) => (
+                            <ShiftRow key={e.date} shift={e} />
+                          ))}
+                        </>
+                      )}
+
+                      {/* Future Shifts */}
+                      {futureShifts.length > 0 && (
+                        <>
+                          <h1 className="text-3xl mt-6 p-6 bg-indigo-500 text-white">
+                            Future Shifts
+                          </h1>
+                          {futureShifts.map((e) => (
+                            <ShiftRow key={e.date} shift={e} />
+                          ))}
+                        </>
+                      )}
+                    </div>
+                  );
+                })()
               ) : (
                 <div className="text-center">No Data</div>
               )}
@@ -193,15 +240,15 @@ export const UserInfo = () => {
                     ))}
                   </select>
                   <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Add New Company (if not listed above)
-                </label>
-                <input
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                  value={control.companyName}
-                  onChange={(e) => control.setCompanyName(e.target.value)}
-                  type="text"
-                  maxLength={50}
-                />
+                    Add New Company (if not listed above)
+                  </label>
+                  <input
+                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    value={control.companyName}
+                    onChange={(e) => control.setCompanyName(e.target.value)}
+                    type="text"
+                    maxLength={50}
+                  />
                 </div>
 
                 <div className="my-4">
