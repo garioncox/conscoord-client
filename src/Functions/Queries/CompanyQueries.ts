@@ -1,6 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./QueryKeyFactory";
-import { AddCompany, getCompanies } from "../CompanyRequests";
+import {
+  AddCompany,
+  getCompanies,
+  getCompanyNameByProjectId,
+} from "../CompanyRequests";
 import { useAuth } from "react-oidc-context";
 import { queryClient } from "./QueryClient";
 import { useCustomToast } from "@/Components/Toast";
@@ -12,13 +16,28 @@ export const useAllCompanies = () => {
   });
 };
 
+export const useCompanyNameByProjectId = (id: number) => {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: [queryKeys.companies, id],
+    queryFn: async () =>
+      await getCompanyNameByProjectId(user?.id_token ?? "", id),
+  });
+};
+
 export const useAddCompanyMutation = () => {
   const { user } = useAuth();
   const { createToast } = useCustomToast();
 
   return useMutation({
     mutationFn: async ({ companyName }: { companyName: string }) => {
-      return await createToast(AddCompany, "Adding Company", user?.id_token ?? "", companyName)
+      return await createToast(
+        AddCompany,
+        "Adding Company",
+        user?.id_token ?? "",
+        companyName
+      );
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: queryKeys.companies });
