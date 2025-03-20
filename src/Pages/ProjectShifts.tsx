@@ -110,12 +110,11 @@ const ProjectShifts = () => {
         {contactPerson ? (
           <>
             <h1 className="mb-1 text-2xl">Point of Contact:</h1>
-            <h2 className="text-center mb-4">
-              {contactPerson.name} -{" "}
-              {contactPerson.phonenumber
-                ? contactPerson.phonenumber
-                : contactPerson.email}
-            </h2>
+            <div className="text-center mb-4">
+              <p>{contactPerson.name}</p>
+              <p>{contactPerson.phonenumber}</p>
+              <p>{contactPerson.email}</p>
+            </div>
           </>
         ) : (
           <div className="text-center m-8">
@@ -126,6 +125,7 @@ const ProjectShifts = () => {
       <div className="overflow-y-auto max-h-[80%]">
         <PaginatedTable control={control}>
           <PermissionComponentLock roles={[PSO_ROLE]}>
+            <ShiftSort data={sortedData!} onSortChange={setSortedData} />
             <EmployeeShiftTable
               data={control.currentItems}
               setRowClicked={clickOnAShift}
