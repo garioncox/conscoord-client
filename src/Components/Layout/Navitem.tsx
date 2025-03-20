@@ -14,7 +14,7 @@ const NavItem: FC<{
 
   if (role && roles.includes(role) && !authLoading && !isRoleLoading) {
     return (
-      <div className="text-lg px-3 flex items-center mt-4 lg:mt-0 text-secondary hover:text-tertiary">
+      <div className="text-lg px-3 flex items-center mt-4 sm:mt-0 text-secondary hover:text-tertiary">
         <Link to={to} onClick={onClick ?? undefined}>
           {label}
         </Link>
