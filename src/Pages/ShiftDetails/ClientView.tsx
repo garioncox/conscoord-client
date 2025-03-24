@@ -14,18 +14,18 @@ const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
   const getEmployeesByShiftId = useEmployeesByShiftId(Number(shift?.id));
   const { sendEmail } = useEmailRequests();
 
-  const archiveShift = async() => {
+  const archiveShift = async () => {
     if (!shift || !shift.id) return;
-    archiveShiftMutation.mutate(shift.id);
+    archiveShiftMutation.mutate({ shiftId: shift.id, makeToast: false });
     const employees = await getEmployeesByShiftId.data;
     if (employees) {
-      employees.map(e => {
+      employees.map((e) => {
         sendEmail({
           email: e.email,
           subject: "Your shift has been canceled",
           messageBody: `The shift at ${shift.location} has been canceled, for more information, log in to see the contact info of the person who canceled the shift.`,
-        })
-      })
+        });
+      });
     }
   };
 
