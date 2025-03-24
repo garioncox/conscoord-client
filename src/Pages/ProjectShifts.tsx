@@ -94,7 +94,7 @@ const ProjectShifts = () => {
     archiveProjectMutation.mutate(currentProject);
     if (shifts)
       shifts.forEach((shift) => {
-        archiveShiftMutation.mutate(shift.id);
+        archiveShiftMutation.mutate({ shiftId: shift.id, makeToast: false });
       });
   };
 

@@ -114,8 +114,18 @@ export const useEditShiftMutation = (shift: Shift) => {
 export const useArchiveShiftMutation = () => {
   const { createToast } = useCustomToast();
   return useMutation({
-    mutationFn: async (shiftId: number) => {
-      await createToast(archiveShift, "Archiving shift...", shiftId);
+    mutationFn: async ({
+      shiftId,
+      makeToast = true,
+    }: {
+      shiftId: number;
+      makeToast: boolean;
+    }) => {
+      if (makeToast) {
+        await createToast(archiveShift, "Archiving shift...", shiftId);
+      } else {
+        await archiveShift(shiftId);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
