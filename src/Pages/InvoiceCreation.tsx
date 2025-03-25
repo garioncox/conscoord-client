@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
 import { DateField } from "@mui/x-date-pickers/DateField";
+import { SquareArrowOutUpRightIcon } from "lucide-react";
 
 const InvoiceCreation = () => {
   const control = useInvoiceCreationControl();
@@ -24,21 +25,25 @@ const InvoiceCreation = () => {
   }
 
   return (
-    <div className="flex grow flex-col xl:max-w-[1300px] xl:flex-row xl:space-x-10 xl:justify-around">
+    <div className="flex grow flex-col xl:max-w-[1800px] xl:flex-row xl:space-x-10 xl:justify-around">
       {/* Filter company */}
-      <div className="flex flex-col grow xl:max-w-[25%] rounded-xl border border-slate-300 shadow-md shadow-slate-400">
-        <div className="p-4 flex flex-row items-center rounded-t-xl top-0 bg-slate-200 z-10">
+      <div className="flex flex-col grow xl:w-[20%] rounded-xl border border-slate-300 shadow-md shadow-slate-400">
+        <p className="font-semibold text-2xl bg-slate-200 text-center py-4 rounded-t-xl border-b border-slate-300">
+          Companies
+        </p>
+        <div className="p-4 flex flex-col items-center top-0 z-10 border-b">
           <TextField
-            label="Filter"
+            label="Search"
             variant="standard"
             fullWidth
+            placeholder="Dynamics Construction Co."
             onChange={(e) => {
               control.setFilterString(e.target.value.toLowerCase());
             }}
           />
         </div>
 
-        <div className="flex flex-col grow pb-4 overflow-x-scroll">
+        <div className="flex flex-col grow pb-4 h-[216px] xl:h-full overflow-y-scroll">
           {control.Companies?.sort((a, b) => a.id - b.id).map((e) => {
             if (
               String(e.id).includes(control.filterString) ||
@@ -66,7 +71,7 @@ const InvoiceCreation = () => {
         </div>
       </div>
 
-      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] overflow-y-scroll pt-10 xl:pt-0">
+      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] pt-10 xl:pt-0 pb-10 xl:pb-2 xl:overflow-y-scroll px-2">
         <div className="shadow-md rounded-xl shadow-slate-400 border md:min-h-[560px]">
           <div>
             {/* Month / Date Select */}
@@ -140,8 +145,8 @@ const InvoiceCreation = () => {
             </div>
 
             {control.selectedCompany === null && (
-              <div className="flex flex-grow items-center justify-center p-5">
-                <p className="text-2xl font-semibold">
+              <div className="flex flex-grow items-center justify-center p-5 lg:min-w-[824px]">
+                <p className="text-2xl font-semibold md:min-h-[392px]">
                   Please Select a Company
                 </p>
               </div>
@@ -150,9 +155,9 @@ const InvoiceCreation = () => {
             {/* Calendar View */}
             {control.selectedCompany && (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <div className="flex flex-col items-center p-5">
+                <div className="flex flex-col items-center p-5 2xl:min-w-[824px]">
                   {control.monthView ? (
-                    <div>
+                    <div className="flex items-center flex-col md: md:min-h-[392px]">
                       <div className="flex justify-center font-bold mb-5">
                         <button
                           onClick={() => {
@@ -258,24 +263,24 @@ const InvoiceCreation = () => {
 
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px]">
-          <div className="bg-slate-100 min-h-12 flex items-center justify-center">
+          <div
+            className={`bg-slate-200 min-h-12 flex items-center justify-center ${
+              control.selectedCompany ? "" : "opacity-50"
+            }`}
+          >
             <p className="font-semibold text-xl">Invoice Preview</p>
           </div>
 
-          <div className="flex flex-col grow overflow-x-scroll">
+          <div className="flex flex-col grow">
             {control.invoicePreviewData == null ||
             control.invoicePreviewData.length == 0 ? (
-              <>
+              <div className="flex grow justify-center items-center">
                 {control.isInvoiceDataLoading ? (
-                  <div className="flex grow justify-center items-center">
-                    <Spinner />
-                  </div>
-                ) : (
-                  <div className="flex grow justify-center items-center">
-                    No Data
-                  </div>
-                )}
-              </>
+                  <Spinner />
+                ) : control.selectedCompany ? (
+                  <p>No Data</p>
+                ) : null}
+              </div>
             ) : (
               control.invoicePreviewData?.map((ipd) =>
                 ipd.shiftsByProject.map((sbp) =>
@@ -304,6 +309,47 @@ const InvoiceCreation = () => {
               )
             )}
           </div>
+        </div>
+      </div>
+
+      {/* Previous Invoices */}
+      <div
+        className={`flex flex-col grow xl:w-[20%] rounded-xl border border-slate-300 shadow-md shadow-slate-400 ${
+          control.selectedCompany ? "" : "opacity-50"
+        }`}
+      >
+        <p className="font-semibold text-2xl bg-slate-200 text-center py-4 rounded-t-xl border-b border-slate-300">
+          Previous Invoices
+        </p>
+        <div className="p-4 flex flex-col items-center top-0 z-10 border-b">
+          <TextField
+            label="Search"
+            variant="standard"
+            fullWidth
+            disabled={!control.selectedCompany}
+            placeholder="11-21-2025"
+            onChange={(e) => {
+              control.setFilterString(e.target.value.toLowerCase());
+            }}
+          />
+        </div>
+
+        <div className="flex flex-col grow pb-4 h-[216px] xl:h-full overflow-y-scroll">
+          {control.Companies?.map((e) => (
+            <div key={e.id} className="grid grid-cols-7 gap-0 p-5 border-b">
+              <p className="col-span-3">#55-555</p>
+              <p className="col-span-3 truncate">11-21-2025</p>
+              <div className="col-span-1 ms-auto">
+                <SquareArrowOutUpRightIcon
+                  className={`text-blue-500 ${
+                    control.selectedCompany
+                      ? "hover:text-blue-700 cursor-pointer"
+                      : ""
+                  } `}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
