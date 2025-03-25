@@ -7,7 +7,6 @@ import { ShiftRow } from "./EmployeeShiftRow";
 
 export const UserInfo = () => {
   const control = useUserInfoControl();
-
   if (control.isLoading) {
     return <Spinner />;
   }
@@ -139,7 +138,7 @@ export const UserInfo = () => {
                             Needs Time Entered
                           </h1>
                           {shiftsWithErrors.map((e) => (
-                            <ShiftRow key={e.date} shift={e} />
+                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
                           ))}
                         </>
                       )}
@@ -151,7 +150,7 @@ export const UserInfo = () => {
                             Past Shifts
                           </h1>
                           {pastShifts.map((e) => (
-                            <ShiftRow key={e.date} shift={e} />
+                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
                           ))}
                         </>
                       )}
@@ -163,7 +162,7 @@ export const UserInfo = () => {
                             Future Shifts
                           </h1>
                           {futureShifts.map((e) => (
-                            <ShiftRow key={e.date} shift={e} />
+                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
                           ))}
                         </>
                       )}
