@@ -326,6 +326,7 @@ const InvoiceCreation = () => {
             label="Search"
             variant="standard"
             fullWidth
+            disabled={!control.selectedCompany}
             placeholder="11-21-2025"
             onChange={(e) => {
               control.setFilterString(e.target.value.toLowerCase());
@@ -339,7 +340,13 @@ const InvoiceCreation = () => {
               <p className="col-span-3">#55-555</p>
               <p className="col-span-3 truncate">11-21-2025</p>
               <div className="col-span-1 ms-auto">
-                <SquareArrowOutUpRightIcon className="text-blue-500 hover:text-blue-700 cursor-pointer" />
+                <SquareArrowOutUpRightIcon
+                  className={`text-blue-500 ${
+                    control.selectedCompany
+                      ? "hover:text-blue-700 cursor-pointer"
+                      : ""
+                  } `}
+                />
               </div>
             </div>
           ))}
