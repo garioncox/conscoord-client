@@ -16,9 +16,11 @@ import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useInvoiceCreationControl } from "./Control/InvoiceCreationControl";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { SquareArrowOutUpRightIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const InvoiceCreation = () => {
   const control = useInvoiceCreationControl();
+  const navigate = useNavigate();
 
   if (control.isLoading) {
     return <Spinner />;
@@ -335,10 +337,10 @@ const InvoiceCreation = () => {
         </div>
 
         <div className="flex flex-col grow pb-4 h-[216px] xl:h-full overflow-y-scroll">
-          {control.Companies?.map((e) => (
-            <div key={e.id} className="grid grid-cols-7 gap-0 p-5 border-b">
-              <p className="col-span-3">#55-555</p>
-              <p className="col-span-3 truncate">11-21-2025</p>
+          {control.invoices?.map((i) => (
+            <div key={i.id} className="grid grid-cols-7 gap-0 p-5 border-b">
+              <p className="col-span-3">#{i.id}</p>
+              <p className="col-span-3 truncate">{i.Name}</p>
               <div className="col-span-1 ms-auto">
                 <SquareArrowOutUpRightIcon
                   className={`text-blue-500 ${
@@ -346,10 +348,16 @@ const InvoiceCreation = () => {
                       ? "hover:text-blue-700 cursor-pointer"
                       : ""
                   } `}
+                  onClick={() => navigate(i.URI)}
                 />
               </div>
             </div>
           ))}
+          {!control.invoices && (
+            <p className="w-full text-center pt-3">
+              No Previous Invoices Found
+            </p>
+          )}
         </div>
       </div>
     </div>

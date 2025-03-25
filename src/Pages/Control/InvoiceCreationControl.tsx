@@ -3,7 +3,10 @@ import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { Company } from "@/Data/Interfaces/Company";
 import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
-import { useInvoicePreviewData } from "@/Functions/Queries/InvoicePreviewQueries";
+import {
+  useAllInvoicesForCompany,
+  useInvoicePreviewData,
+} from "@/Functions/Queries/InvoicePreviewQueries";
 import { useShiftDatesWithError } from "@/Functions/Queries/ShiftQueries";
 import { Badge } from "@mui/material";
 import {
@@ -21,6 +24,7 @@ import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
+
   const dateUtils = useDateUtils();
   const { user, isLoading: isUserLoading } = useAuth();
 
@@ -47,6 +51,7 @@ export const useInvoiceCreationControl = () => {
     useInvoicePreviewData(invoicePreviewDTO);
 
   const { data: datesWithErrors } = useShiftDatesWithError(selectedCompany?.id);
+  const { data: invoices } = useAllInvoicesForCompany(selectedCompany?.id);
 
   const isLoading = isCompaniesLoading || isUserLoading;
 
@@ -211,7 +216,7 @@ export const useInvoiceCreationControl = () => {
       endDate:
         freshEndDate?.format("YYYY-MM-DDTHH:mm:ss.SSS") ??
         selectedEndDate!.format("YYYY-MM-DDTHH:mm:ss.SSS"),
-      includeResidualShifts: includeAllResidualShifts
+      includeResidualShifts: includeAllResidualShifts,
     };
     setInvoicePreviewDTO(data);
   };
@@ -226,9 +231,9 @@ export const useInvoiceCreationControl = () => {
     return true;
   };
 
-
   return {
     isLoading,
+    invoices,
     Companies,
     currentYear,
     DateCalendarBadgeSlots,

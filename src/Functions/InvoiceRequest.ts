@@ -1,3 +1,4 @@
+import { AzureInvoiceDTO } from "@/Data/DTOInterfaces/AzureInvoiceDTO";
 import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
 import axios from "axios";
@@ -19,8 +20,21 @@ export const useInvoiceRequests = () => {
     return response.data;
   };
 
+  const useAllInvoicesForCompany = async (
+    companyId: number | undefined
+  ): Promise<AzureInvoiceDTO[]> => {
+    const response = await axios.get(`/api/Invoice/getAll/${companyId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.id_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  };
+
   return {
     getInvoiceInfo,
+    useAllInvoicesForCompany,
   };
 };
 
