@@ -8,8 +8,8 @@ import {
 import { getShiftsByProject } from "../ShiftRequests";
 import { ProjectShiftDTO } from "@/Data/DTOInterfaces/ProjectShiftDTO";
 import { useAuth } from "react-oidc-context";
-import { toast } from "react-toastify";
 import { queryClient } from "./QueryClient";
+import { useCustomToast } from "@/Components/Toast";
 
 export const useNumProjectShiftForProject = (projectId: number) => {
   return useQuery({
@@ -22,12 +22,12 @@ export const useNumProjectShiftForProject = (projectId: number) => {
 
 export const useAddProjectShift = () => {
   const { user } = useAuth();
+  const {createToast} = useCustomToast();
   return useMutation({
     mutationFn: async ({ project }: { project: ProjectShiftDTO }) => {
-      addProjectShift(user?.id_token ?? "", project);
+      await createToast(addProjectShift,user?.id_token ?? "", project);
     },
     onSuccess: () => {
-      toast.success("Shift created successfully");
       queryClient.invalidateQueries({ queryKey: queryKeys.projects });
     },
   });
