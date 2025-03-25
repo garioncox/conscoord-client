@@ -1,19 +1,13 @@
 import { useDeleteEmpShiftMutation } from "@/Functions/Queries/EmployeeShiftQueries";
-import { useUserInfoControl } from "@/Pages/Control/UserInfoControl";
 import { MenuItem } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import { EllipsisVerticalIcon } from "lucide-react";
 import { useState } from "react";
-import { Spinner } from "./Spinner";
 import { toast } from "react-toastify";
 
 function KebabMenu({ shiftId, employeeId }: { shiftId: number, employeeId?: number }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const deleteEmpShiftMutation = useDeleteEmpShiftMutation();
-  const control = useUserInfoControl();
-  if (control.isLoading) {
-    return <Spinner />;
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleClick = (event: any) => {
