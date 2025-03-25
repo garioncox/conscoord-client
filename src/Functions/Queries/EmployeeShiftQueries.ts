@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryKeys } from "./QueryKeyFactory";
 import {
+  deleteEmpShift,
   getAllEmployeeShifts,
   getClaimedEmployeeShiftsByEmail,
   getEmpShiftHistory,
@@ -47,6 +48,19 @@ export const useEmpShiftMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.employeeShifts });
+    },
+  });
+};
+
+export const useDeleteEmpShiftMutation = () => {
+  const { createToast } = useCustomToast();
+
+  return useMutation({
+    mutationFn: async ({ shiftId, employeeId }: { shiftId: number; employeeId: number }) => {
+      await createToast(() => deleteEmpShift(shiftId, employeeId), "Removing from shift...");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKeys.employeeHistory] });
     },
   });
 };

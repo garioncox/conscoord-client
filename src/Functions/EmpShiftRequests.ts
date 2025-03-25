@@ -61,3 +61,9 @@ export const getEmpShiftHistory = async (
   const response = await axios.get(`/api/EmployeeShift/get/history/${email}`);
   return response.data;
 };
+
+export const deleteEmpShift = async (shift_id: number, emp_id: number) => {
+  await axios.delete(`/api/EmployeeShift/delete`, {
+    params: { shiftId: shift_id, employeeId: emp_id },
+  });
+};
