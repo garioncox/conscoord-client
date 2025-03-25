@@ -9,7 +9,7 @@ interface ShiftSortProps {
 }
 
 const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
-  const [sortValue, setSortValue] = useState<string>("startDateAsc");
+  const [sortValue, setSortValue] = useState<string>("officersNeeded");
   const { data: empShifts, isLoading } = useAllEmployeeShifts();
 
   const sortMethods: { [key: string]: (a: Shift, b: Shift) => number } = {
@@ -18,13 +18,13 @@ const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
       const employeesAssignedA = empShifts!.filter(
         (es) => es.shiftId == a.id
       ).length;
-      const employeesNeededA = a.requestedEmployees - employeesAssignedA;
+      const employeesNeededA = a.requestedEmployees / employeesAssignedA;
 
       // Calculate employees assigned and needed for shift 'b'
       const employeesAssignedB = empShifts!.filter(
         (es) => es.shiftId == b.id
       ).length;
-      const employeesNeededB = b.requestedEmployees - employeesAssignedB;
+      const employeesNeededB = b.requestedEmployees / employeesAssignedB;
 
       // Compare based on employees needed
       return employeesNeededB - employeesNeededA;
