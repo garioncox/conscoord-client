@@ -36,7 +36,7 @@ export const UserInfo = () => {
               return (
                 <div
                   key={e.id}
-                  className={`grid grid-cols-1 md:grid-cols-4 gap-y-2 px-3 py-4 border-b ${
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-y-2 px-3 py-4 border-b hover:bg-slate-200 ${
                     control.selectedEmployee?.id === e.id
                       ? "shadow-inner shadow-slate-500 bg-slate-200"
                       : "cursor-pointer"
