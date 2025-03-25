@@ -25,7 +25,6 @@ function ShiftList() {
       const defaultSort = [...shifts].sort(
         (a, b) =>
         {
-          //TODO fix this default sort
         const employeesAssignedA = empShifts!.filter(
           (es: EmployeeShift) => es.shiftId == a.id
         ).length;
