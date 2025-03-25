@@ -8,6 +8,8 @@ import { Shift } from "@/Data/Interfaces/Shift";
 import ShiftSort from "@/Components/Sorting/ShiftSort";
 import { useAuth } from "react-oidc-context";
 import { Spinner } from "@/Components/Spinner";
+import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
+import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 
 function ShiftList() {
   const { isLoading: isAuthLoading } = useAuth();
@@ -15,18 +17,33 @@ function ShiftList() {
   const navigate = useNavigate();
   const [sortedData, setSortedData] = useState<Shift[] | null>([]);
   const control = usePagination(sortedData || []);
+  const { data: empShifts, isLoading: empShiftsLoading } = useAllEmployeeShifts();
+  
 
   useEffect(() => {
     if (shifts) {
       const defaultSort = [...shifts].sort(
         (a, b) =>
-          new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
-      );
+        {
+          //TODO fix this default sort
+        const employeesAssignedA = empShifts!.filter(
+          (es: EmployeeShift) => es.shiftId == a.id
+        ).length;
+        const employeesNeededA = a.requestedEmployees / employeesAssignedA;
+  
+        // Calculate employees assigned and needed for shift 'b'
+        const employeesAssignedB = empShifts!.filter(
+          (es: EmployeeShift) => es.shiftId == b.id
+        ).length;
+        const employeesNeededB = b.requestedEmployees / employeesAssignedB;
+  
+        // Compare based on employees needed
+        return employeesNeededB - employeesNeededA; });
       setSortedData(defaultSort);
     }
-  }, [shifts]);
+  }, [shifts, empShifts]);
 
-  if (isLoading || isAuthLoading) {
+  if (isLoading || isAuthLoading || empShiftsLoading) {
     return <Spinner />;
   }
 
