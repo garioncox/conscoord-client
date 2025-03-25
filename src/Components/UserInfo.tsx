@@ -28,6 +28,22 @@ export const UserInfo = () => {
         </div>
 
         <div className="flex flex-col grow overflow-y-auto max-h-screen min-w-80">
+          <div
+            key={"add"}
+            className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
+              control.isAddingEmployee
+                ? "shadow-inner shadow-slate-500 bg-slate-300"
+                : "cursor-pointer"
+            }`}
+            onClick={() => {
+              control.HandleSelectEmployee(null);
+              control.setIsAddingEmployee(true);
+              control.setCardView("info");
+            }}
+          >
+            <p className="col-span-1 font-bold">(+)</p>
+            <p className="col-span-3 truncate"> Create New Employee</p>
+          </div>
           {control.Employees?.sort((a, b) => a.id - b.id).map((e) => {
             if (
               String(e.id).includes(control.filterString) ||
@@ -53,22 +69,6 @@ export const UserInfo = () => {
               );
             }
           })}
-          <div
-            key={"add"}
-            className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
-              control.isAddingEmployee
-                ? "shadow-inner shadow-slate-500 bg-slate-300"
-                : "cursor-pointer"
-            }`}
-            onClick={() => {
-              control.HandleSelectEmployee(null);
-              control.setIsAddingEmployee(true);
-              control.setCardView("info");
-            }}
-          >
-            <p className="col-span-1 font-bold">(+)</p>
-            <p className="col-span-3 truncate"> Create New Employee</p>
-          </div>
         </div>
       </div>
 
@@ -138,7 +138,11 @@ export const UserInfo = () => {
                             Needs Time Entered
                           </h1>
                           {shiftsWithErrors.map((e) => (
-                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
+                            <ShiftRow
+                              key={e.date}
+                              shift={e}
+                              employeeId={control.selectedEmployee?.id}
+                            />
                           ))}
                         </>
                       )}
@@ -150,7 +154,11 @@ export const UserInfo = () => {
                             Past Shifts
                           </h1>
                           {pastShifts.map((e) => (
-                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
+                            <ShiftRow
+                              key={e.date}
+                              shift={e}
+                              employeeId={control.selectedEmployee?.id}
+                            />
                           ))}
                         </>
                       )}
@@ -162,7 +170,11 @@ export const UserInfo = () => {
                             Future Shifts
                           </h1>
                           {futureShifts.map((e) => (
-                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
+                            <ShiftRow
+                              key={e.date}
+                              shift={e}
+                              employeeId={control.selectedEmployee?.id}
+                            />
                           ))}
                         </>
                       )}
