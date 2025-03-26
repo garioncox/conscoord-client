@@ -21,7 +21,7 @@ export const useShiftDatesWithError = (companyId: number | undefined) => {
   const { user, isAuthenticated } = useAuth();
 
   return useQuery({
-    queryKey: queryKeys.shiftErrorDates,
+    queryKey: [queryKeys.shiftErrorDates, companyId],
     queryFn: async () => {
       if (!companyId) {
         return;
