@@ -52,14 +52,6 @@ export function ProjectCards({
     <>
       <div className="flex-1">
         <div className="grid md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-5 gap-5">
-          {sortedData.map((project) => (
-            <Card
-              key={project.id}
-              project={project}
-              setRowClicked={setRowClicked}
-            />
-          ))}
-
           <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
             <div
               className={`rounded-xl p-3 h-[345px] w-auto border-slate-300 border bg-slate-200 shadow-sm shadow-slate-100 cursor-pointer transition-transform transform hover:scale-105 group flex items-center justify-center`}
@@ -69,6 +61,13 @@ export function ProjectCards({
               <PlusIcon className="opacity-25 scale-[3]" />
             </div>
           </PermissionComponentLock>
+          {sortedData.map((project) => (
+            <Card
+              key={project.id}
+              project={project}
+              setRowClicked={setRowClicked}
+            />
+          ))}
         </div>
       </div>
 

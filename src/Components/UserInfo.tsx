@@ -14,7 +14,7 @@ export const UserInfo = () => {
   return (
     <div className="block lg:flex grow justify-center items-start p-6 md:p-12 gap-6 min-h-screen">
       {/* Employee List */}
-      <div className="flex flex-col rounded border-2 border-slate-300 shadow-md shadow-slate-400 mb-10 max-h-96 lg:max-h-[75vh] lg:mb-0 max-w-[800px]">
+      <div className="flex flex-col rounded border-2 border-slate-300 shadow-md shadow-slate-400 mb-10 max-h-96 lg:max-h-full lg:min-h-[960px] lg:mb-0 max-w-[800px]">
         <div className="p-2 md:p-4 flex flex-row items-center sticky top-0 bg-slate-200 z-10">
           <TextField
             className="w-full sm:w-3/4"
@@ -28,6 +28,22 @@ export const UserInfo = () => {
         </div>
 
         <div className="flex flex-col grow overflow-y-auto max-h-screen min-w-80">
+          <div
+            key={"add"}
+            className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
+              control.isAddingEmployee
+                ? "shadow-inner shadow-slate-500 bg-slate-300"
+                : "cursor-pointer hover:bg-slate-200"
+            }`}
+            onClick={() => {
+              control.HandleSelectEmployee(null);
+              control.setIsAddingEmployee(true);
+              control.setCardView("info");
+            }}
+          >
+            <p className="col-span-1 font-bold">(+)</p>
+            <p className="col-span-3 truncate"> Create New Employee</p>
+          </div>
           {control.Employees?.sort((a, b) => a.id - b.id).map((e) => {
             if (
               String(e.id).includes(control.filterString) ||
@@ -36,7 +52,7 @@ export const UserInfo = () => {
               return (
                 <div
                   key={e.id}
-                  className={`grid grid-cols-1 md:grid-cols-4 gap-y-2 px-3 py-4 border-b ${
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-y-2 px-3 py-4 border-b hover:bg-slate-200 ${
                     control.selectedEmployee?.id === e.id
                       ? "shadow-inner shadow-slate-500 bg-slate-200"
                       : "cursor-pointer"
@@ -53,27 +69,11 @@ export const UserInfo = () => {
               );
             }
           })}
-          <div
-            key={"add"}
-            className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
-              control.isAddingEmployee
-                ? "shadow-inner shadow-slate-500 bg-slate-300"
-                : "cursor-pointer"
-            }`}
-            onClick={() => {
-              control.HandleSelectEmployee(null);
-              control.setIsAddingEmployee(true);
-              control.setCardView("info");
-            }}
-          >
-            <p className="col-span-1 font-bold">(+)</p>
-            <p className="col-span-3 truncate"> Create New Employee</p>
-          </div>
         </div>
       </div>
 
       {/* Employee Info / History */}
-      <div className="flex flex-col grow max-w-[800px] shadow-md shadow-slate-400 lg:min-h-[75vh] max-h-[75vh]">
+      <div className="flex flex-col grow max-w-[800px] shadow-md shadow-slate-400 lg:min-h-[75vh] max-h-[75vh] min-h-[300px]">
         <div className="grid grid-cols-2 text-center">
           <div
             className={`rounded-tl border-2 border-r-0 border-slate-300 p-4 ${
@@ -138,7 +138,11 @@ export const UserInfo = () => {
                             Needs Time Entered
                           </h1>
                           {shiftsWithErrors.map((e) => (
-                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
+                            <ShiftRow
+                              key={e.date}
+                              shift={e}
+                              employeeId={control.selectedEmployee?.id}
+                            />
                           ))}
                         </>
                       )}
@@ -150,7 +154,11 @@ export const UserInfo = () => {
                             Past Shifts
                           </h1>
                           {pastShifts.map((e) => (
-                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
+                            <ShiftRow
+                              key={e.date}
+                              shift={e}
+                              employeeId={control.selectedEmployee?.id}
+                            />
                           ))}
                         </>
                       )}
@@ -162,7 +170,11 @@ export const UserInfo = () => {
                             Future Shifts
                           </h1>
                           {futureShifts.map((e) => (
-                            <ShiftRow key={e.date} shift={e} employeeId={control.selectedEmployee?.id}/>
+                            <ShiftRow
+                              key={e.date}
+                              shift={e}
+                              employeeId={control.selectedEmployee?.id}
+                            />
                           ))}
                         </>
                       )}
