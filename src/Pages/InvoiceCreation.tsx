@@ -52,7 +52,7 @@ const InvoiceCreation = () => {
               return (
                 <div
                   key={e.id}
-                  className={`grid grid-cols-4 gap-0 p-5 border-b ${
+                  className={`grid grid-cols-4 gap-0 p-5 border-b hover:bg-slate-200 ${
                     control.selectedCompany != null &&
                     control.selectedCompany.id == e.id
                       ? "shadow-inner shadow-slate-500 bg-slate-200"
