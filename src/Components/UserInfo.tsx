@@ -14,7 +14,7 @@ export const UserInfo = () => {
   return (
     <div className="block lg:flex grow justify-center items-start p-6 md:p-12 gap-6 min-h-screen">
       {/* Employee List */}
-      <div className="flex flex-col rounded border-2 border-slate-300 shadow-md shadow-slate-400 mb-10 max-h-96 lg:max-h-[75vh] lg:mb-0 max-w-[800px]">
+      <div className="flex flex-col rounded border-2 border-slate-300 shadow-md shadow-slate-400 mb-10 max-h-96 lg:max-h-full lg:min-h-[960px] lg:mb-0 max-w-[800px]">
         <div className="p-2 md:p-4 flex flex-row items-center sticky top-0 bg-slate-200 z-10">
           <TextField
             className="w-full sm:w-3/4"
@@ -73,7 +73,7 @@ export const UserInfo = () => {
       </div>
 
       {/* Employee Info / History */}
-      <div className="flex flex-col grow max-w-[800px] shadow-md shadow-slate-400 lg:min-h-[75vh] max-h-[75vh]">
+      <div className="flex flex-col grow max-w-[800px] shadow-md shadow-slate-400 lg:min-h-[75vh] max-h-[75vh] min-h-[300px]">
         <div className="grid grid-cols-2 text-center">
           <div
             className={`rounded-tl border-2 border-r-0 border-slate-300 p-4 ${
