@@ -33,7 +33,7 @@ export const UserInfo = () => {
             className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
               control.isAddingEmployee
                 ? "shadow-inner shadow-slate-500 bg-slate-300"
-                : "cursor-pointer"
+                : "cursor-pointer hover:bg-slate-200"
             }`}
             onClick={() => {
               control.HandleSelectEmployee(null);
