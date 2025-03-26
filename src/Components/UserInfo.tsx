@@ -33,7 +33,7 @@ export const UserInfo = () => {
             className={`grid grid-cols-4 gap-0 p-5 border-y-2 border-slate-300 bg-slate-100 ${
               control.isAddingEmployee
                 ? "shadow-inner shadow-slate-500 bg-slate-300"
-                : "cursor-pointer"
+                : "cursor-pointer hover:bg-slate-200"
             }`}
             onClick={() => {
               control.HandleSelectEmployee(null);
@@ -52,7 +52,7 @@ export const UserInfo = () => {
               return (
                 <div
                   key={e.id}
-                  className={`grid grid-cols-1 md:grid-cols-4 gap-y-2 px-3 py-4 border-b ${
+                  className={`grid grid-cols-1 md:grid-cols-4 gap-y-2 px-3 py-4 border-b hover:bg-slate-200 ${
                     control.selectedEmployee?.id === e.id
                       ? "shadow-inner shadow-slate-500 bg-slate-200"
                       : "cursor-pointer"
