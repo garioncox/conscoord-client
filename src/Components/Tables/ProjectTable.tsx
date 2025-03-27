@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { AddProject } from "../AddProject";
 import { Project, STATUS_ARCHIVED } from "@/Data/Interfaces/Project";
 import PermissionComponentLock from "../Auth/PermissionComponentLock";
-import { CLIENT_ROLE, ADMIN_ROLE } from "../Auth/PermissionLock";
+import { CLIENT_ROLE, ADMIN_ROLE, PSO_ROLE } from "../Auth/PermissionLock";
 import { Spinner } from "../Spinner";
 import Error from "../Error";
 import { useProjectUtils } from "../ProjectUtils";
@@ -187,7 +187,15 @@ const Card = ({
 
       <div className="flex flex-row mt-auto items-start text-xs justify-end">
         <CalendarDays className="me-1 h-auto min-w-4 max-w-4" />
-        <div>{projectUtils.getShiftsAvailable(project)} shifts</div>
+
+        {/* TODO put component lock here*/}
+        <PermissionComponentLock roles={[PSO_ROLE]}>
+          <div>{projectUtils.getShiftsAvailable(project, true)} shifts</div>
+        </PermissionComponentLock>
+
+        <PermissionComponentLock roles={[ADMIN_ROLE, CLIENT_ROLE]}>
+          <div>{projectUtils.getShiftsAvailable(project, false)} shifts</div>
+        </PermissionComponentLock>
       </div>
 
       <div className="flex mt-2 pt-2 border-t justify-center opacity-50 font-semibold text-xs group-hover:border-slate-300">

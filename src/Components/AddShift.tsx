@@ -65,7 +65,6 @@ export const AddShift: React.FC<{
 
   function CreateShift() {
     setControlsTouched();
-console.log("creating shift")
     if (validateShift()) {
       const projectShiftDTO: ProjectShiftDTO = {
         ProjectId: projectId,
@@ -89,7 +88,6 @@ console.log("creating shift")
       ) {
         return;
       }
-console.log("about to mutate")
       addShiftMutation.mutate({ project: projectShiftDTO });
       toggleModal();
     }

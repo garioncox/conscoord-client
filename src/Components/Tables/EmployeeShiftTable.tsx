@@ -67,7 +67,7 @@ export function EmployeeShiftTable({
 
         <TableBody>
           {sortedData
-            .filter((e) => new Date(e.endTime) >= new Date())
+            .filter((e) => new Date(e.endTime) >= new Date() && shiftFraction(e) < 1)
             .map((shift) => {
               const isShiftTaken = userShifts?.some(
                 (userShift) => userShift.id === shift.id
