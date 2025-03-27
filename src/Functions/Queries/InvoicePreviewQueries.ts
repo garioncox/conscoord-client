@@ -5,7 +5,7 @@ import { useInvoiceRequests } from "../InvoiceRequest";
 
 export const useInvoicePreviewData = (dto: invoiceCreationDTO | null) => {
   const invoiceRequests = useInvoiceRequests();
-  
+
   return useQuery({
     queryKey: queryKeys.invoicePreviewData(dto!),
     queryFn: () => {
@@ -14,5 +14,19 @@ export const useInvoicePreviewData = (dto: invoiceCreationDTO | null) => {
       }
     },
     enabled: !!dto,
+  });
+};
+
+export const useAllInvoicesForCompany = (companyId: number | undefined) => {
+  const invoiceRequests = useInvoiceRequests();
+
+  return useQuery({
+    queryKey: [queryKeys.allInvoices, companyId],
+    queryFn: () => {
+      if (companyId) {
+        return invoiceRequests.useAllInvoicesForCompany(companyId);
+      }
+    },
+    enabled: !!companyId,
   });
 };

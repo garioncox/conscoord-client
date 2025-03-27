@@ -3,7 +3,10 @@ import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { Company } from "@/Data/Interfaces/Company";
 import { createInvoice } from "@/Functions/InvoiceRequest";
 import { useAllCompanies } from "@/Functions/Queries/CompanyQueries";
-import { useInvoicePreviewData } from "@/Functions/Queries/InvoicePreviewQueries";
+import {
+  useAllInvoicesForCompany,
+  useInvoicePreviewData,
+} from "@/Functions/Queries/InvoicePreviewQueries";
 import { useShiftDatesWithError } from "@/Functions/Queries/ShiftQueries";
 import { Badge } from "@mui/material";
 import {
@@ -21,6 +24,7 @@ import { toast } from "react-toastify";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
+
   const dateUtils = useDateUtils();
   const { user, isLoading: isUserLoading } = useAuth();
 
@@ -32,7 +36,7 @@ export const useInvoiceCreationControl = () => {
     dayjs()
   );
   const [selectedStartDate, setSelectedStartDate] =
-    useState<dayjs.Dayjs | null>(dayjs());
+    useState<dayjs.Dayjs | null>(dayjs().startOf("month"));
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
@@ -47,6 +51,7 @@ export const useInvoiceCreationControl = () => {
     useInvoicePreviewData(invoicePreviewDTO);
 
   const { data: datesWithErrors } = useShiftDatesWithError(selectedCompany?.id);
+  const { data: invoices } = useAllInvoicesForCompany(selectedCompany?.id);
 
   const isLoading = isCompaniesLoading || isUserLoading;
 
@@ -171,6 +176,10 @@ export const useInvoiceCreationControl = () => {
   };
 
   const selectNextYear = () => {
+    if (currentYear == dayjs().year()) {
+      toast.error("Can't generate invoices for future dates");
+      return;
+    }
     setCurrentYear(currentYear + 1);
     getInvoicePreviewData(
       null,
@@ -185,12 +194,23 @@ export const useInvoiceCreationControl = () => {
   };
 
   const handleMonthSelect = (month: dayjs.Dayjs) => {
+    if (
+      month.year() > dayjs().year() ||
+      (month.year() == dayjs().year() && month.month() > dayjs().month())
+    ) {
+      toast.error("Cannot generate an invoice for future dates");
+      return;
+    }
+
     const startDate = month.startOf("month");
-    const endDate = month;
-    endDate.set(
-      "date",
-      Math.min(month.endOf("month").subtract(1, "day").date(), dayjs().date())
-    );
+    const endDate = dayjs()
+      .month(month.month())
+      .year(month.year())
+      .date(
+        month.month() == dayjs().month()
+          ? Math.min(month.endOf("month").date(), dayjs().date())
+          : month.endOf("month").date()
+      );
 
     setSelectedMonth(month);
     setSelectedStartDate(startDate);
@@ -256,6 +276,7 @@ export const useInvoiceCreationControl = () => {
 
   return {
     isLoading,
+    invoices,
     Companies,
     currentYear,
     DateCalendarBadgeSlots,

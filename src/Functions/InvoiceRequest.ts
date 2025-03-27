@@ -1,8 +1,11 @@
+import { AzureInvoiceDTO } from "@/Data/DTOInterfaces/AzureInvoiceDTO";
 import { invoiceCreationDTO } from "@/Data/DTOInterfaces/CreateInvoice";
 import { InvoiceInfoDTO } from "@/Data/DTOInterfaces/InvoiceInfoDTO";
 import axios from "axios";
 import { useAuth } from "react-oidc-context";
 import { toast } from "react-toastify";
+import { queryClient } from "./Queries/QueryClient";
+import { queryKeys } from "./Queries/QueryKeyFactory";
 
 export const useInvoiceRequests = () => {
   const { user } = useAuth();
@@ -19,8 +22,21 @@ export const useInvoiceRequests = () => {
     return response.data;
   };
 
+  const useAllInvoicesForCompany = async (
+    companyId: number | undefined
+  ): Promise<AzureInvoiceDTO[]> => {
+    const response = await axios.get(`/api/Invoice/getAll/${companyId}`, {
+      headers: {
+        Authorization: `Bearer ${user?.id_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  };
+
   return {
     getInvoiceInfo,
+    useAllInvoicesForCompany,
   };
 };
 
@@ -39,7 +55,12 @@ export const createInvoice = async (
     const blob = response.data;
     const url = window.URL.createObjectURL(blob);
     window.open(url);
+
     toast.success("Success Creating Invoice");
+    queryClient.invalidateQueries({
+      queryKey: [queryKeys.allInvoices, dto.companyId],
+    });
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     const text = await error.response.data.text();
