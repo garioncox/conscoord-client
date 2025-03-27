@@ -122,7 +122,20 @@ export const useInvoiceCreationControl = () => {
   };
 
   const setStartDate = (value: dayjs.Dayjs) => {
-    if (selectedEndDate && value > selectedEndDate) {
+    if (!selectedEndDate) {
+      return;
+    }
+
+    if (value > selectedEndDate) {
+      toast.error("Can't select a negative date range");
+      return;
+    }
+
+    if (
+      value.month() > dayjs().month() ||
+      (value.month() === dayjs().month() && value.date() > dayjs().date())
+    ) {
+      toast.error("Can't generate invoices for future dates");
       return;
     }
 
@@ -131,7 +144,20 @@ export const useInvoiceCreationControl = () => {
   };
 
   const setEndDate = (value: dayjs.Dayjs) => {
-    if (selectedStartDate && value < selectedStartDate) {
+    if (!selectedStartDate) {
+      return;
+    }
+
+    if (value < selectedStartDate) {
+      toast.error("Can't select a negative date range");
+      return;
+    }
+
+    if (
+      value.month() > dayjs().month() ||
+      (value.month() === dayjs().month() && value.date() > dayjs().date())
+    ) {
+      toast.error("Can't generate invoices for future dates");
       return;
     }
 
@@ -164,15 +190,17 @@ export const useInvoiceCreationControl = () => {
   };
 
   const handleMonthSelect = (month: dayjs.Dayjs) => {
-    setSelectedMonth(month);
-    setSelectedStartDate(month.startOf("month"));
-    setSelectedEndDate(month.endOf("month").subtract(1, "day"));
-    getInvoicePreviewData(
-      null,
-      month.startOf("month"),
-      month.endOf("month").subtract(1, "day"),
-      includeResidualShifts
+    const startDate = month.startOf("month");
+    const endDate = month;
+    endDate.set(
+      "date",
+      Math.min(month.endOf("month").subtract(1, "day").date(), dayjs().date())
     );
+
+    setSelectedMonth(month);
+    setSelectedStartDate(startDate);
+    setSelectedEndDate(endDate);
+    getInvoicePreviewData(null, startDate, endDate, includeResidualShifts);
   };
 
   const generateInvoice = async () => {
