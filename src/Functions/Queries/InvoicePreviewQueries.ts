@@ -27,5 +27,6 @@ export const useAllInvoicesForCompany = (companyId: number | undefined) => {
         return invoiceRequests.useAllInvoicesForCompany(companyId);
       }
     },
+    enabled: !!companyId,
   });
 };

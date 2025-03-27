@@ -36,7 +36,7 @@ export const useInvoiceCreationControl = () => {
     dayjs()
   );
   const [selectedStartDate, setSelectedStartDate] =
-    useState<dayjs.Dayjs | null>(dayjs());
+    useState<dayjs.Dayjs | null>(dayjs().startOf("month"));
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );

@@ -1,6 +1,5 @@
 export interface AzureInvoiceDTO {
-  id: number;
-  URI: string;
-  Name: string;
-  ContentType: string;
+  id: string;
+  uri: string;
+  name: string;
 }
