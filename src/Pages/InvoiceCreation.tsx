@@ -337,8 +337,9 @@ const InvoiceCreation = () => {
         <div className="flex flex-col grow pb-4 h-[216px] xl:h-full overflow-y-scroll">
           {control.invoices?.map((i) => (
             <div key={i.id} className="grid grid-cols-7 gap-3 p-5 border-b">
-              <p className="col-span-6 truncate text-red-500">#{i.uri}</p>
-              {/* <p className="col-span-3 truncate">{i.name}</p> */}
+              <p className="col-span-6 truncate text-red-500">
+                {i.uri ? i.uri.split("/").pop()?.split(".").shift() : ""}
+              </p>
               <div className="col-span-1 ms-auto">
                 <SquareArrowOutUpRightIcon
                   className={`text-blue-500 ${

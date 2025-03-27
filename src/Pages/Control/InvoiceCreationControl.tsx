@@ -176,6 +176,10 @@ export const useInvoiceCreationControl = () => {
   };
 
   const selectNextYear = () => {
+    if (currentYear == dayjs().year()) {
+      toast.error("Can't generate invoices for future dates");
+      return;
+    }
     setCurrentYear(currentYear + 1);
     getInvoicePreviewData(
       null,
@@ -190,12 +194,23 @@ export const useInvoiceCreationControl = () => {
   };
 
   const handleMonthSelect = (month: dayjs.Dayjs) => {
+    if (
+      month.year() > dayjs().year() ||
+      (month.year() == dayjs().year() && month.month() > dayjs().month())
+    ) {
+      toast.error("Cannot generate an invoice for future dates");
+      return;
+    }
+
     const startDate = month.startOf("month");
-    const endDate = month;
-    endDate.set(
-      "date",
-      Math.min(month.endOf("month").subtract(1, "day").date(), dayjs().date())
-    );
+    const endDate = dayjs()
+      .month(month.month())
+      .year(month.year())
+      .date(
+        month.month() == dayjs().month()
+          ? Math.min(month.endOf("month").date(), dayjs().date())
+          : month.endOf("month").date()
+      );
 
     setSelectedMonth(month);
     setSelectedStartDate(startDate);
