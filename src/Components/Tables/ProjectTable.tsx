@@ -188,7 +188,6 @@ const Card = ({
       <div className="flex flex-row mt-auto items-start text-xs justify-end">
         <CalendarDays className="me-1 h-auto min-w-4 max-w-4" />
 
-        {/* TODO put component lock here*/}
         <PermissionComponentLock roles={[PSO_ROLE]}>
           <div>{projectUtils.getShiftsAvailable(project, true)} shifts</div>
         </PermissionComponentLock>
