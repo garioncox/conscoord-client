@@ -125,7 +125,7 @@ const ProjectShifts = () => {
       <div className="overflow-y-auto max-h-[80%]">
         <PaginatedTable control={control}>
           <PermissionComponentLock roles={[PSO_ROLE]}>
-            <ShiftSort data={sortedData!} onSortChange={setSortedData} />
+            <ShiftSort data={sortedData!} onSortChange={setSortedData} psoRole={true}/>
             <EmployeeShiftTable
               data={control.currentItems}
               setRowClicked={clickOnAShift}

@@ -27,11 +27,12 @@ export const useProjectUtils = () => {
     return new Date(p.endDate).toISOString() < new Date().toISOString();
   };
 
-  const getShiftsAvailable = (p: Project) => {
+  const getShiftsAvailable = (p: Project, isPSO: boolean) => {
     if (isComplete(p)) {
       return 0;
     }
 
+    //get all project shifts for the project
     const filteredProjectShifts = projectShifts!.filter(
       (ps) => ps.projectId === p.id
     );
@@ -40,13 +41,16 @@ export const useProjectUtils = () => {
       filteredProjectShifts.some((ps) => ps.shiftId === shift.id)
     );
 
-    const shiftsAvailable = filteredShifts.reduce(
-      (total, s) =>
-        total + shiftUtils.shiftsAvailable(s) - shiftUtils.shiftsClaimed(s),
-      0
-    );
-
-    return shiftsAvailable;
+    if (isPSO) {
+      const shiftsAvailable = filteredShifts.filter(
+        (s) =>
+          shiftUtils.shiftsAvailable(s) - shiftUtils.shiftsClaimed(s) > 0 &&
+          new Date(s.endTime) >= new Date()
+      ).length;
+      return shiftsAvailable;
+    } else {
+      return filteredShifts.length;
+    }
   };
 
   const getContactInfo = (p: Project) => {

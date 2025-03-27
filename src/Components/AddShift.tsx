@@ -65,31 +65,29 @@ export const AddShift: React.FC<{
 
   function CreateShift() {
     setControlsTouched();
-
     if (validateShift()) {
       const projectShiftDTO: ProjectShiftDTO = {
         projectId: projectId,
         shift: {
-          StartTime:
+          startTime:
             dateControl.value!.format("YYYY-MM-DD") +
             startTimeControl.value?.format("THH:mm:ss.SSS"),
-          EndTime:
+          endTime:
             dateControl.value!.format("YYYY-MM-DD") +
             endTimeControl.value?.format("THH:mm:ss.SSS"),
-          Description: descriptionControl.value,
-          Location: locationControl.value,
-          RequestedEmployees: reqEmpControl.value,
-          Status: "ACTIVE",
+          description: descriptionControl.value,
+          location: locationControl.value,
+          requestedEmployees: reqEmpControl.value,
+          status: "ACTIVE",
         },
       };
 
       if (
-        projectShiftDTO.shift.StartTime === "" ||
-        projectShiftDTO.shift.EndTime === ""
+        projectShiftDTO.shift.startTime === "" ||
+        projectShiftDTO.shift.endTime === ""
       ) {
         return;
       }
-
       addShiftMutation.mutate({ project: projectShiftDTO });
       toggleModal();
     }
