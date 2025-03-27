@@ -6,10 +6,11 @@ import { FC, useEffect, useState } from "react";
 interface ShiftSortProps {
   onSortChange: (sortedData: Shift[]) => void;
   data: Shift[];
+  psoRole?: boolean;
 }
 
-const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data }) => {
-  const [sortValue, setSortValue] = useState<string>("officersNeeded");
+const ShiftSort: FC<ShiftSortProps> = ({ onSortChange, data, psoRole = false }) => {
+  const [sortValue, setSortValue] = useState<string>(psoRole ? "officersNeeded" : "startDateAsc");
   const { data: empShifts, isLoading } = useAllEmployeeShifts();
 
   const sortMethods: { [key: string]: (a: Shift, b: Shift) => number } = {
