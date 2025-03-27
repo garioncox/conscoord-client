@@ -13,9 +13,9 @@ const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
   const archiveShiftMutation = useArchiveShiftMutation();
   const getEmployeesByShiftId = useEmployeesByShiftId(Number(shift?.id));
   const { sendEmail } = useEmailRequests();
+  if (!shift || !shift.id) return;
 
   const archiveShift = async () => {
-    if (!shift || !shift.id) return;
     archiveShiftMutation.mutate({ shiftId: shift.id, makeToast: false });
     const employees = await getEmployeesByShiftId.data;
     if (employees) {
@@ -31,7 +31,7 @@ const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
 
   return (
     <div>
-      <div className="mt-10 mb-5 text-4xl font-bold">Signed Up Employees:</div>
+      <div className="mt-10 mb-5 text-4xl font-bold">Signed Up Employees: </div>
 
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse border border-gray-300">
@@ -61,6 +61,22 @@ const ClientView = ({ signedUpEmployees, shift }: ClientViewProps) => {
                 </td>
               </tr>
             ))}
+            {Array.from({
+              length:
+                shift.requestedEmployees - (signedUpEmployees?.length ?? 0),
+            }).map((_, index) => {
+              const rowIndex = (signedUpEmployees?.length ?? 0) + index;
+              return (
+                <tr
+                  key={`empty-${index}`}
+                  className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
+                  <td className="border border-gray-300 px-4 py-2">&nbsp;</td>
+                  <td className="border border-gray-300 px-4 py-2">&nbsp;</td>
+                  <td className="border border-gray-300 px-4 py-2">&nbsp;</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         <div className="mt-10 flex justify-end">
