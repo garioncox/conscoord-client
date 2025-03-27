@@ -25,7 +25,7 @@ export const useAddProjectShift = () => {
   const {createToast} = useCustomToast();
   return useMutation({
     mutationFn: async ({ project }: { project: ProjectShiftDTO }) => {
-      await createToast(addProjectShift,user?.id_token ?? "", project);
+      await createToast(addProjectShift, "Adding Project Shift" , user?.id_token ?? "", project);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.projects });

@@ -67,24 +67,24 @@ export const AddShift: React.FC<{
     setControlsTouched();
     if (validateShift()) {
       const projectShiftDTO: ProjectShiftDTO = {
-        ProjectId: projectId,
-        Shift: {
-          StartTime:
+        projectId: projectId,
+        shift: {
+          startTime:
             dateControl.value!.format("YYYY-MM-DD") +
             startTimeControl.value?.format("THH:mm:ss.SSS"),
-          EndTime:
+          endTime:
             dateControl.value!.format("YYYY-MM-DD") +
             endTimeControl.value?.format("THH:mm:ss.SSS"),
-          Description: descriptionControl.value,
-          Location: locationControl.value,
-          RequestedEmployees: reqEmpControl.value,
-          Status: "ACTIVE",
+          description: descriptionControl.value,
+          location: locationControl.value,
+          requestedEmployees: reqEmpControl.value,
+          status: "ACTIVE",
         },
       };
 
       if (
-        projectShiftDTO.Shift.StartTime === "" ||
-        projectShiftDTO.Shift.EndTime === ""
+        projectShiftDTO.shift.startTime === "" ||
+        projectShiftDTO.shift.endTime === ""
       ) {
         return;
       }
