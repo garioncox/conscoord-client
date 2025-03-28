@@ -11,21 +11,14 @@ import {
 } from "@/Functions/Queries/EmployeeShiftQueries";
 import { Spinner } from "@/Components/Spinner";
 import { useAuth } from "react-oidc-context";
+import { useState } from "react";
 
 function MyShifts() {
   const { data: shifts } = useClaimedShiftsForLoggedInUser();
   const { data: employeeShifts } = useEmpShiftsForLoggedInUser();
   const { data: allEmployeeShifts } = useAllEmployeeShifts();
+  const [showPastShifts, setShowPastShifts] = useState<boolean>(false);
   const navigate = useNavigate();
-  const control = usePagination(shifts ?? []);
-  const { isLoading: authLoading } = useAuth();
-
-  const getNumEmployeesSignedUpForShift = (s: Shift) => {
-    return (
-      allEmployeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
-        .length ?? 0
-    );
-  };
 
   const shiftNeedsTimeEntered = (shift: Shift) => {
     const empShift = employeeShifts?.filter(
@@ -37,8 +30,25 @@ function MyShifts() {
     if (hasEnteredTime || isFutureShift) {
       return false;
     }
-
     return true;
+  };
+
+  //after shiftNeedsTimeEntered or else it wouldn't exist to use yet
+  const control = usePagination(
+    shifts?.filter(
+      (x) =>
+        showPastShifts ||
+        new Date(x.endTime) >= new Date() ||
+        shiftNeedsTimeEntered(x)
+    ) ?? []
+  );
+  const { isLoading: authLoading } = useAuth();
+
+  const getNumEmployeesSignedUpForShift = (s: Shift) => {
+    return (
+      allEmployeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
+        .length ?? 0
+    );
   };
 
   const getEmpShiftCountColor = (s: Shift) => {
@@ -80,6 +90,21 @@ function MyShifts() {
   return (
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">My Shifts</h1>
+      <div className="flex items-center gap-2 p-3">
+        <input
+          type="checkbox"
+          id="pastShifts"
+          className="w-5 h-5 accent-blue-600 cursor-pointer"
+          onClick={() => setShowPastShifts(!showPastShifts)}
+        />
+        <label
+          htmlFor="pastShifts"
+          className="text-lg font-medium cursor-pointer select-none"
+        >
+          Show Past Shifts
+        </label>
+      </div>
+
       <div className="overflow-y-auto max-h-[80%]">
         <PaginatedTable control={control}>
           <div>
