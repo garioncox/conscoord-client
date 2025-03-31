@@ -1,117 +1,113 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
-import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
-import { useShiftById } from "@/Functions/Queries/ShiftQueries";
 import { Spinner } from "@/Components/Spinner";
-import { useEmpShiftsForLoggedInUser } from "@/Functions/Queries/EmployeeShiftQueries";
-import {
-  useEmployeesByShiftId as useEmployeesByShiftId,
-  useLoggedInEmployee,
-} from "@/Functions/Queries/EmployeeQueries";
 import PSOView from "./ShiftDetails/PSOView";
-import ClientView from "./ShiftDetails/ClientView";
-import { useShiftsFulfilledUtils } from "@/Components/ShiftsFulfilledHook";
-import { useAuth } from "react-oidc-context";
+import { useShiftDetailsControl } from "./Control/ShiftDetailsControl";
 
 export const ShiftDetails = () => {
   const { id } = useParams();
-  const { isLoading: isAuthLoading } = useAuth();
+  const control = useShiftDetailsControl(Number(id));
 
-  const { data: loggedInEmployee } = useLoggedInEmployee();
-  const { data: claimedShifts, isLoading: isClaimedShiftsLoading } =
-    useEmpShiftsForLoggedInUser();
-  const { data: shiftFromParam, isLoading: isShiftFromParamLoading } =
-    useShiftById(Number(id));
-  const { data: signedUpEmployees } = useEmployeesByShiftId(Number(id));
-  const {
-    shiftFractionString,
-    shiftFractionStyles,
-    shiftsAvailable,
-    shiftsClaimed,
-  } = useShiftsFulfilledUtils();
-
-  const [currentEmpShift, setCurrentEmpShift] = useState<
-    EmployeeShift | undefined
-  >(undefined);
-  const [startTime, setStartTime] = useState<Dayjs | null>(null);
-  const [endTime, setEndTime] = useState<Dayjs | null>(null);
-  const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (id && !isClaimedShiftsLoading && !isShiftFromParamLoading) {
-      const shift = claimedShifts?.find((cs) => cs.shiftId === Number(id));
-      setCurrentEmpShift(shift);
-
-      if (
-        !shift ||
-        (shift.clockInTime && shift.clockOutTime) ||
-        new Date(shiftFromParam!.startTime) > new Date()
-      ) {
-        setIsFormDisabled(true);
-      }
-    }
-  }, [
-    claimedShifts,
-    id,
-    isClaimedShiftsLoading,
-    isShiftFromParamLoading,
-    shiftFromParam,
-    shiftsAvailable,
-    shiftsClaimed,
-  ]);
-
-  useEffect(() => {
-    if (shiftFromParam && !isShiftFromParamLoading) {
-      setStartTime(dayjs(new Date(shiftFromParam!.startTime).toISOString()));
-      setEndTime(dayjs(new Date(shiftFromParam!.endTime).toISOString()));
-    }
-  }, [shiftFromParam, isShiftFromParamLoading]);
-
-  if (isClaimedShiftsLoading || isShiftFromParamLoading || isAuthLoading) {
+  if (control.isLoading || !control.shiftFromParam) {
     return <Spinner />;
   }
 
   return (
-    <>
-      {shiftFromParam ? (
+    <div>
+      <div className="border space-y-2 border-gray-300 rounded-lg p-6 max-w-md mx-auto shadow-md bg-white">
+        <p className="text-xl font-semibold mb-4">Shift Details</p>
+        <p>{control.shiftFromParam.location}</p>
+        <p>{control.shiftFromParam.startTime}</p>
+        <p>{control.shiftFromParam.endTime}</p>
+        <p>{control.shiftFromParam.description}</p>
+        <p
+          className={`font-semibold ${control.shiftFractionStyles(
+            control.shiftFromParam
+          )}`}
+        >
+          {control.shiftFractionString(control.shiftFromParam)} Shifts Filled
+        </p>
+      </div>
+
+      {control.loggedInEmployee?.roleid !== 3 ? (
+        <PSOView
+          currentEmpShift={control.currentEmpShift}
+          startTime={control.loggedStartTime}
+          endTime={control.loggedEndTime}
+          isFormDisabled={control.isFormDisabled}
+          setStartTime={control.setLoggedStartTime}
+          setEndTime={control.setLoggedEndTime}
+        />
+      ) : (
         <div>
-          <div className="border space-y-2 border-gray-300 rounded-lg p-6 max-w-md mx-auto shadow-md bg-white">
-            <h3 className="text-xl font-semibold mb-4 text-gray-700 ">
-              Shift Details
-            </h3>
-            <p className="text-gray-600">{shiftFromParam.location}</p>
-            <p className="text-gray-600">{shiftFromParam.startTime}</p>
-            <p className="text-gray-600">{shiftFromParam.endTime}</p>
-            <p className="text-gray-600">{shiftFromParam.description}</p>
-            <p
-              className={`text-gray-600 font-semibold ${shiftFractionStyles(
-                shiftFromParam
-              )}`}
-            >
-              {shiftFractionString(shiftFromParam)} Shifts Filled
-            </p>
+          <div className="mt-10 mb-5 text-4xl font-bold">
+            Signed Up Employees:
           </div>
 
-          {loggedInEmployee?.roleid !== 3 ? (
-            <PSOView
-              currentEmpShift={currentEmpShift}
-              startTime={startTime}
-              endTime={endTime}
-              isFormDisabled={isFormDisabled}
-              setStartTime={setStartTime}
-              setEndTime={setEndTime}
-            />
-          ) : (
-            <ClientView
-              signedUpEmployees={signedUpEmployees}
-              shift={shiftFromParam}
-            />
-          )}
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full border-collapse border border-slate-300">
+              <thead className="bg-slate-200">
+                <tr>
+                  <th className="border border-slate-300 px-4 py-2 text-left">
+                    Name
+                  </th>
+                  <th className="border border-slate-300 px-4 py-2 text-left">
+                    Email
+                  </th>
+                  <th className="border border-slate-300 px-4 py-2 text-left">
+                    Phone Number
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {control.signedUpEmployees?.map((s, index) => (
+                  <tr key={index} className="bg-white even:bg-slate-100">
+                    <td className="border border-slate-300 px-4 py-2">
+                      {s.name}
+                    </td>
+                    <td className="border border-slate-300 px-4 py-2">
+                      {s.email}
+                    </td>
+                    <td className="border border-slate-300 px-4 py-2">
+                      {s.phonenumber}
+                    </td>
+                  </tr>
+                ))}
+                {Array.from({
+                  length:
+                    control.shiftFromParam.requestedEmployees -
+                    (control.signedUpEmployees?.length ?? 0),
+                }).map((_, index) => {
+                  return (
+                    <tr
+                      key={`empty-${index}`}
+                      className="bg-white even:bg-slate-100"
+                    >
+                      <td className="border border-slate-300 px-4 py-2">
+                        &nbsp;
+                      </td>
+                      <td className="border border-slate-300 px-4 py-2">
+                        &nbsp;
+                      </td>
+                      <td className="border border-slate-300 px-4 py-2">
+                        &nbsp;
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="mt-10 flex justify-end">
+              <button
+                onClick={control.archiveShift}
+                disabled={control.shiftFromParam?.status === "ARCHIVED"}
+                className="bg-red-500 text-white font-bold py-2 px-4 rounded disabled:opacity-30"
+              >
+                Cancel Shift
+              </button>
+            </div>
+          </div>
         </div>
-      ) : (
-        <Spinner />
       )}
-    </>
+    </div>
   );
 };
