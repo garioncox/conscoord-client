@@ -1,25 +1,17 @@
-export function CombineTime(startTime: string, endTime: string) {
-    const _startDate = startTime.split("T")[0];
-    const _startTime = startTime.split("T")[1];
-    const _endTime = endTime.split("T")[1];
+import dayjs from "dayjs";
 
-    const _startTimeNoSeconds = _startTime.slice(0, -3);
-    const _endTimeNoSeconds = _endTime.slice(0, -3);
-    const _startDateNoYear = _startDate.slice(5, 10);
+export function CombineTime(start: string, end: string) {
+  const startDate = dayjs(start).format("MM/DD/YYYY");
 
-    return `${_startDateNoYear} at ${_startTimeNoSeconds} - ${_endTimeNoSeconds}`;
-}
+  const startTime = dayjs(start).format("hh:mm");
+  const endTime = dayjs(end).format("hh:mm");
 
-export function combineDates(startDate: string, endDate: string) {
-    const _startDate = startDate.split("T")[0];
-    const _endDate = endDate.split("T")[0];
-
-    return `${_startDate} - ${_endDate}`;
+  return `${startDate} @ ${startTime} - ${endTime}`;
 }
 
 export function combineTimes(startDate: string, endDate: string) {
-    const _startDate = startDate.split("T")[1];
-    const _endDate = endDate.split("T")[1];
+  const _startDate = dayjs(startDate).format("HH:mm");
+  const _endDate = dayjs(endDate).format("HH:mm");
 
-    return `${_startDate} - ${_endDate}`;
+  return `${_startDate} - ${_endDate}`;
 }
