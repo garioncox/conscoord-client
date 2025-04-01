@@ -157,7 +157,7 @@ const InvoiceCreation = () => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="flex flex-col items-center p-5 2xl:min-w-[824px]">
                   {control.monthView ? (
-                    <div className="flex items-center flex-col md: md:min-h-[392px]">
+                    <div className="flex items-center flex-col md:min-h-[392px]">
                       <div className="flex justify-center font-bold mb-5">
                         <button
                           onClick={() => {
@@ -271,7 +271,7 @@ const InvoiceCreation = () => {
             <p className="font-semibold text-xl">Invoice Preview</p>
           </div>
 
-          <div className="flex flex-col grow">
+          <div className="flex flex-col grow xl:h-full h-[300px] overflow-y-scroll">
             {control.invoicePreviewData == null ||
             control.invoicePreviewData.length == 0 ? (
               <div className="flex grow justify-center items-center">
@@ -296,9 +296,9 @@ const InvoiceCreation = () => {
                             : "bg-red-100 border-l-red-400"
                         }`}
                     >
-                      <p className="col-span-5">{ebs.employeeName}</p>
-                      <p className="col-span-5">{sbp.shiftLocation}</p>
-                      <p className="col-span-1">
+                      <p className="col-span-5 truncate">{ebs.employeeName}</p>
+                      <p className="col-span-5 truncate">{sbp.shiftLocation}</p>
+                      <p className="ps-2 col-span-1">
                         {ebs.hoursWorked == 0
                           ? "--"
                           : `${ebs.hoursWorked.toPrecision(3)} hr`}
