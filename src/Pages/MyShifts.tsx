@@ -40,7 +40,7 @@ function MyShifts() {
         showPastShifts ||
         new Date(x.endTime) >= new Date() ||
         shiftNeedsTimeEntered(x)
-    ) ?? []
+    ).sort((a) => shiftNeedsTimeEntered(a) ? -1 : 1) ?? []
   );
   const { isLoading: authLoading } = useAuth();
 
