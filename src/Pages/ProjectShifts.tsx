@@ -24,6 +24,7 @@ import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
 import ShiftSort from "@/Components/Sorting/ShiftSort";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAuth } from "react-oidc-context";
+import { IdCard } from "lucide-react";
 
 const ProjectShifts = () => {
   const { isLoading: authLoading } = useAuth();
@@ -99,48 +100,53 @@ const ProjectShifts = () => {
   };
 
   return (
-    <div className="min-w-full 2xl:px-40">
-      <h1 className="text-4xl">Viewing Project</h1>
-      <h2 className="text-center capitalize font-semibold">
-        Name: {currentProject?.name} <br />
-        Location: {currentProject?.location} <br />
-        {currentProject?.status}
-      </h2>
-      <div>
-        {contactPerson ? (
-          <>
-            <h1 className="mb-1 text-2xl">Point of Contact:</h1>
-            <div className="text-center mb-4">
-              <p>{contactPerson.name}</p>
-              <p>{contactPerson.phonenumber}</p>
-              <p>{contactPerson.email}</p>
-            </div>
-          </>
-        ) : (
-          <div className="text-center m-8">
-            No contact person listed for this project
+    <div className="w-full">
+      <h1 className="py-5 text-4xl">{currentProject?.name}</h1>
+      <div className="min-w-full flex flex-col lg:flex-row p-2">
+        <div className="flex flex-col lg:p-10 lg:me-10 xl:max-w-[22%] lg:max-w-[30%] border rounded-xl bg-slate-100 w-full shadow max-h-[35vh] p-5 mb-4 lg:mb-0">
+          <h2 className="text-center capitalize font-semibold text-2xl">
+            {currentProject?.location} <br />
+          </h2>
+          <div>
+            {contactPerson ? (
+              <>
+                <hr className="m-3 border-2" />
+                <div className="flex flex-row items-start mt-2 text-sm">
+                  <IdCard className="me-1 h-auto min-w-6" />
+                  <div>
+                    <div className="font-semibold ps-2">{contactPerson.name}</div>
+                    <div className="ps-2" title={contactPerson.email}>{contactPerson.email}</div>
+                    <div className="ps-2">{contactPerson.phonenumber}</div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center m-8">
+                No contact person listed for this project
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <div className="overflow-y-auto max-h-[80%]">
-        <PaginatedTable control={control}>
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <ShiftSort data={sortedData!} onSortChange={setSortedData} psoRole={true}/>
-            <EmployeeShiftTable
-              data={control.currentItems}
-              setRowClicked={clickOnAShift}
-            />
-          </PermissionComponentLock>
+        </div>
+        <div className="overflow-y-auto max-h-[80%] flex-row lg:flex-col lg:w-full">
+          <PaginatedTable control={control}>
+            <PermissionComponentLock roles={[PSO_ROLE]}>
+              <ShiftSort data={sortedData!} onSortChange={setSortedData} psoRole={true} />
+              <EmployeeShiftTable
+                data={control.currentItems}
+                setRowClicked={clickOnAShift}
+              />
+            </PermissionComponentLock>
 
-          <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
-            <ShiftSort data={sortedData!} onSortChange={setSortedData} />
-            <ShiftTable
-              data={control.currentItems}
-              setRowClicked={clickOnAShift}
-              projectId={Number(id)}
-            />
-          </PermissionComponentLock>
-        </PaginatedTable>
+            <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
+              <ShiftSort data={sortedData!} onSortChange={setSortedData} />
+              <ShiftTable
+                data={control.currentItems}
+                setRowClicked={clickOnAShift}
+                projectId={Number(id)}
+              />
+            </PermissionComponentLock>
+          </PaginatedTable>
+        </div>
       </div>
       <PermissionComponentLock roles={[ADMIN_ROLE]}>
         <div className="flex justify-end mt-2">
