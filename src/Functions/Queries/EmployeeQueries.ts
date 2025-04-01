@@ -46,14 +46,15 @@ export const useAllEmployees = () => {
   });
 };
 
-export const useEmployeesByShiftId = (shiftId: number) => {
+export const useEmployeesByShiftId = (shiftId: number | undefined) => {
   const { user } = useAuth();
 
   return useQuery({
     queryKey: [queryKeys.employeeId, shiftId],
     queryFn: async () => {
-      return await getEmployeesByShiftId(user?.id_token ?? "", shiftId);
+      return await getEmployeesByShiftId(user?.id_token ?? "", shiftId!);
     },
+    enabled: !!shiftId,
   });
 };
 
@@ -62,7 +63,7 @@ export const useEditEmployeeMutation = () => {
 
   return useMutation({
     mutationFn: async (e: Employee) => {
-      await createToast(editEmployee,"Editing Project", e);
+      await createToast(editEmployee, "Editing Project", e);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
