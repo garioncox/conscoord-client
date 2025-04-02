@@ -10,8 +10,10 @@ import { Spinner } from "@/Components/Spinner";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
 import { ShiftTable } from "@/Components/Tables/ShiftTable";
+import { useShiftsFulfilledUtils } from "@/Components/ShiftsFulfilledHook";
 
 function ShiftList() {
+  const { shiftFraction } = useShiftsFulfilledUtils();
   const { isLoading: isAuthLoading } = useAuth();
   const { data: shifts, isLoading } = useAllShifts();
   const navigate = useNavigate();
@@ -37,7 +39,10 @@ function ShiftList() {
         // Compare based on employees needed
         return employeesNeededB - employeesNeededA;
       });
-      setSortedData(defaultSort);
+      const removedData = defaultSort.filter(
+        (e) => new Date(e.endTime) >= new Date() && shiftFraction(e) < 1
+      )
+      setSortedData(removedData);
     }
   }, [shifts, empShifts]);
 
