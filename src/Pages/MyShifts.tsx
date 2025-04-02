@@ -35,12 +35,14 @@ function MyShifts() {
 
   //after shiftNeedsTimeEntered or else it wouldn't exist to use yet
   const control = usePagination(
-    shifts?.filter(
-      (x) =>
-        showPastShifts ||
-        new Date(x.endTime) >= new Date() ||
-        shiftNeedsTimeEntered(x)
-    ).sort((a) => shiftNeedsTimeEntered(a) ? -1 : 1) ?? []
+    shifts
+      ?.filter(
+        (x) =>
+          showPastShifts ||
+          new Date(x.endTime) >= new Date() ||
+          shiftNeedsTimeEntered(x)
+      )
+      .sort((a) => (shiftNeedsTimeEntered(a) ? -1 : 1)) ?? []
   );
   const { isLoading: authLoading } = useAuth();
 
@@ -105,17 +107,17 @@ function MyShifts() {
         </label>
       </div>
 
-      <div className="overflow-y-auto max-h-[80%]">
-        <PaginatedTable control={control}>
-          <div>
-            <div className="px-3 font-semibold border-b-2 border-slate-200">
-              <div className="grid grid-cols-4 gap-10 pb-3">
-                <p>Location</p>
-                <p>Time</p>
-                <p>Description</p>
-                <p className="text-end">Shifts Fulfilled</p>
-              </div>
+      <PaginatedTable control={control}>
+        <div>
+          <div className="px-3 font-semibold border-b-2 border-slate-200">
+            <div className="grid grid-cols-4 gap-10 pb-3">
+              <p>Location</p>
+              <p>Time</p>
+              <p>Description</p>
+              <p className="text-end">Shifts Fulfilled</p>
             </div>
+          </div>
+          <div className="overflow-y-auto max-h-[400px] xl:h-[50vh] xl:max-h-full">
             {control.currentItems.map((s: Shift) => {
               return (
                 <div
@@ -146,8 +148,8 @@ function MyShifts() {
               );
             })}
           </div>
-        </PaginatedTable>
-      </div>
+        </div>
+      </PaginatedTable>
     </div>
   );
 }

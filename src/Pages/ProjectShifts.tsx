@@ -15,15 +15,12 @@ import { Spinner } from "@/Components/Spinner";
 import Modal from "@/Components/Modal";
 import { useArchiveShiftMutation } from "@/Functions/Queries/ShiftQueries";
 import PermissionComponentLock from "@/Components/Auth/PermissionComponentLock";
-import {
-  ADMIN_ROLE,
-  CLIENT_ROLE,
-  PSO_ROLE,
-} from "@/Components/Auth/PermissionLock";
-import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
+import { ADMIN_ROLE, CLIENT_ROLE } from "@/Components/Auth/PermissionLock";
 import ShiftSort from "@/Components/Sorting/ShiftSort";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAuth } from "react-oidc-context";
+import { AddShift } from "@/Components/AddShift";
+import { CirclePlus } from "lucide-react";
 
 const ProjectShifts = () => {
   const { isLoading: authLoading } = useAuth();
@@ -82,8 +79,11 @@ const ProjectShifts = () => {
     <Spinner />;
   }
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const toggleCancelModal = () => setIsCancelModalOpen(!isCancelModalOpen);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const toggleAddModal = () => setIsAddModalOpen(!isAddModalOpen);
 
   const clickOnAShift = (id: number) => {
     navigate(`/shift/view/details/${id}`);
@@ -122,30 +122,34 @@ const ProjectShifts = () => {
           </div>
         )}
       </div>
-      <div className="overflow-y-auto max-h-[80%]">
-        <PaginatedTable control={control}>
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <ShiftSort data={sortedData!} onSortChange={setSortedData} psoRole={true}/>
-            <EmployeeShiftTable
-              data={control.currentItems}
-              setRowClicked={clickOnAShift}
-            />
-          </PermissionComponentLock>
+      <PaginatedTable control={control}>
+        <ShiftSort
+          data={sortedData!}
+          onSortChange={setSortedData}
+          psoRole={true}
+        />
+        <ShiftTable data={control.currentItems} setRowClicked={clickOnAShift} />
 
-          <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
-            <ShiftSort data={sortedData!} onSortChange={setSortedData} />
-            <ShiftTable
-              data={control.currentItems}
-              setRowClicked={clickOnAShift}
+        <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
+          <button
+            onClick={() => toggleAddModal()}
+            className="border rounded-lg hover:bg-slate-200 hover:border-slate-300 h-10 w-10 flex items-center justify-center"
+          >
+            <CirclePlus className="h-4 w-4" />
+          </button>
+          {isAddModalOpen === true && (
+            <AddShift
               projectId={Number(id)}
+              toggleModal={toggleAddModal}
+              isModalOpen={isAddModalOpen}
             />
-          </PermissionComponentLock>
-        </PaginatedTable>
-      </div>
+          )}
+        </PermissionComponentLock>
+      </PaginatedTable>
       <PermissionComponentLock roles={[ADMIN_ROLE]}>
         <div className="flex justify-end mt-2">
           <button
-            onClick={toggleModal}
+            onClick={toggleCancelModal}
             disabled={currentProject?.status === "ARCHIVED"}
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
           >
@@ -154,8 +158,8 @@ const ProjectShifts = () => {
         </div>
       </PermissionComponentLock>
 
-      <Modal isOpen={isModalOpen} onClose={toggleModal}>
-        <div className="">
+      <Modal isOpen={isCancelModalOpen} onClose={toggleCancelModal}>
+        <div>
           <div>
             <p>
               Are you sure you want to cancel this project? You cannot undo this
@@ -164,7 +168,7 @@ const ProjectShifts = () => {
           </div>
           <div className="flex grow flex-row mt-5">
             <button
-              onClick={toggleModal}
+              onClick={toggleCancelModal}
               className="ms-auto me-3 p-2 px-4 bg-slate-400 text-white rounded hover:bg-slate-500"
             >
               Close
