@@ -1,7 +1,6 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePagination } from "@/Components/PaginatedTableHook";
 import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
-import { EmployeeShiftTable } from "@/Components/Tables/EmployeeShiftTable";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
@@ -10,6 +9,7 @@ import { useAuth } from "react-oidc-context";
 import { Spinner } from "@/Components/Spinner";
 import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
 import { useAllEmployeeShifts } from "@/Functions/Queries/EmployeeShiftQueries";
+import { ShiftTable } from "@/Components/Tables/ShiftTable";
 
 function ShiftList() {
   const { isLoading: isAuthLoading } = useAuth();
@@ -54,7 +54,7 @@ function ShiftList() {
       <h1 className="text-4xl pb-5">Available Shifts</h1>
       <PaginatedTable control={control}>
         <ShiftSort data={sortedData!} onSortChange={setSortedData} />
-        <EmployeeShiftTable
+        <ShiftTable
           data={control.currentItems}
           setRowClicked={clickOnAShift}
         />
