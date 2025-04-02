@@ -5,6 +5,7 @@ export interface EmployeeShift {
   didNotWork: boolean;
   empId: number;
   hasbeeninvoiced: boolean;
+  isResidual: boolean;
   reportedCanceled: boolean;
   shiftId: number;
   notes: string;

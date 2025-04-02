@@ -1,74 +1,18 @@
 import { PaginatedTable } from "@/Components/paginated-table";
-import { usePagination } from "@/Components/PaginatedTableHook";
-import { useClaimedShiftsForLoggedInUser } from "@/Functions/Queries/ShiftQueries";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { CombineTime } from "@/Functions/CombineTime";
-import { EmployeeShift } from "@/Data/Interfaces/EmployeeShift";
-import {
-  useAllEmployeeShifts,
-  useEmpShiftsForLoggedInUser,
-} from "@/Functions/Queries/EmployeeShiftQueries";
 import { Spinner } from "@/Components/Spinner";
-import { useAuth } from "react-oidc-context";
-import { useState } from "react";
+import { useMyShiftsControl } from "./Control/MyShiftsControl";
 
 function MyShifts() {
-  const { data: shifts } = useClaimedShiftsForLoggedInUser();
-  const { data: employeeShifts } = useEmpShiftsForLoggedInUser();
-  const { data: allEmployeeShifts } = useAllEmployeeShifts();
-  const [showPastShifts, setShowPastShifts] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const control = useMyShiftsControl();
 
-  const shiftNeedsTimeEntered = (shift: Shift) => {
-    const empShift = employeeShifts?.filter(
-      (es: EmployeeShift) => es.shiftId == shift.id
-    )[0];
-
-    const hasEnteredTime = empShift?.clockInTime && empShift?.clockOutTime;
-    const isFutureShift = new Date(shift.endTime) > new Date();
-    if (hasEnteredTime || isFutureShift) {
-      return false;
-    }
-    return true;
-  };
-
-  //after shiftNeedsTimeEntered or else it wouldn't exist to use yet
-  const control = usePagination(
-    shifts
-      ?.filter(
-        (x) =>
-          showPastShifts ||
-          new Date(x.endTime) >= new Date() ||
-          shiftNeedsTimeEntered(x)
-      )
-      .sort((a) => (shiftNeedsTimeEntered(a) ? -1 : 1)) ?? []
-  );
-  const { isLoading: authLoading } = useAuth();
-
-  const getNumEmployeesSignedUpForShift = (s: Shift) => {
-    return (
-      allEmployeeShifts?.filter((es: EmployeeShift) => es.shiftId == s.id)
-        .length ?? 0
-    );
-  };
-
-  const getEmpShiftCountColor = (s: Shift) => {
-    const numSignedUp = getNumEmployeesSignedUpForShift(s);
-
-    const percentageFilled = (numSignedUp / s.requestedEmployees) * 100;
-    return percentageFilled <= 20
-      ? "text-red-500"
-      : percentageFilled <= 80
-      ? "text-yellow-600"
-      : "text-green-600";
-  };
-
-  if (!shifts || authLoading) {
+  if (control.isLoading) {
     return <Spinner />;
   }
 
-  if (shifts.length == 0) {
+  if (control.shifts?.length == 0) {
     return (
       <div className="bg-tertiary max-h-[50%] shadow-xl border p-5 md:p-10 my-10 rounded-xl flex flex-col justify-center items-center">
         <p className="font-semibold text-2xl text-center text-slate-600">
@@ -92,55 +36,73 @@ function MyShifts() {
   return (
     <div className="min-w-full 2xl:px-40">
       <h1 className="text-4xl pb-5">My Shifts</h1>
-      <div className="flex items-center gap-2 p-3">
-        <input
-          type="checkbox"
-          id="pastShifts"
-          className="w-5 h-5 accent-blue-600 cursor-pointer"
-          onClick={() => setShowPastShifts(!showPastShifts)}
-        />
-        <label
-          htmlFor="pastShifts"
-          className="text-lg font-medium cursor-pointer select-none"
-        >
-          Show Past Shifts
-        </label>
+      <div className="flex">
+        <div className="flex items-center gap-2 p-3">
+          <input
+            type="checkbox"
+            id="pastShifts"
+            className="w-5 h-5 accent-blue-600 cursor-pointer"
+            onClick={() => control.setShowPastShifts(!control.showPastShifts)}
+          />
+          <label
+            htmlFor="pastShifts"
+            className="text-lg font-medium cursor-pointer select-none"
+          >
+            Show Past Shifts
+          </label>
+        </div>
+        <div className="flex items-center ms-auto text-lg pe-3">
+          <div className="flex flex-row items-center ps-6">
+            <div className="h-5 w-5 bg-green-500 rounded border border-green-600" />
+            <div className="ps-2">Past Shift</div>
+          </div>
+          <div className="flex flex-row items-center ps-6">
+            <div className="h-5 w-5 bg-amber-300 rounded border border-amber-500" />
+            <div className="ps-2">Enter Time</div>
+          </div>
+          <div className="flex flex-row items-center ps-6">
+            <div className="h-5 w-5 bg-gray-300 rounded border border-gray-400" />
+            <div className="ps-2">Future Shift</div>
+          </div>
+        </div>
       </div>
 
-      <PaginatedTable control={control}>
+      <PaginatedTable control={control.paginationControl}>
         <div>
           <div className="px-3 font-semibold border-b-2 border-slate-200">
             <div className="grid grid-cols-4 gap-10 pb-3">
-              <p>Location</p>
-              <p>Time</p>
-              <p>Description</p>
-              <p className="text-end">Shifts Fulfilled</p>
+              <p className="text-xl">Location</p>
+              <p className="text-xl">Time</p>
+              <p className="text-xl">Description</p>
+              <p className="text-xl text-end">Shifts Fulfilled</p>
             </div>
           </div>
           <div className="overflow-y-auto max-h-[400px] xl:h-[50vh] xl:max-h-full">
-            {control.currentItems.map((s: Shift) => {
+            {control.paginationControl.currentItems.map((s: Shift) => {
               return (
                 <div
-                  className={`grid grid-cols-4 gap-10 py-5 px-3 hover:bg-slate-200 border-b-2 border-slate-200 relative ${
-                    shiftNeedsTimeEntered(s)
-                      ? "border-l-8 border-l-amber-300"
-                      : ""
-                  } hover:cursor-pointer`}
+                  className={`grid grid-cols-4 gap-10 py-5 px-3 hover:bg-slate-200 border-b-2 border-slate-200 relative border-l-8 ${control.getShiftStatusColor(
+                    s
+                  )} hover:cursor-pointer`}
                   key={s.id}
                   title={`${
-                    shiftNeedsTimeEntered(s) ? "Shift needs time entered" : ""
+                    control.shiftNeedsTimeEntered(s)
+                      ? "Shift needs time entered"
+                      : ""
                   }`}
-                  onClick={() => navigate(`/shift/view/details/${s.id}`)}
+                  onClick={() =>
+                    control.navigate(`/shift/view/details/${s.id}`)
+                  }
                 >
                   <p>{s.location}</p>
                   <p>{CombineTime(s.startTime, s.endTime)}</p>
                   <p>{s.description}</p>
                   <p
-                    className={`text-end font-semibold ${getEmpShiftCountColor(
+                    className={`pe-2 text-end font-semibold ${control.getEmpShiftCountColor(
                       s
                     )}`}
                   >
-                    {getNumEmployeesSignedUpForShift(s)}
+                    {control.getNumEmployeesSignedUpForShift(s)}
                     {" / "}
                     {s.requestedEmployees}
                   </p>
