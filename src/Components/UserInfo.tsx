@@ -139,7 +139,7 @@ export const UserInfo = () => {
                           </h1>
                           {shiftsWithErrors.map((e) => (
                             <ShiftRow
-                              key={e.date}
+                              key={e.projectName + e.shiftId}
                               shift={e}
                               employeeId={control.selectedEmployee?.id}
                             />
@@ -155,7 +155,7 @@ export const UserInfo = () => {
                           </h1>
                           {pastShifts.map((e) => (
                             <ShiftRow
-                              key={e.date}
+                              key={e.projectName + e.shiftId}
                               shift={e}
                               employeeId={control.selectedEmployee?.id}
                             />
@@ -171,7 +171,7 @@ export const UserInfo = () => {
                           </h1>
                           {futureShifts.map((e) => (
                             <ShiftRow
-                              key={e.date}
+                              key={e.projectName + e.shiftId}
                               shift={e}
                               employeeId={control.selectedEmployee?.id}
                             />
