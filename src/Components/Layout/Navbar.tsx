@@ -34,11 +34,31 @@ const Navbar = () => {
         <div className="hidden sm:flex flex-grow pl-10">
           {/* Left-Aligned Navigation Links */}
           <div className="flex items-center">
-            <NavItem to={"/project/view"} label={"Projects"} roles={[CLIENT_ROLE, PSO_ROLE, ADMIN_ROLE]} />
-            <NavItem to={"/invoiceCreation"} label={"Invoicing"} roles={[CLIENT_ROLE, ADMIN_ROLE]} />
-            <NavItem to={"/shift/view/available"} label={"Available Shifts"} roles={[PSO_ROLE]} />
-            <NavItem to={"/shift/view/claimed"} label={"My Shifts"} roles={[PSO_ROLE]} />
-            <NavItem to={"/admin/user/view"} label={"Employees"} roles={[ADMIN_ROLE]} />
+            <NavItem
+              to={"/project/view"}
+              label={"Projects"}
+              roles={[CLIENT_ROLE, PSO_ROLE, ADMIN_ROLE]}
+            />
+            <NavItem
+              to={"/invoiceCreation"}
+              label={"Invoicing"}
+              roles={[ADMIN_ROLE]}
+            />
+            <NavItem
+              to={"/shift/view/available"}
+              label={"Available Shifts"}
+              roles={[PSO_ROLE]}
+            />
+            <NavItem
+              to={"/shift/view/claimed"}
+              label={"My Shifts"}
+              roles={[PSO_ROLE]}
+            />
+            <NavItem
+              to={"/admin/user/view"}
+              label={"Employees"}
+              roles={[ADMIN_ROLE]}
+            />
           </div>
 
           {/* Right-Aligned Login Button */}
@@ -66,11 +86,36 @@ const Navbar = () => {
                 className="flex flex-col items-center pb-4"
               >
                 {/* Mobile Menu Items */}
-                <NavItem to={"/project/view"} label={"Projects"} roles={[CLIENT_ROLE, PSO_ROLE, ADMIN_ROLE]} onClick={handleCloseMenu} />
-                <NavItem to={"/invoiceCreation"} label={"Invoicing"} roles={[CLIENT_ROLE, ADMIN_ROLE]} onClick={handleCloseMenu} />
-                <NavItem to={"/shift/view/available"} label={"Available Shifts"} roles={[PSO_ROLE]} onClick={handleCloseMenu} />
-                <NavItem to={"/shift/view/claimed"} label={"My Shifts"} roles={[PSO_ROLE]} onClick={handleCloseMenu} />
-                <NavItem to={"/admin/user/view"} label={"Employees"} roles={[ADMIN_ROLE]} onClick={handleCloseMenu} />
+                <NavItem
+                  to={"/project/view"}
+                  label={"Projects"}
+                  roles={[CLIENT_ROLE, PSO_ROLE, ADMIN_ROLE]}
+                  onClick={handleCloseMenu}
+                />
+                <NavItem
+                  to={"/invoiceCreation"}
+                  label={"Invoicing"}
+                  roles={[CLIENT_ROLE, ADMIN_ROLE]}
+                  onClick={handleCloseMenu}
+                />
+                <NavItem
+                  to={"/shift/view/available"}
+                  label={"Available Shifts"}
+                  roles={[PSO_ROLE]}
+                  onClick={handleCloseMenu}
+                />
+                <NavItem
+                  to={"/shift/view/claimed"}
+                  label={"My Shifts"}
+                  roles={[PSO_ROLE]}
+                  onClick={handleCloseMenu}
+                />
+                <NavItem
+                  to={"/admin/user/view"}
+                  label={"Employees"}
+                  roles={[ADMIN_ROLE]}
+                  onClick={handleCloseMenu}
+                />
 
                 {/* Login/Logout Button */}
                 <div className="font-medium text-xl p-3 hover:text-white hover:border-white">

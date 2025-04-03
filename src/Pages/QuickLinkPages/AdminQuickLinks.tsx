@@ -17,21 +17,21 @@ const AdminQuickLinks = () => {
         <hr className="w-1/2 mb-6 border-t-2 border-gray-300" />
         <Link
           className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
-          to="/admin/user/view"
-        >
-          Employees
-        </Link>
-        <Link
-          className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
           to="/project/view"
         >
           Projects
         </Link>
         <Link
           className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
-          to="/shift/view/available"
+          to="/invoicecreation"
         >
-          Available Shifts
+          Invoicing
+        </Link>
+        <Link
+          className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
+          to="/admin/user/view"
+        >
+          Employees
         </Link>
       </div>
     </>
