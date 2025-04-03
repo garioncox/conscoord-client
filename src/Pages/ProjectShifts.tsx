@@ -20,7 +20,7 @@ import ShiftSort from "@/Components/Sorting/ShiftSort";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAuth } from "react-oidc-context";
 import { AddShift } from "@/Components/AddShift";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, IdCard } from "lucide-react";
 
 const ProjectShifts = () => {
   const { isLoading: authLoading } = useAuth();
@@ -100,64 +100,83 @@ const ProjectShifts = () => {
 
   return (
     <div className="min-w-full 2xl:px-40">
-      <h1 className="text-4xl">Viewing Project</h1>
-      <h2 className="text-center capitalize font-semibold">
-        Name: {currentProject?.name} <br />
-        Location: {currentProject?.location} <br />
-        {currentProject?.status}
-      </h2>
-      <div>
-        {contactPerson ? (
-          <>
-            <h1 className="mb-1 text-2xl">Point of Contact:</h1>
-            <div className="text-center mb-4">
-              <p>{contactPerson.name}</p>
-              <p>{contactPerson.phonenumber}</p>
-              <p>{contactPerson.email}</p>
-            </div>
-          </>
-        ) : (
-          <div className="text-center m-8">
-            No contact person listed for this project
+      <h1 className="py-3 text-4xl">
+        <span className="text-red-400 text-lg">#{currentProject?.id}</span>{" "}
+        {currentProject?.name}
+      </h1>
+      <div className="min-w-full flex flex-col lg:flex-row p-2">
+        <div className="flex flex-col lg:p-10 lg:me-10 xl:max-w-[22%] lg:max-w-[30%] border rounded-xl bg-slate-100 w-full shadow max-h-[35vh] p-5 mb-4 lg:mb-0">
+          <h2 className="text-center capitalize font-semibold text-2xl">
+            {currentProject?.location} <br />
+          </h2>
+          <div className="flex flex-col flex-grow">
+            {contactPerson ? (
+              <>
+                <hr className="m-3 border-2" />
+                <div className="flex flex-row items-start mt-2 text-sm">
+                  <IdCard className="me-1 h-auto min-w-6" />
+                  <div className="overflow-hidden whitespace-nowrap w-full">
+                    <div className="font-semibold ps-2 truncate">
+                      {contactPerson.name}
+                    </div>
+                    <div className="ps-2 truncate" title={contactPerson.email}>
+                      {contactPerson.email}
+                    </div>
+                    <div className="ps-2 truncate">
+                      {contactPerson.phonenumber}
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-center m-8">
+                No contact person listed for this project
+              </div>
+            )}
+            <div className="flex flex-grow"></div>
+            <PermissionComponentLock roles={[ADMIN_ROLE]}>
+              <div className="flex justify-end">
+                <button
+                  onClick={toggleCancelModal}
+                  disabled={currentProject?.status === "ARCHIVED"}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
+                >
+                  Cancel Project
+                </button>
+              </div>
+            </PermissionComponentLock>
           </div>
-        )}
-      </div>
-      <PaginatedTable control={control}>
-        <ShiftSort
-          data={sortedData!}
-          onSortChange={setSortedData}
-          psoRole={true}
-        />
-        <ShiftTable data={control.currentItems} setRowClicked={clickOnAShift} />
-
-        <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
-          <button
-            onClick={() => toggleAddModal()}
-            className="border rounded-lg hover:bg-slate-200 hover:border-slate-300 h-10 w-10 flex items-center justify-center"
-          >
-            <CirclePlus className="h-4 w-4" />
-          </button>
-          {isAddModalOpen === true && (
-            <AddShift
-              projectId={Number(id)}
-              toggleModal={toggleAddModal}
-              isModalOpen={isAddModalOpen}
-            />
-          )}
-        </PermissionComponentLock>
-      </PaginatedTable>
-      <PermissionComponentLock roles={[ADMIN_ROLE]}>
-        <div className="flex justify-end mt-2">
-          <button
-            onClick={toggleCancelModal}
-            disabled={currentProject?.status === "ARCHIVED"}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-          >
-            Cancel Project
-          </button>
         </div>
-      </PermissionComponentLock>
+        <div className="overflow-y-auto max-h-[80%] flex-row lg:flex-col lg:w-full">
+          <PaginatedTable control={control}>
+            <ShiftSort
+              data={sortedData!}
+              onSortChange={setSortedData}
+              psoRole={true}
+            />
+            <ShiftTable
+              data={control.currentItems}
+              setRowClicked={clickOnAShift}
+            />
 
+            <PermissionComponentLock roles={[CLIENT_ROLE, ADMIN_ROLE]}>
+              <button
+                onClick={() => toggleAddModal()}
+                className="border rounded-lg hover:bg-slate-200 hover:border-slate-300 h-10 w-10 flex items-center justify-center"
+              >
+                <CirclePlus className="h-4 w-4" />
+              </button>
+              {isAddModalOpen === true && (
+                <AddShift
+                  projectId={Number(id)}
+                  toggleModal={toggleAddModal}
+                  isModalOpen={isAddModalOpen}
+                />
+              )}
+            </PermissionComponentLock>
+          </PaginatedTable>
+        </div>
+      </div>
       <Modal isOpen={isCancelModalOpen} onClose={toggleCancelModal}>
         <div>
           <div>
