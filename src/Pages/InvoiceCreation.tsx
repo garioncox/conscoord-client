@@ -226,30 +226,15 @@ const InvoiceCreation = () => {
         </div>
 
         {/* Invoice Preview */}
-        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px]">
-          <div className="px-5 pt-3 border-b">
-            <div className="border-slate-300 min-h-12 flex items-center">
-              <div className="flex items-center">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={control.includeResidualShifts}
-                      onChange={control.handleCheckboxChange}
-                    />
-                  }
-                  disabled={
-                    control.isGeneratingInvoice ||
-                    control.selectedCompany === null
-                  }
-                  label="Include Residuals"
-                />
-              </div>
-
-              <p className="flex-grow text-center font-semibold text-xl">
+        <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px] xl:min-w-[700px]">
+          <div className="px-5 pt-3 border-b relative">
+            <div className="border-slate-300 min-h-12 flex items-center justify-between relative">
+              {/* Centered Title */}
+              <p className="absolute left-1/2 -translate-x-1/2 font-semibold text-xl">
                 Invoice Preview
               </p>
 
-              <div className="flex flex-row items-center">
+              <div className="flex flex-row items-center ms-auto">
                 {control.isGeneratingInvoice && (
                   <div className="me-5">
                     <Spinner useText={false} />
@@ -273,18 +258,34 @@ const InvoiceCreation = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-start text-lg pe-3 pt-2 pb-1">
-              <div className="flex flex-row items-center">
-                <div className="h-4 w-4 bg-green-500 rounded border border-green-600" />
-                <div className="ps-1 text-md">Past Shift</div>
+            <div
+              className={`flex items-center justify-end text-lg pe-3 pt-2 pb-1 ${
+                control.selectedCompany ? "" : "opacity-50"
+              }`}
+            >
+              <div className="flex items-center">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={control.includeResidualShifts}
+                      onChange={control.handleCheckboxChange}
+                    />
+                  }
+                  disabled={
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                  }
+                  label="Include Residuals"
+                />
+              </div>
+
+              <div className="flex flex-row items-center ms-auto">
+                <div className="h-4 w-4 bg-red-400 rounded border border-red-500" />
+                <div className="ps-2 text-md">Needs Time Entered</div>
               </div>
               <div className="flex flex-row items-center ps-4">
                 <div className="h-4 w-4 bg-amber-300 rounded border border-amber-500" />
-                <div className="ps-1 text-md">Enter Time</div>
-              </div>
-              <div className="flex flex-row items-center ps-4">
-                <div className="h-4 w-4 bg-gray-300 rounded border border-gray-400" />
-                <div className="ps-1 text-md">Future Shift</div>
+                <div className="ps-2 text-md">Residual</div>
               </div>
             </div>
           </div>
