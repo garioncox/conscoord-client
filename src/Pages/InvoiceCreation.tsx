@@ -71,11 +71,11 @@ const InvoiceCreation = () => {
         </div>
       </div>
 
-      <div className="space-y-10 flex flex-col grow xl:max-w-[60%] pt-10 xl:pt-0 pb-10 xl:pb-2 xl:overflow-y-scroll px-2">
-        <div className="shadow-md rounded-xl shadow-slate-400 border md:min-h-[560px]">
+      <div className="space-y-6 flex flex-col grow xl:max-w-[60%] pt-10 xl:pt-0 pb-10 xl:pb-2 xl:overflow-y-scroll px-2">
+        <div className="shadow-md rounded-xl shadow-slate-400 border md:min-h-[490px]">
           <div>
             {/* Month / Date Select */}
-            <div className="flex flex-row mb-5 py-5 justify-around border-b">
+            <div className="flex flex-row mb-5 py-2 justify-around border-b">
               <div className="ms-10">
                 <FormControl>
                   <RadioGroup
@@ -104,43 +104,7 @@ const InvoiceCreation = () => {
                       label="Specific Dates"
                     />
                   </RadioGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={control.includeResidualShifts}
-                        onChange={control.handleCheckboxChange}
-                      />
-                    }
-                    disabled={
-                      control.isGeneratingInvoice ||
-                      control.selectedCompany === null
-                    }
-                    label="Include Residuals"
-                  />
                 </FormControl>
-              </div>
-
-              <div className="ms-auto me-3 flex flex-row items-center">
-                {control.isGeneratingInvoice && (
-                  <div className="me-5">
-                    <Spinner useText={false} />
-                  </div>
-                )}
-                <button
-                  className={`text-white font-semibold p-3 rounded-xl transition-colors duration-150 ${
-                    control.isGeneratingInvoice ||
-                    control.selectedCompany === null
-                      ? "bg-slate-500 opacity-25"
-                      : "bg-[#1976d2] hover:bg-[#1565c0]"
-                  }`}
-                  onClick={() => control.generateInvoice()}
-                  disabled={
-                    control.isGeneratingInvoice ||
-                    control.selectedCompany === null
-                  }
-                >
-                  Generate Invoice
-                </button>
               </div>
             </div>
 
@@ -263,12 +227,66 @@ const InvoiceCreation = () => {
 
         {/* Invoice Preview */}
         <div className="border border-slate-300 shadow-md shadow-slate-400 rounded-xl overflow-x-hidden flex flex-grow flex-col min-h-[250px]">
-          <div
-            className={`bg-slate-200 min-h-12 flex items-center justify-center ${
-              control.selectedCompany ? "" : "opacity-50"
-            }`}
-          >
-            <p className="font-semibold text-xl">Invoice Preview</p>
+          <div className="px-5 pt-3 border-b">
+            <div className="border-slate-300 min-h-12 flex items-center">
+              <div className="flex items-center">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={control.includeResidualShifts}
+                      onChange={control.handleCheckboxChange}
+                    />
+                  }
+                  disabled={
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                  }
+                  label="Include Residuals"
+                />
+              </div>
+
+              <p className="flex-grow text-center font-semibold text-xl">
+                Invoice Preview
+              </p>
+
+              <div className="flex flex-row items-center">
+                {control.isGeneratingInvoice && (
+                  <div className="me-5">
+                    <Spinner useText={false} />
+                  </div>
+                )}
+                <button
+                  className={`text-white font-semibold px-3 py-2 rounded-xl transition-colors duration-150 ${
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                      ? "bg-slate-500 opacity-25"
+                      : "bg-[#1976d2] hover:bg-[#1565c0]"
+                  }`}
+                  onClick={() => control.generateInvoice()}
+                  disabled={
+                    control.isGeneratingInvoice ||
+                    control.selectedCompany === null
+                  }
+                >
+                  Generate Invoice
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-start text-lg pe-3 pt-2 pb-1">
+              <div className="flex flex-row items-center">
+                <div className="h-4 w-4 bg-green-500 rounded border border-green-600" />
+                <div className="ps-1 text-md">Past Shift</div>
+              </div>
+              <div className="flex flex-row items-center ps-4">
+                <div className="h-4 w-4 bg-amber-300 rounded border border-amber-500" />
+                <div className="ps-1 text-md">Enter Time</div>
+              </div>
+              <div className="flex flex-row items-center ps-4">
+                <div className="h-4 w-4 bg-gray-300 rounded border border-gray-400" />
+                <div className="ps-1 text-md">Future Shift</div>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col grow xl:h-full h-[300px] overflow-y-scroll">
