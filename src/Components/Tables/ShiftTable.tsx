@@ -53,9 +53,6 @@ export const ShiftTable: FC<{
 
         <div className="overflow-y-auto max-h-[400px] xl:h-[50vh] xl:max-h-full">
           {sortedData
-            .filter(
-              (e) => new Date(e.endTime) >= new Date() && shiftFraction(e) < 1
-            )
             .map((shift) => {
               const isShiftTaken = userShifts?.some(
                 (userShift) => userShift.id === shift.id
