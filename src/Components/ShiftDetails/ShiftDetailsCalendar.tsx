@@ -20,7 +20,6 @@ export const ShiftDetailsCalendar =  ({ control }: { control: ReturnType<typeof 
 
   return (
     <>
-      <div className="border p-4 rounded-lg shadow w-[30%] m-3">
         <h2 className="text-2xl font-semibold mb-2 flex justify-center">Shift Date</h2>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateCalendar
@@ -30,7 +29,6 @@ export const ShiftDetailsCalendar =  ({ control }: { control: ReturnType<typeof 
         </LocalizationProvider>
         <p className="pb-4 flex justify-center font-semibold text-3xl">{daysAwayString}</p>
         <p className="flex justify-center text-xl">{control.shiftFromParam?.startTime.split('T')[1]} - {control.shiftFromParam?.endTime.split('T')[1]}</p>
-        </div>
     </>
   );
 };

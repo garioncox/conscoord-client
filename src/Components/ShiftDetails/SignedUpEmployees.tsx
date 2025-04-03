@@ -6,7 +6,6 @@ export const SignedUpEmployees =  ({ control }: { control: ReturnType<typeof use
 
   return (
     <>
-      <div className="w-1/3 p-4 border rounded-lg shadow">
         <div className="mt-10 mb-5 text-4xl font-bold ">
           Signed Up Employees:
         </div>
@@ -76,7 +75,6 @@ export const SignedUpEmployees =  ({ control }: { control: ReturnType<typeof use
             </div>
           </PermissionComponentLock>
         </div>
-      </div>
     </>
   );
 };

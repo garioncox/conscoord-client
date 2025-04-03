@@ -21,18 +21,18 @@ export const ShiftDetails = () => {
   }
 
   return (
-    <div className=" flex flex-wrap">
-      <div className=" space-y-2 border-gray-300  bg-white w-full p-4 border rounded-lg shadow flex flex-wrap m-3">
+    <div className="flex flex-col md:flex-row md:flex-wrap">
+      <div className="space-y-2 border-gray-300 bg-white w-full p-4 border rounded-md shadow flex flex-wrap m-3">
         {/* Title */}
-        <div className="justify-center items-center p-6 w-1/2">
+        <div className="justify-center items-center p-6 md:w-1/2 w-full">
           <h1 className="font-bold text-5xl text-center">
             {control.shiftFromParam.location.toUpperCase()}
           </h1>
         </div>
 
         {/* Description Box */}
-        <div className="w-1/2 border rounded-lg bg-gray-50 shadow items-center p-6">
-          <p className="text-lg">
+        <div className="w-full md:w-1/2 border rounded-md bg-gray-50 shadow items-center p-6">
+          <p className="text-md">
             {control.shiftFromParam.description &&
             control.shiftFromParam.description.length > 0
               ? control.shiftFromParam.description
@@ -41,27 +41,39 @@ export const ShiftDetails = () => {
         </div>
       </div>
 
-      <div className="flex justify-center">
-        {/* Log Time/ShiftFraction */}
-        <div className="flex flex-col w-[30%]">
-          <PermissionComponentLock roles={[PSO_ROLE]}>
-            <LogTime control={control} />
-          </PermissionComponentLock>
-
-          {/* Shift Fraction */}
-          <ShiftFraction control={control} />
-        </div>
-
-        {/* Signed Up Employees */}
-        <SignedUpEmployees control={control} />
-
-        {/* Calendar */}
-        <ShiftDetailsCalendar control={control} />
-
-        {/* Modals */}
-        <DidNotWorkModal control={control} />
-        <ReportCanceledModal control={control} />
+      <div className="flex flex-col md:flex-row md:flex-wrap justify-center w-full">
+  {/* Log Time/ShiftFraction */}
+  <div className="flex flex-col w-full md:w-[45%] lg:w-[30%]">
+    <PermissionComponentLock roles={[PSO_ROLE]}>
+      <div
+        className={`justify-center p-4 border rounded-md shadow h-1/2 md:m-3 ${
+          !control.currentEmpShift ? "opacity-50 pointer-events-none" : ""
+        }`}
+      >
+        <LogTime control={control} />
       </div>
+    </PermissionComponentLock>
+
+    {/* Shift Fraction */}
+    <div className="flex items-center justify-center p-4 border rounded-md shadow h-1/2 flex-col m-3">
+      <ShiftFraction control={control} />
+    </div>
+  </div>
+
+  {/* Signed Up Employees - Will be pushed to the bottom on small screens */}
+  <div className="w-full lg:w-[30%] p-4 border rounded-md shadow m-3 order-last lg:order-none">
+    <SignedUpEmployees control={control} />
+  </div>
+
+  {/* Calendar */}
+  <div className="w-full md:w-[50%] lg:w-[30%] p-4 border rounded-md shadow m-3">
+    <ShiftDetailsCalendar control={control} />
+  </div>
+</div>
+
+      {/* Modals */}
+      <DidNotWorkModal control={control} />
+      <ReportCanceledModal control={control} />
     </div>
   );
 };
