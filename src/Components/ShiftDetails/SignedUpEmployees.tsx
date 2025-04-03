@@ -2,8 +2,7 @@ import { useShiftDetailsControl } from "@/Pages/Control/ShiftDetailsControl";
 import PermissionComponentLock from "../Auth/PermissionComponentLock";
 import { ADMIN_ROLE, CLIENT_ROLE } from "../Auth/PermissionLock";
 
-export const SignedUpEmployees = ({ id }: { id: number }) => {
-  const control = useShiftDetailsControl(id);
+export const SignedUpEmployees =  ({ control }: { control: ReturnType<typeof useShiftDetailsControl> }) => {
 
   return (
     <>

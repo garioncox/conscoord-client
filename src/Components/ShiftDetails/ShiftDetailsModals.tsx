@@ -2,8 +2,11 @@ import Modal from "@/Components/Modal";
 import GTextInput from "@/Components/Generics/gTextInput";
 import { useShiftDetailsControl } from "@/Pages/Control/ShiftDetailsControl";
 
-export const DidNotWorkModal = ({ id }: { id: number }) => {
-  const control = useShiftDetailsControl(id);
+interface DNWModalProps {
+  control: ReturnType<typeof useShiftDetailsControl>;
+}
+
+export const DidNotWorkModal: React.FC<DNWModalProps> = ({ control })=> {
 
   return (
     <Modal
@@ -47,8 +50,7 @@ export const DidNotWorkModal = ({ id }: { id: number }) => {
   );
 };
 
-export const ReportCanceledModal = ({ id }: { id: number }) => {
-  const control = useShiftDetailsControl(id);
+export const ReportCanceledModal =  ({ control }: { control: ReturnType<typeof useShiftDetailsControl> }) => {
 
   return (
     <Modal

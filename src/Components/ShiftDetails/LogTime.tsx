@@ -4,13 +4,17 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useShiftDetailsControl } from "@/Pages/Control/ShiftDetailsControl";
 
-export const LogTime = ({ id }: { id: number }) => {
-  const control = useShiftDetailsControl(id);
+interface LogTimeProps {
+  control: ReturnType<typeof useShiftDetailsControl>;
+}
+
+export const LogTime: React.FC<LogTimeProps> = ({ control }) => {
+  // const control = useShiftDetailsControl(id);
 
   return (
     <>
       <div
-        className={`justify-center p-4 border rounded-lg shadow  h-1/2${
+        className={`justify-center p-4 border rounded-lg shadow  h-1/2 m-3${
           !control.currentEmpShift ? "opacity-50 pointer-events-none" : ""
         }`}
       >
@@ -50,12 +54,12 @@ export const LogTime = ({ id }: { id: number }) => {
                   : "cursor-pointer"
               }`}
               onClick={() => {
-                // if (!control.confirmedNotWorked && !control.isFormDisabled) {
-                //   control.toggleShiftNotWorkedModal();
-                // }
-                console.log(control.isNotWorkedModalOpen )
-                control.setNotWorkedModalOpen(true)
-                control.setConfirmedNotWorked(false)
+                if (!control.confirmedNotWorked && !control.isFormDisabled) {
+                  control.toggleShiftNotWorkedModal();
+                }
+                // console.log(control.isNotWorkedModalOpen )
+                // control.setNotWorkedModalOpen(true)
+                // control.setConfirmedNotWorked(false)
               }}
             >
               <Checkbox
