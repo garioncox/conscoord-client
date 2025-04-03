@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export interface PaginationControl<T> {
   setCurrentPage: Dispatch<SetStateAction<number>>;
@@ -24,6 +24,16 @@ export function usePagination<T>(data: T[]) {
   const totalPages = data ? Math.ceil(data.length / itemsPerPage) || 1 : 1;
 
   const handlePageChange = (pageNumber: number) => {
+    if (pageNumber < totalPages) {
+      setCurrentPage(1);
+      return;
+    }
+
+    if (pageNumber > totalPages) {
+      setCurrentPage(totalPages);
+      return;
+    }
+
     setCurrentPage(pageNumber);
   };
 
@@ -31,6 +41,18 @@ export function usePagination<T>(data: T[]) {
     setItemsPerPage(Number(value));
     setCurrentPage(1);
   };
+
+  useEffect(() => {
+    if (currentPage < totalPages) {
+      setCurrentPage(1);
+      return;
+    }
+
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+      return;
+    }
+  }, [data, totalPages, currentPage]);
 
   return {
     totalPages,
