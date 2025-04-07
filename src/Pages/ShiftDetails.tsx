@@ -36,7 +36,7 @@ export const ShiftDetails = () => {
             {control.shiftFromParam.description &&
             control.shiftFromParam.description.length > 0
               ? control.shiftFromParam.description
-              : "No Description Provided"}
+              : "No description provided for this shift"}
           </p>
         </div>
       </div>
