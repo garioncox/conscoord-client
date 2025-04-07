@@ -17,6 +17,7 @@ export const ProgressCircle = ({
       lightness = 40; // Darker yellow
     } else {
       hue = 60 + ((progress - 60) / 40) * 60; // 60% → 100% (Yellow → Green)
+      lightness = 35;
     }
 
     return `hsl(${hue}, 100%, ${lightness}%)`; // Adjusted lightness for yellow

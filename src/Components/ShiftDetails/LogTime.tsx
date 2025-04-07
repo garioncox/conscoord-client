@@ -41,7 +41,7 @@ export const LogTime: React.FC<LogTimeProps> = ({ control }) => {
         {/* Did not work + Canceled checkboxes */}
         <div>
           <div
-            className={`flex flex-row items-center ${
+            className={`flex flex-row items-center mb-3 ${
               control.confirmedNotWorked || control.isFormDisabled
                 ? "cursor-not-allowed"
                 : "cursor-pointer"
@@ -50,9 +50,6 @@ export const LogTime: React.FC<LogTimeProps> = ({ control }) => {
               if (!control.confirmedNotWorked && !control.isFormDisabled) {
                 control.toggleShiftNotWorkedModal();
               }
-              // console.log(control.isNotWorkedModalOpen )
-              // control.setNotWorkedModalOpen(true)
-              // control.setConfirmedNotWorked(false)
             }}
           >
             <Checkbox
