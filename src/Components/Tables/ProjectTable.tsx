@@ -176,10 +176,10 @@ const Card = ({
       {project.contactinfo && (
         <div className="flex flex-row items-start mt-2 text-sm">
           <IdCard className="me-1 h-auto min-w-6" />
-          <div>
-            <div className="font-semibold">{contact?.name}</div>
-            <div>{contact?.email}</div>
-            <div>{contact?.phonenumber}</div>
+          <div className="overflow-hidden whitespace-nowrap w-full">
+            <div className="font-semibold truncate">{contact?.name}</div>
+            <div className="truncate">{contact?.email}</div>
+            <div className="truncate">{contact?.phonenumber}</div>
           </div>
         </div>
       )}

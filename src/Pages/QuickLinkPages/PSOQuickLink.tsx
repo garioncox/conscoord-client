@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import PSOBanner from "../../Pictures/PSOBanner.webp"
+import PSOBanner from "../../Pictures/PSOBanner.webp";
 
 const PSOQuickLink = () => {
   return (
@@ -19,9 +19,9 @@ const PSOQuickLink = () => {
         <hr className="w-1/2 mb-6 border-t-2 border-gray-300" />
         <Link
           className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
-          to="/shift/view/claimed"
+          to="/project/view"
         >
-          My Shifts
+          Projects
         </Link>
         <Link
           className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
@@ -31,9 +31,9 @@ const PSOQuickLink = () => {
         </Link>
         <Link
           className="text-2xl text-blue-500 font-semibold hover:text-blue-900 hover:scale-105 p-2 transition duration-300"
-          to="/project/view"
+          to="/shift/view/claimed"
         >
-          Projects
+          My Shifts
         </Link>
       </div>
     </>

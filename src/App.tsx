@@ -70,7 +70,7 @@ function App() {
       <Route
         path="invoiceCreation"
         element={
-          <PermissionLock roles={[CLIENT_ROLE]}>
+          <PermissionLock roles={[ADMIN_ROLE]}>
             <InvoiceCreation />
           </PermissionLock>
         }
