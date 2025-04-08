@@ -42,8 +42,8 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
-  const [debouncedStartDate] = useDebounce(selectedStartDate, 1500);
-  const [debouncedEndDate] = useDebounce(selectedEndDate, 1500);
+  const [debouncedStartDate] = useDebounce(selectedStartDate, 1000);
+  const [debouncedEndDate] = useDebounce(selectedEndDate, 1000);
 
   const [includeResidualShifts, setIncludeResidualShifts] = useState(false);
   const [isGeneratingInvoice, setIsGeneratingInvoice] =
