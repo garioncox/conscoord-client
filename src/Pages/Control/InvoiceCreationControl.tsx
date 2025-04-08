@@ -18,9 +18,10 @@ import {
   PickersDay,
 } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { toast } from "react-toastify";
+import { useDebounce } from "use-debounce";
 
 export const useInvoiceCreationControl = () => {
   const { data: Companies, isLoading: isCompaniesLoading } = useAllCompanies();
@@ -41,6 +42,8 @@ export const useInvoiceCreationControl = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<dayjs.Dayjs | null>(
     dayjs()
   );
+  const [debouncedStartDate] = useDebounce(selectedStartDate, 1000);
+  const [debouncedEndDate] = useDebounce(selectedEndDate, 1000);
 
   const [includeResidualShifts, setIncludeResidualShifts] = useState(false);
   const [isGeneratingInvoice, setIsGeneratingInvoice] =
@@ -50,6 +53,18 @@ export const useInvoiceCreationControl = () => {
     useState<invoiceCreationDTO | null>(null);
   const { data: invoicePreviewData, isLoading: isInvoiceDataLoading } =
     useInvoicePreviewData(invoicePreviewDTO);
+
+    useEffect(() => {
+      if (debouncedStartDate) {
+        setStartDate(debouncedStartDate);
+      }
+    }, [debouncedStartDate]);
+    
+    useEffect(() => {
+      if (debouncedEndDate) {
+        setEndDate(debouncedEndDate);
+      }
+    }, [debouncedEndDate]);
 
   const { data: datesWithErrors } = useShiftDatesWithError(selectedCompany?.id);
   const { data: invoices } = useAllInvoicesForCompany(selectedCompany?.id);
@@ -290,8 +305,12 @@ export const useInvoiceCreationControl = () => {
     selectedCompany,
     selectedMonth,
     setSelectedMonth,
-    selectedStartDate,
+    debouncedStartDate,
+    setSelectedStartDate,
+    setSelectedEndDate,
     setStartDate,
+    debouncedEndDate,
+    selectedStartDate,
     selectedEndDate,
     setEndDate,
     selectPreviousYear,
