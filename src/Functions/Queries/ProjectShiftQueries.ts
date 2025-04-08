@@ -22,13 +22,19 @@ export const useNumProjectShiftForProject = (projectId: number) => {
 
 export const useAddProjectShift = () => {
   const { user } = useAuth();
-  const {createToast} = useCustomToast();
+  const { createToast } = useCustomToast();
   return useMutation({
     mutationFn: async ({ project }: { project: ProjectShiftDTO }) => {
-      await createToast(addProjectShift, "Adding Project Shift" , user?.id_token ?? "", project);
+      await createToast(
+        addProjectShift,
+        "Adding Project Shift",
+        user?.id_token ?? "",
+        project
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.projects });
+      queryClient.invalidateQueries({ queryKey: [queryKeys.shiftsByProject] });
     },
   });
 };
