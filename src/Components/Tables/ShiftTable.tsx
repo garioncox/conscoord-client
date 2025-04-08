@@ -1,5 +1,5 @@
 import { Shift } from "@/Data/Interfaces/Shift";
-import { Check, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   useClaimedShiftsForLoggedInUser,
   useClaimShiftMutation,
@@ -60,15 +60,13 @@ export const ShiftTable: FC<{
 
         <div className="overflow-y-auto max-h-[400px] xl:h-[50vh] xl:max-h-full">
           {sortedData.map((shift) => {
-            const isShiftTaken = userShifts?.some(
-              (userShift) => userShift.id === shift.id
-            );
             const isShiftFull =
               shiftFraction(shift) >= 1 || shift.status === "ARCHIVED";
             const isOverlapping = userShifts?.some(
-              (userShift) =>
-                userShift.startTime >= shift.startTime &&
-                userShift.endTime <= shift.endTime
+              (s) =>
+                (shift.startTime > s.startTime &&
+                  shift.startTime < s.endTime) ||
+                (shift.endTime > s.startTime && shift.endTime < s.endTime)
             );
 
             const buttonClass =
@@ -131,23 +129,14 @@ export const ShiftTable: FC<{
                 </div>
                 <PermissionComponentLock roles={[PSO_ROLE]}>
                   <div className="flex justify-end pe-2 col-span-1">
-                    {isShiftTaken ? (
-                      <button
-                        onClick={(e) => e.stopPropagation()}
-                        className="bg-emerald-400 group rounded-full cursor-default hover:bg-emerald-400 h-10 w-10 flex items-center justify-center"
-                      >
-                        <Check className="h-4 w-4 text-white" strokeWidth={5} />
-                      </button>
-                    ) : (
-                      <button
-                        className={`rounded-xl bg-tertiary ${buttonClass} border-2 h-10 w-10 flex items-center justify-center`}
-                        title={buttonTitle}
-                        onClick={handleDebouncedTakeShift}
-                        disabled={addMutation.isPending || isClaimingShift}
-                      >
-                        <Plus className="h-4 w-4" strokeWidth={3} />
-                      </button>
-                    )}
+                    <button
+                      className={`rounded-xl bg-tertiary ${buttonClass} border-2 h-10 w-10 flex items-center justify-center`}
+                      title={buttonTitle}
+                      onClick={handleDebouncedTakeShift}
+                      disabled={addMutation.isPending || isClaimingShift}
+                    >
+                      <Plus className="h-4 w-4" strokeWidth={3} />
+                    </button>
                   </div>
                 </PermissionComponentLock>
               </div>
