@@ -387,7 +387,7 @@ const InvoiceCreation = () => {
                 </div>
               </div>
             ))}
-          {!control.invoices && (
+          {(!control.invoices || control.invoices.length <= 0) && (
             <p className="w-full text-center pt-3">
               No Previous Invoices Found
             </p>
