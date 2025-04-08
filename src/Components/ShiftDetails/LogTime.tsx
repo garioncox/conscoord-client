@@ -14,7 +14,7 @@ export const LogTime: React.FC<LogTimeProps> = ({ control }) => {
       <div className="font-semibold text-xl pb-5 text-center lg:text-left">
         Log Time
       </div>
-      <div className="flex flex-col items-center space-y-5 lg:flex-row lg:space-y-0 lg:space-x-3">
+      <div className="flex flex-col items-center space-y-5 lg:flex-row lg:space-y-0 lg:space-x-3" title={control.shiftToolTip}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimePicker
             label="Start Time"
@@ -93,7 +93,7 @@ export const LogTime: React.FC<LogTimeProps> = ({ control }) => {
           </div>
         </div>
       </div>
-      <button
+      <button title={control.shiftToolTip}
         className={`text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 ${
           control.isFormDisabled ||
           control.currentEmpShift?.reportedCanceled ||
