@@ -165,10 +165,10 @@ const InvoiceCreation = () => {
                         <div>
                           <DateField
                             label="Start Date"
-                            value={control.selectedStartDate}
+                            value={control.debouncedStartDate}
                             onChange={(newValue) => {
                               if (newValue != null) {
-                                control.setStartDate(newValue);
+                                control.setSelectedStartDate(newValue);
                               }
                             }}
                           />
@@ -193,10 +193,10 @@ const InvoiceCreation = () => {
                         <div>
                           <DateField
                             label="End Date"
-                            value={control.selectedEndDate}
+                            value={control.debouncedEndDate}
                             onChange={(newValue) => {
                               if (newValue != null) {
-                                control.setEndDate(newValue);
+                                control.setSelectedEndDate(newValue);
                               }
                             }}
                           />
@@ -387,7 +387,7 @@ const InvoiceCreation = () => {
                 </div>
               </div>
             ))}
-          {!control.invoices && (
+          {(!control.invoices || control.invoices.length <= 0) && (
             <p className="w-full text-center pt-3">
               No Previous Invoices Found
             </p>
