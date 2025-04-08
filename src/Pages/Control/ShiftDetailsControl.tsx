@@ -215,5 +215,6 @@ export const useShiftDetailsControl = (id: number) => {
     SaveShiftTimes,
     MarkShiftNotWorked,
     ReportShiftCanceled,
+    setNotWorkedModalOpen
   };
 };
