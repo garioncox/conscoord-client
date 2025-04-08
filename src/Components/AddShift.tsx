@@ -27,7 +27,7 @@ export const AddShift: React.FC<{
   const descriptionControl = useGTextInput("", () => "");
   const reqEmpControl = useGNumberInput(1, (v) => {
     if (v < 1 || v > 15) {
-      return "Error";
+      return "Max 15 Officers";
     }
     return "";
   });
