@@ -46,6 +46,7 @@ export const useShiftDetailsControl = (id: number) => {
   const [loggedStartTime, setLoggedStartTime] = useState<Dayjs | null>(null);
   const [loggedEndTime, setLoggedEndTime] = useState<Dayjs | null>(null);
   const [isFormDisabled, setIsFormDisabled] = useState<boolean>(false);
+  const [shiftToolTip, setShiftToolTip] = useState<string>("");
   const [isNotWorkedModalOpen, setNotWorkedModalOpen] = useState(false);
   const toggleShiftNotWorkedModal = () =>
     setNotWorkedModalOpen(!isNotWorkedModalOpen);
@@ -155,14 +156,19 @@ export const useShiftDetailsControl = (id: number) => {
   useEffect(() => {
     if (id && !isClaimedShiftsLoading && !isShiftFromParamLoading) {
       const shift = claimedShifts?.find((cs) => cs.shiftId === Number(id));
-      setCurrentEmpShift(shift);
+      setCurrentEmpShift(shift);      
+      if (!shift) {
+        setIsFormDisabled(true); 
+      }
 
-      if (
-        !shift ||
-        (shift.clockInTime && shift.clockOutTime) ||
-        new Date(shiftFromParam!.startTime) > new Date()
-      ) {
-        setIsFormDisabled(true);
+      if (new Date(shiftFromParam!.startTime) > new Date()){
+        setIsFormDisabled(true); 
+        setShiftToolTip("Future Shift - You can't add time yet")
+      }
+
+      if (shift?.clockInTime && shift.clockOutTime){
+        setIsFormDisabled(true); 
+        setShiftToolTip("You have already added time - if any changes are needed, contact your admin")
       }
     }
   }, [
@@ -175,6 +181,12 @@ export const useShiftDetailsControl = (id: number) => {
     shiftsClaimed,
   ]);
 
+  useEffect(()=>{
+    if (currentEmpShift) {
+      setConfirmedNotWorked(currentEmpShift.didNotWork)
+    }
+  })
+
   useEffect(() => {
     if (shiftFromParam && !isShiftFromParamLoading) {
       setLoggedStartTime(
@@ -183,6 +195,15 @@ export const useShiftDetailsControl = (id: number) => {
       setLoggedEndTime(dayjs(new Date(shiftFromParam!.endTime).toISOString()));
     }
   }, [shiftFromParam, isShiftFromParamLoading]);
+
+  useEffect(()=> {
+    if (confirmedNotWorked){
+      setShiftToolTip("This shift was not worked - cannot enter time. If this is a mistake, contact your admin")
+    }
+    else {
+      setShiftToolTip("")
+    }
+  },[confirmedNotWorked])
 
   return {
     isLoading,
@@ -215,6 +236,8 @@ export const useShiftDetailsControl = (id: number) => {
     SaveShiftTimes,
     MarkShiftNotWorked,
     ReportShiftCanceled,
-    setNotWorkedModalOpen
+    setNotWorkedModalOpen,
+    shiftToolTip, 
+    setShiftToolTip
   };
 };
