@@ -110,7 +110,7 @@ const InvoiceCreation = () => {
 
             {control.selectedCompany === null && (
               <div className="flex flex-grow items-center justify-center p-5 lg:min-w-[824px]">
-                <p className="text-2xl font-semibold md:min-h-[392px]">
+                <p className="text-xl font-semibold md:min-h-[392px]">
                   Please Select a Company
                 </p>
               </div>
@@ -230,7 +230,12 @@ const InvoiceCreation = () => {
           <div className="px-5 pt-3 border-b relative">
             <div className="border-slate-300 min-h-12 flex items-center justify-between relative">
               {/* Centered Title */}
-              <p className="absolute left-1/2 -translate-x-1/2 font-semibold text-xl">
+
+              <p
+                className={`absolute left-1/2 -translate-x-1/2 font-semibold text-2xl ${
+                  control.selectedCompany === null ? "opacity-25" : ""
+                } `}
+              >
                 Invoice Preview
               </p>
 
