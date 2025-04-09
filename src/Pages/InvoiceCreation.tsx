@@ -236,7 +236,7 @@ const InvoiceCreation = () => {
               {/* Centered Title */}
 
               <p
-                className={`absolute left-1/2 -translate-x-1/2 font-semibold text-2xl ${
+                className={`absolute sm:left-1/2 sm:-translate-x-1/2 font-semibold text-2xl${
                   control.selectedCompany === null ? "opacity-25" : ""
                 } `}
               >

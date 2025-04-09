@@ -36,6 +36,14 @@ export const useMyShiftsControl = () => {
     return true;
   };
 
+  const shiftReportedCanceled = (shift: Shift) => {
+    const empShift = employeeShifts?.filter(
+      (es: EmployeeShift) => es.shiftId == shift.id
+    )[0];
+
+    return empShift?.reportedCanceled || empShift?.didNotWork;
+  };
+
   const shiftIsResidual = (shift: Shift) => {
     const empShift = employeeShifts?.filter(
       (es: EmployeeShift) => es.shiftId == shift.id
@@ -75,6 +83,10 @@ export const useMyShiftsControl = () => {
   };
 
   const getShiftStatusColor = (s: Shift) => {
+    if (shiftReportedCanceled(s)) {
+      return "border-l-slate-200";
+    }
+
     if (shiftNeedsTimeEntered(s)) {
       return "border-l-amber-300";
     }
