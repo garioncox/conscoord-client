@@ -20,7 +20,8 @@ import ShiftSort from "@/Components/Sorting/ShiftSort";
 import { Shift } from "@/Data/Interfaces/Shift";
 import { useAuth } from "react-oidc-context";
 import { AddShift } from "@/Components/AddShift";
-import { CirclePlus, IdCard } from "lucide-react";
+import { CirclePlus, ClockIcon, IdCard } from "lucide-react";
+import dayjs from "dayjs";
 
 const ProjectShifts = () => {
   const { isLoading: authLoading } = useAuth();
@@ -134,8 +135,13 @@ const ProjectShifts = () => {
               </div>
             )}
             <div className="flex flex-grow"></div>
-            <PermissionComponentLock roles={[ADMIN_ROLE]}>
-              <div className="flex justify-end">
+            <div className="flex items-center justify-center gap-4 border-t pt-3">
+              <p className="flex">
+                <ClockIcon className="me-3" />
+                {dayjs(currentProject?.startDate).format("MM/DD/YYYY")} -{" "}
+                {dayjs(currentProject?.endDate).format("MM/DD/YYYY")}
+              </p>
+              <PermissionComponentLock roles={[ADMIN_ROLE]}>
                 <button
                   onClick={toggleCancelModal}
                   disabled={currentProject?.status === "ARCHIVED"}
@@ -143,8 +149,8 @@ const ProjectShifts = () => {
                 >
                   Cancel Project
                 </button>
-              </div>
-            </PermissionComponentLock>
+              </PermissionComponentLock>
+            </div>
           </div>
         </div>
         <div className="overflow-y-auto max-h-[80%] flex-row lg:flex-col lg:w-full">
