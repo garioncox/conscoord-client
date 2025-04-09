@@ -41,8 +41,8 @@ export const ShiftDetailsCalendar = ({
       </p>
 
       <p className="flex justify-center text-xl">
-        {control.shiftFromParam?.startTime.split("T")[1]} -{" "}
-        {control.shiftFromParam?.endTime.split("T")[1]}
+        {dayjs(control.shiftFromParam?.startTime).format("MM:ss")} -{" "}
+        {dayjs(control.shiftFromParam?.endTime).format("MM:ss")}
       </p>
     </>
   );

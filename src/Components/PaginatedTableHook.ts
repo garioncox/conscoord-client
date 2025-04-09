@@ -24,7 +24,7 @@ export function usePagination<T>(data: T[]) {
   const totalPages = data ? Math.ceil(data.length / itemsPerPage) || 1 : 1;
 
   const handlePageChange = (pageNumber: number) => {
-    if (pageNumber < totalPages) {
+    if (pageNumber < 0) {
       setCurrentPage(1);
       return;
     }
@@ -43,7 +43,7 @@ export function usePagination<T>(data: T[]) {
   };
 
   useEffect(() => {
-    if (currentPage < totalPages) {
+    if (currentPage < 0) {
       setCurrentPage(1);
       return;
     }

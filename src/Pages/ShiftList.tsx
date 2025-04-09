@@ -1,6 +1,9 @@
 import { PaginatedTable } from "@/Components/paginated-table";
 import { usePagination } from "@/Components/PaginatedTableHook";
-import { useAllShifts } from "@/Functions/Queries/ShiftQueries";
+import {
+  useAllShifts,
+  useClaimedShiftsForLoggedInUser,
+} from "@/Functions/Queries/ShiftQueries";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Shift } from "@/Data/Interfaces/Shift";
@@ -21,6 +24,8 @@ function ShiftList() {
   const control = usePagination(sortedData || []);
   const { data: empShifts, isLoading: empShiftsLoading } =
     useAllEmployeeShifts();
+  const { data: userShifts, isLoading: shiftsLoading } =
+    useClaimedShiftsForLoggedInUser();
 
   useEffect(() => {
     if (shifts) {
@@ -39,14 +44,20 @@ function ShiftList() {
         // Compare based on employees needed
         return employeesNeededB - employeesNeededA;
       });
+
+      // Filter out past and taken shifts
       const removedData = defaultSort.filter(
-        (e) => new Date(e.endTime) >= new Date() && shiftFraction(e) < 1
-      )
+        (e) =>
+          new Date(e.endTime) >= new Date() &&
+          shiftFraction(e) < 1 &&
+          !userShifts?.some((userShift) => userShift.id === e.id)
+      );
+
       setSortedData(removedData);
     }
   }, [shifts, empShifts]);
 
-  if (isLoading || isAuthLoading || empShiftsLoading) {
+  if (isLoading || isAuthLoading || empShiftsLoading || shiftsLoading) {
     return <Spinner />;
   }
 
@@ -59,10 +70,7 @@ function ShiftList() {
       <h1 className="text-4xl pb-5">Available Shifts</h1>
       <PaginatedTable control={control}>
         <ShiftSort data={sortedData!} onSortChange={setSortedData} />
-        <ShiftTable
-          data={control.currentItems}
-          setRowClicked={clickOnAShift}
-        />
+        <ShiftTable data={control.currentItems} setRowClicked={clickOnAShift} />
       </PaginatedTable>
     </div>
   );
