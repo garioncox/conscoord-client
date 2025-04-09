@@ -60,6 +60,10 @@ const InvoiceCreation = () => {
                   }`}
                   onClick={() => {
                     control.setCompanyFilter(e);
+
+                    if (control.selectedMonth) {
+                      control.handleMonthSelect(control.selectedMonth);
+                    }
                   }}
                 >
                   <p className="col-span-1">{e.id}</p>
