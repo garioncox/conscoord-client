@@ -9,7 +9,37 @@ interface LogTimeProps {
 }
 
 export const LogTime: React.FC<LogTimeProps> = ({ control }) => {
+
   const isNoShift = !control.currentEmpShift;
+
+  return (
+    <>
+      <div className="font-semibold text-xl pb-5 text-center lg:text-left">
+        Log Time
+      </div>
+      <div className="flex flex-col items-center space-y-5 lg:flex-row lg:space-y-0 lg:space-x-3" title={control.shiftToolTip}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            label="Start Time"
+            value={control.loggedStartTime}
+            onChange={(newValue) => control.setLoggedStartTime(newValue)}
+            disabled={
+              control.isFormDisabled ||
+              control.currentEmpShift?.reportedCanceled ||
+              control.currentEmpShift?.didNotWork
+            }
+          />
+          <TimePicker
+            label="End Time"
+            value={control.loggedEndTime}
+            onChange={(newValue) => control.setLoggedEndTime(newValue)}
+            disabled={
+              control.isFormDisabled ||
+              control.currentEmpShift?.reportedCanceled ||
+              control.currentEmpShift?.didNotWork
+            }
+          />
+        </LocalizationProvider>
 
   return (
     <div className="relative">
@@ -118,6 +148,25 @@ export const LogTime: React.FC<LogTimeProps> = ({ control }) => {
           Submit Time
         </button>
       </div>
+
+      <button title={control.shiftToolTip}
+        className={`text-white font-semibold py-3 px-6 w-full rounded-lg mt-4 ${
+          control.isFormDisabled ||
+          control.currentEmpShift?.reportedCanceled ||
+          control.currentEmpShift?.didNotWork
+            ? "bg-gray-400 hover:bg-gray-400 cursor-not-allowed"
+            : "bg-blue-500 hover:bg-blue-600"
+        }`}
+        onClick={() => control.SaveShiftTimes()}
+        disabled={
+          control.isFormDisabled ||
+          control.currentEmpShift?.reportedCanceled ||
+          control.currentEmpShift?.didNotWork
+        }
+      >
+        Submit Time
+      </button>
+
 
       {/* Overlay message */}
       {isNoShift && (
