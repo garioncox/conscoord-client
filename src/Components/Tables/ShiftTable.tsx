@@ -130,7 +130,7 @@ export const ShiftTable: FC<{
                 <PermissionComponentLock roles={[PSO_ROLE]}>
                   <div className="flex justify-end pe-2 col-span-1">
                     <button
-                      className={`rounded-xl bg-tertiary ${buttonClass} border-2 h-10 w-10 flex items-center justify-center`}
+                      className={`rounded-xl bg-tertiary ${buttonClass} border-2 h-10 w-10 min-w-[2.5rem] flex items-center justify-center flex-shrink-0`}
                       title={buttonTitle}
                       onClick={handleDebouncedTakeShift}
                       disabled={addMutation.isPending || isClaimingShift}
